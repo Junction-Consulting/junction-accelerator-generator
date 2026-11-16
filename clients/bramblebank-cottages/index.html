@@ -5160,12 +5160,91 @@ body:not(.has-plan) .plan-content{display:none}
   height:auto;
   display:block;
 }
+.tactic-mockup-body{aspect-ratio:16/10;overflow:hidden}
+.tactic-mockup-body img{width:100%;height:100%;object-fit:cover;object-position:top center;cursor:zoom-in}
+.tactic-mockup--page .tactic-mockup-body::after{content:"Full page ↗";position:absolute;right:10px;bottom:10px;background:rgba(20,26,26,.72);color:#fff;font-size:11px;letter-spacing:.3px;padding:4px 9px;border-radius:20px;pointer-events:none}
+.tactic-embed .tactic-mockup-body{aspect-ratio:16/9}
+.tactic-embed iframe{width:100%;height:100%;border:0;display:block}
 .tactic-mockup-label{
   padding:12px 16px;
   font-size:12px;
   color:#8a7f68;
   text-align:center;
   background:#f7f2e9;
+}
+
+/* Linked mockup: opens the real site in a new tab (no lightbox) */
+.tactic-mockup-link{
+  display:block;
+  max-width:640px;
+  color:inherit;
+  text-decoration:none;
+  border-radius:12px;
+}
+.tactic-mockup-link .tactic-mockup{
+  transition:transform .2s ease,box-shadow .2s ease;
+}
+.tactic-mockup-link:hover .tactic-mockup,
+.tactic-mockup-link:focus-visible .tactic-mockup{
+  transform:translateY(-3px);
+  box-shadow:0 10px 24px rgba(30,25,15,.16);
+}
+.tactic-mockup-link:hover,
+.tactic-mockup-link:focus-visible{text-decoration:none}
+.tactic-mockup-link:focus-visible{
+  outline:2px solid var(--link-blue);
+  outline-offset:3px;
+}
+.tactic-mockup-open{
+  flex-shrink:0;
+  margin-left:4px;
+  font-size:11px;
+  font-weight:600;
+  color:#8a7f68;
+  white-space:nowrap;
+  transition:color .2s ease;
+}
+.tactic-mockup-link .tactic-mockup-url{min-width:0}
+.tactic-mockup-link:hover .tactic-mockup-open,
+.tactic-mockup-link:focus-visible .tactic-mockup-open{
+  color:var(--link-blue);
+}
+@media(max-width:480px){
+  .tactic-mockup-open-text{display:none}
+}
+@media(prefers-reduced-motion:reduce){
+  .tactic-mockup-link .tactic-mockup{transition:none}
+  .tactic-mockup-link:hover .tactic-mockup,
+  .tactic-mockup-link:focus-visible .tactic-mockup{transform:none}
+}
+
+/* Two mockups side by side, stacked on mobile */
+.tactic-mockup-pair{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:16px;
+  margin-top:16px;
+}
+.tactic-mockup-pair > *{min-width:0}
+.tactic-mockup-pair .tactic-mockup{margin-top:0}
+@media(max-width:768px){
+  .tactic-mockup-pair{grid-template-columns:1fr}
+}
+
+/* Four mockups in one row, stacked on mobile */
+.tactic-mockup-pair.tactic-mockup-four{grid-template-columns:repeat(4,1fr)}
+@media(max-width:768px){
+  .tactic-mockup-pair.tactic-mockup-four{grid-template-columns:1fr}
+}
+
+/* "Example" badge in the top corner of a mockup */
+.tactic-mockup-body{position:relative}
+.tactic-mockup-badge{
+  position:absolute;
+  top:10px;
+  left:10px;
+  z-index:1;
+  box-shadow:0 2px 6px rgba(17,21,75,.18);
 }
 
 /* Two-column step layout */
@@ -6520,6 +6599,34 @@ button,
               <li data-editable-key="t1-bullet-3">Compress what remains before uploading. Resize each original so the longest edge is about 2,500 pixels, then run it through a free tool such as Squoosh (squoosh.app) or TinyPNG at roughly 75 to 80 percent quality. Replace the existing images with the compressed versions.</li>
               <li data-editable-key="t1-bullet-4">Squarespace lazy-loads images in most templates, so the larger gain is simply having fewer and smaller files on the first page. Test the result in PageSpeed Insights (pagespeed.web.dev), where the current mobile score is 73 and the goal is 85 or higher.</li>
             </ul>
+            <div class="tactic-mockup-pair">
+              <div class="tactic-mockup">
+                <div class="tactic-mockup-chrome">
+                  <span class="tactic-mockup-dot red"></span>
+                  <span class="tactic-mockup-dot yellow"></span>
+                  <span class="tactic-mockup-dot green"></span>
+                  <div class="tactic-mockup-url">pagespeed.web.dev</div>
+                </div>
+                <div class="tactic-mockup-body">
+                  <img src="/assets/bramblebank-cottages-mockups/media/t1-s1-pagespeed-mobile.png" alt="PageSpeed Insights mobile result for bramblebankcottages.com with a performance score of 55 and the enormous network payload diagnostic highlighted" class="lightbox-trigger" onclick="openLightbox(this.src, this.alt)" loading="lazy">
+                </div>
+              </div>
+              <a href="https://pagespeed.web.dev" class="tactic-mockup-link" target="_blank" rel="noopener" aria-label="Open PageSpeed Insights (opens in a new tab)">
+                <div class="tactic-mockup">
+                  <div class="tactic-mockup-chrome">
+                    <span class="tactic-mockup-dot red"></span>
+                    <span class="tactic-mockup-dot yellow"></span>
+                    <span class="tactic-mockup-dot green"></span>
+                    <div class="tactic-mockup-url">pagespeed.web.dev</div>
+                    <span class="tactic-mockup-open" aria-hidden="true"><span class="tactic-mockup-open-text">Open site </span>↗</span>
+                  </div>
+                  <div class="tactic-mockup-body" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:20px;text-align:center;background:#f7f5f0">
+                    <strong style="font-size:18px;color:#3a3326">PageSpeed Insights</strong>
+                    <span style="font-size:13px;color:#8a7f68">Test bramblebankcottages.com on mobile and desktop</span>
+                  </div>
+                </div>
+              </a>
+            </div>
           </div>
         </li>
         <li class="tactic-step-item" id="step-t1-2">
@@ -6533,6 +6640,17 @@ button,
               <li data-editable-key="t1-bullet-8">Alt text: add a short description to the eight icons that are missing it, such as &quot;WiFi included,&quot; &quot;Free parking,&quot; and &quot;Natural gas BBQ.&quot; Use the Alt Text field when you edit each image.</li>
               <li data-editable-key="t1-bullet-9">Phone number: the number, (604) 796-9552, currently appears only on the contact page and cannot be tapped. Add it to the header and footer, and make it a tap-to-call link by selecting the number, clicking the link icon, and entering tel:+16047969552.</li>
             </ul>
+            <div class="tactic-mockup">
+              <div class="tactic-mockup-chrome">
+                <span class="tactic-mockup-dot red"></span>
+                <span class="tactic-mockup-dot yellow"></span>
+                <span class="tactic-mockup-dot green"></span>
+                <div class="tactic-mockup-url">Squarespace · Page settings</div>
+              </div>
+              <div class="tactic-mockup-body">
+                <img src="/assets/bramblebank-cottages-mockups/media/t1-s2-squarespace-seo.png" alt="Squarespace page settings SEO tab for the homepage with the new title &quot;Bramblebank Cottages | Harrison Hot Springs Cabins&quot; and the new meta description" class="lightbox-trigger" onclick="openLightbox(this.src, this.alt)" loading="lazy">
+              </div>
+            </div>
           </div>
         </li>
         <li class="tactic-step-item" id="step-t1-3">
@@ -6544,6 +6662,18 @@ button,
               <li data-editable-key="t1-bullet-11">Write directions from the two main routes out of Vancouver, Highway 7 and Highway 9, and add the last stretch to Lillooet Road and where to park on arrival. [INSERT TURN-BY-TURN DIRECTIONS FOR EACH ROUTE AND THE ARRIVAL INSTRUCTIONS]</li>
               <li data-editable-key="t1-bullet-12">Put a short Getting Here section in the footer or the main navigation, so it is findable from every page. Guests can copy and send it to the rest of their party, and it should reduce the &quot;how do I find you&quot; calls the assessment expects to drop by about half.</li>
             </ul>
+            <div class="tactic-mockup">
+              <div class="tactic-mockup-chrome">
+                <span class="tactic-mockup-dot red"></span>
+                <span class="tactic-mockup-dot yellow"></span>
+                <span class="tactic-mockup-dot green"></span>
+                <div class="tactic-mockup-url">bramblebankcottages.com/getting-here</div>
+              </div>
+              <div class="tactic-mockup-body">
+                <span class="tactic-step-media-badge tactic-mockup-badge">Mockup</span>
+                <img src="/assets/bramblebank-cottages-mockups/media/t1-s3-getting-here.png" alt="Getting Here page on desktop and mobile with a map pin at 312 Lillooet Road, a tap-to-call phone button, and directions via Highway 7 and via Highway 1 and 9" class="lightbox-trigger" onclick="openLightbox(this.src, this.alt)" loading="lazy">
+              </div>
+            </div>
           </div>
         </li>
         <li class="tactic-step-item" id="step-t1-4">
@@ -6580,6 +6710,18 @@ button,
               <li data-editable-key="t1-bullet-19">Lean on perks that add value more than public price cuts. Perks that cost you little are hard to compare against an OTA listing and keep PriceLabs in control of your nightly rate. Before you publish a lower public rate, read your Booking.com and Expedia agreements, since some contain rate parity terms.</li>
               <li data-editable-key="t1-bullet-20">Put the same line in your Google Business Profile description, your social bios, and the confirmation email every direct guest receives.</li>
             </ul>
+            <div class="tactic-mockup">
+              <div class="tactic-mockup-chrome">
+                <span class="tactic-mockup-dot red"></span>
+                <span class="tactic-mockup-dot yellow"></span>
+                <span class="tactic-mockup-dot green"></span>
+                <div class="tactic-mockup-url">bramblebankcottages.com/lily-pad-cottage</div>
+              </div>
+              <div class="tactic-mockup-body">
+                <span class="tactic-step-media-badge tactic-mockup-badge">Mockup</span>
+                <img src="/assets/bramblebank-cottages-mockups/media/t1-s5-direct-perks.png" alt="Lily Pad Cottage page with a direct-booking perks block beside Check Availability, and the Cloudbeds booking page on a phone with the promo code applied" class="lightbox-trigger" onclick="openLightbox(this.src, this.alt)" loading="lazy">
+              </div>
+            </div>
           </div>
         </li>
         <li class="tactic-step-item" id="step-t1-6">
@@ -6591,6 +6733,18 @@ button,
               <li data-editable-key="t1-bullet-22">Use first names and dates as they appear in the public Google review, and check with anyone you would like to quote at length. The assessment suggests a dedicated testimonials page, and a section on the pages guests actually read does more work than a page they have to find.</li>
               <li data-editable-key="t1-bullet-23">Add the star rating and review count near the Book Now button: 4.8 stars from 247 reviews.</li>
             </ul>
+            <div class="tactic-mockup">
+              <div class="tactic-mockup-chrome">
+                <span class="tactic-mockup-dot red"></span>
+                <span class="tactic-mockup-dot yellow"></span>
+                <span class="tactic-mockup-dot green"></span>
+                <div class="tactic-mockup-url">bramblebankcottages.com</div>
+              </div>
+              <div class="tactic-mockup-body">
+                <span class="tactic-step-media-badge tactic-mockup-badge">Mockup</span>
+                <img src="/assets/bramblebank-cottages-mockups/media/t1-s6-testimonials.png" alt="Homepage testimonials section with three Google review quotes and 4.8 stars from 247 reviews beside the Book Your Stay button, on desktop and mobile" class="lightbox-trigger" onclick="openLightbox(this.src, this.alt)" loading="lazy">
+              </div>
+            </div>
           </div>
         </li>
         <li class="tactic-step-item" id="step-t1-7">
@@ -6603,6 +6757,18 @@ button,
               <li data-editable-key="t1-bullet-26">Create a promo code and booking link for the offer, and add it to the website beside the direct-booking block, in a Stories highlight, and in your Google Business Profile posts.</li>
               <li data-editable-key="t1-bullet-27">Use the phrase your guests already use in your content. A post called &quot;Two nights is never enough&quot; will land because it says what they said.</li>
             </ul>
+            <div class="tactic-mockup">
+              <div class="tactic-mockup-chrome">
+                <span class="tactic-mockup-dot red"></span>
+                <span class="tactic-mockup-dot yellow"></span>
+                <span class="tactic-mockup-dot green"></span>
+                <div class="tactic-mockup-url">bramblebankcottages.com</div>
+              </div>
+              <div class="tactic-mockup-body">
+                <span class="tactic-step-media-badge tactic-mockup-badge">Mockup</span>
+                <img src="/assets/bramblebank-cottages-mockups/media/t1-s7-stay-longer.png" alt="&quot;Two nights is never enough&quot; Stay Longer offer block on the website and a matching Instagram post on a phone" class="lightbox-trigger" onclick="openLightbox(this.src, this.alt)" loading="lazy">
+              </div>
+            </div>
           </div>
         </li>
       </ol>
@@ -6627,6 +6793,17 @@ button,
               <li data-editable-key="t1-bullet-30">Be careful with OTA guests. OTA terms vary, and some restrict how you promote direct booking to guests who booked through them. Read the terms for Booking.com, Expedia, and Airbnb, and if you are unsure whether the in-cottage card is allowed for those stays, ask your account manager first. Build the list from guests who book direct, from your website, and from social sign-ups, and do not use contact details taken from an OTA reservation.</li>
               <li data-editable-key="t1-bullet-31">An owned list is also a transferable asset. It is one of the clearest signs of a healthy business that a future owner can see.</li>
             </ul>
+            <div class="tactic-mockup">
+              <div class="tactic-mockup-chrome">
+                <span class="tactic-mockup-dot red"></span>
+                <span class="tactic-mockup-dot yellow"></span>
+                <span class="tactic-mockup-dot green"></span>
+                <div class="tactic-mockup-url">In-cottage card</div>
+              </div>
+              <div class="tactic-mockup-body">
+                <img src="/assets/bramblebank-cottages-mockups/media/t1-s8-qr-card.png" alt="Two in-cottage tent cards reading &quot;Loved your stay?&quot; with a QR code to join the guest list" class="lightbox-trigger" onclick="openLightbox(this.src, this.alt)" loading="lazy">
+              </div>
+            </div>
           </div>
         </li>
         <li class="tactic-step-item" id="step-t1-9">
