@@ -337,3 +337,40 @@ describe('test pack used for manual upload testing', () => {
     expect(errors[3].message).toMatch(/points at Step 99/);
   });
 });
+
+describe('sub-bullets in steps', () => {
+  // Rewrite the bullets under the first step of the plan. `shape` gives each
+  // bullet's extra indent in spaces, e.g. [0, 2, 2] nests the 2nd and 3rd.
+  function reshapeFirstStep(md, shape) {
+    const lines = md.split('\n');
+    const start = lines.findIndex(l => /^\d+\. \*\*/.test(l));
+    let seen = 0;
+    for (let i = start + 1; i < lines.length && seen < shape.length; i++) {
+      if (/^\d+\. \*\*/.test(lines[i]) || /^#/.test(lines[i])) break;
+      if (/^\s*- /.test(lines[i])) lines[i] = ' '.repeat(shape[seen++]) + lines[i];
+    }
+    return { md: lines.join('\n'), firstBulletLine: lines.findIndex((l, i) => i > start && /^\s*- /.test(l)) + 1 };
+  }
+  const nestingWarnings = md => validatePlan(md, { type: 'accelerator' }).warnings.filter(w => /indented|nests bullets/.test(w.message));
+
+  test('one level of sub-bullets under a lead-in bullet is accepted without warnings', () => {
+    const { md } = reshapeFirstStep(GOOD, [0, 2, 2]);
+    expect(nestingWarnings(md)).toEqual([]);
+    const step = parsePlanMd(md).tactics[0].implementationSteps[0];
+    expect(step.bulletLevels.slice(0, 3)).toEqual([0, 1, 1]);
+  });
+
+  test('an indented first bullet is reported, and shows as a main bullet', () => {
+    const { md, firstBulletLine } = reshapeFirstStep(GOOD, [2]);
+    const warning = nestingWarnings(md).find(w => /first bullet under Step 1 is indented/.test(w.message));
+    expect(warning).toBeDefined();
+    expect(warning.line).toBe(firstBulletLine);
+    expect(parsePlanMd(md).tactics[0].implementationSteps[0].bulletLevels[0]).toBe(0);
+  });
+
+  test('nesting two levels deep is reported, and shows one level in', () => {
+    const { md } = reshapeFirstStep(GOOD, [0, 2, 4]);
+    expect(nestingWarnings(md).some(w => /more than one level deep/.test(w.message))).toBe(true);
+    expect(parsePlanMd(md).tactics[0].implementationSteps[0].bulletLevels.slice(0, 3)).toEqual([0, 1, 1]);
+  });
+});

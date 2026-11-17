@@ -244,6 +244,20 @@ function validatePlan(rawContent, options = {}) {
       let expected = 1;
       let numberingReported = false;
       let lastStep = null;
+      // Sub-bullets: a bullet indented under the one above it shows as a
+      // sub-bullet. Only one level is shown, and the first bullet in a step
+      // has nothing above it to sit under.
+      const checkNesting = step => {
+        if (!step || !step.indents || step.indents.length < 2) return;
+        const levels = [...new Set(step.indents.map(b => b.indent))].sort((a, b) => a - b);
+        if (step.indents[0].indent > levels[0]) {
+          warn(step.indents[0].line, `${name}: the first bullet under Step ${step.num} is indented, but there is no bullet above it to sit under. It will show as a main bullet.`, 'Line it up with the other main bullets in the step.');
+        }
+        if (levels.length > 2) {
+          const deep = step.indents.find(b => b.indent === levels[2]);
+          warn(deep.line, `${name}: Step ${step.num} nests bullets more than one level deep. Only one level of sub-bullet is shown, so deeper bullets show at the same level as the sub-bullets.`, 'Keep to main bullets and one level of sub-bullets.');
+        }
+      };
       const looseStepLines = [];
       rows.forEach(({ text: l, index }) => {
         if (/^####\s*Part [A-Z]: /.test(l) || /^####\s*Part [A-Z]:$/.test(l)) {
@@ -258,8 +272,8 @@ function validatePlan(rawContent, options = {}) {
         const ok = l.match(STEP_OK);
         if (ok) {
           const num = Number(ok[1] || ok[2]);
-          if (lastStep && lastStep.bullets === 0) warn(lastStep.line, `${name}: Step ${lastStep.num} has no bullet points under it.`, 'Add the instructions as "- " bullets, or leave it if the title says it all.');
-          lastStep = { num, line: lineNo(index), bullets: 0 };
+          if (lastStep && lastStep.bullets === 0) warn(lastStep.line, `${name}: Step ${lastStep.num} has no bullet points under it.`, 'Add the instructions as "- " bullets, or leave it if the title says it all.'); checkNesting(lastStep);
+          lastStep = { num, line: lineNo(index), bullets: 0, indents: [] };
           unit.steps += 1;
           if (parts.length) parts[parts.length - 1].steps += 1;
           if (num !== expected && !numberingReported) {
@@ -280,13 +294,17 @@ function validatePlan(rawContent, options = {}) {
           expected = num + 1;
           return;
         }
-        if (isListItem(l) && lastStep) { lastStep.bullets += 1; return; }
+        if (isListItem(l) && lastStep) {
+          lastStep.bullets += 1;
+          if (lastStep.indents) lastStep.indents.push({ indent: l.match(/^\s*/)[0].length, line: lineNo(index) });
+          return;
+        }
         // Anything else under a step that is not a bullet is not shown
         if (lastStep && l.trim() && !isRule(l) && !/^#/.test(l.trim()) && !/^\|/.test(l.trim())) {
           looseStepLines.push(lineNo(index));
         }
       });
-      if (lastStep && lastStep.bullets === 0) warn(lastStep.line, `${name}: Step ${lastStep.num} has no bullet points under it.`, 'Add the instructions as "- " bullets, or leave it if the title says it all.');
+      if (lastStep && lastStep.bullets === 0) warn(lastStep.line, `${name}: Step ${lastStep.num} has no bullet points under it.`, 'Add the instructions as "- " bullets, or leave it if the title says it all.'); checkNesting(lastStep);
 
       if (looseStepLines.length) {
         warn(looseStepLines[0], `${name}: ${looseStepLines.length} line${looseStepLines.length === 1 ? '' : 's'} under the steps ${looseStepLines.length === 1 ? 'is' : 'are'} not written as a bullet, so ${looseStepLines.length === 1 ? 'it' : 'they'} will not appear on the dashboard${looseStepLines.length > 1 ? ` (first on line ${looseStepLines[0]})` : ''}.`, 'Start each line of step detail with "- ".');
