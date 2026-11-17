@@ -82,6 +82,11 @@
     <p class="loading__sub">You'll be redirected in a moment.</p>
   </div>
 
+  <script>
+    // Keep the address the link came back with. Supabase clears it once it has
+    // read it, and a used or expired link reports its error there.
+    window.__linkAddress = window.location.search + window.location.hash;
+  </script>
   <script src="/shared/supabase-client.js"></script>
   <script>
     async function handleSession(session) {
@@ -97,6 +102,11 @@
         window.location.replace('/login?error=access_denied');
         return;
       }
+
+      // Leave a note for the next page that this tab signed in a moment ago.
+      // If the browser does not keep the sign-in, auth.js reads the note and
+      // the login page explains why, instead of showing a blank form.
+      window.name = 'accel-signed-in:' + Date.now();
 
       // Staff roles come first, the same as the password login page. Someone
       // who is an admin, PSM or coach goes to My Clients even if they are also
@@ -121,6 +131,13 @@
     }
 
     let handled = false;
+
+    // A link that was already used or has expired comes back with an error in
+    // the address. Say so straight away instead of waiting for the timeout.
+    if (/(^|[?#&])error(_code)?=/.test(window.__linkAddress || '')) {
+      handled = true;
+      window.location.replace('/login?error=invalid_link');
+    }
 
     // Listen for the SIGNED_IN event fired when Supabase processes the URL hash token
     const { data: { subscription } } = supabaseClient.auth.onAuthStateChange(async (event, session) => {

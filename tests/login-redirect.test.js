@@ -13,6 +13,7 @@ const path = require('path');
 const ROOT = path.join(__dirname, '..');
 const callback = fs.readFileSync(path.join(ROOT, 'auth', 'callback', 'index.html'), 'utf8');
 const login = fs.readFileSync(path.join(ROOT, 'login', 'index.html'), 'utf8');
+const auth = fs.readFileSync(path.join(ROOT, 'shared', 'auth.js'), 'utf8');
 
 // Run the redirect decision from the emailed-link page against a set of access rows
 function landingFor(rows) {
@@ -59,5 +60,47 @@ describe('password login', () => {
     const block = login.match(/if \(adminRow \|\| psmRow \|\| coachRow\) \{[\s\S]*?\} else if \(clientRow\)/);
     expect(block).not.toBeNull();
     expect(block[0]).toContain("'/my-clients/'");
+  });
+});
+
+/**
+ * Someone who is sent back to the login page must be told why. A browser that
+ * does not keep the sign-in, or a link that was already used, otherwise looks
+ * like an endless loop.
+ */
+describe('explaining a failed login', () => {
+  // Every reason any page sends to /login?error=...
+  const reasonsSent = new Set();
+  for (const source of [callback, login, auth]) {
+    for (const match of source.matchAll(/\/login\?error=([a-z_]+)/g)) reasonsSent.add(match[1]);
+  }
+
+  test('the login page has a message for every reason it can be sent', () => {
+    const table = login.match(/const BOUNCE_REASONS = \{[\s\S]*?\n  \};/)[0];
+    expect(reasonsSent.size).toBeGreaterThan(0);
+    for (const reason of reasonsSent) {
+      expect(table).toMatch(new RegExp('\\b' + reason + ':'));
+    }
+  });
+
+  test('both login routes leave the signed-in note that auth.js reads', () => {
+    expect(callback).toContain("window.name = 'accel-signed-in:' + Date.now()");
+    expect(login).toContain("window.name = 'accel-signed-in:' + Date.now()");
+    expect(auth).toContain('accel-signed-in:');
+    expect(auth).toContain("'/login?error=session_lost'");
+  });
+
+  test('a used or expired link is reported without waiting for the timeout', () => {
+    const check = callback.match(/if \(\/(.+?)\/\.test\(window\.__linkAddress/);
+    expect(check).not.toBeNull();
+    const pattern = new RegExp(check[1]);
+    expect(pattern.test('#error=access_denied&error_code=otp_expired')).toBe(true);
+    expect(pattern.test('?error=access_denied&error_code=otp_expired')).toBe(true);
+    expect(pattern.test('#access_token=abc&refresh_token=def&type=magiclink')).toBe(false);
+  });
+
+  test('the messages follow the writing rules', () => {
+    const table = login.match(/const BOUNCE_REASONS = \{[\s\S]*?\n  \};/)[0];
+    expect(table).not.toContain('\u2014');
   });
 });

@@ -48,8 +48,16 @@ window.__authReady = (async function () {
   // 1. Check for an active session — redirect to /login if none exists
   //    (session already fetched above for public demo check)
   // ------------------------------------------------------------------
+  // The login pages leave a note in window.name when they sign someone in.
+  // It travels with the tab and does not depend on browser storage.
+  const signedInNote = /^accel-signed-in:(\d+)$/.exec(window.name || '');
+  if (signedInNote) window.name = '';
+
   if (!session) {
-    window.location.replace('/login');
+    // Signed in less than a minute ago and the sign-in is already gone: the
+    // browser is not keeping it. Tell the login page so it can explain.
+    const justSignedIn = signedInNote && (Date.now() - Number(signedInNote[1])) < 60000;
+    window.location.replace(justSignedIn ? '/login?error=session_lost' : '/login');
     return new Promise(() => {}); // redirect in flight — never resolve
   }
 
