@@ -934,260 +934,95 @@ In addition to the general checklist:
 
 ## Type B: Experience Dashboard
 
-Command pattern:
-> "Generate an experience dashboard for [Operator Name] using clients/[client-slug]/plan.md
-> Coach email: [coach@email.com]"
+Experience dashboards are built by code, never by hand. The same code runs on the server (the Create and Manage pages) and on this computer (`scripts/build-experience.js`), so a dashboard can always be rebuilt from its inputs.
 
-Note: Experience dashboards do NOT take a cohort start date. The operator sets this themselves via the UI.
+**Never edit `clients/[slug]/index.html` for an experience dashboard.** It is overwritten the next time the dashboard is rebuilt. Change one of its inputs and rebuild.
 
-### Step 1: Copy template, then edit in place (hard constraint)
+### What a dashboard is built from
 
-**NEVER write the file from scratch. NEVER regenerate the whole document in one pass. NEVER use a subagent task to generate the dashboard.**
+| Input | File | Holds |
+|---|---|---|
+| Template | `template/experience-template.html` | Layout, styling, scripts, neutral program wording |
+| Project record | `clients/[slug]/project.json` | Operator name, coach email, stage, the five material links, optional welcome message |
+| Launch plan | `clients/[slug]/plan.md` | Everything on Strategy, the Tracks, the Launch Roadmap and the Bookability Checklist. Follows `PLAN_FORMAT_EXPERIENCE.md` |
 
-The template is roughly 6,000 lines. Writing it wholesale drops sections, corrupts the JS arrays, and takes hours. Every change must be a targeted edit against the copied file.
+Outputs: `clients/[slug]/index.html` and, once there is a plan, `clients/[slug]/plan.json` (for the weekly emails).
 
-**Required procedure:**
-1. Read `clients/[slug]/plan.md` (follows `PLAN_FORMAT_EXPERIENCE.md`)
-2. Read `brand/elearningu-brand.md`
-3. Copy the template to the output path: `cp template/experience-template.html clients/[slug]/index.html`
-4. Edit that copy in place with targeted replacements, one region at a time:
-   - Placeholders
-   - The three Track pages
-   - The twelve roadmap weeks
-   - The four JS arrays
-   - The tour text
+### The two stages
 
-### Step 2: Fill placeholders
+| Stage | When | Pages shown |
+|---|---|---|
+| `onboarding` | Created before the operator's onboarding call. No plan.md yet | Home (the program step by step), Guide, Materials |
+| `plan` | A plan.md has been added, after coaching call 2 | All of the above, plus Strategy, three Tracks, Launch Roadmap, Bookability Checklist |
 
-**Standard placeholders** (same as accelerator):
-| Placeholder | How to derive it |
-|---|---|
-| `{{CLIENT_SLUG}}` | Lowercase, hyphens, no special chars |
-| `{{CLIENT_NAME}}` | Title-cased client name |
-| `{{TOTAL_TASKS}}` | Count every checklist item across all roadmap weeks |
-| `{{WM_SUBLINE}}` | From the `## Welcome Message` section of the plan |
-| `{{PAGE_SUBTITLE}}` | 1-sentence version of the goal |
-| `{{GOAL_TEXT}}` | Full goal paragraph from `## Goal` |
-| `{{STRATEGIC_POSITIONING}}` | From `## Strategic Positioning` |
-| `{{COACH_EMAIL}}` | From command |
-| `{{COHORT_START_DATE}}` | Human-readable placeholder for print header (e.g. "To be set") |
+The stage is set by whether a plan.md exists. Nothing else changes it. The template marks plan-stage elements with the class `plan-only` and onboarding-stage elements with `onboarding-only`; `data-stage` on `<body>` decides which show.
 
-**Experience-specific placeholders:**
-| Placeholder | How to derive it |
-|---|---|
-| `{{EXPERIENCE_SENTENCE}}` | Verbatim from `## The Experience` section. Do not edit. |
-| `{{PRICE_POINT}}` | From `Meta: Price Point` if present |
-| `{{LAUNCH_TARGET_TITLE}}` | First part of `Meta: Launch Target` (the date) |
-| `{{LAUNCH_TARGET_DESC}}` | Second part of `Meta: Launch Target` (the revenue goal) |
-| `{{TACTIC_N_SUBTITLE}}` | From `Subtitle:` line under each Track header |
-| `{{TACTIC_N_NAV_LABEL}}` | From `Short Label:` line under each Track header |
-| `{{MONTH_N_NAME}}` | From `Month N Name:` in the Launch Roadmap section |
-| `{{OBJECTIVE_N_TITLE}}` | From `### Objective N` Title line |
-| `{{OBJECTIVE_N_DESC}}` | From `### Objective N` Description line |
-| `{{OBJECTIVE_N_TACTIC_PILL}}` | From `### Objective N` Track Pill line |
+### Commands
 
-**Guide page placeholders:**
-| Placeholder | Value |
-|---|---|
-| `{{GUIDE_URL}}` | URL to the operator's guide document, or `#` if not yet available |
-| `{{GUIDE_STATUS}}` | `ready` if URL exists, `coming` if not |
-| `{{GUIDE_BUTTON_TEXT}}` | `Open Guide` if ready, `Coming Soon` if not |
+**Create a dashboard** (normally done by staff on the Create Experience Dashboard page):
+> "Create an experience dashboard for [Operator Name], slug [client-slug]. Coach email: [coach@email.com]"
 
-**Materials page placeholders (12 total):**
-| Placeholder | Purpose |
-|---|---|
-| `{{MATERIAL_QUESTIONNAIRE_URL}}` | URL or `#` |
-| `{{MATERIAL_QUESTIONNAIRE_STATUS}}` | `available` or `coming` |
-| `{{MATERIAL_QUESTIONNAIRE_BUTTON}}` | `View Questionnaire` or `Coming Soon` |
-| `{{MATERIAL_SESSION1_URL}}` | URL or `#` |
-| `{{MATERIAL_SESSION1_STATUS}}` | `available` or `coming` |
-| `{{MATERIAL_SESSION1_BUTTON}}` | `Watch Recording` or `Coming Soon` |
-| `{{MATERIAL_SESSION2_URL}}` | URL or `#` |
-| `{{MATERIAL_SESSION2_STATUS}}` | `available` or `coming` |
-| `{{MATERIAL_SESSION2_BUTTON}}` | `Watch Recording` or `Coming Soon` |
-| `{{MATERIAL_CALCULATOR_URL}}` | URL or `#` |
-| `{{MATERIAL_CALCULATOR_STATUS}}` | `available` or `coming` |
-| `{{MATERIAL_CALCULATOR_BUTTON}}` | `Open Calculator` or `Coming Soon` |
+1. Write `clients/[slug]/project.json`:
+   ```json
+   {
+     "type": "experience",
+     "client_name": "Salt Spring Kayak Co",
+     "client_slug": "salt-spring-kayak",
+     "coach_email": "coach@email.com",
+     "stage": "onboarding",
+     "welcome_message": "",
+     "materials": { "guide": "", "questionnaire": "", "session1": "", "session2": "", "calculator": "" }
+   }
+   ```
+2. If a plan was given, save it as `clients/[slug]/plan.md`.
+3. Run `node scripts/build-experience.js [slug] --write`.
 
-For initial generation, set all materials to `coming` status with `#` URLs unless the plan specifies otherwise.
+**Add or replace the launch plan:**
+> "Add the launch plan for [Operator] using [file]"
 
-### Step 3: Handle optional blocks
-- `<!-- IF:PRICE_POINT -->`: include only if `Meta: Price Point` exists in the plan
-- `<!-- IF:LAUNCH_TARGET -->`: include only if `Meta: Launch Target` exists in the plan
-- `<!-- IF:BOOKABILITY_CHECKLIST -->`: include only if `Meta: Has Bookability Checklist: yes`
+1. Save the plan as `clients/[slug]/plan.md`.
+2. Run `node scripts/build-experience.js [slug]` (check only). Fix anything it lists in the plan.md.
+3. Run it again with `--write`.
 
-### Step 4: Map Tracks to Tactic pages
+**Add a material:**
+> "The [material] for [Operator] is now available at [URL]"
 
-**CRITICAL:** The plan uses "Track 1/2/3" terminology, but the HTML template uses "tactic1/2/3" for page IDs and step anchors. You must translate:
+1. Put the URL in the matching key of `materials` in `clients/[slug]/project.json`. Keys: `guide`, `questionnaire`, `session1` (Coaching Call 1 summary), `session2` (Coaching Call 2 summary), `calculator`.
+2. Run `node scripts/build-experience.js [slug] --write`.
 
-| Plan says | HTML uses |
-|---|---|
-| `## Track 1:` | `<section id="page-tactic1">` |
-| `## Track 2:` | `<section id="page-tactic2">` |
-| `## Track 3:` | `<section id="page-tactic3">` |
-| `Track 1 / Step 3` | `step-t1-3` |
-| `Track 2 / Step 5` | `step-t2-5` |
-| `Track 3 / Step 1` | `step-t3-1` |
+An empty string means "Coming soon". Only `https://` links are accepted.
 
-**Worked example:**
+**After changing the template:** run `npm test`, then `node scripts/build-experience.js sample-experience --write` so the public sample matches. A test fails if the committed sample differs from what the generator builds.
 
-The plan contains:
-```markdown
-## Track 2: Make It Operable
-### Implementation Steps
-#### Part A: Costing
-1. **Calculate fixed costs per departure**
-   - List venue rental, equipment, supplies
-#### Part B: Pricing
-2. **Set your per-guest price**
-   - Use the cost-plus method
-3. **Build a pricing tier structure**
-   - Early bird, standard, premium
-```
+Report after any of these: stage, number of weeks, checklist items and "how to" links (the script prints them), and any warnings.
 
-In the HTML, this becomes:
-```html
-<section id="page-tactic2" class="page">
-  ...
-  <li class="step-item" id="step-t2-1">
-    <div class="step-num">1</div>
-    <div class="step-title">Calculate fixed costs per departure</div>
-    ...
-  </li>
-  <li class="step-item" id="step-t2-2">
-    <div class="step-num">2</div>
-    <div class="step-title">Set your per-guest price</div>
-    ...
-  </li>
-  <li class="step-item" id="step-t2-3">
-    <div class="step-num">3</div>
-    <div class="step-title">Build a pricing tier structure</div>
-    ...
-  </li>
-```
+### Rules the generator applies
 
-And a roadmap action annotated `→ links to: Track 2 / Step 2` becomes:
-```html
-<button class="howto-link" onclick="howToLink('tactic2','step-t2-2')">how to</button>
-```
-
-### Step 5: Rebuild the Launch Roadmap
-
-For each of the 12 weeks:
-- Set week card `id="wc-N"` with `data-week="N"`
-- Fill week title from `### Week N:` heading
-- Fill "This Week's Actions" from the `**Actions:**` list
-- Fill "Completion Checklist" from the `**Checklist:**` list
-
-**"How to" links:** When an action bullet has `→ links to: Track X / Step Y`:
-1. Strip the annotation from the display text
-2. Add a howto button: `<button class="howto-link" onclick="howToLink('tacticX','step-tX-Y')">how to</button>`
-3. Place the button on the action bullet, not the checklist item
-
-### Step 6: Update JavaScript arrays
-
-Update these arrays from roadmap checklist items ONLY:
-```javascript
-const ALL_CHECK_IDS = ['rw1_d1', 'rw1_d2', ...];  // All checklist IDs
-const WEEK_CHECKS   = { 1: ['rw1_d1', ...], 2: [...], ... };
-const MONTH_CHECKS  = { 1: [...], 2: [...], 3: [...] };
-const TACTIC_CHECKS = { 1: [...], 2: [...], 3: [...] };
-```
-
-**IMPORTANT:** The guide section checkboxes (`gs1` through `gs5`) are NOT included in any of these arrays. They have separate tracking via `updateGuideProgress()`.
-
-### Step 7: Set data-cohort-start to empty
-
-Always set `data-cohort-start=""` on the body tag. Never pre-fill a date. The operator chooses their start date via the dashboard UI.
-
-```html
-<body data-client-slug="salt-spring-kayak"
-      data-client-name="Salt Spring Kayak Co"
-      data-client-type="experience"
-      data-cohort-start=""
-      data-total-days="90"
-      data-total-weeks="12">
-```
-
-### Step 8: Build the Bookability Checklist page (if applicable)
-
-If `Has Bookability Checklist: yes`, rebuild the `page-bookability` section with items from `## Bookability Checklist`. Each item has a title and description. The checkboxes use IDs `bookability_1` through `bookability_N` with corresponding `data-key` attributes.
-
-### Step 9: Generate plan.json
-
-Write to `clients/[slug]/plan.json`:
-
-```json
-{
-  "client_name": "Salt Spring Kayak Co",
-  "client_slug": "salt-spring-kayak",
-  "goal": "...",
-  "coach_email": "coach@email.com",
-  "weeks": [
-    {
-      "week": 1,
-      "month": 1,
-      "title": "Week 1: Define Your Guest",
-      "actions": ["plain text action 1", "plain text action 2"],
-      "checklist": ["plain text item 1", "plain text item 2"],
-      "deep_link": "https://accelerator.elearningu.com/salt-spring-kayak/#week-1"
-    }
-  ]
-}
-```
-
-### Step 10: Output
-1. Write `clients/[slug]/index.html`
-2. Write `clients/[slug]/plan.json`
-3. Report: placeholder count resolved, optional blocks included/excluded, total checklist items, total "how to" links
+- **Tracks are tactics in the HTML.** The plan says "Track 1/2/3". Page ids are `page-tactic1/2/3` and step anchors are `step-tN-M`. `→ links to: Track 2 / Step 5` becomes `howToLink('tactic2','step-t2-5')` on that action, and the note is removed from the text. `→ links to: Bookability Checklist` opens that page.
+- **Roadmap length is 8 to 12 weeks**, numbered from 1 with none skipped. Eight is the usual length.
+- **Three phases, one per track.** The roadmap is shown as Phase 1, 2 and 3, and Track N's progress counts the checklist items in Phase N. `Phase 2 Starts: Week N` and `Phase 3 Starts: Week N` in the plan set the boundaries. Without them the weeks are shared out evenly (8 weeks is 3, 3, 2).
+- **Checkbox ids.** Roadmap items are `rwN_dM` with `data-key="week-N-check-M"`. Bookability items are `bookability_N`. Both are in `ALL_CHECK_IDS`. Guide section checkboxes `gs1` to `gs5` are not: they have their own count on the Guide page.
+- **The start date is the operator's choice.** `data-cohort-start` is always empty in the HTML. The operator picks a date on Home, which is saved by the `set_launch_start_date` database function (`supabase/migrations/015_experience_launch_start.sql`). The date stored on the account when the project was created is ignored for experience dashboards, and weekly emails are not sent until a start date is chosen.
+- **No Assessment page.** Experience dashboards never have one.
+- **Wording follows the plan's length.** The template never says "90 days" or "12 weeks". Success Metrics tables use the column headings written in the plan.
 
 ---
 
-# Part 4: Materials Update Command
+# Part 4: Experience Quality Checklist
 
-This is a supported operation for experience dashboards:
+`npm test` and the build script check the structure. Read the result for these, which only a person can judge:
 
-> "Update the experience dashboard for [Operator] - the [material] is now available at [URL]. Change only that card's status, URL and button text."
-
-**Procedure:**
-1. Read `clients/[slug]/index.html`
-2. Find the material card by its placeholder pattern (e.g., `MATERIAL_SESSION1_*`)
-3. Update only these three values:
-   - URL: from `#` to the provided URL
-   - Status: from `coming` to `available`
-   - Button text: from `Coming Soon` to the appropriate action text
-4. Do NOT regenerate any other sections
-5. Write the updated file
-
-**Material types and their button text when available:**
-| Material | Button text |
-|---|---|
-| Questionnaire | View Questionnaire |
-| Session 1 | Watch Recording |
-| Session 2 | Watch Recording |
-| Calculator | Open Calculator |
-| Guide | Open Guide |
+- [ ] The Experience sentence on the Strategy page is the operator's own, word for word
+- [ ] The goal names the experience, the guest, the price and the first departure date
+- [ ] Each week's actions carry a `→ links to:` note wherever a matching step exists
+- [ ] Each track's work sits inside its own phase of the roadmap
+- [ ] Success Metrics column headings fit this plan's length
+- [ ] Every material link opens for someone who is not signed in to Junction's Google account
+- [ ] No em dashes, and Canadian spelling throughout
 
 ---
 
-# Part 5: Experience-Specific Quality Checklist
-
-In addition to the general quality checklist, verify these for experience dashboards:
-
-- [ ] No Assessment nav item or `page-assessment` section exists (experience dashboards have no assessment)
-- [ ] `data-cohort-start` is empty (never pre-filled)
-- [ ] Guide page has five section cards with checkboxes `gs1` through `gs5`
-- [ ] `gs1` through `gs5` are NOT in ALL_CHECK_IDS, WEEK_CHECKS, MONTH_CHECKS, or TACTIC_CHECKS
-- [ ] Materials page has five cards with correct statuses (`available` or `coming`)
-- [ ] Every "how to" button targets a `step-tN-M` id that actually exists on the page
-- [ ] The Experience sentence appears verbatim on the Strategy page (in the `.strategy-goal` section)
-- [ ] The Experience sentence appears in the print cover content
-- [ ] Track/Tactic mapping is correct (Track 1 = tactic1, etc.)
-- [ ] All `→ links to:` annotations are stripped from display text and converted to howto buttons
-
----
-
-# Part 6: Update Commands
+# Part 5: Update Commands
 
 ## Accelerator update
 > "Update the accelerator page for [Client] - [what changed]"
@@ -1200,14 +1035,14 @@ In addition to the general quality checklist, verify these for experience dashbo
 ## Experience update
 > "Update the experience dashboard for [Operator] - [what changed]"
 
-1. Read `clients/[slug]/index.html` and `clients/[slug]/plan.md`
-2. Apply only the changes described
-3. Do NOT regenerate sections that weren't mentioned
+1. Make the change in `clients/[slug]/plan.md` or `clients/[slug]/project.json`, never in `index.html`
+2. Run `node scripts/build-experience.js [slug] --write`
+3. Check `git diff` shows only the change described
 4. Commit with a clear message describing what changed
 
 ---
 
-# Part 7: File Locations
+# Part 6: File Locations
 
 | File | Purpose |
 |---|---|
@@ -1219,7 +1054,11 @@ In addition to the general quality checklist, verify these for experience dashbo
 | `PLAN_FORMAT.md` | Standard format for accelerator plans |
 | `PLAN_FORMAT_EXPERIENCE.md` | Standard format for experience design plans |
 | `shared/plan-generator.js` | **The accelerator generator.** Parses plan.md and fills the template. Used by the Add Plan upload (`netlify/functions/create-project.js`) and `scripts/regenerate-dashboards.js`. Never copy its functions into another file. |
-| `shared/experience-generator.js` | **The experience generator.** Used by `netlify/functions/create-experience-project.js`. Output goes to `clients/[slug]/`. |
+| `shared/experience-generator.js` | **The experience generator.** Parses an experience plan.md and fills the experience template. Never copy its functions into another file. |
+| `shared/experience-project.js` | **Builds every file of an experience dashboard** from the template, the project record and the plan. Used by `netlify/functions/create-experience-project.js` (Create page), `netlify/functions/update-experience-project.js` (Manage page: add the plan, change material links) and `scripts/build-experience.js`. |
+| `clients/[slug]/project.json` | Experience dashboards only: operator name, coach, stage and material links. |
+| `admin/create-experience/`, `admin/manage-experience/` | Staff pages for creating an experience dashboard, then adding its launch plan and materials. |
+| `shared/github-repo.js` | Reads and commits repository files for the experience functions. |
 | `shared/plan-validator.js` | **The plan check.** Runs on every upload before anything is generated and returns each problem with its line number and fix. Also runs in the browser on the upload forms via `shared/plan-report-ui.js`. |
 | `shared/coach-access.js` | **Coach dashboard access.** The only code that creates, reactivates or removes a coach's `user_plans` row. Used by the uploads, assessment generation and `netlify/functions/grant-coach-access.js` (called by Edit Project and Change Coach). Never insert a coach row any other way: the browser cannot insert into `user_plans`, and the row needs a start date. |
 | `tests/plan-generator.test.js`, `tests/experience-generator.test.js`, `tests/plan-validator.test.js` | Run every real plan through the validator and generators against the current templates. Run `npm test` after changing a template, a generator or the validator. |
@@ -1245,7 +1084,7 @@ The projections block in `template/accelerator-template.html` uses placeholders 
 
 ---
 
-# Part 8: Design Sandbox Workflow
+# Part 7: Design Sandbox Workflow
 
 ## Andrea's Resort (Design Sandbox)
 

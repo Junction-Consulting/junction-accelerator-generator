@@ -1792,9 +1792,12 @@
       const experienceProjects = Array.from(projectMap.values());
       countEl.textContent = experienceProjects.length;
 
-      // Hide section if no experience projects
+      // With no experience projects, hide the section from coaches. Staff
+      // still see it, because the Create button lives in its header.
       if (experienceProjects.length === 0) {
-        section.style.display = 'none';
+        const isStaff = currentUser.role === 'admin' || currentUser.role === 'psm' || hasWildcardAccess;
+        section.style.display = isStaff ? 'block' : 'none';
+        gallery.innerHTML = `<div class="empty-state"><p>No experience dashboards yet. Create one before an operator's onboarding call, then add their launch plan after the second coaching call.</p></div>`;
         return;
       }
 
@@ -1810,9 +1813,22 @@
     }
 
     async function loadExperienceProjectProgress(project) {
-      // Fetch plan.json for total item count
+      // The project record has the operator's name and stage
+      project.stage = 'plan';
       try {
-        const res = await fetch(`/clients/${project.slug}/plan.json`);
+        const res = await fetch(`/clients/${project.slug}/project.json`, { cache: 'no-store' });
+        if (res.ok) {
+          const record = await res.json();
+          if (record.client_name) project.name = record.client_name;
+          project.stage = record.stage === 'onboarding' ? 'onboarding' : 'plan';
+        }
+      } catch (_) { /* older dashboards have no project record */ }
+
+      // Fetch plan.json for total item count and roadmap length
+      project.totalItems = 0;
+      project.totalWeeks = 12;
+      try {
+        const res = await fetch(`/clients/${project.slug}/plan.json`, { cache: 'no-store' });
         if (res.ok) {
           const plan = await res.json();
           let total = 0;
@@ -1820,10 +1836,19 @@
             total += (w.checklist || []).length;
           });
           project.totalItems = total;
+          project.totalWeeks = plan.weeks.length || 12;
         }
       } catch (_) {
         project.totalItems = 0;
       }
+
+      // The roadmap starts only once a start date is confirmed on the dashboard.
+      // The date stored with the account is just the day the project was created.
+      project.cohort_start_date = null;
+      try {
+        const { data } = await supabaseClient.rpc('get_launch_start_date', { p_client_slug: project.slug });
+        if (data && data.confirmed && data.start_date) project.cohort_start_date = data.start_date;
+      } catch (_) { /* not available: treat as not started */ }
 
       // Fetch checked count from Supabase
       try {
@@ -1837,11 +1862,11 @@
         project.checkedCount = 0;
       }
 
-      // Calculate current week from cohort start date (if set by operator)
+      // Calculate current week from the confirmed start date
       if (project.cohort_start_date) {
-        const start = new Date(project.cohort_start_date);
+        const start = new Date(project.cohort_start_date + 'T00:00:00');
         const days = Math.floor((Date.now() - start.getTime()) / 86400000);
-        project.week = Math.min(Math.max(Math.floor(days / 7) + 1, 1), 12);
+        project.week = Math.min(Math.max(Math.floor(days / 7) + 1, 1), project.totalWeeks);
       } else {
         project.week = null; // Not yet set
       }
@@ -1856,13 +1881,26 @@
           ? Math.round((p.checkedCount / p.totalItems) * 100)
           : 0;
 
-        const startDateDisplay = p.cohort_start_date
-          ? new Date(p.cohort_start_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
-          : 'Onboarding date not set';
+        const onboarding = p.stage === 'onboarding';
+        const startDateDisplay = onboarding
+          ? 'Onboarding'
+          : (p.cohort_start_date
+            ? 'Started ' + new Date(p.cohort_start_date + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+            : 'Start date not chosen yet');
 
-        const weekDisplay = p.week !== null
-          ? `Week ${p.week} of 12`
-          : 'Awaiting launch date';
+        const weekDisplay = onboarding
+          ? 'Launch plan not added yet'
+          : (p.week !== null ? `Week ${p.week} of ${p.totalWeeks}` : 'Launch plan ready');
+
+        const manageButton = canEdit ? `
+              <div class="project-card__actions">
+                <button class="project-card__edit-btn" onclick="event.preventDefault(); event.stopPropagation(); window.location.href='/admin/manage-experience/?slug=${p.slug}'" title="Add the launch plan or materials">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 20h9"/>
+                    <path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/>
+                  </svg>
+                </button>
+              </div>` : '';
 
         return `
           <a href="/${p.slug}/" class="project-card" style="animation-delay: ${i * 0.05}s" data-slug="${p.slug}">
@@ -1870,7 +1908,7 @@
               <div class="project-card__info">
                 <h2 class="project-card__name">${escapeHtml(p.name)}</h2>
                 <p class="project-card__meta">${startDateDisplay}</p>
-              </div>
+              </div>${manageButton}
             </div>
             <p class="project-card__week">${weekDisplay}</p>
             <div class="project-card__progress">

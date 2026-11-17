@@ -1,16 +1,17 @@
 // Netlify Function: Create Experience Project
-// Processes a plan.md file (experience format), generates experience dashboard, commits to GitHub
+//
+// Creates a new Experience Design dashboard. It can be created at either stage:
+//   - onboarding: no plan yet. The dashboard has Home, Guide and Materials, so
+//     it is live for the operator's onboarding call.
+//   - plan: a plan.md (experience format) is uploaded with it.
+// The launch plan and material links are added later with
+// netlify/functions/update-experience-project.js.
 
 import { createClient } from '@supabase/supabase-js';
-// Parsing and rendering live in a shared, tested module.
-import { parseExperiencePlanMd, renderExperienceDashboard, generateExperiencePlanJson, validateExperienceHtml } from '../../shared/experience-generator.js';
-import { validatePlan, formatReport } from '../../shared/plan-validator.js';
+// Parsing, checking and rendering live in shared, tested modules.
+import { buildExperienceFiles, materialLinkProblems } from '../../shared/experience-project.js';
+import { readRepoFile, repoPathExists, commitToGitHub } from '../../shared/github-repo.js';
 import { ensureCoachAccess } from '../../shared/coach-access.js';
-
-// The branch this function reads templates from and commits to. Production
-// uses main. A Netlify deploy preview can set GITHUB_BRANCH to its own branch
-// so test uploads never touch main.
-const GITHUB_BRANCH = process.env.GITHUB_BRANCH || 'main';
 
 // ═══════════════════════════════════════════════════════════════════════════
 // MAIN HANDLER
@@ -25,10 +26,10 @@ export async function handler(event, context) {
   try {
     // Parse request body
     const body = JSON.parse(event.body);
-    const { clientName, slug, coachEmail, assessmentDate, planMd } = body;
+    const { clientName, slug, coachEmail, planMd, materials, welcomeMessage } = body;
 
-    // Validate required fields (no cohortStartDate for experience)
-    if (!clientName || !slug || !coachEmail || !assessmentDate || !planMd) {
+    // The plan is optional: without one the dashboard starts at the onboarding stage
+    if (!clientName || !slug || !coachEmail) {
       return {
         statusCode: 400,
         body: JSON.stringify({ error: 'Missing required fields' })
@@ -41,6 +42,11 @@ export async function handler(event, context) {
         statusCode: 400,
         body: JSON.stringify({ error: 'Invalid slug format' })
       };
+    }
+
+    const linkProblems = materialLinkProblems(materials);
+    if (linkProblems.length) {
+      return { statusCode: 400, body: JSON.stringify({ error: linkProblems.join('\n'), step: 'materials' }) };
     }
 
     // ─────────────────────────────────────────────────────────────────────────
@@ -76,130 +82,42 @@ export async function handler(event, context) {
     }
 
     // ─────────────────────────────────────────────────────────────────────────
-    // 2. CHECK IF PROJECT EXISTS
+    // 2. CHECK IF PROJECT EXISTS, AND READ THE TEMPLATE
     // ─────────────────────────────────────────────────────────────────────────
-    const checkUrl = `https://api.github.com/repos/${process.env.GITHUB_OWNER}/${process.env.GITHUB_REPO}/contents/clients/${slug}?ref=${encodeURIComponent(GITHUB_BRANCH)}`;
-    const checkRes = await fetch(checkUrl, {
-      headers: {
-        'Authorization': `Bearer ${process.env.GITHUB_TOKEN}`,
-        'Accept': 'application/vnd.github.v3+json'
+    // The template is read from the same branch the result is committed to, so
+    // the function code and the template always come from the same place.
+    let template;
+    try {
+      if (await repoPathExists(`clients/${slug}`)) {
+        return {
+          statusCode: 409,
+          body: JSON.stringify({ error: 'A project with this URL slug already exists. To add a launch plan or materials to it, open it from My Clients and choose Manage.', step: 'github' })
+        };
       }
-    });
+      template = await readRepoFile('template/experience-template.html');
+      if (template === null) throw new Error('The dashboard template was not found on GitHub. Nothing was created.');
+    } catch (err) {
+      return { statusCode: 500, body: JSON.stringify({ error: err.message, step: 'github' }) };
+    }
 
-    if (checkRes.status === 200) {
+    // ─────────────────────────────────────────────────────────────────────────
+    // 3. CHECK THE PLAN (IF ANY) AND BUILD THE FILES
+    // ─────────────────────────────────────────────────────────────────────────
+    // A plan with problems is rejected with a list of the exact changes
+    // needed. The generated page is checked too. Nothing is committed unless
+    // both pass.
+    const built = buildExperienceFiles({ template, clientName, slug, coachEmail, planMd, materials, welcomeMessage });
+    if (!built.ok) {
       return {
-        statusCode: 409,
-        body: JSON.stringify({ error: 'Project already exists', step: 'github' })
+        statusCode: built.step === 'generate' ? 500 : 400,
+        body: JSON.stringify({ error: built.error, step: built.step, issues: built.issues, warnings: built.warnings })
       };
     }
 
     // ─────────────────────────────────────────────────────────────────────────
-    // 3. PARSE PLAN.MD
+    // 4. COMMIT TO GITHUB (all files in a single commit)
     // ─────────────────────────────────────────────────────────────────────────
-    // Check the plan first. A plan with problems is rejected with a list of
-    // the exact changes needed; nothing is generated or committed.
-    const report = validatePlan(planMd, { type: 'experience', slug });
-    if (!report.ok) {
-      return {
-        statusCode: 400,
-        body: JSON.stringify({
-          error: formatReport(report),
-          step: 'validate',
-          issues: report.errors,
-          warnings: report.warnings
-        })
-      };
-    }
-
-    const planData = parseExperiencePlanMd(planMd);
-    if (planData.error) {
-      return {
-        statusCode: 400,
-        body: JSON.stringify({ error: planData.error, step: 'parse' })
-      };
-    }
-
-    // ─────────────────────────────────────────────────────────────────────────
-    // 4. FETCH TEMPLATE FROM GITHUB
-    // ─────────────────────────────────────────────────────────────────────────
-    // Read the template from the same branch the result is committed to, so the
-    // function code and the template always come from the same place.
-    const templateUrl = `https://api.github.com/repos/${process.env.GITHUB_OWNER}/${process.env.GITHUB_REPO}/contents/template/experience-template.html?ref=${encodeURIComponent(GITHUB_BRANCH)}`;
-    const templateRes = await fetch(templateUrl, {
-      headers: {
-        'Authorization': `Bearer ${process.env.GITHUB_TOKEN}`,
-        'Accept': 'application/vnd.github.v3+json'
-      }
-    });
-
-    if (!templateRes.ok) {
-      // Say why GitHub refused, so a configuration problem can be fixed
-      // without guessing. GitHub's message never contains the token.
-      let githubMessage = '';
-      try { githubMessage = (await templateRes.json()).message || ''; } catch (e) { /* no JSON body */ }
-      const hint = templateRes.status === 401
-        ? 'The GitHub token in the site settings is not valid or has expired.'
-        : templateRes.status === 403
-          ? 'The GitHub token is not allowed to access this repository.'
-          : templateRes.status === 404
-            ? `The template was not found on the "${GITHUB_BRANCH}" branch, or the GitHub token cannot see this repository.`
-            : 'GitHub could not be reached.';
-      console.error('[github] Template fetch failed:', templateRes.status, githubMessage);
-      return {
-        statusCode: 500,
-        body: JSON.stringify({
-          error: `Could not read the dashboard template from GitHub (status ${templateRes.status}${githubMessage ? `: ${githubMessage}` : ''}). ${hint} Nothing was created.`,
-          step: 'github'
-        })
-      };
-    }
-
-    const templateData = await templateRes.json();
-    const templateContent = Buffer.from(templateData.content, 'base64').toString('utf-8');
-
-    // ─────────────────────────────────────────────────────────────────────────
-    // 5. PROCESS TEMPLATE
-    // ─────────────────────────────────────────────────────────────────────────
-    const { html: processedHtml, unfilledPlaceholders } = renderExperienceDashboard(templateContent, {
-      clientName,
-      slug,
-      coachEmail,
-      ...planData
-    });
-
-    // Never commit a page that is not internally consistent
-    const pageProblems = validateExperienceHtml(processedHtml);
-    if (unfilledPlaceholders.length > 0 || pageProblems.length > 0) {
-      const details = [
-        ...unfilledPlaceholders.map(name => `Template placeholder with no data: ${name}`),
-        ...pageProblems.map(problem => problem.message)
-      ];
-      console.error('[generator] Refusing to commit an inconsistent page:', details.join(' | '));
-      return {
-        statusCode: 500,
-        body: JSON.stringify({
-          error: `The dashboard could not be generated correctly, so nothing was uploaded. This is a problem with the generator or template, not with the plan.\n• ${details.slice(0, 8).join('\n• ')}`,
-          step: 'generate',
-          issues: details.map(message => ({ severity: 'error', line: null, message, fix: '' }))
-        })
-      };
-    }
-
-    // ─────────────────────────────────────────────────────────────────────────
-    // 6. GENERATE PLAN.JSON
-    // ─────────────────────────────────────────────────────────────────────────
-    const planJson = generateExperiencePlanJson(clientName, slug, coachEmail, planData);
-
-    // ─────────────────────────────────────────────────────────────────────────
-    // 7. COMMIT TO GITHUB (3 files in single commit)
-    // ─────────────────────────────────────────────────────────────────────────
-    const commitMessage = `Add experience project: ${clientName}`;
-
-    const commitResult = await commitToGitHub([
-      { path: `clients/${slug}/plan.md`, content: planMd },
-      { path: `clients/${slug}/index.html`, content: processedHtml },
-      { path: `clients/${slug}/plan.json`, content: JSON.stringify(planJson, null, 2) }
-    ], commitMessage);
+    const commitResult = await commitToGitHub(built.files, `Add experience project: ${clientName}`);
 
     if (commitResult.error) {
       return {
@@ -209,11 +127,13 @@ export async function handler(event, context) {
     }
 
     // ─────────────────────────────────────────────────────────────────────────
-    // 8. CREATE OR UPDATE SUPABASE ENTRY (upsert logic)
+    // 5. GIVE THE COACH ACCESS
     // ─────────────────────────────────────────────────────────────────────────
     // The coach's own user_plans row is what lists this project in My Clients
     // and lets the coach open it. The table requires a start date, so the row
-    // starts on today's date until staff or the operator's coach changes it.
+    // carries today's date. That date is never shown as the operator's start:
+    // the roadmap starts only when a start date is confirmed on the dashboard
+    // (see supabase/migrations/015_experience_launch_start.sql).
     // Files are already committed, so a failure is reported, not thrown.
     const coachAccess = await ensureCoachAccess(supabaseAdmin, {
       coachEmail,
@@ -225,11 +145,8 @@ export async function handler(event, context) {
       console.error('[create-experience-project] Coach access not granted:', coachAccess.error);
     }
 
-    // Note: Experience projects do NOT seed 30/60/90 day milestones.
-    // The operator sets their own start date via the dashboard UI.
-
     // ─────────────────────────────────────────────────────────────────────────
-    // 8B. NOTIFY COACH OF ASSIGNMENT
+    // 6. NOTIFY COACH OF ASSIGNMENT
     // ─────────────────────────────────────────────────────────────────────────
     try {
       if (coachEmail && process.env.RESEND_API_KEY) {
@@ -253,7 +170,7 @@ export async function handler(event, context) {
         <table width="100%" cellpadding="0" cellspacing="0" style="max-width: 520px; background-color: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 24px rgba(17,21,75,0.08);">
           <tr>
             <td style="background-color: #11154b; padding: 32px; text-align: center;">
-              <span style="font-size: 18px; font-weight: 800; color: #aadab6; letter-spacing: 0.06em; text-transform: uppercase;">eLearningU</span>
+              <span style="font-size: 18px; font-weight: 800; color: #aadab6; letter-spacing: 0.06em; text-transform: uppercase;">Junction</span>
             </td>
           </tr>
           <tr>
@@ -263,7 +180,7 @@ export async function handler(event, context) {
                 Great news! You have been assigned as the coach for <strong style="color: #11154b;">${safeClientName}</strong>.
               </p>
               <p style="margin: 0 0 24px; font-size: 15px; line-height: 1.6; color: #6b6b8a;">
-                Their experience design dashboard has been created and you can now access it to track their progress and support them through the launch process.
+                Their Experience Design dashboard has been created. You can open it to add their guide and materials, and to follow their progress once their launch plan is added.
               </p>
               <div style="background-color: #f5ede0; border-radius: 10px; padding: 20px; margin-bottom: 24px;">
                 <p style="margin: 0 0 8px; font-size: 13px; font-weight: 600; color: #11154b;">Project Details</p>
@@ -290,7 +207,7 @@ export async function handler(event, context) {
             <td style="padding: 24px 32px; background-color: #f5ede0; text-align: center;">
               <p style="margin: 0; font-size: 12px; color: #6b6b8a;">
                 Assigned by ${safeSenderEmail}<br>
-                eLearningU Accelerator Program<br>
+                Junction Experience Design Program<br>
                 <a href="https://accelerator.elearningu.com" style="color: #11154b;">accelerator.elearningu.com</a>
               </p>
             </td>
@@ -329,7 +246,7 @@ export async function handler(event, context) {
     }
 
     // ─────────────────────────────────────────────────────────────────────────
-    // 9. SUCCESS
+    // 7. SUCCESS
     // ─────────────────────────────────────────────────────────────────────────
     return {
       statusCode: 200,
@@ -337,8 +254,9 @@ export async function handler(event, context) {
         success: true,
         slug,
         projectUrl: `/${slug}/`,
-        warnings: report.warnings,
-        summary: report.summary,
+        stage: built.stage,
+        warnings: built.warnings,
+        summary: built.summary,
         commitUrl: commitResult.commitUrl,
         coachAccessGranted: coachAccess.ok
       })
@@ -350,96 +268,5 @@ export async function handler(event, context) {
       statusCode: 500,
       body: JSON.stringify({ error: err.message || 'Internal server error' })
     };
-  }
-}
-
-// ═══════════════════════════════════════════════════════════════════════════
-// GITHUB COMMIT
-// ═══════════════════════════════════════════════════════════════════════════
-
-// Build an error that says which GitHub step failed and why. GitHub's
-// message never contains the token.
-async function githubError(action, response) {
-  let githubMessage = '';
-  try { githubMessage = (await response.json()).message || ''; } catch (e) { /* no JSON body */ }
-  const writeStep = action !== 'read the branch' && action !== 'read the latest commit';
-  const hint = response.status === 401
-    ? 'The GitHub token in the site settings is not valid or has expired.'
-    : (response.status === 403 || response.status === 404)
-      ? (writeStep
-        ? 'The GitHub token can read this repository but is not allowed to write to it. It needs read and write access to the repository contents.'
-        : 'The GitHub token cannot see this repository or branch.')
-      : response.status === 409 || response.status === 422
-        ? 'GitHub rejected the change. Someone else may have committed at the same moment. Try again.'
-        : 'GitHub could not complete the request.';
-  console.error(`[github] Could not ${action}:`, response.status, githubMessage);
-  return new Error(`Could not ${action} on GitHub (status ${response.status}${githubMessage ? `: ${githubMessage}` : ''}). ${hint} Nothing was created.`);
-}
-
-async function commitToGitHub(files, message) {
-  const headers = {
-    'Authorization': `Bearer ${process.env.GITHUB_TOKEN}`,
-    'Accept': 'application/vnd.github.v3+json'
-  };
-
-  const owner = process.env.GITHUB_OWNER;
-  const repo = process.env.GITHUB_REPO;
-  const branch = GITHUB_BRANCH;
-
-  try {
-    // 1. Get latest commit SHA
-    const refRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/git/refs/heads/${branch}`, { headers });
-    if (!refRes.ok) throw await githubError('read the branch', refRes);
-    const refData = await refRes.json();
-    const latestCommitSha = refData.object.sha;
-
-    // 2. Get tree of latest commit
-    const commitRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/git/commits/${latestCommitSha}`, { headers });
-    if (!commitRes.ok) throw await githubError('read the latest commit', commitRes);
-    const commitData = await commitRes.json();
-    const baseTreeSha = commitData.tree.sha;
-
-    // 3. Create new tree
-    const treeRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/git/trees`, {
-      method: 'POST',
-      headers: { ...headers, 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        base_tree: baseTreeSha,
-        tree: files.map(f => ({
-          path: f.path,
-          mode: '100644',
-          type: 'blob',
-          content: f.content
-        }))
-      })
-    });
-    if (!treeRes.ok) throw await githubError('save the new files', treeRes);
-    const treeData = await treeRes.json();
-
-    // 4. Create commit
-    const newCommitRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/git/commits`, {
-      method: 'POST',
-      headers: { ...headers, 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        message,
-        tree: treeData.sha,
-        parents: [latestCommitSha]
-      })
-    });
-    if (!newCommitRes.ok) throw await githubError('create the commit', newCommitRes);
-    const newCommitData = await newCommitRes.json();
-
-    // 5. Update branch reference
-    const updateRefRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/git/refs/heads/${branch}`, {
-      method: 'PATCH',
-      headers: { ...headers, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ sha: newCommitData.sha })
-    });
-    if (!updateRefRes.ok) throw await githubError('update the branch', updateRefRes);
-
-    return { commitUrl: newCommitData.html_url };
-
-  } catch (err) {
-    return { error: err.message };
   }
 }

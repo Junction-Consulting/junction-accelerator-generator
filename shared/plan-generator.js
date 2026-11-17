@@ -15,7 +15,10 @@
 // PLAN.MD PARSER
 // ═══════════════════════════════════════════════════════════════════════════
 
-function parsePlanMd(rawContent) {
+function parsePlanMd(rawContent, options = {}) {
+  // Accelerator roadmaps are always 12 weeks. Experience roadmaps pass a
+  // lower minimum (see shared/experience-generator.js).
+  const minWeeks = options.minWeeks || 12;
   try {
     // Tolerate common formatting variations before parsing
     const content = normalisePlanMd(rawContent);
@@ -294,8 +297,8 @@ function parsePlanMd(rawContent) {
       });
     }
 
-    if (result.roadmap.weeks.length < 12) {
-      return { error: `Found ${result.roadmap.weeks.length} weeks, expected 12` };
+    if (result.roadmap.weeks.length < minWeeks) {
+      return { error: `Found ${result.roadmap.weeks.length} weeks, expected ${minWeeks === 12 ? '12' : `${minWeeks} to 12`}` };
     }
 
     // Extract GBP Quick Wins content

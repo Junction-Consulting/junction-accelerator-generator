@@ -68,12 +68,41 @@ function parseExperiencePlanMd(content) {
       .replace(/^## Track (\d+):/gm, '## Tactic $1:')
       .replace(/^Track Pill:/gm, 'Tactic Pill:')
       .replace(/^## Launch Roadmap\s*$/m, '## 90-Day Roadmap')
+      .replace(/^Phase ([123]) Name:/gm, 'Month $1 Name:')
       .replace(/→ links to: Track (\d+)/g, '→ links to: Tactic $1');
 
-    const base = parseAcceleratorPlanMd(normalised);
+    const base = parseAcceleratorPlanMd(normalised, { minWeeks: MIN_WEEKS });
     if (base.error) {
       return { error: base.error.replace(/tactics/g, 'tracks').replace(/Tactic/g, 'Track') };
     }
+
+    // A launch roadmap runs 8 to 12 weeks, numbered from 1 with none missing
+    const weeks = [...base.roadmap.weeks].sort((a, b) => a.number - b.number);
+    if (weeks.length > MAX_WEEKS) {
+      return { error: `Found ${weeks.length} weeks, expected ${MIN_WEEKS} to ${MAX_WEEKS}` };
+    }
+    const outOfSequence = weeks.find((w, i) => w.number !== i + 1);
+    if (outOfSequence) {
+      return { error: `Roadmap weeks must be numbered 1 to ${weeks.length} with none missing or repeated (found Week ${outOfSequence.number} in position ${weeks.indexOf(outOfSequence) + 1})` };
+    }
+
+    // The roadmap is shown in three phases, one per track. Weeks are shared
+    // out evenly unless the plan says where Phase 2 and Phase 3 start.
+    const phaseStart = n => {
+      const m = text.match(new RegExp(`^(?:Phase|Month) ${n} Starts:\\s*(?:Week\\s*)?(\\d+)`, 'mi'));
+      return m ? Number(m[1]) : null;
+    };
+    const phaseWeeks = splitIntoPhases(weeks.length, phaseStart(2), phaseStart(3));
+
+    // Column headings of each track's Success Metrics table, as written
+    const metricsHeaders = normalised
+      .split(/\n(?=## Tactic \d+:)/)
+      .filter(section => /^## Tactic \d+:/.test(section))
+      .map(section => {
+        const m = section.match(/### Success Metrics[\r\n]+\|([^\n]+)\|[ \t]*[\r\n]+\|[-|:\s]+\|/);
+        const cells = m ? m[1].split('|').map(c => c.trim()) : [];
+        return cells.length >= 4 ? cells.slice(0, 4) : DEFAULT_METRICS_HEADER;
+      });
 
     return {
       meta: base.meta,
@@ -82,8 +111,8 @@ function parseExperiencePlanMd(content) {
       strategicPositioning: base.strategicPositioning,
       welcomeMessage: base.welcomeMessage,
       objectives: base.objectives,
-      tactics: base.tactics.slice(0, 3),
-      roadmap: base.roadmap,
+      tactics: base.tactics.slice(0, 3).map((track, i) => ({ ...track, metricsHeader: metricsHeaders[i] || DEFAULT_METRICS_HEADER })),
+      roadmap: { ...base.roadmap, weeks, phaseWeeks },
       hasBookabilityChecklist,
       bookabilityItems,
       pricePoint,
@@ -97,6 +126,29 @@ function parseExperiencePlanMd(content) {
 // ═══════════════════════════════════════════════════════════════════════════
 // HTML GENERATORS (experience template markup)
 // ═══════════════════════════════════════════════════════════════════════════
+
+const MIN_WEEKS = 8;
+const MAX_WEEKS = 12;
+const DEFAULT_METRICS_HEADER = ['Metric', '30 Days', '60 Days', '90 Days'];
+
+/**
+ * Share the roadmap weeks between the three phases. Returns the phase (1-3)
+ * of each week, as an object keyed by week number. With no starts given the
+ * weeks are split evenly and earlier phases take any extra week:
+ * 8 weeks = 3/3/2, 10 = 4/3/3, 12 = 4/4/4.
+ */
+function splitIntoPhases(totalWeeks, phase2Start, phase3Start) {
+  const base = Math.floor(totalWeeks / 3);
+  const extra = totalWeeks % 3;
+  let start2 = base + (extra > 0 ? 1 : 0) + 1;
+  let start3 = start2 + base + (extra > 1 ? 1 : 0);
+  const valid = Number.isInteger(phase2Start) && Number.isInteger(phase3Start)
+    && phase2Start > 1 && phase3Start > phase2Start && phase3Start <= totalWeeks;
+  if (valid) { start2 = phase2Start; start3 = phase3Start; }
+  const phaseOf = {};
+  for (let w = 1; w <= totalWeeks; w++) phaseOf[w] = w >= start3 ? 3 : (w >= start2 ? 2 : 1);
+  return phaseOf;
+}
 
 function paragraphsHtml(text) {
   return (text || '')
@@ -256,13 +308,60 @@ function bookabilityItemsHtml(items) {
 // TEMPLATE PROCESSOR
 // ═══════════════════════════════════════════════════════════════════════════
 
-const MATERIALS = ['QUESTIONNAIRE', 'SESSION1', 'SESSION2', 'CALCULATOR'];
+// The five things on the Guide and Materials pages. Each is a link staff add
+// when it is ready; until then the card says "Coming soon".
+const MATERIALS = {
+  guide: { placeholder: 'GUIDE', button: 'Open Your Guide' },
+  questionnaire: { placeholder: 'MATERIAL_QUESTIONNAIRE', button: 'View Your Answers' },
+  session1: { placeholder: 'MATERIAL_SESSION1', button: 'Read the Summary' },
+  session2: { placeholder: 'MATERIAL_SESSION2', button: 'Read the Summary' },
+  calculator: { placeholder: 'MATERIAL_CALCULATOR', button: 'Open the Calculator' }
+};
+const MATERIAL_KEYS = Object.keys(MATERIALS);
 
-function monthOf(weekNum) {
-  return Math.min(3, Math.ceil(weekNum / 4));
+const ONBOARDING_WELCOME = 'This is your home for the program. Your guide and materials live here, and your launch plan will be added after your coaching calls.';
+const ONBOARDING_SUBTITLE = 'Your guide, your materials and, after your coaching calls, your launch plan.';
+
+/** Only web links are accepted; anything else is treated as not yet available. */
+function safeUrl(value) {
+  const url = String(value == null ? '' : (typeof value === 'object' ? value.url || '' : value)).trim();
+  return /^https?:\/\/[^\s"'<>]+$/i.test(url) ? url : '';
 }
 
-function renderExperienceDashboard(template, data) {
+/** Always returns all five material keys, each a link or ''. */
+function normaliseMaterials(input) {
+  const out = {};
+  for (const key of MATERIAL_KEYS) out[key] = safeUrl(input && input[key]);
+  return out;
+}
+
+/** First sentence of the goal, or as much of it as fits, never cut mid-word. */
+function shortGoal(goal, max = 170) {
+  const text = stripMarkdown(goal || '').replace(/\s+/g, ' ').trim();
+  if (text.length <= max) return text;
+  const sentence = text.match(/^.+?[.!?](?=\s)/);
+  if (sentence && sentence[0].length <= max) return sentence[0];
+  return text.slice(0, max).replace(/\s+\S*$/, '').replace(/[,;:]$/, '') + '…';
+}
+
+const EMPTY_PLAN = {
+  goal: '', experienceSentence: '', strategicPositioning: '', objectives: [], tactics: [],
+  roadmap: { monthNames: ['', '', ''], weeks: [], phaseWeeks: {} },
+  hasBookabilityChecklist: false, bookabilityItems: [], pricePoint: null, launchTarget: null
+};
+
+/**
+ * Fill the experience template.
+ *
+ * data.stage is 'plan' (a parsed plan.md is included) or 'onboarding' (the
+ * dashboard exists before the plan does: Home, Guide and Materials only).
+ * When stage is not given it is 'plan' if the data has roadmap weeks.
+ */
+function renderExperienceDashboard(template, input) {
+  const stage = input.stage || (input.roadmap && input.roadmap.weeks && input.roadmap.weeks.length ? 'plan' : 'onboarding');
+  const data = stage === 'plan' ? input : { ...input, ...EMPTY_PLAN };
+  const phaseOf = week => (data.roadmap.phaseWeeks && data.roadmap.phaseWeeks[week]) || splitIntoPhases(data.roadmap.weeks.length, null, null)[week];
+  const materials = normaliseMaterials({ guide: input.guideUrl, ...(input.materials || {}) });
   let html = template;
 
   // Remove the template header comment (documentation for maintainers)
@@ -278,9 +377,9 @@ function renderExperienceDashboard(template, data) {
   data.roadmap.weeks.forEach(week => {
     weekChecks[week.number] = week.checklist.map((_, i) => checkId(week.number, i + 1));
     roadmapIds.push(...weekChecks[week.number]);
-    // Month N and Track N both cover weeks 4N-3 to 4N
-    monthChecks[monthOf(week.number)].push(...weekChecks[week.number]);
-    tacticChecks[monthOf(week.number)].push(...weekChecks[week.number]);
+    // Phase N of the roadmap is the work of Track N
+    monthChecks[phaseOf(week.number)].push(...weekChecks[week.number]);
+    tacticChecks[phaseOf(week.number)].push(...weekChecks[week.number]);
   });
 
   const includeBookability = data.hasBookabilityChecklist && (data.bookabilityItems || []).length > 0;
@@ -293,9 +392,13 @@ function renderExperienceDashboard(template, data) {
   const goal = data.goal || '';
   fill('CLIENT_NAME', escapeHtml(data.clientName));
   fill('CLIENT_SLUG', data.slug);
-  fill('PAGE_SUBTITLE', plainText(goal.length > 100 ? goal.slice(0, 100) + '...' : goal));
+  const totalWeeks = data.roadmap.weeks.length;
+  fill('STAGE', stage);
+  fill('TOTAL_WEEKS', totalWeeks);
+  fill('TOTAL_DAYS', totalWeeks * 7);
+  fill('PAGE_SUBTITLE', stage === 'plan' ? escapeHtml(shortGoal(goal)) : ONBOARDING_SUBTITLE);
   fill('GOAL_TEXT', richText(goal));
-  fill('WM_SUBLINE', richText(data.welcomeMessage || goal.slice(0, 150)));
+  fill('WM_SUBLINE', richText(input.welcomeMessage || (stage === 'plan' ? shortGoal(goal) : ONBOARDING_WELCOME)));
   fill('STRATEGIC_POSITIONING', richText(data.strategicPositioning));
   fill('EXPERIENCE_SENTENCE', richText(data.experienceSentence));
   fill('COACH_EMAIL', escapeHtml(data.coachEmail));
@@ -321,23 +424,24 @@ function renderExperienceDashboard(template, data) {
     fill(`TACTIC_${n}_WHAT_IS`, paragraphsHtml(track.whatIs));
     fill(`TACTIC_${n}_MATTERS`, paragraphsHtml(track.whyMatters));
     fill(`TACTIC_${n}_IMPLEMENTATION_STEPS`, stepsHtml(track.implementationSteps, n));
+    fill(`TACTIC_${n}_METRICS_HEADER`, (track.metricsHeader || DEFAULT_METRICS_HEADER).map(cell => `<th>${plainText(cell)}</th>`).join(''));
     fill(`TACTIC_${n}_METRICS_ROWS`, metricsRowsHtml(track.successMetrics));
     fill(`TACTIC_${n}_TIPS`, tipsHtml(track.tips, n));
     fill(`TACTIC_${n}_RESOURCES`, resourcesHtml(track.resources, n));
 
     fill(`MONTH_${n}_NAME`, escapeHtml(data.roadmap.monthNames[i]));
     fill(`MONTH_${n}_TOTAL`, monthChecks[n].length);
-    fill(`MONTH_${n}_WEEKS`, data.roadmap.weeks.filter(w => monthOf(w.number) === n).map(w => weekCardHtml(w, { hasBookabilityPage: includeBookability })).join('\n\n'));
+    fill(`MONTH_${n}_WEEKS`, data.roadmap.weeks.filter(w => phaseOf(w.number) === n).map(w => weekCardHtml(w, { hasBookabilityPage: includeBookability })).join('\n\n'));
   }
 
-  // ── Guide and Materials: not available at first generation ───────────────
-  fill('GUIDE_URL', data.guideUrl || '#');
-  fill('GUIDE_STATUS', data.guideUrl ? 'ready' : 'coming');
-  fill('GUIDE_BUTTON_TEXT', data.guideUrl ? 'Open Guide' : 'Coming Soon');
-  for (const material of MATERIALS) {
-    fill(`MATERIAL_${material}_URL`, '#');
-    fill(`MATERIAL_${material}_STATUS`, 'coming');
-    fill(`MATERIAL_${material}_BUTTON_TEXT`, 'Coming Soon');
+  // ── Guide and Materials: a link when staff have added one ────────────────
+  for (const key of MATERIAL_KEYS) {
+    const { placeholder, button } = MATERIALS[key];
+    const url = materials[key];
+    fill(`${placeholder}_URL`, url ? escapeHtml(url) : '#');
+    fill(`${placeholder}_STATUS`, url ? 'available' : 'coming');
+    fill(`${placeholder}_STATUS_LABEL`, url ? 'Available' : 'Coming soon');
+    fill(`${placeholder}_BUTTON_TEXT`, url ? button : 'Coming soon');
   }
 
   // ── Conditional blocks ───────────────────────────────────────────────────
@@ -361,7 +465,7 @@ function renderExperienceDashboard(template, data) {
   fill('BOOKABILITY_ITEMS', bookabilityItemsHtml(data.bookabilityItems));
   if (!includeBookability) {
     // Remove the sidebar link to a page that no longer exists
-    html = html.replace(/[ \t]*<div class="nav-item"[^>]*onclick="navigate\('bookability'\)"[^>]*>[\s\S]*?<\/div>\n?/, '');
+    html = html.replace(/[ \t]*<div class="nav-item[^"]*"[^>]*onclick="navigate\('bookability'\)"[^>]*>[\s\S]*?<\/div>\n?/, '');
   }
 
   // ── JavaScript arrays ────────────────────────────────────────────────────
@@ -401,7 +505,7 @@ function generateExperiencePlanJson(clientName, slug, coachEmail, planData) {
     coach_email: coachEmail,
     weeks: planData.roadmap.weeks.map(week => ({
       week: week.number,
-      month: monthOf(week.number),
+      month: (planData.roadmap.phaseWeeks || splitIntoPhases(planData.roadmap.weeks.length, null, null))[week.number],
       title: `Week ${week.number}: ${week.title}`,
       actions: week.actions.map(plain),
       checklist: week.checklist.map(plain),
@@ -417,6 +521,10 @@ function generateExperiencePlanJson(clientName, slug, coachEmail, planData) {
 function validateExperienceHtml(html) {
   const problems = [];
   const add = (code, message) => problems.push({ code, message });
+
+  const stage = (html.match(/<body[^>]*data-stage="([a-z]*)"/) || [])[1];
+  if (stage !== 'plan' && stage !== 'onboarding') add('stage', 'data-stage on <body> must be "plan" or "onboarding"');
+  const hasPlan = stage === 'plan';
 
   const placeholders = [...new Set(html.match(/\{\{[A-Z_0-9]+\}\}/g) || [])];
   if (placeholders.length) add('placeholder', `Unfilled placeholders: ${placeholders.join(', ')}`);
@@ -457,15 +565,33 @@ function validateExperienceHtml(html) {
   }
 
   const weeks = [...html.matchAll(/<div class="week-card" id="wc-(\d+)" data-week="(\d+)"/g)].map(m => Number(m[2]));
-  if (weeks.length !== 12 || weeks.some((w, i) => w !== i + 1)) add('weeks', `Expected week cards 1-12, found: ${weeks.join(',') || 'none'}`);
+  if (hasPlan && (weeks.length < MIN_WEEKS || weeks.length > MAX_WEEKS || weeks.some((w, i) => w !== i + 1))) {
+    add('weeks', `Expected ${MIN_WEEKS} to ${MAX_WEEKS} week cards numbered from 1, found: ${weeks.join(',') || 'none'}`);
+  }
+  if (!hasPlan && weeks.length) add('weeks', 'An onboarding dashboard must not have roadmap weeks');
+  const totalWeeksAttr = Number((html.match(/<body[^>]*data-total-weeks="(\d+)"/) || [])[1]);
+  if (totalWeeksAttr !== weeks.length) add('weeks', `data-total-weeks is ${totalWeeksAttr} but the page has ${weeks.length} week cards`);
 
   for (const m of html.matchAll(/howToLink\('tactic(\d)','(step-t\d-\d+)'\)/g)) {
     if (!html.includes(`id="${m[2]}"`)) add('howto', `"how to" link points at ${m[2]}, which does not exist`);
   }
   if (/→ links to:/.test(html)) add('howto', 'A "→ links to:" annotation was left in the page text');
 
-  for (const id of ['w1-howto-example', 'w1-note-example']) {
+  for (const id of hasPlan ? ['w1-howto-example', 'w1-note-example'] : []) {
     if (!html.includes(`id="${id}"`)) add('tour', `Onboarding tour target #${id} is missing`);
+  }
+  // Every tour step must point at something on the page
+  const tourBlock = (html.match(/const TOUR_STEPS = \[[\s\S]*?\n\];/) || [''])[0];
+  for (const step of tourBlock.match(/\{[^{}]*\}/g) || []) {
+    const stepStage = (step.match(/stage:\s*'([a-z]+)'/) || [])[1];
+    if (stepStage && stepStage !== stage) continue;
+    for (const m of step.matchAll(/(?:targetId|mobileTargetId):\s*'([^']+)'/g)) {
+      if (!html.includes(`id="${m[1]}"`)) add('tour', `Welcome tour points at #${m[1]}, which does not exist`);
+    }
+  }
+  for (const m of html.matchAll(/<a [^>]*href="([^"]*)"[^>]*class="guide-action-btn (available|coming)"/g)) {
+    if (m[2] === 'available' && !/^https?:\/\//.test(m[1])) add('materials', `An available material has no link (${m[1]})`);
+    if (m[2] === 'coming' && m[1] !== '#') add('materials', 'A material marked coming soon has a link');
   }
   for (let n = 1; n <= 5; n++) {
     if (!new RegExp(`id="gs${n}"`).test(html)) add('guide', `Guide checkbox gs${n} is missing`);
@@ -482,7 +608,30 @@ function validateExperienceHtml(html) {
   return problems;
 }
 
+/**
+ * The small record kept beside each experience dashboard
+ * (clients/[slug]/project.json). The dashboard is always rebuilt from the
+ * template, this record and, once it exists, plan.md.
+ */
+function buildExperienceProject({ clientName, slug, coachEmail, stage, materials, welcomeMessage }) {
+  return {
+    type: 'experience',
+    client_name: clientName,
+    client_slug: slug,
+    coach_email: coachEmail,
+    stage: stage === 'plan' ? 'plan' : 'onboarding',
+    welcome_message: (welcomeMessage || '').trim(),
+    materials: normaliseMaterials(materials)
+  };
+}
+
 export {
+  MATERIAL_KEYS,
+  MIN_WEEKS,
+  MAX_WEEKS,
+  normaliseMaterials,
+  splitIntoPhases,
+  buildExperienceProject,
   parseExperiencePlanMd,
   renderExperienceDashboard,
   generateExperiencePlanJson,

@@ -13,12 +13,18 @@ const {
   parseExperiencePlanMd,
   renderExperienceDashboard,
   generateExperiencePlanJson,
-  validateExperienceHtml
+  validateExperienceHtml,
+  splitIntoPhases
 } = require('../shared/experience-generator.js');
+const { buildExperienceFiles, materialLinkProblems } = require('../shared/experience-project.js');
+const { validatePlan } = require('../shared/plan-validator.js');
 
 const ROOT = path.join(__dirname, '..');
 const TEMPLATE = fs.readFileSync(path.join(ROOT, 'template', 'experience-template.html'), 'utf8');
 const SAMPLE_MD = fs.readFileSync(path.join(ROOT, 'clients', 'sample-experience', 'plan.md'), 'utf8');
+// The sample is an 8-week plan; the neutral fixture is a 12-week one
+const TWELVE_WEEK_MD = fs.readFileSync(path.join(ROOT, 'tests', 'fixtures', 'neutral-experience-plan.md'), 'utf8');
+const SAMPLE_WEEKS = (SAMPLE_MD.match(/^### Week \d+:/gm) || []).length;
 
 function render(md, overrides = {}) {
   const plan = parseExperiencePlanMd(md);
@@ -59,7 +65,8 @@ describe('parser', () => {
     expect(plan.error).toBeUndefined();
     expect(plan.tactics).toHaveLength(3);
     expect(plan.objectives).toHaveLength(3);
-    expect(plan.roadmap.weeks).toHaveLength(12);
+    expect(plan.roadmap.weeks).toHaveLength(SAMPLE_WEEKS);
+    expect(SAMPLE_WEEKS).toBe(8);
   });
 
   test('keeps every implementation step', () => {
@@ -91,15 +98,15 @@ describe('parser', () => {
     expect(plan.bookabilityItems[0]).toEqual({ title: 'Insurance Coverage Confirmed', description: expect.stringMatching(/liability coverage/) });
   });
 
-  test('the bookability section does not leak into Week 12', () => {
-    const week12 = plan.roadmap.weeks[11];
-    expect(week12.checklist).toHaveLength(3);
-    week12.checklist.forEach(item => expect(item).not.toMatch(/^-+$|###/));
+  test('the bookability section does not leak into the last week', () => {
+    const lastWeek = plan.roadmap.weeks[plan.roadmap.weeks.length - 1];
+    expect(lastWeek.checklist).toHaveLength(3);
+    lastWeek.checklist.forEach(item => expect(item).not.toMatch(/^-+$|###/));
   });
 
   test('accepts a week heading directly followed by Actions', () => {
     const tight = SAMPLE_MD.replace(/(### Week \d+: .+)\n\n(\*\*Actions:\*\*)/g, '$1\n$2');
-    expect(parseExperiencePlanMd(tight).roadmap.weeks).toHaveLength(12);
+    expect(parseExperiencePlanMd(tight).roadmap.weeks).toHaveLength(SAMPLE_WEEKS);
   });
 
   test('rejects an accelerator plan with a clear message', () => {
@@ -108,8 +115,8 @@ describe('parser', () => {
   });
 
   test('reports missing weeks in track terms', () => {
-    const md = SAMPLE_MD.replace('### Week 12:', '### Wk 12:');
-    expect(parseExperiencePlanMd(md).error).toMatch(/expected 12/);
+    const md = SAMPLE_MD.replace('### Week 8:', '### Wk 8:');
+    expect(parseExperiencePlanMd(md).error).toMatch(/expected 8 to 12/);
     const twoTracks = SAMPLE_MD.replace('## Track 3:', '## Stage 3:');
     expect(parseExperiencePlanMd(twoTracks).error).toMatch(/3 tracks/);
   });
@@ -146,14 +153,39 @@ describe('generated dashboard', () => {
     expect(out.html).toContain('id="note-area-rw1_d1"');
   });
 
-  test('month totals and checklist arrays follow four-week months', () => {
+  test('phase totals and checklist arrays follow the phases the plan sets', () => {
     const monthChecks = JSON.parse(out.html.match(/const MONTH_CHECKS = (\{[\s\S]*?\});/)[1]);
+    const tacticChecks = JSON.parse(out.html.match(/const TACTIC_CHECKS = (\{[\s\S]*?\});/)[1]);
     const weeks = out.plan.roadmap.weeks;
-    [1, 2, 3].forEach(month => {
-      const expected = weeks.filter(w => Math.ceil(w.number / 4) === month).reduce((sum, w) => sum + w.checklist.length, 0);
-      expect(monthChecks[month]).toHaveLength(expected);
-      expect(out.html).toContain(`id="m${month}-prog"><span>0</span> of ${expected} done`);
+    // The sample says "Phase 2 Starts: Week 3" and "Phase 3 Starts: Week 6"
+    const phaseOf = w => (w >= 6 ? 3 : w >= 3 ? 2 : 1);
+    [1, 2, 3].forEach(phase => {
+      const expected = weeks.filter(w => phaseOf(w.number) === phase).reduce((sum, w) => sum + w.checklist.length, 0);
+      expect(monthChecks[phase]).toHaveLength(expected);
+      expect(tacticChecks[phase]).toEqual(monthChecks[phase]);
+      expect(out.html).toContain(`id="m${phase}-prog"><span>0</span> of ${expected} done`);
     });
+    expect(out.html).toContain('<span class="month-badge">Phase 1</span>');
+  });
+
+  test('the page says how long this roadmap is, not "90 days"', () => {
+    expect(out.html).toMatch(/<body[^>]*data-total-weeks="8"/);
+    expect(out.html).toMatch(/<body[^>]*data-total-days="56"/);
+    expect(out.html).toContain('Your 8-week roadmap runs from the date you pick');
+    const visible = out.html.replace(/<script[\s\S]*?<\/script>/g, '').replace(/<style[\s\S]*?<\/style>/g, '');
+    expect(visible).not.toMatch(/90[- ]day/i);
+    expect(visible).not.toMatch(/12 weeks/);
+  });
+
+  test('metrics tables use the column headings written in the plan', () => {
+    expect(out.html).toContain('<th>Metric</th><th>Week 2</th><th>Week 5</th><th>Week 8</th>');
+    expect(out.html).not.toContain('<th>30 Days</th>');
+  });
+
+  test('the header subtitle is never cut mid-word', () => {
+    const subtitle = out.html.match(/<h1>Welcome to Your Experience Design Program<\/h1>\s*<p>([^<]*)<\/p>/)[1];
+    expect(subtitle).toMatch(/[.!?…]$/);
+    expect(out.plan.goal.startsWith(subtitle.replace(/…$/, ''))).toBe(true);
   });
 
   test('guide checkboxes are not counted in the checklist arrays', () => {
@@ -198,26 +230,196 @@ describe('optional blocks', () => {
 });
 
 describe('plan.json', () => {
-  test('has twelve plain-text weeks with root deep links', () => {
+  test('has one plain-text entry per week with root deep links', () => {
     const plan = parseExperiencePlanMd(SAMPLE_MD);
     const json = generateExperiencePlanJson('Foothills Quarter Horses', 'sample-experience', 'coach@example.com', plan);
     expect(json.goal).toBe(plan.goal);
-    expect(json.weeks).toHaveLength(12);
+    expect(json.weeks).toHaveLength(SAMPLE_WEEKS);
     json.weeks.forEach((week, i) => {
-      expect(week.month).toBe(Math.ceil((i + 1) / 4));
+      expect(week.month).toBe(plan.roadmap.phaseWeeks[i + 1]);
       expect(week.deep_link).toBe(`https://accelerator.elearningu.com/sample-experience/#week-${i + 1}`);
       [...week.actions, ...week.checklist].forEach(text => expect(text).not.toMatch(/\*\*|→ links to:/));
     });
   });
 });
 
+describe('roadmap length', () => {
+  const dropWeeks = (md, from) => md.replace(new RegExp(`### Week ${from}:[\\s\\S]*?(?=\\n## |$)`), '');
+
+  test('a 12-week plan still works, split into three four-week phases', () => {
+    const { plan, html, unfilledPlaceholders } = render(TWELVE_WEEK_MD, { clientName: 'Zzq Client', slug: 'zzq-client' });
+    expect(plan.roadmap.weeks).toHaveLength(12);
+    expect(unfilledPlaceholders).toEqual([]);
+    expect(validateExperienceHtml(html)).toEqual([]);
+    expect(Object.values(plan.roadmap.phaseWeeks)).toEqual([1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3]);
+    expect(html).toMatch(/<body[^>]*data-total-weeks="12"/);
+  });
+
+  test('weeks are shared out evenly when the plan does not say', () => {
+    expect(Object.values(splitIntoPhases(8))).toEqual([1, 1, 1, 2, 2, 2, 3, 3]);
+    expect(Object.values(splitIntoPhases(10))).toEqual([1, 1, 1, 1, 2, 2, 2, 3, 3, 3]);
+    expect(Object.values(splitIntoPhases(8, 3, 6))).toEqual([1, 1, 2, 2, 2, 3, 3, 3]);
+    // Starts that do not fit are ignored
+    expect(Object.values(splitIntoPhases(8, 6, 3))).toEqual([1, 1, 1, 2, 2, 2, 3, 3]);
+  });
+
+  test('a 10-week plan is accepted by the upload check and generates', () => {
+    const md = dropWeeks(TWELVE_WEEK_MD, 11);
+    expect(validatePlan(md, { type: 'experience' }).errors).toEqual([]);
+    const { plan, html } = render(md, { clientName: 'Zzq Client', slug: 'zzq-client' });
+    expect(plan.roadmap.weeks).toHaveLength(10);
+    expect(validateExperienceHtml(html)).toEqual([]);
+  });
+
+  test('fewer than 8 weeks, or a skipped week, is rejected in plain words', () => {
+    const seven = validatePlan(dropWeeks(TWELVE_WEEK_MD, 8), { type: 'experience' });
+    expect(seven.errors.map(e => e.message).join(' ')).toMatch(/needs 8 to 12 weeks.*Missing: Week 8/);
+    const skipped = validatePlan(TWELVE_WEEK_MD.replace('### Week 5:', '### Week 13:'), { type: 'experience' });
+    expect(skipped.ok).toBe(false);
+  });
+
+  test('an accelerator plan must still be exactly 12 weeks', () => {
+    const accelerator = fs.readFileSync(path.join(ROOT, 'tests', 'fixtures', 'neutral-plan.md'), 'utf8');
+    const report = validatePlan(dropWeeks(accelerator, 11), { type: 'accelerator' });
+    expect(report.errors.map(e => e.message).join(' ')).toMatch(/needs Weeks 1 to 12/);
+  });
+
+  test('phase starts must come as a pair that fits the roadmap', () => {
+    const one = SAMPLE_MD.replace(/^Phase 3 Starts:.*\n/m, '');
+    expect(validatePlan(one, { type: 'experience' }).errors.map(e => e.message).join(' ')).toMatch(/Only one of/);
+    const bad = SAMPLE_MD.replace('Phase 3 Starts: Week 6', 'Phase 3 Starts: Week 9');
+    expect(validatePlan(bad, { type: 'experience' }).errors.map(e => e.message).join(' ')).toMatch(/does not fit a 8-week roadmap/);
+  });
+});
+
+describe('onboarding stage (dashboard created before the plan exists)', () => {
+  const build = (extra = {}) => buildExperienceFiles({
+    template: TEMPLATE, clientName: 'Zzq Client', slug: 'zzq-client', coachEmail: 'coach@example.com', ...extra
+  });
+
+  test('builds a valid dashboard with no plan', () => {
+    const built = build();
+    expect(built.ok).toBe(true);
+    expect(built.stage).toBe('onboarding');
+    expect(built.files.map(f => f.path)).toEqual(['clients/zzq-client/project.json', 'clients/zzq-client/index.html']);
+    const html = built.files[1].content;
+    expect(html).toMatch(/<body[^>]*data-stage="onboarding"/);
+    expect(html).not.toMatch(/class="week-card"/);
+    expect(html).not.toContain('id="page-bookability"');
+    expect(html).toContain('id="journey-section"');
+    expect(JSON.parse(html.match(/const ALL_CHECK_IDS = (\[[\s\S]*?\]);/)[1])).toEqual([]);
+    expect(html).not.toMatch(/\{\{[A-Z_0-9]+\}\}/);
+  });
+
+  test('everything that needs a plan is marked so it is hidden until there is one', () => {
+    const html = build().files[1].content;
+    for (const page of ['strategy', 'roadmap', 'tactic1', 'tactic2', 'tactic3']) {
+      expect(html).toMatch(new RegExp(`<div class="nav-item plan-only"[^>]*data-page="${page}"`));
+    }
+    for (const page of ['guide', 'materials']) {
+      expect(html).toMatch(new RegExp(`<div class="nav-item"[^>]*data-page="${page}"`));
+    }
+    expect(html).toContain('body[data-stage="onboarding"] .plan-only{display:none!important}');
+    expect(html).toContain('<div class="start-date-card plan-only" id="start-date-card">');
+  });
+
+  test('adding the plan keeps the material links and moves to the plan stage', () => {
+    const materials = { guide: 'https://example.com/guide', session1: 'https://example.com/call-1' };
+    const before = build({ materials });
+    const project = JSON.parse(before.files[0].content);
+    expect(project.stage).toBe('onboarding');
+    expect(project.materials).toEqual({ guide: 'https://example.com/guide', questionnaire: '', session1: 'https://example.com/call-1', session2: '', calculator: '' });
+
+    const after = build({ planMd: TWELVE_WEEK_MD, materials: project.materials });
+    expect(after.ok).toBe(true);
+    expect(after.stage).toBe('plan');
+    expect(after.files.map(f => f.path.split('/').pop()).sort()).toEqual(['index.html', 'plan.json', 'plan.md', 'project.json']);
+    const html = after.files.find(f => f.path.endsWith('index.html')).content;
+    expect(html).toMatch(/<body[^>]*data-stage="plan"/);
+    expect(html).toContain('<a href="https://example.com/guide" target="_blank" class="guide-action-btn available">Open Your Guide</a>');
+    expect(html).toContain('<a href="https://example.com/call-1" target="_blank" class="guide-action-btn available">Read the Summary</a>');
+    expect(html).toContain('<a href="#" target="_blank" class="guide-action-btn coming">Coming soon</a>');
+    expect(validateExperienceHtml(html)).toEqual([]);
+  });
+
+  test('a plan with problems is rejected and nothing is built', () => {
+    const built = build({ planMd: TWELVE_WEEK_MD.replace('## The Experience', '## About') });
+    expect(built.ok).toBe(false);
+    expect(built.step).toBe('validate');
+    expect(built.files).toBeUndefined();
+  });
+
+  test('only web links are accepted for materials', () => {
+    expect(materialLinkProblems({ guide: 'https://example.com/a', session1: '' })).toEqual([]);
+    expect(materialLinkProblems({ guide: 'javascript:alert(1)' })).toHaveLength(1);
+    expect(materialLinkProblems({ calculator: 'my calculator.xlsx' })[0]).toMatch(/Costing and Pricing Calculator/);
+    const html = build({ materials: { guide: 'javascript:alert(1)', session1: 'https://example.com/"><script>' } }).files[1].content;
+    expect(html).not.toContain('javascript:alert');
+    expect(html).not.toContain('"><script>');
+  });
+});
+
+describe('template behaviour', () => {
+  test('uses the Junction logo and never swaps it for another', () => {
+    expect(TEMPLATE).toContain('<img id="sidebar-logo-img" src="/assets/junction-logo-white.png" alt="Junction">');
+    expect(TEMPLATE).not.toContain('LOGO_B64');
+    // The only embedded image left is the site favicon in <head>
+    expect(TEMPLATE.slice(TEMPLATE.indexOf('<body'))).not.toMatch(/data:image\/png;base64/);
+  });
+
+  test('opens the week named in an emailed #week-N link', () => {
+    expect(TEMPLATE).toContain("window.addEventListener('hashchange', openWeekFromHash)");
+  });
+
+  test('the start date comes from a confirmed choice, not the account creation date', () => {
+    expect(TEMPLATE).toContain("rpc('get_launch_start_date'");
+    expect(TEMPLATE).toContain("rpc('set_launch_start_date'");
+    const migration = fs.readFileSync(path.join(ROOT, 'supabase', 'migrations', '015_experience_launch_start.sql'), 'utf8');
+    expect(migration).toContain('CREATE OR REPLACE FUNCTION get_launch_start_date(p_client_slug TEXT)');
+    expect(migration).toContain('CREATE OR REPLACE FUNCTION set_launch_start_date(');
+  });
+
+  test('a tour step with nothing to point at is skipped, not treated as the end', () => {
+    const { html } = render(SAMPLE_MD);
+    expect(html).not.toContain("if (!el) { endTour(); return; }");
+    expect(validateExperienceHtml(html.replace('id="materials-list"', 'id="materials-renamed"')).map(p => p.code)).toContain('tour');
+  });
+});
+
 describe('single source of truth', () => {
-  test('the upload function imports the shared generator and writes to clients/', () => {
-    const source = fs.readFileSync(path.join(ROOT, 'netlify', 'functions', 'create-experience-project.js'), 'utf8');
-    expect(source).toContain('shared/experience-generator.js');
-    expect(source).not.toMatch(/function (parsePlanMd|processTemplate)\b/);
+  test.each(['create-experience-project.js', 'update-experience-project.js'])('%s builds through the shared modules and commits last', file => {
+    const source = fs.readFileSync(path.join(ROOT, 'netlify', 'functions', file), 'utf8');
+    expect(source).toContain('shared/experience-project.js');
+    expect(source).toContain('shared/github-repo.js');
+    expect(source).not.toMatch(/function (parsePlanMd|processTemplate|commitToGitHub)\b/);
+    const builtAt = source.indexOf('buildExperienceFiles({');
+    const refusedAt = source.indexOf('if (!built.ok)');
+    const commitAt = source.indexOf('await commitToGitHub(built.files');
+    expect(builtAt).toBeGreaterThan(-1);
+    expect(refusedAt).toBeGreaterThan(builtAt);
+    expect(commitAt).toBeGreaterThan(refusedAt);
+  });
+
+  test('the shared builder checks the plan, then the page, and writes to clients/', () => {
+    const source = fs.readFileSync(path.join(ROOT, 'shared', 'experience-project.js'), 'utf8');
+    const validateAt = source.indexOf('validatePlan(planMd');
+    const pageCheckAt = source.indexOf('pageProblems');
+    expect(validateAt).toBeGreaterThan(-1);
+    expect(pageCheckAt).toBeGreaterThan(validateAt);
     expect(source).toContain('path: `clients/${slug}/index.html`');
-    expect(source).not.toContain('experience/${slug}');
+  });
+
+  test('the committed sample matches what the generator builds today', () => {
+    const dir = path.join(ROOT, 'clients', 'sample-experience');
+    const project = JSON.parse(fs.readFileSync(path.join(dir, 'project.json'), 'utf8'));
+    const built = buildExperienceFiles({
+      template: TEMPLATE, clientName: project.client_name, slug: 'sample-experience', coachEmail: project.coach_email,
+      planMd: SAMPLE_MD, materials: project.materials, welcomeMessage: project.welcome_message
+    });
+    expect(built.ok).toBe(true);
+    for (const file of built.files) {
+      expect(fs.readFileSync(path.join(ROOT, file.path), 'utf8')).toBe(file.content);
+    }
   });
 });
 

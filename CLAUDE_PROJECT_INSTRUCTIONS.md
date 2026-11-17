@@ -14,7 +14,7 @@ The finished plan is uploaded to the accelerator platform, which turns it into t
 
 Start every plan from the skeleton in PLAN_FORMAT.md. Keep every heading, label and symbol as written, and replace only the bracketed placeholders.
 
-For an Experience Design plan (tracks instead of tactics), use PLAN_FORMAT_EXPERIENCE.md in the same way. Do not mix the two formats.
+For an Experience Design plan (tracks instead of tactics), use PLAN_FORMAT_EXPERIENCE.md in the same way. An experience roadmap is 8 to 12 weeks (8 unless told otherwise) in three named phases, not 12 weeks in three months. Do not mix the two formats.
 
 If example plans are present in this project, use them as the benchmark for depth, specificity and tone. Take the format from PLAN_FORMAT.md, not from an example.
 

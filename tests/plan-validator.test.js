@@ -39,7 +39,7 @@ describe('real plans', () => {
     const report = validatePlan(read(slug), { type, slug });
     expect(report.errors.map(formatIssue)).toEqual([]);
     expect(report.ok).toBe(true);
-    expect(report.summary.weeks).toBe(12);
+    expect(report.summary.weeks).toBe(type === 'experience' ? (read(slug).match(/^### Week \d+:/gm) || []).length : 12);
     expect(report.summary.steps).toBeGreaterThan(0);
   });
 });
@@ -305,9 +305,10 @@ describe('Markdown in plan text', () => {
 });
 
 describe('upload functions', () => {
+  // The experience functions do this through shared/experience-project.js,
+  // which tests/experience-generator.test.js checks.
   test.each([
-    'netlify/functions/create-project.js',
-    'netlify/functions/create-experience-project.js'
+    'netlify/functions/create-project.js'
   ])('%s validates the plan and the generated page before committing', file => {
     const source = fs.readFileSync(path.join(ROOT, file), 'utf8');
     const validateAt = source.indexOf('validatePlan(planMd');

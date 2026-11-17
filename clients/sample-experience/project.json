@@ -1,0 +1,15 @@
+{
+  "type": "experience",
+  "client_name": "Foothills Quarter Horses",
+  "client_slug": "sample-experience",
+  "coach_email": "coach@elearningu.com",
+  "stage": "plan",
+  "welcome_message": "",
+  "materials": {
+    "guide": "",
+    "questionnaire": "https://accelerator.elearningu.com/assets/sample-experience/questionnaire.html",
+    "session1": "https://accelerator.elearningu.com/assets/sample-experience/call-1-summary.html",
+    "session2": "https://accelerator.elearningu.com/assets/sample-experience/call-2-summary.html",
+    "calculator": ""
+  }
+}
