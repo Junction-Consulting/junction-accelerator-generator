@@ -462,6 +462,31 @@
       color: var(--navy);
     }
 
+    .section__header--toggle { cursor: pointer; }
+    .section__header--toggle:hover .section__title { text-decoration: underline; text-underline-offset: 3px; }
+
+    .section__toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: none;
+      background: none;
+      padding: 0;
+      font: inherit;
+      color: inherit;
+      cursor: pointer;
+    }
+
+    .section__toggle svg {
+      width: 18px;
+      height: 18px;
+      color: var(--muted);
+      transition: transform 0.15s;
+    }
+
+    .section--collapsed .section__toggle svg { transform: rotate(-90deg); }
+    .section--collapsed .section__header { border-bottom: none; }
+
     .section__count {
       padding: 1px 8px;
       border-radius: 999px;
@@ -1341,6 +1366,9 @@
     // What the person has chosen to look at
     const ui = { tab: 'all', query: '', coach: 'all', sort: 'name' };
 
+    // Sections the person has minimised. Remembered on this device.
+    const collapsedSections = new Set();
+
     const ICONS = {
       external: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>',
       plus: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>',
@@ -1352,6 +1380,7 @@
       trash: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>',
       clipboard: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/></svg>',
       compass: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>',
+      chevron: '<svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M5.3 7.3a1 1 0 011.4 0L10 10.6l3.3-3.3a1 1 0 111.4 1.4l-4 4a1 1 0 01-1.4 0l-4-4a1 1 0 010-1.4z"/></svg>',
       close: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>'
     };
 
@@ -1947,6 +1976,9 @@
       const list = document.getElementById('clientList');
       const filtering = isFiltering();
       const visible = shown.filter(s => ui.tab === 'all' || ui.tab === s.id);
+      const focusedToggle = document.activeElement && document.activeElement.dataset
+        ? document.activeElement.dataset.toggleSection
+        : null;
 
       let total = 0;
       let anyLoading = false;
@@ -1985,6 +2017,10 @@
       }
 
       list.innerHTML = parts.join('');
+      if (focusedToggle) {
+        const again = list.querySelector(`button[data-toggle-section="${focusedToggle}"]`);
+        if (again) again.focus();
+      }
       renderSummary(total, anyLoading, filtering);
     }
 
@@ -2010,15 +2046,27 @@
       }
     }
 
+    // Sections can be minimised on the All tab. A search or coach filter
+    // opens them all again, so a match is never hidden, and a section's
+    // own tab always shows it open.
+    function sectionsCanCollapse() {
+      return ui.tab === 'all' && !isFiltering();
+    }
+
     function sectionHtml(section, count, bodyHtml) {
+      const canCollapse = sectionsCanCollapse();
+      const collapsed = canCollapse && collapsedSections.has(section.id);
+      const title = canCollapse
+        ? `<button type="button" class="section__toggle" data-toggle-section="${section.id}" aria-expanded="${!collapsed}" aria-controls="section-body-${section.id}">${ICONS.chevron}${section.title}</button>`
+        : section.title;
       return `
-        <section class="section" id="section-${section.id}" aria-labelledby="section-title-${section.id}">
-          <div class="section__header">
-            <h2 class="section__title" id="section-title-${section.id}">${section.title}</h2>
+        <section class="section${collapsed ? ' section--collapsed' : ''}" id="section-${section.id}" aria-labelledby="section-title-${section.id}">
+          <div class="section__header${canCollapse ? ' section__header--toggle' : ''}"${canCollapse ? ` data-toggle-section="${section.id}" title="${collapsed ? 'Show' : 'Hide'} ${section.title}"` : ''}>
+            <h2 class="section__title" id="section-title-${section.id}">${title}</h2>
             ${count === undefined ? '' : `<span class="section__count">${count}</span>`}
             <p class="section__desc">${section.desc}</p>
           </div>
-          ${bodyHtml}
+          <div id="section-body-${section.id}"${collapsed ? ' hidden' : ''}>${bodyHtml}</div>
         </section>`;
     }
 
@@ -2286,6 +2334,7 @@
       try {
         localStorage.setItem('myClients.coach', ui.coach);
         localStorage.setItem('myClients.sort', ui.sort);
+        localStorage.setItem('myClients.collapsed', [...collapsedSections].join(','));
       } catch (_) { /* storage unavailable: the choice lasts for this visit */ }
     }
 
@@ -2295,6 +2344,9 @@
         if (['name', 'newest', 'progress'].includes(sort)) ui.sort = sort;
         const coach = localStorage.getItem('myClients.coach');
         if (coach && seesAllClients()) ui.coach = coach;
+        (localStorage.getItem('myClients.collapsed') || '').split(',').forEach(id => {
+          if (SECTIONS.some(s => s.id === id)) collapsedSections.add(id);
+        });
       } catch (_) { /* storage unavailable */ }
       document.getElementById('sortSelect').value = ui.sort;
     }
@@ -2316,7 +2368,21 @@
         if (item) toggleMenu(menuButton, item.name, rowMenuItems(item));
         return;
       }
-      if (e.target.closest('[data-action="clear-filters"]')) clearFilters();
+      if (e.target.closest('[data-action="clear-filters"]')) {
+        clearFilters();
+        return;
+      }
+      const toggle = e.target.closest('[data-toggle-section]');
+      if (toggle) {
+        const id = toggle.dataset.toggleSection;
+        if (collapsedSections.has(id)) {
+          collapsedSections.delete(id);
+        } else {
+          collapsedSections.add(id);
+        }
+        savePreferences();
+        render();
+      }
     });
 
     document.getElementById('summary').addEventListener('click', (e) => {
