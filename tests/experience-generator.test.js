@@ -220,3 +220,16 @@ describe('single source of truth', () => {
     expect(source).not.toContain('experience/${slug}');
   });
 });
+
+describe('sub-bullets in steps', () => {
+  test('a bullet indented under the one above renders as a sub-bullet', () => {
+    const lines = SAMPLE_MD.split('\n');
+    const start = lines.findIndex(l => /^\d+\. \*\*/.test(l));
+    const bullets = lines.map((l, i) => i).filter(i => i > start && /^\s*- /.test(lines[i]));
+    lines[bullets[1]] = '  ' + lines[bullets[1]];
+    const { html } = render(lines.join('\n'));
+    expect(html).toContain('<li class="tactic-step-sub" data-editable-key="t1-bullet-2">');
+    expect(html).toContain('<li data-editable-key="t1-bullet-1">');
+    expect(TEMPLATE).toContain('.step-content li.tactic-step-sub{');
+  });
+});

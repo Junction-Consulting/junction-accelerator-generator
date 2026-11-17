@@ -618,6 +618,7 @@ The Implementation Steps tab uses a collapsible accordion structure. Each part (
 - `.tactic-step-item` - Each step; MUST have `id="step-tN-M"` for "how to" links
 - `.tactic-step-num` - MUST be a `<span>`, not a `<div>`
 - Step numbers continue sequentially across all parts within a tactic
+- A bullet the plan indents under the bullet above it is a sub-bullet: add `class="tactic-step-sub"` to its `<li>` and keep it in the same flat list, so the `tN-bullet-M` numbering does not change. Editors can also indent or outdent a step bullet in Edit Mode (Tab / Shift+Tab, or the Indent / Outdent toolbar); that is saved as a `level:tN-bullet-M` content edit.
 
 **DO NOT:**
 - Use plain `<div class="tactic-part-header">` without button/onclick (won't toggle)

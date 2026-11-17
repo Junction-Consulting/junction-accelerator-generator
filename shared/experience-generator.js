@@ -121,7 +121,10 @@ function stepsHtml(steps, trackNum) {
     const title = part.label || 'Implementation Steps';
     const items = part.steps.map(step => {
       const bullets = (step.bullets || [])
-        .map(b => `<li data-editable-key="t${trackNum}-bullet-${bulletNum++}">${inlineMarkdown(b)}</li>`)
+        .map((b, i) => {
+          const subClass = step.bulletLevels && step.bulletLevels[i] ? ' class="tactic-step-sub"' : '';
+          return `<li${subClass} data-editable-key="t${trackNum}-bullet-${bulletNum++}">${inlineMarkdown(b)}</li>`;
+        })
         .join('');
       return `            <li class="step-item" id="step-t${trackNum}-${step.number}"><div class="step-num">${step.number}</div><div class="step-content"><h4 data-editable-key="tactic-${trackNum}-step-${step.number}-title">${plainText(step.title)}</h4>${bullets ? `<ul>${bullets}</ul>` : ''}</div></li>`;
     }).join('\n');

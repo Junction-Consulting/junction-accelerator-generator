@@ -13,6 +13,14 @@
   const EDITABLE_SELECTOR = '[data-editable-key]';
   const EDITABLE_LINK_SELECTOR = '[data-editable-link]';
 
+  // Implementation-step bullets can be indented into sub-bullets. Accelerator
+  // pages use .tactic-step-bullets, experience pages use .step-content > ul.
+  const STEP_BULLET_SELECTOR = '.tactic-step-bullets > li[data-editable-key], .step-content > ul > li[data-editable-key]';
+  const SUB_BULLET_CLASS = 'tactic-step-sub';
+  // A bullet's level is saved as its own edit, keyed "level:<bullet key>",
+  // with the value "1" for a sub-bullet and "0" for a main bullet.
+  const LEVEL_PREFIX = 'level:';
+
   // ──────────────────────────────────────────────────────────────────────────
   // STATE
   // ──────────────────────────────────────────────────────────────────────────
@@ -31,6 +39,13 @@
 
   // Store original link values: { text, href }
   const originalLinkValues = new Map();
+
+  // Store original bullet levels: { contentKey: 0 | 1 }
+  const originalLevels = new Map();
+
+  // Floating Indent / Outdent toolbar for the focused step bullet
+  let bulletToolbar = null;
+  let toolbarBullet = null;
 
   // Currently active link editor popover
   let activeLinkPopover = null;
@@ -257,6 +272,47 @@
       @media print {
         .link-editor-popover { display: none !important; }
       }
+
+      /* Sub-bullets in implementation steps. Also defined in the templates;
+         repeated here so dashboards built before sub-bullets show them too. */
+      .tactic-step-bullets li.tactic-step-sub,
+      .step-content > ul > li.tactic-step-sub {
+        margin-left: 22px;
+        list-style-type: square;
+      }
+      li.has-unsaved-level {
+        background-color: rgba(255, 193, 7, 0.1) !important;
+      }
+
+      /* Indent / Outdent toolbar (edit mode only) */
+      .bullet-level-toolbar {
+        position: absolute;
+        z-index: 10001;
+        display: none;
+        gap: 4px;
+        padding: 4px;
+        background: #11154b;
+        border-radius: 8px;
+        box-shadow: 0 4px 14px rgba(17,21,75,0.25);
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      }
+      .bullet-level-toolbar.visible { display: flex; }
+      .bullet-level-toolbar button {
+        padding: 4px 10px;
+        border: none;
+        border-radius: 6px;
+        background: transparent;
+        color: #fff;
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        white-space: nowrap;
+      }
+      .bullet-level-toolbar button:hover:not(:disabled) { background: rgba(255,255,255,0.14); }
+      .bullet-level-toolbar button:disabled { opacity: 0.4; cursor: default; }
+      @media print {
+        .bullet-level-toolbar { display: none !important; }
+      }
     `;
     document.head.appendChild(style);
   }
@@ -429,6 +485,119 @@
   }
 
   // ──────────────────────────────────────────────────────────────────────────
+  // SUB-BULLETS (indent / outdent step bullets)
+  // ──────────────────────────────────────────────────────────────────────────
+
+  function isStepBullet(el) {
+    return !!(el && el.matches && el.matches(STEP_BULLET_SELECTOR));
+  }
+
+  function levelOf(li) {
+    return li.classList.contains(SUB_BULLET_CLASS) ? 1 : 0;
+  }
+
+  function isEditModeOn() {
+    return canEdit && document.body.getAttribute('data-readonly') !== 'true';
+  }
+
+  // A sub-bullet belongs to the bullet above it, so the first bullet in a
+  // step cannot be indented.
+  function canIndent(li) {
+    const prev = li.previousElementSibling;
+    return levelOf(li) === 0 && !!(prev && prev.tagName === 'LI');
+  }
+
+  function setBulletLevel(li, level) {
+    const key = li.getAttribute('data-editable-key');
+    if (level === levelOf(li)) return;
+    if (level === 1 && !canIndent(li)) {
+      showToast('The first bullet in a step cannot be a sub-bullet', 'error');
+      return;
+    }
+    if (!originalLevels.has(key)) originalLevels.set(key, levelOf(li));
+
+    li.classList.toggle(SUB_BULLET_CLASS, level === 1);
+
+    const original = originalLevels.get(key);
+    if (level !== original) {
+      pendingChanges.set(LEVEL_PREFIX + key, {
+        editedValue: String(level),
+        originalValue: String(original)
+      });
+      li.classList.add('has-unsaved-level');
+    } else {
+      pendingChanges.delete(LEVEL_PREFIX + key);
+      li.classList.remove('has-unsaved-level');
+    }
+
+    updateSaveButtonVisibility();
+    showBulletToolbar(li);
+  }
+
+  function createBulletToolbar() {
+    const bar = document.createElement('div');
+    bar.className = 'bullet-level-toolbar';
+    bar.setAttribute('role', 'toolbar');
+    bar.setAttribute('aria-label', 'Bullet level');
+    bar.innerHTML = `
+      <button type="button" data-level="0" title="Make this a main bullet (Shift+Tab)">&larr; Outdent</button>
+      <button type="button" data-level="1" title="Make this a sub-bullet of the one above (Tab)">Indent &rarr;</button>
+    `;
+    // Keep the bullet focused while a button is pressed
+    bar.addEventListener('mousedown', (e) => e.preventDefault());
+    bar.addEventListener('click', (e) => {
+      const btn = e.target.closest('button[data-level]');
+      if (btn && toolbarBullet) setBulletLevel(toolbarBullet, Number(btn.dataset.level));
+    });
+    document.body.appendChild(bar);
+    return bar;
+  }
+
+  function showBulletToolbar(li) {
+    if (!bulletToolbar) return;
+    toolbarBullet = li;
+    bulletToolbar.querySelector('[data-level="0"]').disabled = levelOf(li) === 0;
+    bulletToolbar.querySelector('[data-level="1"]').disabled = !canIndent(li);
+
+    const rect = li.getBoundingClientRect();
+    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
+    bulletToolbar.classList.add('visible');
+    const barHeight = bulletToolbar.offsetHeight;
+    bulletToolbar.style.top = (rect.top + scrollTop - barHeight - 8) + 'px';
+    bulletToolbar.style.left = Math.max(8, rect.left + scrollLeft) + 'px';
+  }
+
+  function hideBulletToolbar() {
+    if (!bulletToolbar) return;
+    bulletToolbar.classList.remove('visible');
+    toolbarBullet = null;
+  }
+
+  function setupSubBulletEditing() {
+    bulletToolbar = createBulletToolbar();
+
+    document.addEventListener('focusin', (e) => {
+      if (isEditModeOn() && isStepBullet(e.target)) showBulletToolbar(e.target);
+    });
+    document.addEventListener('focusout', (e) => {
+      if (e.target === toolbarBullet) hideBulletToolbar();
+    });
+
+    // Tab indents, Shift+Tab outdents, like a word processor
+    document.addEventListener('keydown', (e) => {
+      if (e.key !== 'Tab' || !isEditModeOn() || !isStepBullet(e.target)) return;
+      e.preventDefault();
+      setBulletLevel(e.target, e.shiftKey ? 0 : 1);
+    });
+
+    // Keep the toolbar beside its bullet when the layout shifts
+    window.addEventListener('resize', () => {
+      if (toolbarBullet) showBulletToolbar(toolbarBullet);
+    });
+  }
+
+  // ──────────────────────────────────────────────────────────────────────────
   // LOAD & APPLY SAVED EDITS
   // ──────────────────────────────────────────────────────────────────────────
 
@@ -459,6 +628,7 @@
       // Apply each edit to the DOM
       let textEdits = 0;
       let linkEdits = 0;
+      let levelEdits = 0;
 
       edits.forEach(edit => {
         // Check if this is a link edit (prefixed with "link:")
@@ -477,6 +647,16 @@
               console.warn('content-editor: Failed to parse link edit', edit.content_key, e);
             }
           }
+        } else if (edit.content_key.startsWith(LEVEL_PREFIX)) {
+          // Bullet level edit (sub-bullet on or off)
+          const bulletKey = edit.content_key.substring(LEVEL_PREFIX.length);
+          const li = document.querySelector(`[data-editable-key="${bulletKey}"]`);
+          if (isStepBullet(li)) {
+            const level = edit.edited_value === '1' ? 1 : 0;
+            li.classList.toggle(SUB_BULLET_CLASS, level === 1);
+            originalLevels.set(bulletKey, level);
+            levelEdits++;
+          }
         } else {
           // Regular text edit
           const element = document.querySelector(`[data-editable-key="${edit.content_key}"]`);
@@ -489,7 +669,7 @@
         }
       });
 
-      console.log(`content-editor: Applied ${textEdits} text edits, ${linkEdits} link edits`);
+      console.log(`content-editor: Applied ${textEdits} text edits, ${linkEdits} link edits, ${levelEdits} bullet level edits`);
     } catch (err) {
       console.error('content-editor: Error loading edits', err);
     }
@@ -617,6 +797,12 @@
             } catch (e) { /* ignore parse errors */ }
             const linkEl = document.querySelector(`[data-editable-link="${linkKey}"]`);
             if (linkEl) linkEl.classList.remove('has-unsaved-changes');
+          } else if (key.startsWith(LEVEL_PREFIX)) {
+            // Bullet level edit
+            const bulletKey = key.substring(LEVEL_PREFIX.length);
+            originalLevels.set(bulletKey, Number(value.editedValue));
+            const li = document.querySelector(`[data-editable-key="${bulletKey}"]`);
+            if (li) li.classList.remove('has-unsaved-level');
           } else {
             // Text edit
             originalValues.set(key, value.editedValue);
@@ -650,6 +836,9 @@
   // Create save button (hidden initially)
   createSaveButton();
 
+  // Indent / outdent for step bullets (acts only in edit mode)
+  setupSubBulletEditing();
+
   // Load and apply saved edits (for all users)
   await loadAndApplyEdits();
 
@@ -672,8 +861,11 @@
     const readonly = e.detail.readonly;
     setEditableState(!readonly);
     setLinkEditableState(!readonly);
-    // Close any open link popover when switching modes
-    if (readonly) closeLinkPopover();
+    // Close any open link popover and bullet toolbar when switching modes
+    if (readonly) {
+      closeLinkPopover();
+      hideBulletToolbar();
+    }
   });
 
   // Warn before leaving with unsaved changes

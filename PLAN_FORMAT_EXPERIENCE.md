@@ -55,7 +55,9 @@ Subtitle: [One sentence describing what this track delivers.]
 
 1. **[Step title]**
    - [Specific instruction]
-   - [Specific instruction]
+   - [Instruction that introduces a short list, ending with a colon:]
+     - [Item that belongs to the line above]
+     - [Item that belongs to the line above]
 
 2. **[Step title]**
    - [Specific instruction]
@@ -365,6 +367,8 @@ The headings say **Track**, not Tactic. A plan with `## Tactic N:` headings is t
    - Each step is one line: a number, a full stop, a space, then the title in bold. Example: `3. **Set your per-guest price**`.
    - Step numbers run 1, 2, 3 across the whole track. They never restart at a new Part.
    - Step detail goes underneath as bullets starting with `- `.
+   - When a bullet introduces a short list (the sections of a page, the questions to answer, the things to check before launch), put those items under it as sub-bullets: indent them two more spaces than the bullet above, so `   - ` becomes `     - `. They show indented under that bullet on the dashboard. Use sub-bullets only for items that belong to the bullet above, not to make a long step look tidier.
+   - Sub-bullets go one level deep. The first bullet in a step cannot be a sub-bullet, because there is nothing above it to sit under.
 4. **Success Metrics.** A Markdown table with a header row, a `|---|` separator row and at least one data row. Every data row has all four columns filled. Write `n/a` where there is no target.
 5. **Tips.** At least one line starting with `- `.
 6. **Resources.** At least one line. Every line is a Markdown link with a full address: `- [Link text](https://...)`. A short description may follow after a colon.
@@ -407,6 +411,8 @@ These do not block the upload, but each one means something will be missing or l
 | A `## Bookability Checklist` section without `Has Bookability Checklist: yes` | The section is left out |
 | A line under a step, or under Actions or Checklist, that is not a bullet | That line does not appear |
 | A step with no bullets | The step shows its title only |
+| A sub-bullet as the first bullet in a step | It shows as a main bullet |
+| Bullets nested more than one level deep | They show as sub-bullets, one level in |
 | A Short Label longer than 28 characters | It may not fit the sidebar |
 | `[CONFIRM ...]` markers | They appear on the dashboard exactly as written |
 | Em dashes in body text | Style only. Use a colon, a comma or a new sentence |
