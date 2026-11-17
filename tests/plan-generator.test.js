@@ -199,6 +199,23 @@ describe('four-tactic plans', () => {
     expect(html).toContain(plan.tactics[3].shortLabel.replace(/&/g, '&amp;'));
     expect(html).toContain('id="step-t4-1"');
   });
+
+  test.each(fourTactic)('%s shows its own Tactic 4 label in the sidebar', slug => {
+    const { plan, html } = generate(slug);
+    const navItem = html.match(/<div class="nav-item" data-page="tactic4"[\s\S]*?<\/div>/);
+    expect(navItem).not.toBeNull();
+    const label = navItem[0].replace(/<svg[\s\S]*?<\/svg>/, '').replace(/<[^>]+>/g, '').trim();
+    expect(label).toBe(plan.tactics[3].shortLabel.replace(/&/g, '&amp;'));
+  });
+
+  test.each(ACCELERATOR_SLUGS)('%s sidebar shows the plan\'s label for every tactic', slug => {
+    const { plan, html } = generate(slug);
+    plan.tactics.forEach((tactic, i) => {
+      const navItem = html.match(new RegExp(`<div class="nav-item" data-page="tactic${i + 1}"[\\s\\S]*?</div>`));
+      const label = navItem[0].replace(/<svg[\s\S]*?<\/svg>/, '').replace(/<[^>]+>/g, '').trim();
+      expect(label).toBe(tactic.shortLabel.replace(/&/g, '&amp;'));
+    });
+  });
 });
 
 describe('parser', () => {
