@@ -625,6 +625,11 @@
     const coachRow  = rows.find(r => r.role === 'coach');
     const clientRow = rows.find(r => r.role === 'client');
 
+    // Leave a note for the next page that this tab signed in a moment ago.
+    // If the browser does not keep the sign-in, auth.js reads the note and
+    // sends the person back here with the reason.
+    window.name = 'accel-signed-in:' + Date.now();
+
     if (adminRow || psmRow || coachRow) {
       // Admin, PSM, or coach goes to dashboard
       window.location.replace('/my-clients/');
@@ -724,6 +729,64 @@
       successState.classList.add('visible');
     }
   });
+
+  // ══════════════════════════════════════════════════════════════
+  // EXPLAIN WHY SOMEONE WAS SENT BACK HERE
+  // ══════════════════════════════════════════════════════════════
+  // Can this browser save data for the site? Signing in depends on it.
+  function browserCanSaveData() {
+    try {
+      const key = '__accel_storage_test';
+      window.localStorage.setItem(key, '1');
+      const ok = window.localStorage.getItem(key) === '1';
+      window.localStorage.removeItem(key);
+      return ok;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  const CONTACT = ' If it keeps happening, contact brooke@elearningu.com.';
+  const BOUNCE_REASONS = {
+    storage_blocked:
+      'Your browser is blocking this site from saving data, so it cannot keep you signed in. ' +
+      'Allow site data and cookies for accelerator.elearningu.com, or use a different browser, then request a new link.',
+    session_lost:
+      'You were signed in, but your browser did not keep the sign-in. ' +
+      'It is usually a browser setting or privacy extension that blocks or clears site data. ' +
+      'Allow site data and cookies for accelerator.elearningu.com, or use a different browser, then request a new link.',
+    invalid_link:
+      'That sign-in link has already been used or has expired. Each link works once. ' +
+      'Request a new one below and use the newest email.',
+    access_denied:
+      'This email address does not have access to a dashboard. ' +
+      'Use the address your invitation was sent to.',
+    invalid_project:
+      'We could not open your dashboard. Please try again.',
+    db_error:
+      'We could not check your access just now. Please try again.',
+    auth_failed:
+      'Something went wrong while signing you in. Please try again.'
+  };
+
+  (function showBounceReason() {
+    const params = new URLSearchParams(window.location.search);
+    let reason = params.get('error');
+
+    // A browser that cannot save data will lose every sign-in, so say that
+    // first, whatever brought the person here.
+    if (!browserCanSaveData()) reason = 'storage_blocked';
+
+    if (!reason || !BOUNCE_REASONS[reason]) return;
+
+    errorMsg.textContent = BOUNCE_REASONS[reason] + CONTACT;
+    errorMsg.classList.add('visible');
+
+    // Drop the reason from the address so a refresh starts clean
+    if (params.has('error') && window.history.replaceState) {
+      window.history.replaceState(null, '', window.location.pathname);
+    }
+  })();
 
   // ══════════════════════════════════════════════════════════════
   // CHECK FOR EXISTING SESSION ON LOAD
