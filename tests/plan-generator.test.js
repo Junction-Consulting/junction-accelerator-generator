@@ -214,6 +214,23 @@ describe('parser', () => {
     expect(after.tactics[0].implementationSteps[0].bullets).toEqual(before.tactics[0].implementationSteps[0].bullets);
   });
 
+  test('marks indented bullets as sub-bullets without changing the edit keys', () => {
+    const { plan, html } = generate('stsailes-development-corp');
+    const step = plan.tactics[0].implementationSteps[1];
+    expect(step.bullets[3]).toMatch(/^Add one section for each tour you offer/);
+    expect(step.bulletLevels.slice(3, 9)).toEqual([0, 1, 1, 1, 1, 1]);
+    expect(html).toContain('<li class="tactic-step-sub" data-editable-key="t1-bullet-12">the tour name and duration</li>');
+    expect(html).toContain('<li data-editable-key="t1-bullet-11">Add one section for each tour you offer. Each section needs:</li>');
+    expect(html).toContain('<li data-editable-key="t1-bullet-17">You can copy most of the text');
+  });
+
+  test('steps with no indented bullets have no sub-bullets', () => {
+    const plan = parsePlanMd(readPlan('sasquatch-inn'));
+    for (const s of plan.tactics[0].implementationSteps) {
+      expect(s.bulletLevels.every(level => level === 0)).toBe(true);
+    }
+  });
+
   test('rejects a plan with no Goal section', () => {
     const md = readPlan('sasquatch-inn').replace('## Goal', '## Aim');
     expect(parsePlanMd(md).error).toMatch(/Goal/);
