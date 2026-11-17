@@ -18,7 +18,7 @@
  */
 
 import { normalisePlanMd, parsePlanMd, readFields } from './plan-generator.js';
-import { parseExperiencePlanMd } from './experience-generator.js';
+import { parseExperiencePlanMd, parseDate } from './experience-generator.js';
 
 const DIALECTS = {
   accelerator: {
@@ -557,6 +557,47 @@ function validatePlan(rawContent, options = {}) {
           err(lineNo(sec.start + 1 + k), 'This Bookability item has no description.', 'Add one sentence under the heading explaining why it matters.');
         }
       });
+      // The checklist is what must be true BEFORE bookings open. An item about
+      // a booking already made cannot be ticked until after launch.
+      items.forEach(({ l, k }) => {
+        if (/\b(first|1st)\s+(paying\s+)?(booking|guest|departure)|booking\s+(is\s+)?(confirmed|received|taken)|guests?\s+hosted\b/i.test(l)) {
+          warn(lineNo(sec.start + 1 + k), `This Bookability item describes something that happens after bookings open: "${l.replace(/^###\s*/, '').trim()}".`, 'Move it to an "## After Launch" section, and keep the Bookability Checklist to what must be ready before bookings open.');
+        }
+      });
+    }
+
+    // After Launch: milestones shown under the Bookability Checklist
+    const afterSec = findSection(/^After Launch$/i);
+    if (afterSec) {
+      const included = flag && !!sec;
+      if (!included) {
+        warn(lineNo(afterSec.start), 'The "## After Launch" section will be left out because the plan has no Bookability Checklist page to show it on.', 'Add a Bookability Checklist, or remove this section.');
+      }
+      const milestones = body(afterSec).map((l, k) => ({ l, k })).filter(({ l }) => /^### \S/.test(l));
+      if (milestones.length === 0) err(lineNo(afterSec.start), 'The "## After Launch" section has no items.', 'Write each milestone as a "### Milestone title" heading followed by one sentence.');
+      milestones.forEach(({ k }, i) => {
+        const end = i + 1 < milestones.length ? milestones[i + 1].k : body(afterSec).length;
+        if (!body(afterSec).slice(k + 1, end).some(l => l.trim() && !isRule(l))) {
+          err(lineNo(afterSec.start + 1 + k), 'This After Launch milestone has no description.', 'Add one sentence under the heading.');
+        }
+      });
+    }
+
+    // Goal at a Glance: the tiles on the Launch Strategy page
+    const tilesSec = findSection(/^Goal at a Glance$/i);
+    if (tilesSec) {
+      const tileLines = body(tilesSec).map((l, k) => ({ l, k })).filter(({ l }) => l.trim() && !isRule(l));
+      const good = tileLines.filter(({ l }) => /^\s*-\s+[^|]+\|\s*\S/.test(l));
+      tileLines.filter(({ l }) => !/^\s*-\s+[^|]+\|\s*\S/.test(l)).forEach(({ l, k }) => {
+        err(lineNo(tilesSec.start + 1 + k), `This Goal at a Glance line is not recognised: "${l.trim().slice(0, 60)}".`, 'Write each line as "- $145 | per guest": a dash, the figure, a bar, then a few words about it.');
+      });
+      if (good.length === 0 && tileLines.length === 0) err(lineNo(tilesSec.start), 'The "## Goal at a Glance" section is empty.', 'Add up to five lines like "- $145 | per guest", or remove the section.');
+      if (good.length > 5) warn(lineNo(tilesSec.start + 1 + good[5].k), `Goal at a Glance has ${good.length} lines. Only the first five are shown.`, 'Keep the five that matter most.');
+    }
+
+    // The countdown on the home page needs a full launch date
+    if (meta['Launch Target'] && !parseDate(meta['Launch Target'].split('·')[0])) {
+      warn(metaSec ? lineNo(metaSec.start) : null, `The Launch Target "${meta['Launch Target']}" does not start with a full date, so the countdown to launch will be left out.`, 'Start it with the first departure date written like "May 22, 2027", then " · " and the revenue target.');
     }
   }
 

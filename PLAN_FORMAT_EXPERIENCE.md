@@ -18,11 +18,16 @@ Copy this structure exactly. Replace every `[bracketed placeholder]` with real c
 ## Meta
 Client Slug: [client-slug]
 Price Point: [Price per guest]
-Launch Target: [First departure date] · [Revenue target]
+Launch Target: [Month D, YYYY] · [Revenue target]
 Has Bookability Checklist: yes
 
 ## Goal
 [One paragraph. What this operator will have launched by the end of the roadmap. Name the experience, the guest, the price and the first departure.]
+
+## Goal at a Glance
+- [Figure] | [A few words about it]
+- [Figure] | [A few words about it]
+- [Figure] | [A few words about it]
 
 ## The Experience
 [One sentence. The experience as agreed in Coaching Call 1, in the operator's own words.]
@@ -294,6 +299,13 @@ Phase 3 Starts: Week 5
 
 ### [Item title]
 [One sentence on why this matters for launch readiness.]
+
+---
+
+## After Launch
+
+### [Milestone title]
+[One sentence on what this milestone is and when to tick it.]
 ```
 
 ---
@@ -353,9 +365,22 @@ The headings say **Track**, not Tactic. A plan with `## Tactic N:` headings is t
 
 ### Bookability Checklist
 
-- To include the page, Meta must say `Has Bookability Checklist: yes` and the plan must end with a `## Bookability Checklist` section.
+- To include the page, Meta must say `Has Bookability Checklist: yes` and the plan must have a `## Bookability Checklist` section after the roadmap.
 - Each item is a `### Item title` heading followed by a sentence of description. Every item needs a description. Aim for 5 to 8 items.
+- The checklist is what must be true before bookings open. Do not include anything that can only happen afterwards, such as a first booking being confirmed. Put those in `## After Launch`.
 - To leave the page out, write `Has Bookability Checklist: no` and omit the section.
+
+### After Launch
+
+- Optional. A `## After Launch` section after the Bookability Checklist holds milestones that come once bookings are open, such as the first booking.
+- Each milestone is a `### Milestone title` heading followed by a sentence of description.
+- They appear at the bottom of the Bookability Checklist page under "After You Launch", with a tick box each. They are not counted in the operator's launch progress.
+
+### Goal at a Glance
+
+- Optional. A `## Goal at a Glance` section holds up to five lines, each `- Figure | a few words about it`, for example `- $145 | per guest`.
+- They appear as tiles at the top of the Launch Strategy page. Keep each figure short: a price, a number, a date or a day.
+- Without this section, the tiles show the price point, the first departure date and the length of the roadmap.
 
 ### Never include
 
@@ -375,6 +400,10 @@ These do not block the upload, but each one means something will be missing or l
 | No `## Meta` section | The price point, launch target and Bookability Checklist are all left out |
 | `Client Slug:` differs from the slug typed on the form | The form's slug is used |
 | A `## Bookability Checklist` section without `Has Bookability Checklist: yes` | The section is left out |
+| A Bookability item about a first booking, first guest or first departure | It can only be ticked after launch. Move it to `## After Launch` |
+| A `## After Launch` section in a plan with no Bookability Checklist | The section is left out |
+| A Launch Target that does not start with a full date, such as "Late May 2027" | The countdown to launch is left out of the home page |
+| More than five Goal at a Glance lines | Only the first five are shown |
 | A line under a step, or under Actions or Checklist, that is not a bullet | That line does not appear |
 | A step with no bullets | The step shows its title only |
 | A sub-bullet as the first bullet in a step | It shows as a main bullet |
@@ -390,7 +419,7 @@ These do not block the upload, but each one means something will be missing or l
 | Line | Effect |
 |---|---|
 | `Price Point: $145 per guest` | Shown on the dashboard. Leave the line out until pricing is confirmed |
-| `Launch Target: June 15, 2027 · $2,400 in first-month bookings` | Shown on the dashboard as a date and a goal. Separate the two with ` · `. Leave the line out until it is agreed |
+| `Launch Target: June 15, 2027 · $2,400 in first-month bookings` | The date drives the countdown and the Launch step on the home page. Write it in full, like `June 15, 2027`, then ` · ` and the revenue target. Leave the line out until it is agreed |
 | `Has Bookability Checklist: yes` | Includes the Bookability Checklist page |
 
 ---
@@ -399,19 +428,21 @@ These do not block the upload, but each one means something will be missing or l
 
 | Part of the plan | Where it appears |
 |---|---|
-| Goal | Dashboard, Strategy page, welcome screen and the printed roadmap |
-| The Experience | Strategy page |
-| Strategic Positioning | Strategy page |
+| Goal | Home page (first sentence), Launch Strategy page under "Read your full goal", welcome screen and the printed roadmap |
+| Goal at a Glance | Tiles at the top of the Launch Strategy page |
+| The Experience | The headline of the Launch Strategy page |
+| Strategic Positioning | Launch Strategy page |
 | Welcome Message | Welcome screen |
 | Track title, Phase, Short Label, Subtitle | Track page header, sidebar and dashboard cards |
 | What We Heard From You, What This Is, Why It Matters | Track Overview tab, as paragraphs |
 | Steps and their bullets | Implementation Steps tab, grouped by Part |
 | Success Metrics | Success Metrics tab. The first four columns are used |
 | Tips and Resources | Tips and Resources tab |
-| Objectives | Strategy page |
+| Objectives | Launch Strategy page. Each objective is shown on its track's card, with that track's weeks, progress and link |
 | Weeks, Actions, Checklist | Launch Roadmap. Checklist items become the tick boxes that track progress |
 | `→ links to:` notes | A "how to" button on that action. The note itself is not shown |
 | Bookability Checklist | Its own page, with a tick box per item |
+| After Launch | The bottom of the Bookability Checklist page |
 
 The roadmap is shown in three phases, one for each track: Phase 1 is Track 1's work, Phase 2 is Track 2's and Phase 3 is Track 3's. Each track's progress bar counts the checklist items in its phase.
 

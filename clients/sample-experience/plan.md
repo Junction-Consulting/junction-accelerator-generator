@@ -9,6 +9,13 @@ Has Bookability Checklist: yes
 ## Goal
 In eight weeks, Foothills Quarter Horses will have a half-day horsemanship experience for up to six guests listed, priced at $145 per person and open for booking. The experience will run every Saturday morning from late May through September, with the first paying departure on Saturday, May 22, 2027. By the end of June, the ranch will have welcomed at least 12 paying guests and established a repeatable booking and operations workflow.
 
+## Goal at a Glance
+- $145 | per guest
+- Up to 6 | guests per departure
+- Saturdays | mornings, late May to September
+- May 22 | first paying departure, 2027
+- 12 guests | paying guests by the end of June
+
 ## The Experience
 A half-day at the ranch where guests learn to read a horse, saddle up properly, and ride the same trails our family has worked for four generations.
 
@@ -424,5 +431,12 @@ Photos sell experiences. A listing without photos will not convert. Aim for 8 to
 ### Availability Set Through September
 Do not launch with just one date. Show guests that this is a real, ongoing experience with multiple opportunities to book.
 
+### Test Booking Completed
+Make one booking yourself, start to finish, as if you were a guest. Check that the payment goes through, the confirmation email arrives and the booking shows on your calendar.
+
+---
+
+## After Launch
+
 ### First Booking Confirmed
-Your first paying guest is the milestone that matters. Do whatever it takes to get that first booking on the calendar before launch day.
+Your first paying guest is the milestone that matters. Tick this when the first booking for your May 22 departure is confirmed.

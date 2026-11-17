@@ -28,7 +28,8 @@ function skeleton(doc) {
 
 // Replace every [bracketed placeholder] with sample text. Checklist boxes
 // "[ ]" and Markdown links "[text](url)" are left alone.
-const fill = text => text.replace(/\[(?! \])[^\]\n]+\](?!\()/g, 'Sample text');
+// A date placeholder gets a date, so the filled-in plan has a real launch date.
+const fill = text => text.replace('[Month D, YYYY]', 'May 22, 2027').replace(/\[(?! \])[^\]\n]+\](?!\()/g, 'Sample text');
 
 let warnSpy;
 beforeAll(() => { warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {}); });

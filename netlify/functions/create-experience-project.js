@@ -9,7 +9,7 @@
 
 import { createClient } from '@supabase/supabase-js';
 // Parsing, checking and rendering live in shared, tested modules.
-import { buildExperienceFiles, materialLinkProblems } from '../../shared/experience-project.js';
+import { buildExperienceFiles, materialLinkProblems, materialsAddedAfter } from '../../shared/experience-project.js';
 import { readRepoFile, repoPathExists, commitToGitHub } from '../../shared/github-repo.js';
 import { ensureCoachAccess } from '../../shared/coach-access.js';
 
@@ -26,7 +26,7 @@ export async function handler(event, context) {
   try {
     // Parse request body
     const body = JSON.parse(event.body);
-    const { clientName, slug, coachEmail, planMd, materials, welcomeMessage } = body;
+    const { clientName, slug, coachEmail, planMd, materials, welcomeMessage, ownerFirstName, coachName, program } = body;
 
     // The plan is optional: without one the dashboard starts at the onboarding stage
     if (!clientName || !slug || !coachEmail) {
@@ -106,7 +106,12 @@ export async function handler(event, context) {
     // A plan with problems is rejected with a list of the exact changes
     // needed. The generated page is checked too. Nothing is committed unless
     // both pass.
-    const built = buildExperienceFiles({ template, clientName, slug, coachEmail, planMd, materials, welcomeMessage });
+    const today = new Date().toISOString().slice(0, 10);
+    const built = buildExperienceFiles({
+      template, clientName, slug, coachEmail, planMd, materials, welcomeMessage, ownerFirstName, coachName, program,
+      materialsAdded: materialsAddedAfter({}, {}, materials, today),
+      planAdded: planMd ? today : ''
+    });
     if (!built.ok) {
       return {
         statusCode: built.step === 'generate' ? 500 : 400,

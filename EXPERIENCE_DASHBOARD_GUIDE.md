@@ -11,8 +11,8 @@ Each operator has one dashboard for the whole program. It grows in two stages.
 
 | Stage | When | What the operator sees |
 |-------|------|------------------------|
-| **Onboarding** | Created before the onboarding call | Home (the program step by step), Experience Development Guide, Materials |
-| **Launch plan** | After coaching call 2, when the plan is added | Everything above, plus Strategy, Launch Roadmap, three Tracks and the Bookability Checklist |
+| **Onboarding** | Created before the onboarding call | Dashboard (their next step and where they are in the program), Experience Development Guide, Materials |
+| **Launch plan** | After coaching call 2, when the plan is added | Everything above, plus Launch Strategy, Launch Roadmap, three Tracks and the Bookability Checklist |
 
 The dashboard address is `https://accelerator.elearningu.com/[slug]/`. The operator signs in with the email they were invited with.
 
@@ -41,7 +41,17 @@ On My Clients, click the pencil on the operator's card to open **Manage**. Paste
 
 Each card on the operator's Materials page says "Coming soon" until its link is saved, then becomes a button. Clear a link and save to hide it again. Before saving, open each link in a private window to check the operator will be able to open it.
 
-### 3. Add the launch plan after coaching call 2
+### 3. Keep the home page up to date
+
+The operator's Dashboard answers three questions when they sign in: where am I, what do I do next, and how am I doing. Before the launch plan exists, the answers come from the **Home page details** card on the Manage page:
+
+- **Owner's first name** and **Coach's name**: for the greeting and the "Your coach" card.
+- **Program steps completed**: tick Questionnaire, Onboarding call, Coaching Call 1 and Coaching Call 2 as each one happens. The first unticked step is shown to the operator as "Your next step".
+- **Next call date**: shown under Key dates.
+
+Click **Save details** after each call. "What's new" on the home page fills itself in: it lists each material on the day its link was saved.
+
+### 4. Add the launch plan after coaching call 2
 
 1. Write the plan to `PLAN_FORMAT_EXPERIENCE.md`. A launch roadmap is 8 to 12 weeks. Eight is the usual length.
 2. On the **Manage** page, choose the plan.md file. It is checked straight away, and anything that needs fixing is listed line by line.
@@ -56,14 +66,14 @@ The dashboard moves to the launch plan stage about a minute later. Guide and Mat
 ### At the onboarding call
 
 Open the dashboard together. Show them:
-- **Home**: the six steps of the program, from questionnaire to launch plan
+- **Dashboard**: their next step, and the six steps of the program from questionnaire to launch
 - **Experience Development Guide**: where their guide opens, and the five sections they tick off as they work through it
 - **Materials**: where their answers and call summaries will appear
 
 ### When the launch plan is delivered
 
-1. **Choose the start date.** On Home, the operator picks the Monday they want Week 1 to begin and clicks **Set my start date**. Every week of the roadmap is dated from it, the current week is highlighted, and the weekly emails begin. The operator can set this once. Staff (admin or PSM) can change it afterwards with the **Change** link beside the date.
-2. **Strategy.** Their experience in one sentence, the goal, the positioning and the three objectives.
+1. **Choose the start date.** On the Dashboard, "Your next step" asks for it first. The operator picks the Monday they want Week 1 to begin and clicks **Set my start date**. Every week of the roadmap is dated from it, the current week is highlighted, and the weekly emails begin. The operator can set this once. Staff (admin or PSM) can change it afterwards with the **Change** link beside the date.
+2. **Launch Strategy.** Their experience in one sentence, the goal at a glance, the positioning, and the three tracks, each with its objective, weeks and progress.
 3. **The three Tracks.** Each has an Overview, Implementation Steps, Success Metrics, and Tips & Resources.
 4. **Launch Roadmap.** Each week has actions on the left and a completion checklist on the right. A "how to" button beside an action jumps to the step that explains it. Checkboxes and notes save automatically.
 5. **Bookability Checklist.** Its own page in the sidebar: the items that must be true before the first booking.
@@ -79,7 +89,9 @@ Until a start date is chosen, the roadmap shows no dates and no weekly emails ar
 3. Use a "how to" button to walk through a step they are stuck on.
 4. Preview next week.
 
-Progress shows on each week, on each phase heading, on Home and in the sidebar ring. Guide section ticks are counted separately on the Guide page and do not affect the ring.
+Once a start date is set, the Dashboard shows this week's tasks, which can be ticked there or on the roadmap. If earlier weeks have open tasks it says so and links to the earliest. It also shows progress by track and a countdown to the first departure.
+
+Progress shows on each week, on each phase heading, on the Dashboard and in the sidebar ring. Guide section ticks are counted separately on the Guide page and do not affect the ring.
 
 Staff and coaches also see an **Activity** page with visits and recent ticks.
 

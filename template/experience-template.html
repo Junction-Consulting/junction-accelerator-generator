@@ -2050,6 +2050,214 @@ body.drawer-open{
 /* Hide coming soon when plan exists (controlled by body class) */
 body.has-plan .coming-soon-state{display:none}
 
+/* ════════════════════════════════════════════════════════════════
+   HOME AND LAUNCH STRATEGY (v2)
+   ════════════════════════════════════════════════════════════════ */
+:root{--t1:#067cbc;--t2:#11154b;--t3:#7bc490}
+.page-header-link{
+  position:relative;z-index:1;
+  background:none;border:none;padding:0;margin-top:12px;cursor:pointer;
+  font-family:var(--font-d);font-size:14px;font-weight:700;color:var(--mint);
+}
+.page-header-link:hover{text-decoration:underline}
+.page-header-link:focus-visible,.next-btn:focus-visible,.next-link:focus-visible,.track-card-link:focus-visible,
+.timeline-seg:focus-visible,.track-progress-name:focus-visible,.news-link:focus-visible,.coach-btn:focus-visible{
+  outline:3px solid var(--mint-dark);outline-offset:2px;
+}
+
+/* The next-step card sits over the bottom edge of the page header */
+#page-dashboard .page-header{padding-bottom:92px}
+#page-dashboard .content-area{padding-top:0}
+.next-card{
+  position:relative;z-index:2;
+  margin-top:-56px;margin-bottom:20px;
+  background:var(--card-bg);
+  border-radius:var(--r-xl);
+  padding:28px 32px;
+  box-shadow:0 12px 32px rgba(17,21,75,.14);
+  border:1px solid rgba(17,21,75,.06);
+}
+.next-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:8px}
+.next-eyebrow,.home-eyebrow{
+  font-family:var(--font-d);font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#3d8a55;
+}
+.next-pill{
+  font-family:var(--font-d);font-size:12px;font-weight:700;color:var(--navy);
+  background:rgba(170,218,182,.35);border-radius:20px;padding:5px 12px;white-space:nowrap;
+}
+.next-pill[hidden],.next-catchup[hidden],.next-actions[hidden]{display:none}
+.next-title{font-family:var(--font-d);font-size:24px;font-weight:800;color:var(--dark);line-height:1.25;margin:0 0 6px}
+.next-meta{font-size:14px;color:#4a5568;line-height:1.6;margin:0;max-width:680px}
+.next-call{font-size:14px;font-weight:600;color:var(--navy);margin:10px 0 0}
+.next-call:empty{display:none}
+.next-card .start-date-card{background:#f4f8f5;border:1px solid rgba(123,196,144,.5);margin:18px 0 0;padding:18px 20px}
+.next-tasks{margin-top:18px;border-top:1px solid rgba(17,21,75,.08);padding-top:6px}
+.next-tasks:empty{display:none}
+.next-task{display:flex;align-items:flex-start;gap:12px;padding:10px 0;cursor:pointer;font-size:14px;color:#2d3748;line-height:1.5}
+.next-task input{
+  appearance:none;-webkit-appearance:none;flex-shrink:0;margin:1px 0 0;
+  width:20px;height:20px;border:2px solid rgba(17,21,75,.25);border-radius:5px;cursor:pointer;
+  transition:background .15s,border-color .15s;
+}
+.next-task input:checked{
+  background:var(--blue) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' fill='none' stroke='white' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='1.5,6 4.5,9 10.5,3'/%3E%3C/svg%3E") center/12px no-repeat;
+  border-color:var(--blue);
+}
+.next-task input:focus-visible{outline:3px solid var(--mint-dark);outline-offset:2px}
+.next-task input:disabled{opacity:.5;cursor:not-allowed}
+.next-task input:checked + span{color:var(--slate);text-decoration:line-through}
+.next-catchup{font-size:13px;color:#92400e;background:#fef3c7;border-radius:var(--r-sm);padding:10px 14px;margin:10px 0 0}
+.next-catchup button{background:none;border:none;padding:0;font:inherit;font-weight:700;color:#92400e;text-decoration:underline;cursor:pointer}
+.next-actions{display:flex;align-items:center;flex-wrap:wrap;gap:18px;margin-top:20px}
+.next-btn{
+  background:var(--navy);color:#fff;border:none;border-radius:var(--r-md);cursor:pointer;
+  font-family:var(--font-d);font-size:14px;font-weight:700;padding:12px 20px;transition:background .15s;
+}
+.next-btn:hover{background:var(--navy-light)}
+.next-link{background:none;border:none;padding:0;cursor:pointer;font-size:14px;font-weight:600;color:var(--blue);text-decoration:underline}
+
+.home-card{
+  background:var(--card-bg);border-radius:var(--r-lg);padding:22px 24px;
+  box-shadow:var(--shadow-sm);border:1px solid rgba(17,21,75,.06);margin-bottom:20px;
+}
+.home-card h3{font-family:var(--font-d);font-size:16px;font-weight:700;color:var(--dark);margin:0 0 14px}
+.home-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px}
+.home-card-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:14px}
+.home-card-head h3{margin:0}
+.progress-total{font-size:13px;color:#4a5568}
+.progress-total strong{font-family:var(--font-d);font-size:16px;color:var(--dark)}
+.track-progress{margin-top:12px}
+.track-progress-row{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:6px}
+.track-progress-name{
+  background:none;border:none;padding:0;cursor:pointer;text-align:left;
+  font-family:var(--font-d);font-size:13px;font-weight:700;color:var(--dark);
+}
+.track-progress-name::before{content:'';display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--tc);margin-right:8px}
+.track-progress-name:hover{text-decoration:underline}
+.track-progress-count{font-size:12px;color:#4a5568;white-space:nowrap}
+.track-progress-bar,.track-card-bar{height:6px;border-radius:3px;background:rgba(17,21,75,.08);overflow:hidden}
+.track-progress-bar > div,.track-card-bar > div{height:100%;width:0;border-radius:3px;background:var(--tc);transition:width .4s ease}
+.countdown-card{display:flex;flex-direction:column;justify-content:center}
+.countdown-value{font-family:var(--font-d);font-size:44px;font-weight:800;color:var(--navy);line-height:1.1;margin:6px 0 4px}
+.countdown-label{font-size:14px;color:#4a5568;margin:0}
+
+.steps-row{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(6,1fr);gap:10px}
+.program-step{background:#f5f2ec;border-radius:var(--r-md);padding:12px 12px 14px;display:flex;flex-direction:column;gap:2px;min-width:0}
+.program-step-dot{width:22px;height:22px;border-radius:50%;border:2px solid rgba(17,21,75,.25);background:#fff;margin-bottom:8px;position:relative}
+.program-step.done .program-step-dot{
+  border-color:#3d8a55;
+  background:#3d8a55 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' fill='none' stroke='white' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='2,6.2 4.8,9 10,3.4'/%3E%3C/svg%3E") center/12px no-repeat;
+}
+.program-step.current{background:var(--navy)}
+.program-step.current .program-step-dot{border-color:var(--mint);background:var(--mint)}
+.program-step.current .program-step-dot::after{content:'';position:absolute;inset:5px;border-radius:50%;background:var(--navy)}
+.program-step-name{font-family:var(--font-d);font-size:13px;font-weight:700;color:var(--dark);line-height:1.3}
+.program-step-note{font-size:12px;color:#5b6474}
+.program-step.current .program-step-name{color:#fff}
+.program-step.current .program-step-note{color:rgba(255,255,255,.8)}
+
+.home-trio{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.home-trio .home-card{margin-bottom:0}
+.key-dates{margin:0}
+.key-dates > div{display:flex;justify-content:space-between;gap:12px;padding:7px 0;font-size:13px;border-bottom:1px solid rgba(17,21,75,.06)}
+.key-dates > div:last-child{border-bottom:none}
+.key-dates dt{color:#4a5568;white-space:nowrap}
+.key-dates dd{margin:0;font-weight:600;color:var(--dark);text-align:right}
+.news-list{list-style:none;margin:0;padding:0}
+.news-list li{padding:6px 0;font-size:13px}
+.news-link{background:none;border:none;padding:0;cursor:pointer;text-align:left;font:inherit;font-weight:600;color:var(--blue)}
+.news-link:hover{text-decoration:underline}
+.news-date{display:block;font-size:12px;color:#5b6474;margin-top:1px}
+.news-empty{color:#5b6474}
+.coach-row{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.coach-avatar{
+  width:40px;height:40px;border-radius:50%;flex-shrink:0;background:rgba(17,21,75,.08);color:var(--navy);
+  font-family:var(--font-d);font-weight:800;display:flex;align-items:center;justify-content:center;
+}
+.coach-name{font-family:var(--font-d);font-size:14px;font-weight:700;color:var(--dark)}
+.coach-note{font-size:12px;color:#5b6474;line-height:1.4}
+.coach-btn{
+  display:inline-block;border:1.5px solid var(--navy);border-radius:var(--r-md);padding:8px 14px;
+  font-family:var(--font-d);font-size:13px;font-weight:700;color:var(--navy);text-decoration:none;
+}
+.coach-btn:hover{background:var(--navy);color:#fff}
+
+/* Launch Strategy */
+.strategy-hero{
+  background:var(--card-bg);border-radius:var(--r-xl);padding:32px 36px;margin-bottom:36px;
+  box-shadow:var(--shadow-sm);border:1px solid rgba(17,21,75,.06);border-top:5px solid var(--mint-dark);
+}
+.strategy-hero-label{font-family:var(--font-d);font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#3d8a55;margin-bottom:12px}
+.strategy-hero-text{font-family:var(--font-d);font-size:24px;font-weight:700;line-height:1.4;color:var(--dark);margin:0 0 12px;max-width:820px}
+.strategy-hero-note{font-size:13px;color:#5b6474;margin:0}
+.strategy-heading{font-family:var(--font-d);font-size:18px;font-weight:700;color:var(--dark);margin:0 0 14px}
+.strategy-subheading{font-size:14px;color:#4a5568;margin:-8px 0 14px}
+.goal-tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:12px}
+.goal-tile{background:var(--card-bg);border-radius:var(--r-lg);padding:18px 20px;box-shadow:var(--shadow-sm);border:1px solid rgba(17,21,75,.06)}
+.goal-tile-value{font-family:var(--font-d);font-size:24px;font-weight:800;color:var(--navy);line-height:1.2;margin-bottom:6px}
+.goal-tile-label{font-size:13px;color:#4a5568;line-height:1.4}
+.goal-details{background:var(--card-bg);border-radius:var(--r-md);box-shadow:var(--shadow-sm);border:1px solid rgba(17,21,75,.06);margin-bottom:36px}
+.goal-details summary{cursor:pointer;padding:14px 20px;font-family:var(--font-d);font-size:13px;font-weight:700;color:var(--blue)}
+.goal-details summary:focus-visible{outline:3px solid var(--mint-dark);outline-offset:2px;border-radius:var(--r-md)}
+.goal-details-text{margin:0;padding:0 20px 18px;font-size:15px;line-height:1.7;color:#2d3748;max-width:820px}
+.strategy-positioning-card{
+  background:var(--card-bg);border-radius:var(--r-lg);padding:26px 30px;margin-bottom:36px;
+  box-shadow:var(--shadow-sm);border:1px solid rgba(17,21,75,.06);
+}
+.strategy-positioning-card p{margin:0;font-size:15px;line-height:1.7;color:#2d3748;max-width:820px}
+.timeline-card{background:var(--card-bg);border-radius:var(--r-lg);padding:20px 22px 16px;margin-bottom:16px;box-shadow:var(--shadow-sm);border:1px solid rgba(17,21,75,.06)}
+.timeline-row{display:flex;align-items:center;gap:10px}
+.timeline-bar{flex:1;display:flex;gap:3px;min-width:0}
+.timeline-seg{
+  min-width:0;border:none;cursor:pointer;background:var(--tc);color:var(--tt);
+  font-family:var(--font-d);font-size:12px;font-weight:700;text-align:left;
+  padding:10px 12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transition:filter .15s;
+}
+.timeline-seg:first-child{border-radius:8px 0 0 8px}
+.timeline-seg:last-child{border-radius:0 8px 8px 0}
+.timeline-seg:hover{filter:brightness(1.12)}
+.timeline-launch{
+  flex-shrink:0;width:64px;text-align:center;background:var(--navy);color:#fff;border-radius:20px;
+  font-family:var(--font-d);font-size:11px;font-weight:700;padding:5px 0;
+}
+.timeline-weeks{display:flex;margin:8px 74px 0 0;font-size:11px;color:#5b6474}
+.timeline-weeks span{flex:1;min-width:0;white-space:nowrap}
+.timeline-weeks i{font-style:normal}
+.track-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.track-card{
+  background:var(--card-bg);border-radius:var(--r-lg);padding:22px 24px;display:flex;flex-direction:column;
+  box-shadow:var(--shadow-sm);border:1px solid rgba(17,21,75,.06);border-top:5px solid var(--tc);
+}
+.track-card-eyebrow{font-family:var(--font-d);font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#4a5568;margin-bottom:8px}
+.track-card-title{font-family:var(--font-d);font-size:18px;font-weight:800;color:var(--dark);margin:0 0 14px}
+.track-card-label{font-family:var(--font-d);font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#5b6474;margin-bottom:4px}
+.track-card-objective{font-size:14px;font-weight:600;color:var(--dark);line-height:1.5;margin:0 0 6px}
+.track-card-desc{font-size:13px;color:#4a5568;line-height:1.6;margin:0 0 18px;flex:1}
+.track-card-stat{font-size:12px;color:#4a5568;margin:8px 0 14px}
+.track-card-link{align-self:flex-start;background:none;border:none;padding:0;cursor:pointer;font-family:var(--font-d);font-size:13px;font-weight:700;color:var(--blue)}
+.track-card-link:hover{text-decoration:underline}
+
+@media(max-width:900px){
+  .steps-row{grid-template-columns:repeat(3,1fr)}
+  .home-trio,.track-cards{grid-template-columns:1fr}
+}
+@media(max-width:768px){
+  #page-dashboard .page-header{padding-bottom:72px}
+  .next-card{margin-top:-44px;padding:22px 20px;border-radius:var(--r-lg)}
+  .next-title{font-size:20px}
+  .steps-row{grid-template-columns:repeat(2,1fr)}
+  .strategy-hero{padding:24px 22px}
+  .strategy-hero-text{font-size:19px}
+  .goal-tiles{grid-template-columns:repeat(2,1fr)}
+  .timeline-weeks i{display:none}
+  .timeline-seg-name{display:none}
+  .timeline-seg{padding:10px 8px;font-size:11px}
+  .countdown-value{font-size:36px}
+}
+@media (prefers-reduced-motion:reduce){
+  .track-progress-bar > div,.track-card-bar > div{transition:none}
+}
+
 /* Two stages: "onboarding" (before the launch plan exists) and "plan" */
 body[data-stage="onboarding"] .plan-only{display:none!important}
 body[data-stage="plan"] .onboarding-only{display:none!important}
@@ -3941,6 +4149,7 @@ body:not([data-cohort-start]:not([data-cohort-start=""])) .sidebar-progress-sub{
       data-client-type="experience"
       data-cohort-start=""
       data-stage="{{STAGE}}"
+      data-launch-date="{{LAUNCH_DATE}}"
       data-total-days="{{TOTAL_DAYS}}"
       data-total-weeks="{{TOTAL_WEEKS}}">
 <!-- ── Sidebar ──────────────────────────────────────────────── -->
@@ -3969,7 +4178,34 @@ body:not([data-cohort-start]:not([data-cohort-start=""])) .sidebar-progress-sub{
       <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"/></svg>
       Dashboard
     </div>
-    <div class="nav-section-label">Your Program</div>
+    <div class="nav-section-label plan-only">Your Plan</div>
+    <div class="nav-item plan-only" data-page="strategy" onclick="navigate('strategy')">
+      <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 6a3 3 0 013-3h10a1 1 0 01.8 1.6L14.25 8l2.55 3.4A1 1 0 0116 13H6a1 1 0 00-1 1v3a1 1 0 11-2 0V6z" clip-rule="evenodd"/></svg>
+      Launch Strategy
+    </div>
+    <div class="nav-item plan-only" id="nav-roadmap" data-page="roadmap" onclick="navigate('roadmap')">
+      <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"/></svg>
+      Launch Roadmap
+      <span class="nav-badge" id="roadmap-badge">0%</span>
+    </div>
+    <div class="nav-section-label plan-only">Build Your Experience</div>
+    <div class="nav-item plan-only" data-page="tactic1" onclick="navigate('tactic1')">
+      <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zm6-4a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zm6-3a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"/></svg>
+      Track 1 · {{TACTIC_1_NAV_LABEL}}
+    </div>
+    <div class="nav-item plan-only" data-page="tactic2" onclick="navigate('tactic2')">
+      <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"/></svg>
+      Track 2 · {{TACTIC_2_NAV_LABEL}}
+    </div>
+    <div class="nav-item plan-only" data-page="tactic3" onclick="navigate('tactic3')">
+      <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path d="M15 8a3 3 0 10-2.977-2.63l-4.94 2.47a3 3 0 100 4.319l4.94 2.47a3 3 0 10.895-1.789l-4.94-2.47a3.027 3.027 0 000-.74l4.94-2.47C13.456 7.68 14.19 8 15 8z"/></svg>
+      Track 3 · {{TACTIC_3_NAV_LABEL}}
+    </div>
+    <div class="nav-item plan-only" data-page="bookability" onclick="navigate('bookability')">
+      <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+      Bookability Checklist
+    </div>
+    <div class="nav-section-label">Resources</div>
     <div class="nav-item" data-page="guide" onclick="navigate('guide')">
       <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z"/></svg>
       Experience Development Guide
@@ -3977,33 +4213,6 @@ body:not([data-cohort-start]:not([data-cohort-start=""])) .sidebar-progress-sub{
     <div class="nav-item" data-page="materials" onclick="navigate('materials')">
       <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a2 2 0 012-2h12a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4z"/></svg>
       Materials
-    </div>
-    <div class="nav-section-label plan-only">Your Launch Plan</div>
-    <div class="nav-item plan-only" data-page="strategy" onclick="navigate('strategy')">
-      <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 6a3 3 0 013-3h10a1 1 0 01.8 1.6L14.25 8l2.55 3.4A1 1 0 0116 13H6a1 1 0 00-1 1v3a1 1 0 11-2 0V6z" clip-rule="evenodd"/></svg>
-      Strategy
-    </div>
-    <div class="nav-item plan-only" id="nav-roadmap" data-page="roadmap" onclick="navigate('roadmap')">
-      <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"/></svg>
-      Launch Roadmap
-      <span class="nav-badge" id="roadmap-badge">0%</span>
-    </div>
-    <div class="nav-item plan-only" data-page="bookability" onclick="navigate('bookability')">
-      <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-      Bookability Checklist
-    </div>
-    <div class="nav-section-label plan-only">The Build Tracks</div>
-    <div class="nav-item plan-only" data-page="tactic1" onclick="navigate('tactic1')">
-      <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zm6-4a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zm6-3a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"/></svg>
-      {{TACTIC_1_NAV_LABEL}}
-    </div>
-    <div class="nav-item plan-only" data-page="tactic2" onclick="navigate('tactic2')">
-      <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"/></svg>
-      {{TACTIC_2_NAV_LABEL}}
-    </div>
-    <div class="nav-item plan-only" data-page="tactic3" onclick="navigate('tactic3')">
-      <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path d="M15 8a3 3 0 10-2.977-2.63l-4.94 2.47a3 3 0 100 4.319l4.94 2.47a3 3 0 10.895-1.789l-4.94-2.47a3.027 3.027 0 000-.74l4.94-2.47C13.456 7.68 14.19 8 15 8z"/></svg>
-      {{TACTIC_3_NAV_LABEL}}
     </div>
     <!-- Activity tab - visible only to Admin/PSM/Coach -->
     <div class="nav-item" id="nav-activity" data-page="activity" onclick="navigate('activity')" style="display:none;">
@@ -4042,154 +4251,126 @@ body:not([data-cohort-start]:not([data-cohort-start=""])) .sidebar-progress-sub{
 <section id="page-dashboard" class="page active">
   <div class="page-header">
     <div class="page-header-eyebrow">Junction · Experience Design Program</div>
-    <h1>Welcome to Your Experience Design Program</h1>
+    <h1>Hi {{GREETING_NAME}}</h1>
     <p>{{PAGE_SUBTITLE}}</p>
+    <button class="page-header-link plan-only" onclick="navigate('strategy')">View your Launch Strategy <span aria-hidden="true">&rarr;</span></button>
   </div>
   <div class="content-area">
 
-    <!-- WELCOME MESSAGE -->
-    <div class="welcome-section">
-      <div class="welcome-header">
-        <div class="welcome-eyebrow">Getting Started</div>
-        <h2 class="welcome-title">Hi {{CLIENT_NAME}}!</h2>
-        <p class="welcome-message">{{WM_SUBLINE}}</p>
+    <!-- YOUR NEXT STEP: what to do now -->
+    <div class="next-card" id="next-step-card">
+
+      <!-- Plan stage: filled in by renderNextStep() from the roadmap and the start date -->
+      <div class="plan-only">
+        <div class="next-head">
+          <div class="next-eyebrow">Your next step</div>
+          <span class="next-pill" id="next-pill" hidden></span>
+        </div>
+        <h2 class="next-title" id="next-title">Choose your start date</h2>
+        <p class="next-meta" id="next-meta">Your launch plan is ready. Pick the Monday you want Week 1 to begin.</p>
+
+        <!-- Shown until a start date is chosen -->
+        <div class="start-date-card" id="start-date-card">
+          <div class="start-date-content">
+            <div class="start-date-desc">Your {{TOTAL_WEEKS}}-week roadmap runs from the date you pick.</div>
+          </div>
+          <div class="start-date-controls">
+            <input type="date" class="start-date-input" id="start-date-input" aria-label="Start date">
+            <button class="start-date-btn" id="start-date-btn">Set my start date</button>
+            <div class="start-date-readonly-note" id="start-date-readonly-note" style="display:none">The operator sets this themselves.</div>
+          </div>
+          <div class="start-date-error" id="start-date-error" role="alert"></div>
+        </div>
+
+        <div class="next-tasks" id="next-tasks"></div>
+        <p class="next-catchup" id="next-catchup" hidden></p>
+        <div class="next-actions" id="next-actions" hidden>
+          <button class="next-btn" id="next-open-btn">Open the roadmap <span aria-hidden="true">&rarr;</span></button>
+          <button class="next-link" id="next-roadmap-link" onclick="navigate('roadmap')">See the full roadmap</button>
+        </div>
+      </div>
+
+      <!-- Onboarding stage: set from the program steps staff have ticked -->
+      <div class="onboarding-only">
+        <div class="next-head"><div class="next-eyebrow">Your next step</div></div>
+        <h2 class="next-title">{{ONBOARDING_NEXT_TITLE}}</h2>
+        <p class="next-meta">{{ONBOARDING_NEXT_DESC}}</p>
+        <p class="next-call">{{ONBOARDING_NEXT_CALL}}</p>
+        <div class="next-actions">
+          <button class="next-btn" onclick="navigate('{{ONBOARDING_NEXT_PAGE}}')">{{ONBOARDING_NEXT_BUTTON}} <span aria-hidden="true">&rarr;</span></button>
+        </div>
       </div>
     </div>
 
-    <!-- PROGRAM JOURNEY (onboarding stage: before the launch plan is added) -->
-    <div class="journey-section onboarding-only" id="journey-section">
-      <div class="how-to-section-label">Your Program, Step by Step</div>
-      <ol class="journey-list">
-        <li class="journey-step"><span class="journey-num">1</span><div><h4>Questionnaire</h4><p>You tell us about your idea, your guests and your season. Your answers shape everything that follows.</p></div></li>
-        <li class="journey-step"><span class="journey-num">2</span><div><h4>Onboarding call</h4><p>A walkthrough of the program, this dashboard and your guide. We book both coaching calls together.</p></div></li>
-        <li class="journey-step"><span class="journey-num">3</span><div><h4>Experience Development Guide</h4><p>Your working document. You work through it between calls, at your own pace.</p></div></li>
-        <li class="journey-step"><span class="journey-num">4</span><div><h4>Coaching call 1: concept and feasibility</h4><p>We leave with one experience, described in one sentence, and one launch window.</p></div></li>
-        <li class="journey-step"><span class="journey-num">5</span><div><h4>Coaching call 2: pricing and launch</h4><p>We leave with a price, a booking method and a launch date.</p></div></li>
-        <li class="journey-step"><span class="journey-num">6</span><div><h4>Your launch plan</h4><p>A week-by-week roadmap to your first paying guest is added to this dashboard.</p></div></li>
+    <!-- HOW AM I DOING: progress by track, and the countdown to launch -->
+    <div class="home-grid plan-only">
+      <div class="home-card" id="progress-card">
+        <div class="home-card-head">
+          <h3>Your progress</h3>
+          <span class="progress-total"><strong id="dash-done-count">0</strong> of <span id="dash-total-count">{{TOTAL_TASKS}}</span> tasks done</span>
+        </div>
+        <div class="track-progress" style="--tc:var(--t1)">
+          <div class="track-progress-row"><button class="track-progress-name" onclick="navigate('tactic1')">Track 1 · {{TACTIC_1_NAV_LABEL}}</button><span class="track-progress-count" id="hp1-stat">0 of {{TACTIC_1_TOTAL}}</span></div>
+          <div class="track-progress-bar"><div id="hp1-bar"></div></div>
+        </div>
+        <div class="track-progress" style="--tc:var(--t2)">
+          <div class="track-progress-row"><button class="track-progress-name" onclick="navigate('tactic2')">Track 2 · {{TACTIC_2_NAV_LABEL}}</button><span class="track-progress-count" id="hp2-stat">0 of {{TACTIC_2_TOTAL}}</span></div>
+          <div class="track-progress-bar"><div id="hp2-bar"></div></div>
+        </div>
+        <div class="track-progress" style="--tc:var(--t3)">
+          <div class="track-progress-row"><button class="track-progress-name" onclick="navigate('tactic3')">Track 3 · {{TACTIC_3_NAV_LABEL}}</button><span class="track-progress-count" id="hp3-stat">0 of {{TACTIC_3_TOTAL}}</span></div>
+          <div class="track-progress-bar"><div id="hp3-bar"></div></div>
+        </div>
+      </div>
+      <!-- IF:LAUNCH_DATE -->
+      <div class="home-card countdown-card" id="countdown-card">
+        <div class="home-eyebrow">Countdown</div>
+        <div class="countdown-value" id="countdown-value">&nbsp;</div>
+        <p class="countdown-label" id="countdown-label">until your first paying guests on {{LAUNCH_DATE_LONG}}</p>
+      </div>
+      <!-- /IF:LAUNCH_DATE -->
+    </div>
+
+    <!-- WHERE AM I: the six steps of the program -->
+    <div class="home-card" id="program-steps">
+      <h3>Where you are in the program</h3>
+      <ol class="steps-row">
+        <li class="program-step {{STEP_1_STATE}}"><span class="program-step-dot"></span><span class="program-step-name">Questionnaire</span><span class="program-step-note">{{STEP_1_NOTE}}</span></li>
+        <li class="program-step {{STEP_2_STATE}}"><span class="program-step-dot"></span><span class="program-step-name">Onboarding Call</span><span class="program-step-note">{{STEP_2_NOTE}}</span></li>
+        <li class="program-step {{STEP_3_STATE}}"><span class="program-step-dot"></span><span class="program-step-name">Coaching Call 1</span><span class="program-step-note">{{STEP_3_NOTE}}</span></li>
+        <li class="program-step {{STEP_4_STATE}}"><span class="program-step-dot"></span><span class="program-step-name">Coaching Call 2</span><span class="program-step-note">{{STEP_4_NOTE}}</span></li>
+        <li class="program-step {{STEP_5_STATE}}"><span class="program-step-dot"></span><span class="program-step-name">Launch Roadmap</span><span class="program-step-note">{{STEP_5_NOTE}}</span></li>
+        <li class="program-step {{STEP_6_STATE}}" id="program-step-launch"><span class="program-step-dot"></span><span class="program-step-name">Launch</span><span class="program-step-note">{{STEP_6_NOTE}}</span></li>
       </ol>
     </div>
 
-    <!-- START DATE PICKER (shown until a start date is chosen) -->
-    <div class="start-date-card plan-only" id="start-date-card">
-      <div class="start-date-content">
-        <div class="start-date-title">Choose your start date</div>
-        <div class="start-date-desc">Your {{TOTAL_WEEKS}}-week roadmap runs from the date you pick. Choose the Monday you are ready to start working the plan.</div>
+    <!-- KEY DATES, WHAT'S NEW, YOUR COACH -->
+    <div class="home-trio">
+      <div class="home-card">
+        <h3>Key dates</h3>
+        <dl class="key-dates">
+          <div class="plan-only"><dt>Start date</dt><dd><span id="start-date-set-value">Not chosen yet</span><button class="start-date-change" id="start-date-change" hidden>Change</button></dd></div>
+          <div><dt>Next coaching call</dt><dd>{{KEY_DATE_NEXT_CALL}}</dd></div>
+          <div><dt>Launch</dt><dd>{{LAUNCH_DATE_LONG}}</dd></div>
+        </dl>
       </div>
-      <div class="start-date-controls">
-        <input type="date" class="start-date-input" id="start-date-input">
-        <button class="start-date-btn" id="start-date-btn">Set my start date</button>
-        <div class="start-date-readonly-note" id="start-date-readonly-note" style="display:none">The operator sets this themselves.</div>
+      <div class="home-card">
+        <h3>What's new</h3>
+        <ul class="news-list">
+{{WHATS_NEW}}
+        </ul>
       </div>
-      <div class="start-date-error" id="start-date-error"></div>
-    </div>
-
-    <div class="start-date-set plan-only" id="start-date-set" hidden><span id="start-date-set-label">Your roadmap starts on</span> <strong id="start-date-set-value"></strong>.<button class="start-date-change" id="start-date-change" hidden>Change</button></div>
-
-    <!-- LAUNCH TARGETS (optional) -->
-    <div class="launch-targets-row plan-only" id="launch-targets">
-      <!-- IF:PRICE_POINT -->
-      <div class="launch-target-card">
-        <div class="launch-target-label">Price Point</div>
-        <div class="launch-target-value">{{PRICE_POINT}}</div>
-      </div>
-      <!-- /IF:PRICE_POINT -->
-      <!-- IF:LAUNCH_TARGET -->
-      <div class="launch-target-card">
-        <div class="launch-target-label">Launch Target</div>
-        <div class="launch-target-value">{{LAUNCH_TARGET_TITLE}}</div>
-        <div class="launch-target-desc">{{LAUNCH_TARGET_DESC}}</div>
-      </div>
-      <!-- /IF:LAUNCH_TARGET -->
-    </div>
-
-    <!-- WHERE TO START (onboarding stage) -->
-    <div class="how-to-section onboarding-only">
-      <div class="how-to-section-label">Where to Start</div>
-      <div class="how-to-grid">
-        <div class="how-to-card">
-          <div class="how-to-icon strategy">
-            <svg viewBox="0 0 20 20" fill="currentColor"><path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z"/></svg>
-          </div>
-          <h4 class="how-to-title">Open Your Guide</h4>
-          <p class="how-to-desc">The working document you complete between coaching calls.</p>
-          <button class="how-to-link" onclick="navigate('guide')">Go to Guide <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 10a.75.75 0 01.75-.75h10.638L10.23 5.29a.75.75 0 111.04-1.08l5.5 5.25a.75.75 0 010 1.08l-5.5 5.25a.75.75 0 11-1.04-1.08l4.158-3.96H3.75A.75.75 0 013 10z" clip-rule="evenodd"/></svg></button>
-        </div>
-        <div class="how-to-card">
-          <div class="how-to-icon roadmap">
-            <svg viewBox="0 0 20 20" fill="currentColor"><path d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a2 2 0 012-2h12a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4z"/></svg>
-          </div>
-          <h4 class="how-to-title">Find Your Materials</h4>
-          <p class="how-to-desc">Your questionnaire answers, call summaries and the pricing calculator, added as the program goes on.</p>
-          <button class="how-to-link" onclick="navigate('materials')">Go to Materials <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 10a.75.75 0 01.75-.75h10.638L10.23 5.29a.75.75 0 111.04-1.08l5.5 5.25a.75.75 0 010 1.08l-5.5 5.25a.75.75 0 11-1.04-1.08l4.158-3.96H3.75A.75.75 0 013 10z" clip-rule="evenodd"/></svg></button>
-        </div>
-      </div>
-    </div>
-
-    <!-- HOW TO USE THIS PLAN -->
-    <div class="how-to-section plan-only">
-      <div class="how-to-section-label">How to Use This Plan</div>
-      <div class="how-to-grid">
-        <div class="how-to-card">
-          <div class="how-to-icon strategy">
-            <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 6a3 3 0 013-3h10a1 1 0 01.8 1.6L14.25 8l2.55 3.4A1 1 0 0116 13H6a1 1 0 00-1 1v3a1 1 0 11-2 0V6z" clip-rule="evenodd"/></svg>
-          </div>
-          <h4 class="how-to-title">Review Your Strategy</h4>
-          <p class="how-to-desc">Your experience, your positioning, and the three tracks that get it launched.</p>
-          <button class="how-to-link" onclick="navigate('strategy')">View Strategy <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 10a.75.75 0 01.75-.75h10.638L10.23 5.29a.75.75 0 111.04-1.08l5.5 5.25a.75.75 0 010 1.08l-5.5 5.25a.75.75 0 11-1.04-1.08l4.158-3.96H3.75A.75.75 0 013 10z" clip-rule="evenodd"/></svg></button>
-        </div>
-        <div class="how-to-card">
-          <div class="how-to-icon roadmap">
-            <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"/></svg>
-          </div>
-          <h4 class="how-to-title">Follow the Roadmap</h4>
-          <p class="how-to-desc">Week by week to your first paying guest. Check items off as you go.</p>
-          <button class="how-to-link" onclick="navigate('roadmap')">Open Roadmap <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 10a.75.75 0 01.75-.75h10.638L10.23 5.29a.75.75 0 111.04-1.08l5.5 5.25a.75.75 0 010 1.08l-5.5 5.25a.75.75 0 11-1.04-1.08l4.158-3.96H3.75A.75.75 0 013 10z" clip-rule="evenodd"/></svg></button>
-        </div>
-        <div class="how-to-card">
-          <div class="how-to-icon tactics">
-            <svg viewBox="0 0 20 20" fill="currentColor"><path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zm6-4a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zm6-3a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"/></svg>
-          </div>
-          <h4 class="how-to-title">Use the Track Guides</h4>
-          <p class="how-to-desc">Detailed how-to for every task. Tap "how to" to jump straight to the step.</p>
-          <button class="how-to-link" onclick="navigate('tactic1')">Browse Tracks <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 10a.75.75 0 01.75-.75h10.638L10.23 5.29a.75.75 0 111.04-1.08l5.5 5.25a.75.75 0 010 1.08l-5.5 5.25a.75.75 0 11-1.04-1.08l4.158-3.96H3.75A.75.75 0 013 10z" clip-rule="evenodd"/></svg></button>
-        </div>
-      </div>
-    </div>
-
-    <!-- PROGRESS COMPACT -->
-    <div class="progress-section-compact plan-only">
-      <div class="progress-ring-wrap">
-        <svg class="progress-ring-svg" width="100" height="100" viewBox="0 0 100 100">
-          <circle class="progress-ring-bg" cx="50" cy="50" r="45"/>
-          <circle class="progress-ring-bar" id="dash-ring" cx="50" cy="50" r="45"/>
-        </svg>
-        <div class="progress-ring-text">
-          <div class="progress-ring-pct" id="dash-pct">0%</div>
-          <div class="progress-ring-label">Complete</div>
-        </div>
-      </div>
-      <div class="progress-text">
-        <h3>Your Progress</h3>
-        <p>Work through the Launch Roadmap week by week. Each completed checklist item moves you closer to your goal.</p>
-        <div class="progress-stats">
-          <div class="progress-stat">
-            <div class="progress-stat-value" id="dash-done-count">0</div>
-            <div class="progress-stat-label">Tasks done</div>
-          </div>
-          <div class="progress-stat">
-            <div class="progress-stat-value" id="dash-total-count">{{TOTAL_TASKS}}</div>
-            <div class="progress-stat-label">Total tasks</div>
+      <div class="home-card">
+        <h3>Your coach</h3>
+        <div class="coach-row">
+          <span class="coach-avatar" aria-hidden="true">{{COACH_INITIAL}}</span>
+          <div>
+            <div class="coach-name">{{COACH_NAME}}</div>
+            <div class="coach-note">Questions between calls? Get in touch.</div>
           </div>
         </div>
+        <a class="coach-btn" href="mailto:{{COACH_EMAIL}}">Email your coach</a>
       </div>
-    </div>
-
-    <!-- QUICK ACTIONS -->
-    <div class="quick-actions plan-only">
-      <button class="quick-action-btn primary" onclick="navigate('roadmap')">
-        <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"/></svg>
-        Continue to Roadmap
-      </button>
     </div>
 
   </div>
@@ -4200,89 +4381,83 @@ body:not([data-cohort-start]:not([data-cohort-start=""])) .sidebar-progress-sub{
      ════════════════════════════════════════════ -->
 <section id="page-strategy" class="page">
   <div class="page-header">
-    <div class="page-header-eyebrow">Your Strategy</div>
-    <h1>Your Launch Plan</h1>
-    <p>Your customised roadmap to a bookable experience</p>
+    <div class="page-header-eyebrow">Your Plan</div>
+    <h1>Launch Strategy</h1>
+    <p>{{CLIENT_NAME}}</p>
   </div>
   <div class="content-area">
 
     <!-- THE EXPERIENCE -->
-    <div class="strategy-goal">
-      <div class="strategy-goal-quote">&ldquo;</div>
-      <div class="strategy-goal-inner">
-        <div class="strategy-goal-label">Your Experience</div>
-        <p class="strategy-goal-text" data-editable-key="strategy-experience">{{EXPERIENCE_SENTENCE}}</p>
-      </div>
+    <div class="strategy-hero">
+      <div class="strategy-hero-label">Your Experience</div>
+      <p class="strategy-hero-text" data-editable-key="strategy-experience">{{EXPERIENCE_SENTENCE}}</p>
+      <p class="strategy-hero-note">Your one-sentence description. Use it as the starting point for your listing.</p>
     </div>
 
     <!-- GOAL -->
-    <div class="strategy-goal">
-      <div class="strategy-goal-quote">&ldquo;</div>
-      <div class="strategy-goal-inner">
-        <div class="strategy-goal-label">Your Goal</div>
-        <p class="strategy-goal-text" data-editable-key="strategy-goal">{{GOAL_TEXT}}</p>
-      </div>
+    <h2 class="strategy-heading">Your goal at a glance</h2>
+    <!-- IF:GOAL_TILES -->
+    <div class="goal-tiles">
+{{GOAL_TILES}}
     </div>
+    <!-- /IF:GOAL_TILES -->
+    <details class="goal-details">
+      <summary>Read your full goal</summary>
+      <p class="goal-details-text" data-editable-key="strategy-goal">{{GOAL_TEXT}}</p>
+    </details>
 
     <!-- STRATEGIC POSITIONING -->
-    <div class="strategy-positioning">
-      <div class="strategy-positioning-label">Strategic Positioning</div>
-      <p class="strategy-positioning-text" data-editable-key="strategy-positioning">{{STRATEGIC_POSITIONING}}</p>
+    <h2 class="strategy-heading">Strategic positioning</h2>
+    <div class="strategy-positioning-card">
+      <p data-editable-key="strategy-positioning">{{STRATEGIC_POSITIONING}}</p>
     </div>
 
-    <!-- OBJECTIVES -->
-    <div class="strategy-objectives">
-      <div class="strategy-objectives-label">Three Objectives</div>
-      <div class="strategy-objectives-grid">
-        <div class="strategy-objective-card" style="--obj-color:#067cbc">
-          <div class="strategy-objective-num">01</div>
-          <div class="strategy-objective-content">
-            <h3 class="strategy-objective-title" data-editable-key="objective-1-title">{{OBJECTIVE_1_TITLE}}</h3>
-            <p class="strategy-objective-desc" data-editable-key="objective-1-desc">{{OBJECTIVE_1_DESC}}</p>
-            <span class="strategy-objective-pill">{{OBJECTIVE_1_TACTIC_PILL}}</span>
-          </div>
+    <!-- THE THREE TRACKS: each with its objective, weeks, progress and link -->
+    <h2 class="strategy-heading">Your three tracks</h2>
+    <p class="strategy-subheading">{{TOTAL_WEEKS}} weeks, three tracks, one launch date.</p>
+
+    <div class="timeline-card" id="track-timeline">
+      <div class="timeline-row">
+        <div class="timeline-bar">
+          <button class="timeline-seg" style="flex:{{TACTIC_1_SPAN}};--tc:var(--t1);--tt:#fff" onclick="navigate('tactic1')">Track 1<span class="timeline-seg-name"> · {{TACTIC_1_NAV_LABEL}}</span></button>
+          <button class="timeline-seg" style="flex:{{TACTIC_2_SPAN}};--tc:var(--t2);--tt:#fff" onclick="navigate('tactic2')">Track 2<span class="timeline-seg-name"> · {{TACTIC_2_NAV_LABEL}}</span></button>
+          <button class="timeline-seg" style="flex:{{TACTIC_3_SPAN}};--tc:var(--t3);--tt:var(--navy)" onclick="navigate('tactic3')">Track 3<span class="timeline-seg-name"> · {{TACTIC_3_NAV_LABEL}}</span></button>
         </div>
-        <div class="strategy-objective-card" style="--obj-color:#11154b">
-          <div class="strategy-objective-num">02</div>
-          <div class="strategy-objective-content">
-            <h3 class="strategy-objective-title" data-editable-key="objective-2-title">{{OBJECTIVE_2_TITLE}}</h3>
-            <p class="strategy-objective-desc" data-editable-key="objective-2-desc">{{OBJECTIVE_2_DESC}}</p>
-            <span class="strategy-objective-pill">{{OBJECTIVE_2_TACTIC_PILL}}</span>
-          </div>
-        </div>
-        <div class="strategy-objective-card" style="--obj-color:#7bc490">
-          <div class="strategy-objective-num">03</div>
-          <div class="strategy-objective-content">
-            <h3 class="strategy-objective-title" data-editable-key="objective-3-title">{{OBJECTIVE_3_TITLE}}</h3>
-            <p class="strategy-objective-desc" data-editable-key="objective-3-desc">{{OBJECTIVE_3_DESC}}</p>
-            <span class="strategy-objective-pill">{{OBJECTIVE_3_TACTIC_PILL}}</span>
-          </div>
-        </div>
+        <span class="timeline-launch">Launch</span>
       </div>
+      <div class="timeline-weeks">{{TIMELINE_WEEK_LABELS}}</div>
     </div>
 
-    <!-- TACTICS OVERVIEW -->
-    <div class="tactics-overview">
-      <div class="tactics-overview-label">The Three Build Tracks</div>
-      <div class="tactics-overview-grid">
-        <div class="tactic-overview-card" style="--color:#067cbc">
-          <div class="tactic-overview-phase">{{TACTIC_1_PHASE}}</div>
-          <h3 class="tactic-overview-title" data-editable-key="tactic-1-title">{{TACTIC_1_TITLE}}</h3>
-          <p class="tactic-overview-desc" data-editable-key="tactic-1-subtitle">{{TACTIC_1_SUBTITLE}}</p>
-          <button class="tactic-overview-link" onclick="navigate('tactic1')">View full guide <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 10a.75.75 0 01.75-.75h10.638L10.23 5.29a.75.75 0 111.04-1.08l5.5 5.25a.75.75 0 010 1.08l-5.5 5.25a.75.75 0 11-1.04-1.08l4.158-3.96H3.75A.75.75 0 013 10z" clip-rule="evenodd"/></svg></button>
-        </div>
-        <div class="tactic-overview-card" style="--color:#11154b">
-          <div class="tactic-overview-phase">{{TACTIC_2_PHASE}}</div>
-          <h3 class="tactic-overview-title" data-editable-key="tactic-2-title">{{TACTIC_2_TITLE}}</h3>
-          <p class="tactic-overview-desc" data-editable-key="tactic-2-subtitle">{{TACTIC_2_SUBTITLE}}</p>
-          <button class="tactic-overview-link" onclick="navigate('tactic2')">View full guide <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 10a.75.75 0 01.75-.75h10.638L10.23 5.29a.75.75 0 111.04-1.08l5.5 5.25a.75.75 0 010 1.08l-5.5 5.25a.75.75 0 11-1.04-1.08l4.158-3.96H3.75A.75.75 0 013 10z" clip-rule="evenodd"/></svg></button>
-        </div>
-        <div class="tactic-overview-card" style="--color:#aadab6">
-          <div class="tactic-overview-phase">{{TACTIC_3_PHASE}}</div>
-          <h3 class="tactic-overview-title" data-editable-key="tactic-3-title">{{TACTIC_3_TITLE}}</h3>
-          <p class="tactic-overview-desc" data-editable-key="tactic-3-subtitle">{{TACTIC_3_SUBTITLE}}</p>
-          <button class="tactic-overview-link" onclick="navigate('tactic3')">View full guide <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 10a.75.75 0 01.75-.75h10.638L10.23 5.29a.75.75 0 111.04-1.08l5.5 5.25a.75.75 0 010 1.08l-5.5 5.25a.75.75 0 11-1.04-1.08l4.158-3.96H3.75A.75.75 0 013 10z" clip-rule="evenodd"/></svg></button>
-        </div>
+    <div class="track-cards">
+      <div class="track-card" style="--tc:var(--t1)">
+        <div class="track-card-eyebrow">Track 1 · {{TACTIC_1_WEEKS}}</div>
+        <h3 class="track-card-title" data-editable-key="tactic-1-title">{{TACTIC_1_TITLE}}</h3>
+        <div class="track-card-label">Objective</div>
+        <p class="track-card-objective" data-editable-key="objective-1-title">{{OBJECTIVE_1_TITLE}}</p>
+        <p class="track-card-desc" data-editable-key="objective-1-desc">{{OBJECTIVE_1_DESC}}</p>
+        <div class="track-card-bar"><div id="tc1-bar"></div></div>
+        <div class="track-card-stat" id="tc1-stat">0 of {{TACTIC_1_TOTAL}} tasks done</div>
+        <button class="track-card-link" onclick="navigate('tactic1')">Open Track 1 <span aria-hidden="true">&rarr;</span></button>
+      </div>
+      <div class="track-card" style="--tc:var(--t2)">
+        <div class="track-card-eyebrow">Track 2 · {{TACTIC_2_WEEKS}}</div>
+        <h3 class="track-card-title" data-editable-key="tactic-2-title">{{TACTIC_2_TITLE}}</h3>
+        <div class="track-card-label">Objective</div>
+        <p class="track-card-objective" data-editable-key="objective-2-title">{{OBJECTIVE_2_TITLE}}</p>
+        <p class="track-card-desc" data-editable-key="objective-2-desc">{{OBJECTIVE_2_DESC}}</p>
+        <div class="track-card-bar"><div id="tc2-bar"></div></div>
+        <div class="track-card-stat" id="tc2-stat">0 of {{TACTIC_2_TOTAL}} tasks done</div>
+        <button class="track-card-link" onclick="navigate('tactic2')">Open Track 2 <span aria-hidden="true">&rarr;</span></button>
+      </div>
+      <div class="track-card" style="--tc:var(--t3)">
+        <div class="track-card-eyebrow">Track 3 · {{TACTIC_3_WEEKS}}</div>
+        <h3 class="track-card-title" data-editable-key="tactic-3-title">{{TACTIC_3_TITLE}}</h3>
+        <div class="track-card-label">Objective</div>
+        <p class="track-card-objective" data-editable-key="objective-3-title">{{OBJECTIVE_3_TITLE}}</p>
+        <p class="track-card-desc" data-editable-key="objective-3-desc">{{OBJECTIVE_3_DESC}}</p>
+        <div class="track-card-bar"><div id="tc3-bar"></div></div>
+        <div class="track-card-stat" id="tc3-stat">0 of {{TACTIC_3_TOTAL}} tasks done</div>
+        <button class="track-card-link" onclick="navigate('tactic3')">Open Track 3 <span aria-hidden="true">&rarr;</span></button>
       </div>
     </div>
 
@@ -4713,11 +4888,11 @@ body:not([data-cohort-start]:not([data-cohort-start=""])) .sidebar-progress-sub{
   <div class="page-header">
     <div class="page-header-eyebrow">Pre-Launch Checklist</div>
     <h1>Bookability Checklist</h1>
-    <p>These items must be complete before you can accept your first booking. Work through them during the final weeks of Track 3.</p>
+    <p>Everything that must be true before you open for bookings. Work through it during the final weeks of Track 3.</p>
   </div>
   <div class="content-area">
     <div class="bookability-intro">
-      Each item below is a gate between you and a live listing. Some are quick, some require decisions. Complete them in order and you will be ready to take bookings the moment your listing goes live.
+      Each item below is a gate between you and a live listing. Some are quick, some need a decision. When every item is ticked, you are ready to take bookings.
     </div>
     <div class="section-label">Complete These Items</div>
     <div class="card" style="padding:0">
@@ -4727,6 +4902,19 @@ body:not([data-cohort-start]:not([data-cohort-start=""])) .sidebar-progress-sub{
         </div>
       </div>
     </div>
+    <!-- IF:AFTER_LAUNCH -->
+    <div class="section-label" style="margin-top:32px">After You Launch</div>
+    <div class="bookability-intro">
+      These come once bookings are open. They are tracked here but are not counted in your launch progress.
+    </div>
+    <div class="card" style="padding:0">
+      <div class="card-body">
+        <div class="check-list" style="gap:16px">
+{{AFTER_LAUNCH_ITEMS}}
+        </div>
+      </div>
+    </div>
+    <!-- /IF:AFTER_LAUNCH -->
   </div>
 </section>
 <!-- /IF:BOOKABILITY_CHECKLIST -->
@@ -5133,6 +5321,10 @@ function formatDateRange(startDate, endDate) {
 
 // Update week date ranges and current week highlight
 function updateWeekDates() {
+  renderWeekDates();
+  renderNextStep();
+}
+function renderWeekDates() {
   const cohortStart = document.body.dataset.cohortStart;
   const totalWeeks = parseInt(document.body.dataset.totalWeeks) || 12;
 
@@ -5185,7 +5377,7 @@ let startDateUser = null;
 
 function formatLongDate(isoDate) {
   const d = new Date(isoDate + 'T00:00:00');
-  return isNaN(d) ? isoDate : d.toLocaleDateString('en-CA', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+  return isNaN(d) ? isoDate : d.toLocaleDateString('en-CA', { month: 'long', day: 'numeric', year: 'numeric' });
 }
 
 function isDemoViewer() {
@@ -5204,8 +5396,6 @@ function applyStartDate(isoDate) {
   if (card) card.classList.add('hidden');
   if (banner) banner.classList.add('hidden');
   if (setValue) setValue.textContent = formatLongDate(isoDate);
-  const setLabel = document.getElementById('start-date-set-label');
-  if (setLabel) setLabel.textContent = new Date(isoDate + 'T00:00:00') > new Date() ? 'Your roadmap starts on' : 'Your roadmap started on';
   if (setLine) setLine.hidden = false;
   // Staff can correct the date; so can anyone trying the public sample
   if (change) change.hidden = !(isDemoViewer() || (startDateUser && (startDateUser.role === 'admin' || startDateUser.role === 'psm')));
@@ -5223,6 +5413,10 @@ function clearStartDate() {
   if (card) card.classList.remove('hidden');
   if (banner) banner.classList.remove('hidden');
   if (setLine) setLine.hidden = true;
+  const setValue = document.getElementById('start-date-set-value');
+  if (setValue) setValue.textContent = 'Not chosen yet';
+  const change = document.getElementById('start-date-change');
+  if (change) change.hidden = true;
   updateWeekDates();
 }
 
@@ -5265,7 +5459,8 @@ function initStartDateCard() {
     change.addEventListener('click', function() {
       input.value = confirmedStart || getNextMonday();
       card.classList.remove('hidden');
-      document.getElementById('start-date-set').hidden = true;
+      navigate('dashboard');
+      input.focus();
     });
   }
 
@@ -5335,6 +5530,7 @@ window.addEventListener('cohortDateUpdated', function() {
 });
 
 // Listen for readonly mode changes
+window.addEventListener('readonlyModeChanged', function() { setTimeout(renderNextStep, 0); });
 window.addEventListener('readonlyModeChanged', function(e) {
   const input = document.getElementById('start-date-input');
   const btn = document.getElementById('start-date-btn');
@@ -5370,6 +5566,188 @@ function updateDayWeek() {
   el.textContent = 'Day ' + day + ' of ' + totalDays + ' · week ' + week;
 }
 
+// ── Home page: your next step, progress by track, countdown ─────────────────
+function weekTitleText(w) {
+  const el = document.querySelector('#wc-' + w + ' .week-title');
+  if (!el) return '';
+  const copy = el.cloneNode(true);
+  copy.querySelectorAll('.week-date-range').forEach(function(r) { r.remove(); });
+  return copy.textContent.trim();
+}
+
+function openWeek(w) {
+  navigate('roadmap');
+  const card = document.getElementById('wc-' + w);
+  if (!card) return;
+  card.classList.add('open');
+  setTimeout(function() { card.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 200);
+}
+
+function openTasksIn(w) {
+  const ids = WEEK_CHECKS[w] || [];
+  return ids.length - countChecked(ids);
+}
+
+let nextStepKey = '';
+
+function renderNextStep() {
+  if (document.body.dataset.stage !== 'plan') return;
+  const title = document.getElementById('next-title');
+  const meta = document.getElementById('next-meta');
+  const tasks = document.getElementById('next-tasks');
+  const pill = document.getElementById('next-pill');
+  const catchup = document.getElementById('next-catchup');
+  const actions = document.getElementById('next-actions');
+  const openBtn = document.getElementById('next-open-btn');
+  const roadmapLink = document.getElementById('next-roadmap-link');
+  if (!title || !tasks) return;
+
+  const start = document.body.dataset.cohortStart;
+  const totalWeeks = parseInt(document.body.dataset.totalWeeks) || 0;
+
+  // 1. No start date yet: choosing one is the next step
+  if (!start) {
+    nextStepKey = 'no-start';
+    title.textContent = 'Choose your start date';
+    meta.textContent = 'Your launch plan is ready. Pick the Monday you want Week 1 to begin.';
+    tasks.innerHTML = '';
+    pill.hidden = true; catchup.hidden = true; actions.hidden = true;
+    return;
+  }
+
+  const startDate = new Date(start + 'T00:00:00');
+  const diffDays = Math.floor((new Date() - startDate) / 86400000);
+  const weeksWithOpenTasks = [];
+  for (let w = 1; w <= totalWeeks; w++) if (openTasksIn(w) > 0) weeksWithOpenTasks.push(w);
+
+  let week, mode;
+  if (diffDays < 0) { week = 1; mode = 'upcoming'; }
+  else if (diffDays >= totalWeeks * 7) {
+    if (!weeksWithOpenTasks.length) {
+      // 4. Every roadmap task is ticked
+      nextStepKey = 'complete';
+      const hasBookability = !!document.getElementById('page-bookability');
+      title.textContent = 'Your roadmap is complete';
+      meta.textContent = hasBookability
+        ? 'Every task on your roadmap is ticked off. Finish your Bookability Checklist and you are ready to take bookings.'
+        : 'Every task on your roadmap is ticked off. You are ready to take bookings.';
+      tasks.innerHTML = '';
+      pill.hidden = true; catchup.hidden = true; actions.hidden = false;
+      openBtn.firstChild.textContent = hasBookability ? 'Open Bookability Checklist ' : 'Open the roadmap ';
+      openBtn.onclick = function() { navigate(hasBookability ? 'bookability' : 'roadmap'); };
+      roadmapLink.hidden = !hasBookability;
+      return;
+    }
+    week = weeksWithOpenTasks[0]; mode = 'finish';
+  } else { week = Math.floor(diffDays / 7) + 1; mode = 'current'; }
+
+  // 2 and 3. A week to work on
+  const ids = WEEK_CHECKS[week] || [];
+  const weekTitle = weekTitleText(week);
+  const weekStart = new Date(startDate); weekStart.setDate(startDate.getDate() + (week - 1) * 7);
+  const weekEnd = new Date(weekStart); weekEnd.setDate(weekStart.getDate() + 6);
+  const iso = function(d) { return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); };
+  const track = [1, 2, 3].find(function(t) { return ids.length && TACTIC_CHECKS[t].indexOf(ids[0]) !== -1; });
+  const trackNav = track ? document.querySelector('.nav-item[data-page="tactic' + track + '"]') : null;
+  const trackName = trackNav ? trackNav.textContent.trim() : '';
+
+  const lead = { upcoming: 'Coming up: ', current: 'This week: ', finish: 'Finish up: ' }[mode];
+  title.textContent = lead + 'Week ' + week + (weekTitle ? ' · ' + weekTitle : '');
+  const totalOpen = weeksWithOpenTasks.reduce(function(sum, w) { return sum + openTasksIn(w); }, 0);
+  meta.textContent = mode === 'finish'
+    ? 'Your ' + totalWeeks + ' weeks are up and ' + totalOpen + (totalOpen === 1 ? ' task is' : ' tasks are') + ' still open. Start with the earliest.'
+    : ['Week ' + week + ' of ' + totalWeeks, formatDateRange(iso(weekStart), iso(weekEnd)), trackName].filter(Boolean).join(' · ');
+
+  // Build the task list once per week; after that only keep the ticks in step
+  const key = mode + ':' + week + ':' + ids.join(',');
+  if (key !== nextStepKey) {
+    nextStepKey = key;
+    tasks.innerHTML = '';
+    ids.forEach(function(id) {
+      const real = document.getElementById(id);
+      const label = document.querySelector('label.check-label[for="' + id + '"]');
+      if (!real || !label) return;
+      const row = document.createElement('label');
+      row.className = 'next-task';
+      const box = document.createElement('input');
+      box.type = 'checkbox';
+      box.setAttribute('data-mirror', id);
+      // Ticking here ticks the same item on the roadmap, which saves it
+      box.addEventListener('change', function() {
+        real.checked = box.checked;
+        real.dispatchEvent(new Event('change', { bubbles: true }));
+      });
+      const text = document.createElement('span');
+      text.innerHTML = label.innerHTML;
+      row.appendChild(box); row.appendChild(text);
+      tasks.appendChild(row);
+    });
+  }
+  tasks.querySelectorAll('input[data-mirror]').forEach(function(box) {
+    const real = document.getElementById(box.getAttribute('data-mirror'));
+    if (!real) return;
+    box.checked = real.checked;
+    box.disabled = real.disabled;
+  });
+
+  pill.textContent = countChecked(ids) + ' of ' + ids.length + ' tasks';
+  pill.hidden = ids.length === 0;
+
+  // Open tasks left behind in earlier weeks
+  const earlier = mode === 'current' ? weeksWithOpenTasks.filter(function(w) { return w < week; }) : [];
+  if (earlier.length) {
+    const count = earlier.reduce(function(sum, w) { return sum + openTasksIn(w); }, 0);
+    catchup.innerHTML = '';
+    catchup.appendChild(document.createTextNode('You also have ' + count + (count === 1 ? ' open task' : ' open tasks') + ' from earlier weeks. '));
+    const go = document.createElement('button');
+    go.textContent = 'Go to Week ' + earlier[0];
+    go.onclick = function() { openWeek(earlier[0]); };
+    catchup.appendChild(go);
+    catchup.hidden = false;
+  } else {
+    catchup.hidden = true;
+  }
+
+  actions.hidden = false;
+  roadmapLink.hidden = false;
+  openBtn.firstChild.textContent = 'Open Week ' + week + ' ';
+  openBtn.onclick = function() { openWeek(week); };
+}
+
+function updateHomeProgress() {
+  [1, 2, 3].forEach(function(t) {
+    const ids = TACTIC_CHECKS[t] || [];
+    const done = countChecked(ids);
+    const bar = document.getElementById('hp' + t + '-bar');
+    const stat = document.getElementById('hp' + t + '-stat');
+    if (bar) bar.style.width = (ids.length ? Math.round(done / ids.length * 100) : 0) + '%';
+    if (stat) stat.textContent = done + ' of ' + ids.length;
+  });
+}
+
+function updateCountdown() {
+  const launch = document.body.dataset.launchDate;
+  const value = document.getElementById('countdown-value');
+  const label = document.getElementById('countdown-label');
+  if (!launch || !value || !label) return;
+  const launchDate = new Date(launch + 'T00:00:00');
+  const today = new Date(); today.setHours(0, 0, 0, 0);
+  const days = Math.round((launchDate - today) / 86400000);
+  const longDate = launchDate.toLocaleDateString('en-CA', { month: 'long', day: 'numeric', year: 'numeric' });
+  if (days > 0) {
+    value.textContent = days + (days === 1 ? ' day' : ' days');
+    label.textContent = 'until your first paying guests on ' + longDate;
+  } else if (days === 0) {
+    value.textContent = 'Today';
+    label.textContent = 'Your first paying guests arrive today.';
+  } else {
+    value.textContent = 'Launched';
+    label.textContent = 'Your first departure was on ' + longDate + '.';
+    const step = document.getElementById('program-step-launch');
+    if (step) { step.classList.remove('upcoming'); step.classList.add('done'); }
+  }
+}
+
 function countChecked(ids) {
   // Read from the DOM so progress reflects checkboxes loaded from Supabase
   return ids.filter(id => {
@@ -5398,17 +5776,14 @@ function updateProgress() {
   // Roadmap badge
   document.getElementById('roadmap-badge').textContent = pct + '%';
   
-  // Dashboard ring
-  const ring = document.getElementById('dash-ring');
-  if (ring) {
-    const circ = 2 * Math.PI * 45;
-    ring.style.strokeDasharray = circ;
-    ring.style.strokeDashoffset = circ - (circ * pct / 100);
-  }
-  document.getElementById('dash-pct').textContent = pct + '%';
-  document.getElementById('dash-done-count').textContent = done;
-  document.getElementById('dash-total-count').textContent = total;
-  
+  // Home page
+  const doneCount = document.getElementById('dash-done-count');
+  const totalCount = document.getElementById('dash-total-count');
+  if (doneCount) doneCount.textContent = done;
+  if (totalCount) totalCount.textContent = total;
+  updateHomeProgress();
+  renderNextStep();
+
   // Tactic cards
   [1,2,3].forEach(t => {
     const ids = TACTIC_CHECKS[t];
@@ -5420,7 +5795,8 @@ function updateProgress() {
     if (bar) bar.style.width = p + '%';
     if (stat) {
       const labels = /* {{TACTIC_PHASE_LABELS}} */ {1:'',2:'',3:''};
-      stat.textContent = d + ' of ' + tot + ' done · ' + labels[t];
+      stat.textContent = d + ' of ' + tot + ' tasks done';
+      stat.title = labels[t];
     }
   });
   
@@ -5463,9 +5839,10 @@ function updateGuideProgress() {
 
 // ── Restore state from localStorage ───────────────────────
 function restoreState() {
-  ALL_CHECK_IDS.forEach(id => {
+  // Every tick box kept in this browser, including those not counted in progress
+  Object.keys(state.checks).forEach(id => {
     const el = document.getElementById(id);
-    if (el && state.checks[id]) {
+    if (el && el.type === 'checkbox' && state.checks[id]) {
       el.checked = true;
     }
   });
@@ -5501,16 +5878,22 @@ const TOUR_STEPS = [
     mobileTargetId: 'nav-hamburger',
     page: 'dashboard',
     title: 'Find Your Way Around',
-    desc: 'Use the sidebar to move between your guide, your materials and your launch plan.',
-    mobileDesc: 'Tap the menu icon to move between your guide, your materials and your launch plan.',
+    desc: 'Use the sidebar to move between your launch plan, your three tracks and your resources.',
+    mobileDesc: 'Tap the menu icon to move between your launch plan, your three tracks and your resources.',
     pos: 'right', pad: 0, mobilePos: 'below'
   },
   {
-    stage: 'onboarding',
-    targetId: 'journey-section',
+    targetId: 'next-step-card',
     page: 'dashboard',
-    title: 'Your Program, Step by Step',
-    desc: 'This is the path from your first questionnaire to a launch plan. Your dashboard fills in as you move along it.',
+    title: 'Your Next Step',
+    desc: 'Each time you sign in, this card tells you what to do next. Once your launch plan has a start date, it shows this week\'s tasks.',
+    pos: 'below', pad: 8
+  },
+  {
+    targetId: 'program-steps',
+    page: 'dashboard',
+    title: 'Where You Are',
+    desc: 'The six steps of the program, from your questionnaire to launch day, with the one you are on highlighted.',
     pos: 'below', pad: 8, mobileScrollBlock: 'start'
   },
   {
@@ -5519,14 +5902,6 @@ const TOUR_STEPS = [
     page: 'guide',
     title: 'Your Experience Development Guide',
     desc: 'Your guide opens from here. Work through it between your coaching calls and tick off each section as you go.',
-    pos: 'below', pad: 8
-  },
-  {
-    stage: 'plan',
-    targetId: 'start-date-card',
-    page: 'dashboard',
-    title: 'Pick Your Start Date',
-    desc: 'Choose the Monday you want Week 1 to begin. Every week of your roadmap is dated from it.',
     pos: 'below', pad: 8
   },
   {
@@ -5782,6 +6157,8 @@ document.addEventListener('DOMContentLoaded', function() {
   // Open Week 1 by default on roadmap
   const wc1 = document.getElementById('wc-1');
   if (wc1) wc1.classList.add('open');
+
+  updateCountdown();
 
   // Links from the weekly emails end in #week-N
   openWeekFromHash();

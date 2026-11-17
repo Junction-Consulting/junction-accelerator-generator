@@ -699,6 +699,12 @@
         </div>
 
         <div class="form-group">
+          <label class="form-label" for="ownerFirstName">Owner's first name <span style="font-weight:400">(optional)</span></label>
+          <input type="text" class="form-input" id="ownerFirstName" placeholder="e.g., Dana">
+          <p class="form-hint">Their dashboard greets them with "Hi Dana". Left empty, it uses the business name.</p>
+        </div>
+
+        <div class="form-group">
           <label class="form-label" for="slug">URL Slug</label>
           <input type="text" class="form-input" id="slug" placeholder="e.g., salt-spring-kayak" required>
           <p class="form-hint">Auto-generated from operator name. Lowercase, hyphens only.</p>
@@ -709,6 +715,12 @@
           <select class="form-input" id="coach" required>
             <option value="">Select a coach...</option>
           </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="coachName">Coach's name <span style="font-weight:400">(optional)</span></label>
+          <input type="text" class="form-input" id="coachName" placeholder="e.g., Conner Galway">
+          <p class="form-hint">Shown on the operator's home page beside "Email your coach".</p>
         </div>
 
         <div class="form-group">
@@ -1025,6 +1037,8 @@
           slug,
           coachEmail,
           materials,
+          ownerFirstName: document.getElementById('ownerFirstName').value.trim(),
+          coachName: document.getElementById('coachName').value.trim(),
           planMd: planMdContent || undefined
         };
 

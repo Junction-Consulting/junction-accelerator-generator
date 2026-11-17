@@ -61,9 +61,33 @@ function parseExperiencePlanMd(content) {
       }
     }
 
+    // After Launch: milestones that come once bookings are open, same shape
+    const afterLaunchItems = [];
+    const afterLaunchMatch = text.match(/\n## After Launch\n([\s\S]*?)(?=\n## |$)/);
+    if (afterLaunchMatch) {
+      for (const block of afterLaunchMatch[1].split(/\n(?=### )/)) {
+        const m = block.match(/^\s*### (.+)\n?([\s\S]*)$/);
+        if (!m) continue;
+        const description = m[2].split('\n').map(l => l.trim()).filter(l => l && !/^-{3,}$/.test(l)).join(' ');
+        afterLaunchItems.push({ title: m[1].trim(), description });
+      }
+    }
+
+    // Goal at a Glance: up to five "- value | label" lines for the strategy page
+    const goalTiles = [];
+    const tilesMatch = text.match(/\n## Goal at a Glance\n([\s\S]*?)(?=\n## |$)/);
+    if (tilesMatch) {
+      for (const line of tilesMatch[1].split('\n')) {
+        const m = line.match(/^\s*-\s+([^|]+?)\s*\|\s*(.+?)\s*$/);
+        if (m && goalTiles.length < MAX_GOAL_TILES) goalTiles.push({ value: m[1].trim(), label: m[2].trim() });
+      }
+    }
+
     // ── Shared structure: parse with the accelerator parser ────────────────
     let normalised = text;
-    if (bookabilityMatch) normalised = normalised.replace(bookabilityMatch[0], '\n');
+    for (const match of [bookabilityMatch, afterLaunchMatch, tilesMatch]) {
+      if (match) normalised = normalised.replace(match[0], '\n');
+    }
     normalised = normalised
       .replace(/^## Track (\d+):/gm, '## Tactic $1:')
       .replace(/^Track Pill:/gm, 'Tactic Pill:')
@@ -115,8 +139,11 @@ function parseExperiencePlanMd(content) {
       roadmap: { ...base.roadmap, weeks, phaseWeeks },
       hasBookabilityChecklist,
       bookabilityItems,
+      afterLaunchItems,
+      goalTiles,
       pricePoint,
-      launchTarget
+      launchTarget,
+      launchDate: parseDate((launchTarget || '').split('·')[0])
     };
   } catch (err) {
     return { error: `Parse error: ${err.message}` };
@@ -129,6 +156,37 @@ function parseExperiencePlanMd(content) {
 
 const MIN_WEEKS = 8;
 const MAX_WEEKS = 12;
+const MAX_GOAL_TILES = 5;
+const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+/**
+ * Read a date written as "May 22, 2027", "Saturday, May 22, 2027",
+ * "22 May 2027" or "2027-05-22". Returns "2027-05-22", or '' when the text
+ * holds no full date (for example "Late May 2027").
+ */
+function parseDate(text) {
+  const t = String(text || '');
+  const pad = n => String(n).padStart(2, '0');
+  const valid = (y, m, d) => {
+    const date = new Date(Date.UTC(y, m - 1, d));
+    return date.getUTCFullYear() === y && date.getUTCMonth() === m - 1 && date.getUTCDate() === d ? `${y}-${pad(m)}-${pad(d)}` : '';
+  };
+  const iso = t.match(/\b(\d{4})-(\d{2})-(\d{2})\b/);
+  if (iso) return valid(Number(iso[1]), Number(iso[2]), Number(iso[3]));
+  const monthIndex = name => MONTHS.findIndex(m => m.toLowerCase().startsWith(name.toLowerCase().slice(0, 3))) + 1;
+  const names = 'jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec';
+  const mdy = t.match(new RegExp(`\\b((?:${names})[a-z]*)\\.?\\s+(\\d{1,2})(?:st|nd|rd|th)?,?\\s+(\\d{4})\\b`, 'i'));
+  if (mdy) return valid(Number(mdy[3]), monthIndex(mdy[1]), Number(mdy[2]));
+  const dmy = t.match(new RegExp(`\\b(\\d{1,2})(?:st|nd|rd|th)?\\s+((?:${names})[a-z]*)\\.?,?\\s+(\\d{4})\\b`, 'i'));
+  if (dmy) return valid(Number(dmy[3]), monthIndex(dmy[2]), Number(dmy[1]));
+  return '';
+}
+
+/** "2027-05-22" as "May 22, 2027". Returns '' for anything else. */
+function longDate(iso) {
+  const m = String(iso || '').match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  return m ? `${MONTHS[Number(m[2]) - 1]} ${Number(m[3])}, ${m[1]}` : '';
+}
 const DEFAULT_METRICS_HEADER = ['Metric', '30 Days', '60 Days', '90 Days'];
 
 /**
@@ -344,10 +402,58 @@ function shortGoal(goal, max = 170) {
   return text.slice(0, max).replace(/\s+\S*$/, '').replace(/[,;:]$/, '') + '…';
 }
 
+const MATERIAL_NEWS = {
+  guide: { text: 'Your Experience Development Guide is ready', page: 'guide' },
+  questionnaire: { text: 'Questionnaire responses added to Materials', page: 'materials' },
+  session1: { text: 'Coaching Call 1 summary added to Materials', page: 'materials' },
+  session2: { text: 'Coaching Call 2 summary added to Materials', page: 'materials' },
+  calculator: { text: 'Costing and pricing calculator added to Materials', page: 'materials' }
+};
+
+const PROGRAM_STEPS = ['questionnaire_done', 'onboarding_done', 'call1_done', 'call2_done'];
+
+/** Always returns the four step flags (true or false) and next_call_date ('' or a date). */
+function normaliseProgram(input) {
+  const out = {};
+  for (const key of PROGRAM_STEPS) out[key] = !!(input && input[key]);
+  out.next_call_date = parseDate(input && input.next_call_date);
+  return out;
+}
+
+// What the home page tells an operator to do before their launch plan exists
+const ONBOARDING_NEXT = [
+  { title: 'Complete your questionnaire', desc: 'Your answers shape your guide and both coaching calls. Your coach has sent you the link.', button: 'Go to Materials', page: 'materials' },
+  { title: 'Join your onboarding call', desc: 'We walk through the program, this dashboard and your guide, and book both coaching calls together.', button: 'Open your guide', page: 'guide' },
+  { title: 'Get ready for Coaching Call 1', desc: 'Work through the first sections of your guide. We leave the call with one experience, described in one sentence, and one launch window.', button: 'Open your guide', page: 'guide' },
+  { title: 'Get ready for Coaching Call 2', desc: 'Finish your guide and gather what it costs you to run one departure. We leave the call with a price, a booking method and a launch date.', button: 'Open your guide', page: 'guide' },
+  { title: 'Your launch plan is on its way', desc: 'Your coach is turning your guide and both calls into a week-by-week roadmap. It will appear here when it is ready.', button: 'Go to Materials', page: 'materials' }
+];
+
+function goalTilesHtml(tiles) {
+  return (tiles || []).slice(0, MAX_GOAL_TILES)
+    .map(tile => `        <div class="goal-tile"><div class="goal-tile-value">${plainText(tile.value)}</div><div class="goal-tile-label">${plainText(tile.label)}</div></div>`)
+    .join('\n');
+}
+
+function afterLaunchItemsHtml(items) {
+  return (items || []).map((item, i) => {
+    const n = i + 1;
+    const title = plainText(item.title.replace(/[.\s]+$/, ''));
+    return checkItemHtml({
+      id: `afterlaunch_${n}`,
+      dataKey: `after-launch-${n}`,
+      labelHtml: `<strong>${title}.</strong> ${inlineMarkdown(item.description)}`,
+      editableKey: `afterlaunch_${n}-label`,
+      placeholder: 'Add a note…'
+    });
+  }).join('\n');
+}
+
 const EMPTY_PLAN = {
   goal: '', experienceSentence: '', strategicPositioning: '', objectives: [], tactics: [],
   roadmap: { monthNames: ['', '', ''], weeks: [], phaseWeeks: {} },
-  hasBookabilityChecklist: false, bookabilityItems: [], pricePoint: null, launchTarget: null
+  hasBookabilityChecklist: false, bookabilityItems: [], afterLaunchItems: [], goalTiles: [],
+  pricePoint: null, launchTarget: null, launchDate: ''
 };
 
 /**
@@ -402,6 +508,55 @@ function renderExperienceDashboard(template, input) {
   fill('STRATEGIC_POSITIONING', richText(data.strategicPositioning));
   fill('EXPERIENCE_SENTENCE', richText(data.experienceSentence));
   fill('COACH_EMAIL', escapeHtml(data.coachEmail));
+
+  // ── People ───────────────────────────────────────────────────────────────
+  const ownerFirstName = (input.ownerFirstName || '').trim();
+  const coachName = (input.coachName || '').trim();
+  fill('GREETING_NAME', escapeHtml(ownerFirstName || data.clientName));
+  fill('COACH_NAME', escapeHtml(coachName || 'Your coach'));
+  fill('COACH_INITIAL', escapeHtml((coachName || data.coachEmail || '?').trim().charAt(0).toUpperCase()));
+
+  // ── Where the operator is in the program ─────────────────────────────────
+  // Once there is a launch plan, everything before it has happened.
+  const program = normaliseProgram(input.program);
+  const launchDate = stage === 'plan' ? (data.launchDate || parseDate((data.launchTarget || '').split('·')[0])) : '';
+  const stepsDone = PROGRAM_STEPS.map(key => stage === 'plan' || program[key]);
+  const firstOpen = stepsDone.indexOf(false); // -1 when all four are done
+  const stepStates = stepsDone.map((done, i) => (done ? 'done' : (i === firstOpen ? 'current' : 'upcoming')));
+  stepStates.push(firstOpen === -1 ? 'current' : 'upcoming'); // Launch Roadmap
+  stepStates.push('upcoming'); // Launch
+  const stepNotes = stepStates.map(state => ({ done: 'Done', current: 'You are here', upcoming: 'Up next' }[state]));
+  if (stage !== 'plan' && firstOpen === -1) stepNotes[4] = 'Being prepared';
+  stepNotes[5] = longDate(launchDate) || 'Date to be set';
+  stepStates.forEach((state, i) => {
+    fill(`STEP_${i + 1}_STATE`, state);
+    fill(`STEP_${i + 1}_NOTE`, escapeHtml(stepNotes[i]));
+  });
+
+  const next = ONBOARDING_NEXT[firstOpen === -1 ? 4 : firstOpen];
+  fill('ONBOARDING_NEXT_TITLE', next.title);
+  fill('ONBOARDING_NEXT_DESC', next.desc);
+  fill('ONBOARDING_NEXT_BUTTON', next.button);
+  fill('ONBOARDING_NEXT_PAGE', next.page);
+
+  const nextCall = stepsDone[3] ? 'Complete' : (longDate(program.next_call_date) || 'To be booked');
+  fill('KEY_DATE_NEXT_CALL', nextCall);
+  fill('ONBOARDING_NEXT_CALL', !stepsDone[3] && program.next_call_date ? `Your next call: ${longDate(program.next_call_date)}` : '');
+
+  fill('LAUNCH_DATE', launchDate);
+  fill('LAUNCH_DATE_LONG', longDate(launchDate) || 'To be set');
+
+  // ── What's new: the latest things staff have added ───────────────────────
+  const news = MATERIAL_KEYS
+    .filter(key => materials[key] && parseDate(input.materialsAdded && input.materialsAdded[key]))
+    .map(key => ({ ...MATERIAL_NEWS[key], date: parseDate(input.materialsAdded[key]) }));
+  if (stage === 'plan' && parseDate(input.planAdded)) {
+    news.push({ text: 'Your launch plan was added', page: 'roadmap', date: parseDate(input.planAdded) });
+  }
+  news.sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0));
+  fill('WHATS_NEW', news.length
+    ? news.slice(0, 4).map(item => `        <li><button class="news-link" onclick="navigate('${item.page}')">${item.text}</button><span class="news-date">${longDate(item.date)}</span></li>`).join('\n')
+    : '        <li class="news-empty">Nothing new yet. New materials are listed here as they are added.</li>');
   // The operator picks their own start date in the dashboard
   fill('COHORT_START_DATE', 'To be set');
   fill('TOTAL_TASKS', allCheckIds.length);
@@ -419,6 +574,13 @@ function renderExperienceDashboard(template, input) {
     fill(`TACTIC_${n}_PHASE`, escapeHtml(track.phase));
     fill(`TACTIC_${n}_SUBTITLE`, inlineMarkdown(track.subtitle));
     fill(`TACTIC_${n}_TOTAL`, tacticChecks[n].length);
+
+    // The weeks this track's phase covers, for the strategy page
+    const phaseWeekNumbers = data.roadmap.weeks.map(w => w.number).filter(w => phaseOf(w) === n);
+    const firstWeek = phaseWeekNumbers[0];
+    const lastWeek = phaseWeekNumbers[phaseWeekNumbers.length - 1];
+    fill(`TACTIC_${n}_WEEKS`, !phaseWeekNumbers.length ? '' : (firstWeek === lastWeek ? `Week ${firstWeek}` : `Weeks ${firstWeek}–${lastWeek}`));
+    fill(`TACTIC_${n}_SPAN`, phaseWeekNumbers.length || 1);
 
     fill(`TACTIC_${n}_HEARD`, paragraphsHtml(track.whatHeard));
     fill(`TACTIC_${n}_WHAT_IS`, paragraphsHtml(track.whatIs));
@@ -463,6 +625,22 @@ function renderExperienceDashboard(template, input) {
 
   conditional('BOOKABILITY_CHECKLIST', includeBookability);
   fill('BOOKABILITY_ITEMS', bookabilityItemsHtml(data.bookabilityItems));
+
+  // After-launch milestones sit on the Bookability page, under their own heading
+  const includeAfterLaunch = includeBookability && (data.afterLaunchItems || []).length > 0;
+  conditional('AFTER_LAUNCH', includeAfterLaunch);
+  fill('AFTER_LAUNCH_ITEMS', afterLaunchItemsHtml(data.afterLaunchItems));
+
+  // Strategy page: goal tiles from the plan, or from what the plan always has
+  const tiles = (data.goalTiles || []).length ? data.goalTiles : [
+    data.pricePoint ? { value: data.pricePoint.replace(/\s+per\s+.*$/i, ''), label: (data.pricePoint.match(/\bper\s+.*$/i) || ['price'])[0] } : null,
+    launchDate ? { value: longDate(launchDate).replace(/,\s*\d{4}$/, ''), label: `first departure, ${launchDate.slice(0, 4)}` } : null,
+    totalWeeks ? { value: `${totalWeeks} weeks`, label: 'from start date to open for booking' } : null
+  ].filter(Boolean);
+  conditional('GOAL_TILES', tiles.length > 0);
+  fill('GOAL_TILES', goalTilesHtml(tiles));
+  fill('TIMELINE_WEEK_LABELS', data.roadmap.weeks.map(w => `<span><i>Week </i>${w.number}</span>`).join(''));
+  conditional('LAUNCH_DATE', !!launchDate);
   if (!includeBookability) {
     // Remove the sidebar link to a page that no longer exists
     html = html.replace(/[ \t]*<div class="nav-item[^"]*"[^>]*onclick="navigate\('bookability'\)"[^>]*>[\s\S]*?<\/div>\n?/, '');
@@ -560,7 +738,12 @@ function validateExperienceHtml(html) {
   }
   if (allIds.some(id => /^gs\d/.test(id))) add('js-array', 'Guide checkboxes (gs1-gs5) must not be in ALL_CHECK_IDS');
 
-  for (const id of [...roadmapDom, ...bookabilityDom]) {
+  const afterLaunchDom = [...html.matchAll(/<input[^>]*id="(afterlaunch_\d+)"/g)].map(m => m[1]);
+  if (allIds.some(id => /^afterlaunch_/.test(id))) add('js-array', 'After-launch milestones must not be in ALL_CHECK_IDS');
+  for (const id of ['next-step-card', 'program-steps', 'next-title', 'next-tasks']) {
+    if (!html.includes(`id="${id}"`)) add('home', `Home page element #${id} is missing`);
+  }
+  for (const id of [...roadmapDom, ...bookabilityDom, ...afterLaunchDom]) {
     if (!html.includes(`id="note-area-${id}"`)) add('note-area', `Checklist item ${id} has no note area`);
   }
 
@@ -613,19 +796,36 @@ function validateExperienceHtml(html) {
  * (clients/[slug]/project.json). The dashboard is always rebuilt from the
  * template, this record and, once it exists, plan.md.
  */
-function buildExperienceProject({ clientName, slug, coachEmail, stage, materials, welcomeMessage }) {
+function buildExperienceProject({ clientName, slug, coachEmail, stage, materials, welcomeMessage, ownerFirstName, coachName, program, materialsAdded, planAdded }) {
+  const links = normaliseMaterials(materials);
+  const added = {};
+  for (const key of MATERIAL_KEYS) {
+    const date = parseDate(materialsAdded && materialsAdded[key]);
+    if (links[key] && date) added[key] = date;
+  }
   return {
     type: 'experience',
     client_name: clientName,
     client_slug: slug,
+    owner_first_name: (ownerFirstName || '').trim(),
     coach_email: coachEmail,
+    coach_name: (coachName || '').trim(),
     stage: stage === 'plan' ? 'plan' : 'onboarding',
     welcome_message: (welcomeMessage || '').trim(),
-    materials: normaliseMaterials(materials)
+    // Which program steps have happened, ticked by staff on the Manage page
+    program: normaliseProgram(program),
+    materials: links,
+    // The day each material link was added, for "What's new" on the home page
+    materials_added: added,
+    plan_added: stage === 'plan' ? parseDate(planAdded) : ''
   };
 }
 
 export {
+  PROGRAM_STEPS,
+  normaliseProgram,
+  parseDate,
+  longDate,
   MATERIAL_KEYS,
   MIN_WEEKS,
   MAX_WEEKS,
