@@ -46,7 +46,8 @@ describe.each([
     const report = validatePlan(plan, { type });
     expect(report.errors.map(formatIssue)).toEqual([]);
     expect(report.warnings.map(formatIssue)).toEqual([]);
-    expect(report.summary.weeks).toBe(12);
+    // The experience skeleton is an 8-week launch roadmap
+    expect(report.summary.weeks).toBe(type === 'experience' ? 8 : 12);
     expect(report.summary.howToLinks).toBeGreaterThan(8);
   });
 

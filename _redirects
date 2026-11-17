@@ -28,6 +28,9 @@
 /elevated/:slug     /elevated/:slug/index.html  200
 /elevated/:slug/    /elevated/:slug/index.html  200
 
+# Each client's plan.json, read by the weekly emails at /[slug]/plan.json
+/:slug/plan.json    /clients/:slug/plan.json    200
+
 # Client dashboards (Accelerator and Experience Design)
 # Files live at clients/[slug]/index.html, served at /[slug]/
 /:slug          /clients/:slug/index.html   200

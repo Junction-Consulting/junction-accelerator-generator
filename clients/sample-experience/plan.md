@@ -1,22 +1,22 @@
-# Foothills Quarter Horses — Experience Design Implementation Plan
+# Foothills Quarter Horses: Experience Design Implementation Plan
 
 ## Meta
 Client Slug: sample-experience
 Price Point: $145 per guest
-Launch Target: May 24, 2025 · $1,740 in first-month bookings
+Launch Target: May 22, 2027 · $1,740 in first-month bookings
 Has Bookability Checklist: yes
 
 ## Goal
-In 90 days, Foothills Quarter Horses will launch a half-day horsemanship experience for up to six guests at $145 per person. The experience will run every Saturday morning from late May through September, with the first paying departure on May 24, 2025. By the end of June, the ranch will have welcomed at least 12 paying guests and established a repeatable booking and operations workflow.
+In eight weeks, Foothills Quarter Horses will have a half-day horsemanship experience for up to six guests listed, priced at $145 per person and open for booking. The experience will run every Saturday morning from late May through September, with the first paying departure on Saturday, May 22, 2027. By the end of June, the ranch will have welcomed at least 12 paying guests and established a repeatable booking and operations workflow.
 
 ## The Experience
 A half-day at the ranch where guests learn to read a horse, saddle up properly, and ride the same trails our family has worked for four generations.
 
 ## Strategic Positioning
-This experience is for visitors who want more than a trail ride. They want to understand horses, not just sit on one. Foothills Quarter Horses is the only working ranch in the Crowsnest Pass offering hands-on horsemanship instruction from a third-generation rancher. This is not for guests looking for a quick photo opportunity or a passive scenic tour. It is for people who want to leave knowing something they did not know before.
+This experience is for visitors who want more than a trail ride. They want to understand horses, not just sit on one. Foothills Quarter Horses is a working ranch in the Crowsnest Pass offering hands-on horsemanship instruction from a third-generation rancher. This is not for guests looking for a quick photo opportunity or a passive scenic tour. It is for people who want to leave knowing something they did not know before.
 
 ## Welcome Message
-You have been sharing your ranch with friends and neighbours for years. This plan turns that into a bookable experience that pays for itself. In 90 days, you will have your first paying guests in the saddle.
+You have been sharing your ranch with friends and neighbours for years. This plan turns that into a bookable experience that pays for itself. Eight weeks from your start date, guests will be able to book, and on May 22 your first paying guests will be in the saddle.
 
 ---
 
@@ -67,11 +67,11 @@ Everything else depends on this. You cannot price what you have not defined. You
 
 ### Success Metrics
 
-| Metric | 30 Days | 60 Days | 90 Days |
+| Metric | Week 2 | Week 5 | Week 8 |
 |---|---|---|---|
-| Guest persona document complete | Yes | — | — |
-| Experience arc mapped | Yes | — | — |
-| One-sentence description finalised | — | Yes | — |
+| Guest persona document complete | Yes | Yes | Yes |
+| Experience arc mapped | Yes | Yes | Yes |
+| One-sentence description | Final | In the pricing notes | In the live listing |
 
 ### Tips
 
@@ -81,8 +81,8 @@ Everything else depends on this. You cannot price what you have not defined. You
 
 ### Resources
 
-- [Airbnb Experience guidelines](https://www.airbnb.ca/help/article/1451)
-- [Tourism Alberta experience development guide](https://industry.travelalberta.com/resources)
+- [Travel Alberta industry resources](https://industry.travelalberta.com/resources)
+- [Airbnb Experiences: information for hosts](https://www.airbnb.ca/host/experiences)
 
 ---
 
@@ -139,7 +139,7 @@ Operations is where goodwill turns into a real business. If you underprice, you 
 
 **8. Check permit and licence requirements**
 - Contact the MD of Pincher Creek to confirm whether you need a business licence
-- Confirm whether Alberta Tourism requires any registration for paid experiences
+- Confirm whether the province requires any registration for paid guided experiences
 
 **9. Write your safety protocol**
 - Document the safety briefing you give at the start
@@ -152,12 +152,13 @@ Operations is where goodwill turns into a real business. If you underprice, you 
 
 ### Success Metrics
 
-| Metric | 30 Days | 60 Days | 90 Days |
+| Metric | Week 2 | Week 5 | Week 8 |
 |---|---|---|---|
-| Cost breakdown complete | Yes | — | — |
-| Insurance confirmed | — | Yes | — |
-| Safety protocol documented | — | Yes | — |
-| Cancellation policy published | — | — | Yes |
+| Cost per departure calculated | Not yet | Yes | Yes |
+| Price per guest set | Not yet | $145 | $145 |
+| Insurance confirmed | Not yet | Yes | Yes |
+| Safety protocol and waiver | Not yet | Written | In use |
+| Cancellation policy | Not yet | Written | Published |
 
 ### Tips
 
@@ -167,8 +168,8 @@ Operations is where goodwill turns into a real business. If you underprice, you 
 
 ### Resources
 
-- [Alberta liability waiver template](https://www.lawdepot.ca/)
-- [Travel Alberta commercial insurance FAQ](https://industry.travelalberta.com/)
+- [BizPaL: find the permits and licences your business needs](https://bizpal.ca/)
+- [LawDepot: release and waiver templates](https://www.lawdepot.ca/)
 
 ---
 
@@ -222,7 +223,7 @@ A great experience means nothing if no one can find it or book it. This track tu
 - Aim for 8–12 photos minimum
 
 **7. Upload photos and finalise listing**
-- Add photos in the order that tells a story (arrival → activity → departure)
+- Add photos in the order that tells a story: arrival, activity, departure
 - Write alt text for accessibility
 - Preview the listing on mobile before publishing
 
@@ -234,16 +235,16 @@ A great experience means nothing if no one can find it or book it. This track tu
 **9. Confirm your first booking**
 - Follow up with anyone who shows interest
 - Offer a friends-and-family rate for the first departure if you want a soft launch
-- Confirm at least one booking before May 24
+- Confirm at least one booking for the May 22 departure
 
 ### Success Metrics
 
-| Metric | 30 Days | 60 Days | 90 Days |
+| Metric | Week 2 | Week 5 | Week 8 |
 |---|---|---|---|
-| Booking platform account created | Yes | — | — |
-| Listing published | — | Yes | — |
-| First booking confirmed | — | — | Yes |
-| 12 guests hosted | — | — | Yes |
+| Booking platform chosen | Not yet | Shortlist | Account live |
+| Listing published | Not yet | Not yet | Yes |
+| Saturday departures open for booking | 0 | 0 | May 22 to September |
+| Bookings confirmed for May 22 | 0 | 0 | At least 2 guests |
 
 ### Tips
 
@@ -253,8 +254,8 @@ A great experience means nothing if no one can find it or book it. This track tu
 
 ### Resources
 
-- [Airbnb Experience photo guidelines](https://www.airbnb.ca/help/article/1546)
-- [FareHarbor getting started guide](https://fareharbor.com/help/)
+- [FareHarbor: booking software for tours and activities](https://fareharbor.com/)
+- [Airbnb Experiences: information for hosts](https://www.airbnb.ca/host/experiences)
 
 ---
 
@@ -263,69 +264,57 @@ A great experience means nothing if no one can find it or book it. This track tu
 ### Objective 1
 Title: Define a half-day experience guests will travel for
 Description: Create a clear guest persona, map the experience arc, and write a one-sentence description that makes visitors want to book.
-Track Pill: Track 1 · Weeks 1–4
+Track Pill: Track 1 · Weeks 1-2
 
 ### Objective 2
 Title: Set a sustainable price and confirm operational readiness
 Description: Calculate costs, set the $145 per-guest price, confirm insurance, and document safety protocols.
-Track Pill: Track 2 · Weeks 4–8
+Track Pill: Track 2 · Weeks 3-5
 
 ### Objective 3
 Title: Go live and welcome your first paying guests
 Description: Publish a listing with compelling photos, take your first booking, and host at least 12 guests by the end of June.
-Track Pill: Track 3 · Weeks 7–12
+Track Pill: Track 3 · Weeks 6-8
 
 ---
 
 ## Launch Roadmap
 
-Month 1 Name: Design and Decide
-Month 2 Name: Build and Cost
-Month 3 Name: List and Launch
+Phase 1 Name: Design and Decide
+Phase 2 Name: Cost and Protect
+Phase 3 Name: List and Launch
+Phase 2 Starts: Week 3
+Phase 3 Starts: Week 6
 
 ### Week 1: Know Your Guest
 
 **Actions:**
 - Write your ideal guest persona → links to: Track 1 / Step 1
 - Identify who this experience is not for → links to: Track 1 / Step 2
-- Review competitor experiences in the region for pricing and positioning
+- Review two or three comparable experiences in the region for price and positioning
 
 **Checklist:**
 - [ ] Guest persona document is complete and saved
 - [ ] "Not for" statement is written
-- [ ] Competitor review notes are captured
+- [ ] Notes on comparable experiences are captured
 
 ---
 
-### Week 2: Map the Arc
+### Week 2: Map the Experience
 
 **Actions:**
 - Outline the beginning, middle, and end of the experience → links to: Track 1 / Step 3
 - Define what is included and what is not → links to: Track 1 / Step 4
-- Walk through the experience mentally from guest arrival to departure
+- Draft three versions of your one-sentence description and test your favourite → links to: Track 1 / Step 5
 
 **Checklist:**
-- [ ] Experience arc document is complete
+- [ ] Experience arc fits on one page, with timing for each segment
 - [ ] Inclusions and exclusions list is finalised
-- [ ] Timing for each segment is estimated
+- [ ] One sentence is tested, selected and saved for your listing
 
 ---
 
-### Week 3: Write the Sentence
-
-**Actions:**
-- Draft three versions of your one-sentence description → links to: Track 1 / Step 5
-- Test your favourite version on someone who has never visited
-- Finalise and save your one-sentence description
-
-**Checklist:**
-- [ ] Three draft sentences are written
-- [ ] One sentence is tested and selected
-- [ ] Final sentence is saved for listing copy
-
----
-
-### Week 4: Calculate Costs
+### Week 3: Cost It
 
 **Actions:**
 - List your fixed costs per departure → links to: Track 2 / Step 1
@@ -335,11 +324,11 @@ Month 3 Name: List and Launch
 **Checklist:**
 - [ ] Fixed costs are documented with dollar amounts
 - [ ] Labour cost per departure is calculated
-- [ ] Total cost per departure (with margin) is confirmed
+- [ ] Total cost per departure, with margin, is entered in the pricing calculator
 
 ---
 
-### Week 5: Set Your Price
+### Week 4: Set Your Price
 
 **Actions:**
 - Calculate your break-even point → links to: Track 2 / Step 4
@@ -348,106 +337,67 @@ Month 3 Name: List and Launch
 
 **Checklist:**
 - [ ] Break-even price per guest is calculated
-- [ ] Final price of $145 per guest is confirmed
+- [ ] Final price of $145 per guest is confirmed against break-even
 - [ ] Minimum booking policy is documented
 
 ---
 
-### Week 6: Confirm Insurance
+### Week 5: Insurance, Safety and Policies
 
 **Actions:**
 - Contact your insurance broker about commercial liability → links to: Track 2 / Step 7
-- Request a certificate of insurance for booking platforms
 - Check permit and licence requirements with the MD of Pincher Creek → links to: Track 2 / Step 8
-
-**Checklist:**
-- [ ] Insurance broker has confirmed coverage
-- [ ] Certificate of insurance is received
-- [ ] Business licence requirements are confirmed
-
----
-
-### Week 7: Safety and Policies
-
-**Actions:**
-- Write your safety protocol and emergency procedures → links to: Track 2 / Step 9
+- Write your safety protocol and guest waiver → links to: Track 2 / Step 9
 - Draft your cancellation and weather policy → links to: Track 2 / Step 10
-- Have your waiver reviewed by your insurance broker
 
 **Checklist:**
-- [ ] Safety protocol document is complete
-- [ ] Cancellation policy is written
-- [ ] Guest waiver is reviewed and ready
+- [ ] Insurance broker has confirmed coverage and sent a certificate
+- [ ] Business licence requirements are confirmed
+- [ ] Safety protocol is written and the waiver is reviewed by your broker
+- [ ] Cancellation and weather policy is written
 
 ---
 
-### Week 8: Choose Your Platform
+### Week 6: Platform and Listing
 
 **Actions:**
 - Evaluate booking platform options → links to: Track 3 / Step 1
 - Create your platform account and complete your host profile → links to: Track 3 / Step 2
-- Explore the platform dashboard and settings
-
-**Checklist:**
-- [ ] Platform decision is made
-- [ ] Account is created and profile is complete
-- [ ] Dashboard navigation is understood
-
----
-
-### Week 9: Write Your Listing
-
-**Actions:**
 - Write your listing headline → links to: Track 3 / Step 3
 - Write the full listing description → links to: Track 3 / Step 4
+
+**Checklist:**
+- [ ] Platform decision is made and the account is created
+- [ ] Headline is under 60 characters
+- [ ] Full description is written and read by someone outside the ranch
+
+---
+
+### Week 7: Photos and Availability
+
+**Actions:**
 - Set your availability and pricing in the platform → links to: Track 3 / Step 5
-
-**Checklist:**
-- [ ] Headline is under 60 characters and compelling
-- [ ] Full description is written and reviewed
-- [ ] Availability and pricing are configured
-
----
-
-### Week 10: Shoot Your Photos
-
-**Actions:**
 - Plan and shoot your listing photos → links to: Track 3 / Step 6
-- Select the 8–12 strongest photos
-- Edit photos for brightness and crop if needed
+- Upload photos and finalise the listing → links to: Track 3 / Step 7
 
 **Checklist:**
-- [ ] Photo shoot is complete
-- [ ] Photos are selected and edited
-- [ ] Photos are ready for upload
+- [ ] Saturday departures from May 22 through September are set at $145 per guest
+- [ ] 8 to 12 photos are selected, edited and uploaded
+- [ ] Listing is previewed on a phone and reads correctly
 
 ---
 
-### Week 11: Go Live
+### Week 8: Go Live
 
 **Actions:**
-- Upload photos and finalise listing → links to: Track 3 / Step 7
-- Preview listing on mobile and desktop
+- Work through the last open items on your Bookability Checklist → links to: Bookability Checklist
 - Publish and share your listing → links to: Track 3 / Step 8
+- Follow up with interested guests and confirm your first booking → links to: Track 3 / Step 9
 
 **Checklist:**
-- [ ] All photos are uploaded with alt text
-- [ ] Listing is previewed and looks correct
-- [ ] Listing is live and shareable link is confirmed
-
----
-
-### Week 12: First Booking
-
-**Actions:**
-- Share listing with your network and local tourism contacts
-- Follow up with interested guests
-- Confirm your first booking → links to: Track 3 / Step 9
-
-**Checklist:**
-- [ ] Listing has been shared on social media and email
-- [ ] At least one booking is confirmed for May 24
-- [ ] Guest communication is complete and departure is ready
+- [ ] Listing is live and the shareable link works
+- [ ] Listing has been shared by email, on social media and with local tourism contacts
+- [ ] At least one booking is confirmed for May 22
 
 ---
 
@@ -469,7 +419,7 @@ Your safety briefing and emergency procedures should be written down, not just i
 Guests need to know what happens if they cancel or if you cancel due to weather. Make it clear before they book.
 
 ### First Photos Uploaded
-Photos sell experiences. A listing without photos will not convert. Aim for 8–12 images that show the horses, the land, and the activity.
+Photos sell experiences. A listing without photos will not convert. Aim for 8 to 12 images that show the horses, the land, and the activity.
 
 ### Availability Set Through September
 Do not launch with just one date. Show guests that this is a real, ongoing experience with multiple opportunities to book.

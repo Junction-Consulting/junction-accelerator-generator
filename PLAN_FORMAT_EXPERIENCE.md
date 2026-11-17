@@ -22,7 +22,7 @@ Launch Target: [First departure date] · [Revenue target]
 Has Bookability Checklist: yes
 
 ## Goal
-[One paragraph. What this operator will have launched in 90 days. Name the experience, the guest, the price and the first departure.]
+[One paragraph. What this operator will have launched by the end of the roadmap. Name the experience, the guest, the price and the first departure.]
 
 ## The Experience
 [One sentence. The experience as agreed in Coaching Call 1, in the operator's own words.]
@@ -71,7 +71,7 @@ Subtitle: [One sentence describing what this track delivers.]
    - [Specific instruction]
 
 ### Success Metrics
-| Metric | 30 Days | 60 Days | 90 Days |
+| Metric | Week 2 | Week 4 | Week 8 |
 |--------|---------|---------|---------|
 | [Metric name] | [Target] | [Target] | [Target] |
 
@@ -118,7 +118,7 @@ Subtitle: [One sentence describing what this track delivers.]
    - [Specific instruction]
 
 ### Success Metrics
-| Metric | 30 Days | 60 Days | 90 Days |
+| Metric | Week 2 | Week 4 | Week 8 |
 |--------|---------|---------|---------|
 | [Metric name] | [Target] | [Target] | [Target] |
 
@@ -164,7 +164,7 @@ Subtitle: [One sentence describing what this track delivers.]
    - [Specific instruction]
 
 ### Success Metrics
-| Metric | 30 Days | 60 Days | 90 Days |
+| Metric | Week 2 | Week 4 | Week 8 |
 |--------|---------|---------|---------|
 | [Metric name] | [Target] | [Target] | [Target] |
 
@@ -182,25 +182,27 @@ Subtitle: [One sentence describing what this track delivers.]
 ### Objective 1
 Title: [Short title matching the outcome of Track 1]
 Description: [1-2 sentences.]
-Track Pill: Track 1 · Weeks 1-4
+Track Pill: Track 1 · Weeks 1-2
 
 ### Objective 2
 Title: [Short title matching the outcome of Track 2]
 Description: [1-2 sentences.]
-Track Pill: Track 2 · Weeks 5-8
+Track Pill: Track 2 · Weeks 3-4
 
 ### Objective 3
 Title: [Short title matching the outcome of Track 3]
 Description: [1-2 sentences.]
-Track Pill: Track 3 · Weeks 9-12
+Track Pill: Track 3 · Weeks 5-8
 
 ---
 
 ## Launch Roadmap
 
-Month 1 Name: [Month name]
-Month 2 Name: [Month name]
-Month 3 Name: [Month name]
+Phase 1 Name: [Phase name]
+Phase 2 Name: [Phase name]
+Phase 3 Name: [Phase name]
+Phase 2 Starts: Week 3
+Phase 3 Starts: Week 5
 
 ### Week 1: [Week title]
 **Actions:**
@@ -222,7 +224,7 @@ Month 3 Name: [Month name]
 
 ### Week 3: [Week title]
 **Actions:**
-- [Instruction] → links to: Track 1 / Step 3
+- [Instruction] → links to: Track 2 / Step 1
 - [Instruction]
 
 **Checklist:**
@@ -231,7 +233,7 @@ Month 3 Name: [Month name]
 
 ### Week 4: [Week title]
 **Actions:**
-- [Instruction] → links to: Track 1 / Step 4
+- [Instruction] → links to: Track 2 / Step 2
 - [Instruction]
 
 **Checklist:**
@@ -240,7 +242,7 @@ Month 3 Name: [Month name]
 
 ### Week 5: [Week title]
 **Actions:**
-- [Instruction] → links to: Track 2 / Step 1
+- [Instruction] → links to: Track 3 / Step 1
 - [Instruction]
 
 **Checklist:**
@@ -249,7 +251,7 @@ Month 3 Name: [Month name]
 
 ### Week 6: [Week title]
 **Actions:**
-- [Instruction] → links to: Track 2 / Step 2
+- [Instruction] → links to: Track 3 / Step 2
 - [Instruction]
 
 **Checklist:**
@@ -258,42 +260,6 @@ Month 3 Name: [Month name]
 
 ### Week 7: [Week title]
 **Actions:**
-- [Instruction] → links to: Track 2 / Step 3
-- [Instruction]
-
-**Checklist:**
-- [ ] [Verifiable outcome]
-- [ ] [Verifiable outcome]
-
-### Week 8: [Week title]
-**Actions:**
-- [Instruction] → links to: Track 2 / Step 4
-- [Instruction]
-
-**Checklist:**
-- [ ] [Verifiable outcome]
-- [ ] [Verifiable outcome]
-
-### Week 9: [Week title]
-**Actions:**
-- [Instruction] → links to: Track 3 / Step 1
-- [Instruction]
-
-**Checklist:**
-- [ ] [Verifiable outcome]
-- [ ] [Verifiable outcome]
-
-### Week 10: [Week title]
-**Actions:**
-- [Instruction] → links to: Track 3 / Step 2
-- [Instruction]
-
-**Checklist:**
-- [ ] [Verifiable outcome]
-- [ ] [Verifiable outcome]
-
-### Week 11: [Week title]
-**Actions:**
 - [Instruction] → links to: Track 3 / Step 3
 - [Instruction] → links to: Bookability Checklist
 
@@ -301,7 +267,7 @@ Month 3 Name: [Month name]
 - [ ] [Verifiable outcome]
 - [ ] [Verifiable outcome]
 
-### Week 12: [Week title]
+### Week 8: [Week title]
 **Actions:**
 - [Instruction] → links to: Track 3 / Step 4
 - [Instruction]
@@ -345,7 +311,7 @@ A plan that breaks any of these is rejected. Nothing is created until it passes.
 | `## Strategic Positioning` | Required, with text under it |
 | `## Objectives` | Required |
 | `## Track N: Title` | Exactly 3 tracks, numbered 1, 2, 3 in order, each with a title |
-| `### Week N: Title` | Exactly 12 weeks, numbered 1 to 12 in order, each with a title |
+| `### Week N: Title` | Between 8 and 12 weeks, numbered from 1 in order with none skipped, each with a title. Eight weeks is the usual length of a launch roadmap |
 
 All of these are level-2 headings (`##`), except weeks, which are level 3 (`###`).
 
@@ -369,7 +335,7 @@ The headings say **Track**, not Tactic. A plan with `## Tactic N:` headings is t
    - Step detail goes underneath as bullets starting with `- `.
    - When a bullet introduces a short list (the sections of a page, the questions to answer, the things to check before launch), put those items under it as sub-bullets: indent them two more spaces than the bullet above, so `   - ` becomes `     - `. They show indented under that bullet on the dashboard. Use sub-bullets only for items that belong to the bullet above, not to make a long step look tidier.
    - Sub-bullets go one level deep. The first bullet in a step cannot be a sub-bullet, because there is nothing above it to sit under.
-4. **Success Metrics.** A Markdown table with a header row, a `|---|` separator row and at least one data row. Every data row has all four columns filled. Write `n/a` where there is no target.
+4. **Success Metrics.** A Markdown table with a header row, a `|---|` separator row and at least one data row. Every data row has all four columns filled. Write `n/a` where there is no target. The three column headings after `Metric` are shown on the dashboard exactly as written, so name them for this plan's checkpoints (for an 8-week roadmap, for example `Week 2`, `Week 4`, `Week 8`).
 5. **Tips.** At least one line starting with `- `.
 6. **Resources.** At least one line. Every line is a Markdown link with a full address: `- [Link text](https://...)`. A short description may follow after a colon.
 
@@ -405,7 +371,7 @@ These do not block the upload, but each one means something will be missing or l
 | Warning | What happens |
 |---|---|
 | No `## Welcome Message` | The welcome screen falls back to the start of the goal |
-| No `Month 1 Name:` (or 2, 3) line | The month is labelled "Month 1" |
+| No `Phase 1 Name:` (or 2, 3) line | That phase of the roadmap has no name |
 | No `## Meta` section | The price point, launch target and Bookability Checklist are all left out |
 | `Client Slug:` differs from the slug typed on the form | The form's slug is used |
 | A `## Bookability Checklist` section without `Has Bookability Checklist: yes` | The section is left out |
@@ -447,11 +413,19 @@ These do not block the upload, but each one means something will be missing or l
 | `→ links to:` notes | A "how to" button on that action. The note itself is not shown |
 | Bookability Checklist | Its own page, with a tick box per item |
 
-Weeks 1 to 4 count towards Track 1, weeks 5 to 8 towards Track 2 and weeks 9 to 12 towards Track 3. Keep each track's work in its own four weeks.
+The roadmap is shown in three phases, one for each track: Phase 1 is Track 1's work, Phase 2 is Track 2's and Phase 3 is Track 3's. Each track's progress bar counts the checklist items in its phase.
+
+- Name the phases with `Phase 1 Name:`, `Phase 2 Name:` and `Phase 3 Name:` under the roadmap heading. (`Month 1 Name:` and so on are also accepted.)
+- Say where the phases change with `Phase 2 Starts: Week N` and `Phase 3 Starts: Week N`. Give both lines or neither. Phase 2 must start after Week 1, and Phase 3 after Phase 2 and no later than the last week.
+- With neither line, the weeks are shared out evenly and earlier phases take any extra week: 8 weeks is 3, 3 and 2; 10 weeks is 4, 3 and 3; 12 weeks is 4, 4 and 4.
+
+Keep each track's work inside its own phase.
 
 Within body text, `**bold**`, `*italic*`, `` `code` `` and `[links](https://...)` are shown as formatted text. Titles, labels and headings are shown as plain text.
 
-The Guide and Materials pages start as "Coming Soon". They are filled in later and are not part of the plan.
+The Guide and Materials pages are not part of the plan. Their links are added from My Clients (choose Manage on the operator's card), and each card says "Coming soon" until its link is added.
+
+A dashboard does not need a plan to exist. It is usually created before the operator's onboarding call with no plan, showing Home, Guide and Materials. The plan is added later from the same Manage page, and Strategy, the Tracks, the Launch Roadmap and the Bookability Checklist appear then. The operator chooses their own start date on the dashboard's home page.
 
 ---
 

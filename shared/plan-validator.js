@@ -397,9 +397,12 @@ function validatePlan(rawContent, options = {}) {
     : { name: 'Bookability Checklist', flag: 'Has Bookability Checklist', pattern: /^Bookability Checklist$/i, included: (meta['Has Bookability Checklist'] || '').toLowerCase() === 'yes' && !!findSection(/^Bookability Checklist$/i) };
 
   // ── Roadmap ──────────────────────────────────────────────────────────────
+  // Accelerator roadmaps are grouped into months, experience roadmaps into phases
+  const blockWord = type === 'experience' ? 'Phase' : 'Month';
   [1, 2, 3].forEach(n => {
-    if (!new RegExp(`^Month ${n} Name:\\s*\\S`, 'm').test(text)) {
-      warn(null, `Missing "Month ${n} Name:" line in the roadmap.`, `Add "Month ${n} Name: ..." under the roadmap heading, or the month will be labelled "Month ${n}".`);
+    const named = new RegExp(`^${type === 'experience' ? '(?:Phase|Month)' : 'Month'} ${n} Name:\\s*\\S`, 'm').test(text);
+    if (!named) {
+      warn(null, `Missing "${blockWord} ${n} Name:" line in the roadmap.`, `Add "${blockWord} ${n} Name: ..." under the roadmap heading, or the ${blockWord.toLowerCase()} will have no name.`);
     }
   });
 
@@ -423,12 +426,34 @@ function validatePlan(rawContent, options = {}) {
   });
 
   const weekNumbers = weeks.map(w => w.number);
-  const missingWeeks = Array.from({ length: 12 }, (_, i) => i + 1).filter(n => !weekNumbers.includes(n));
+  // An accelerator roadmap is exactly 12 weeks. A launch roadmap is 8 to 12:
+  // its length is the highest week number in the plan.
+  const minWeeks = type === 'experience' ? 8 : 12;
+  const roadmapLength = Math.min(12, Math.max(minWeeks, ...weekNumbers.filter(n => n <= 12)));
+  const missingWeeks = Array.from({ length: roadmapLength }, (_, i) => i + 1).filter(n => !weekNumbers.includes(n));
   if (missingWeeks.length) {
-    err(null, `The roadmap needs Weeks 1 to 12. Missing: Week ${missingWeeks.join(', Week ')}.`, 'Add a "### Week N: Title" block for each missing week.');
+    const needs = type === 'experience'
+      ? `A launch roadmap needs 8 to 12 weeks, numbered from 1 with none skipped`
+      : 'The roadmap needs Weeks 1 to 12';
+    err(null, `${needs}. Missing: Week ${missingWeeks.join(', Week ')}.`, 'Add a "### Week N: Title" block for each missing week.');
+  }
+  if (type === 'experience') {
+    const starts = [2, 3].map(n => {
+      const i = lines.findIndex(l => new RegExp(`^(?:Phase|Month) ${n} Starts:`, 'i').test(l));
+      if (i === -1) return null;
+      const m = lines[i].match(/Starts:\s*(?:Week\s*)?(\d+)\s*$/i);
+      if (!m) err(lineNo(i), `"Phase ${n} Starts:" needs a week number.`, `Write it as "Phase ${n} Starts: Week 4".`);
+      return m ? { line: i, week: Number(m[1]) } : null;
+    });
+    if ((starts[0] === null) !== (starts[1] === null)) {
+      const present = starts[0] || starts[1];
+      if (present) err(lineNo(present.line), 'Only one of "Phase 2 Starts:" and "Phase 3 Starts:" is given.', 'Give both lines, or remove this one to have the weeks shared out evenly.');
+    } else if (starts[0] && starts[1] && !(starts[0].week > 1 && starts[1].week > starts[0].week && starts[1].week <= roadmapLength)) {
+      err(lineNo(starts[0].line), `Phase 2 starts in Week ${starts[0].week} and Phase 3 in Week ${starts[1].week}, which does not fit a ${roadmapLength}-week roadmap.`, 'Phase 2 must start after Week 1, and Phase 3 after Phase 2 and no later than the last week.');
+    }
   }
   weeks.forEach((week, i) => {
-    if (week.number > 12) err(lineNo(week.start), `Week ${week.number} is beyond the 12-week roadmap.`, 'Fold its content into Weeks 1 to 12.');
+    if (week.number > 12) err(lineNo(week.start), `Week ${week.number} is beyond the 12-week ${type === 'experience' ? 'maximum' : 'roadmap'}.`, 'Fold its content into Weeks 1 to 12.');
     if (weekNumbers.indexOf(week.number) !== i) err(lineNo(week.start), `Week ${week.number} appears more than once.`, 'Renumber or merge the duplicate week.');
     else if (i > 0 && week.number < weeks[i - 1].number) err(lineNo(week.start), `Week ${week.number} is out of order.`, 'List the weeks in order from 1 to 12.');
     if (!week.title) err(lineNo(week.start), `Week ${week.number} has no title.`, 'Add a title after the colon: "### Week 1: Title".');
@@ -578,7 +603,7 @@ function validatePlan(rawContent, options = {}) {
         mismatch(`${name} resources`, unit.resources, p.resources.length, lineNo(unit.start));
       });
       mismatch('Objectives', units.length, parsed.objectives.length, null);
-      mismatch('Weeks', 12, parsed.roadmap.weeks.length, null);
+      mismatch('Weeks', roadmapLength, parsed.roadmap.weeks.length, null);
       weeks.forEach(week => {
         const p = parsed.roadmap.weeks.find(w => w.number === week.number);
         if (!p) return;

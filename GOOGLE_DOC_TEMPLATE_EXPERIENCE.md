@@ -27,7 +27,7 @@
 
 ## Goal
 
-> Write 2–4 sentences. This is the big-picture outcome the operator is working toward. What does success look like at the end of 90 days? Be specific: mention the experience name, the target guest, the price point, and the first departure date. This text appears prominently on their dashboard every time they open the plan.
+> Write 2–4 sentences. This is the big-picture outcome the operator is working toward. What does success look like at the end of the launch roadmap? Be specific: mention the experience name, the target guest, the price point, and the first departure date. This text appears prominently on their dashboard every time they open the plan.
 
 [Write the goal here]
 
@@ -158,7 +158,7 @@
 > Fill in the table. These appear on the track's metrics tab on the dashboard.
 > Be specific. Use numbers wherever possible.
 
-| Metric | 30 Days | 60 Days | 90 Days |
+| Metric | Week 2 | Week 4 | Week 8 |
 |---|---|---|---|
 | [Metric name] | [Target] | [Target] | [Target] |
 | [Metric name] | [Target] | [Target] | [Target] |
@@ -240,7 +240,7 @@
 
 ### Success Metrics
 
-| Metric | 30 Days | 60 Days | 90 Days |
+| Metric | Week 2 | Week 4 | Week 8 |
 |---|---|---|---|
 | [Metric name] | [Target] | [Target] | [Target] |
 | [Metric name] | [Target] | [Target] | [Target] |
@@ -311,7 +311,7 @@
 
 ### Success Metrics
 
-| Metric | 30 Days | 60 Days | 90 Days |
+| Metric | Week 2 | Week 4 | Week 8 |
 |---|---|---|---|
 | [Metric name] | [Target] | [Target] | [Target] |
 | [Metric name] | [Target] | [Target] | [Target] |
@@ -346,11 +346,15 @@
 > This creates the "how to" buttons on the dashboard that take the operator directly to the instructions.
 > If an action has no matching track step, leave no annotation.
 >
-> Month names appear as section headers. Use whatever names fit the plan (e.g. Design and Decide, Build and Cost, List and Launch).
+> A launch roadmap is 8 to 12 weeks. Eight is the usual length: delete the weeks you do not need, renumber so no week is skipped, and move the phase headings to sit above the week each phase starts in.
+>
+> The roadmap has three phases, one per track. Phase names appear as section headers. Use whatever names fit the plan (e.g. Design and Decide, Cost and Protect, List and Launch).
+>
+> Name the Success Metrics columns for this plan's checkpoints (for 8 weeks: Week 2, Week 4, Week 8).
 
 ---
 
-## Month 1: [Month Name, e.g. Design and Decide]
+## Phase 1: [Phase Name, e.g. Design and Decide]
 
 ### Week 1: [Week Title]
 
@@ -409,7 +413,7 @@
 
 ---
 
-## Month 2: [Month Name, e.g. Build and Cost]
+## Phase 2: [Phase Name, e.g. Build and Cost]
 
 ### Week 5: [Week Title]
 
@@ -465,7 +469,7 @@
 
 ---
 
-## Month 3: [Month Name, e.g. List and Launch]
+## Phase 3: [Phase Name, e.g. List and Launch]
 
 ### Week 9: [Week Title]
 

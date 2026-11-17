@@ -18,9 +18,15 @@ Deno.serve(async () => {
 
   const { data: clients, error } = await supabase
     .from('user_plans')
-    .select('email, client_slug, cohort_start_date, timezone, coach_email')
+    .select('email, client_slug, cohort_start_date, timezone, coach_email, dashboard_state')
     .eq('role', 'client')
     .eq('active', true)
+
+  // Experience Design operators choose their own start date on their
+  // dashboard. Until they have, the date on their account is only the day the
+  // project was created, so they get no weekly email.
+  const { data: launches } = await supabase.from('experience_launch').select('client_slug')
+  const launchConfirmed = new Set((launches ?? []).map((row: { client_slug: string }) => row.client_slug))
 
   if (error) {
     console.error('Failed to fetch clients:', error.message)
@@ -30,6 +36,10 @@ Deno.serve(async () => {
   const results: Array<{ client: string; status: string; reason?: string }> = []
 
   for (const client of clients ?? []) {
+    if (client.dashboard_state === 'experience' && !launchConfirmed.has(client.client_slug)) {
+      results.push({ client: client.client_slug, status: 'skipped', reason: 'launch start date not chosen' })
+      continue
+    }
     try {
       const result = await processClient(supabase, client)
       results.push({ client: client.client_slug, ...result })

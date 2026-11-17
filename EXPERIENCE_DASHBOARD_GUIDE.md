@@ -1,195 +1,138 @@
 # Experience Dashboard: Coach Guide
 ### Junction Internal
 
-**What this is:** A guide for coaches helping operators use their Experience Design dashboard.
+**What this is:** How to create, fill and coach with an operator's Experience Design dashboard.
 
 ---
 
 ## Overview
 
-The Experience Dashboard is a 90-day implementation plan for tourism operators creating a bookable experience. It guides them from defining their experience through to their first paying guest.
+Each operator has one dashboard for the whole program. It grows in two stages.
 
-The dashboard has six main sections, accessible from the left sidebar:
+| Stage | When | What the operator sees |
+|-------|------|------------------------|
+| **Onboarding** | Created before the onboarding call | Home (the program step by step), Experience Development Guide, Materials |
+| **Launch plan** | After coaching call 2, when the plan is added | Everything above, plus Strategy, Launch Roadmap, three Tracks and the Bookability Checklist |
 
-| Section | Purpose |
-|---------|---------|
-| **Home** | Welcome screen with progress summary and start date picker |
-| **Strategy** | The goal, positioning, experience sentence, and three objectives |
-| **Tracks 1-3** | Detailed implementation steps for each phase |
-| **Roadmap** | 12-week checklist with actions and completion items |
-| **Guide** | Link to the operator's guide document |
-| **Materials** | Session recordings, questionnaire, pricing calculator |
+The dashboard address is `https://accelerator.elearningu.com/[slug]/`. The operator signs in with the email they were invited with.
 
 ---
 
-## First Session with the Operator
+## Setting Up a Dashboard
 
-### 1. Set the Start Date
+### 1. Create it before the onboarding call
 
-On the Home screen, click **Choose Start Date** to open the date picker. Pick the Monday of Week 1. This date:
-- Calculates the week labels across the roadmap
-- Shows "You are here" indicator on the current week
-- Enables the weekly progress emails
+1. Go to **My Clients** and click **Create Experience Dashboard**.
+2. Enter the operator's business name, check the URL slug, and choose the coach.
+3. Paste the link to their Experience Development Guide and their questionnaire responses if you have them. Both are optional and can be added later.
+4. Leave the launch plan file empty and click **Create Experience Dashboard**.
 
-The start date can be changed later if needed.
+The dashboard is live about a minute later. To invite the operator, open their dashboard and use the **Share** button.
 
-### 2. Walk Through the Strategy Page
+### 2. Add materials as they are ready
 
-Show them:
-- **The Goal**: What they will achieve in 90 days
-- **The Experience**: Their one-sentence experience description
-- **Strategic Positioning**: Why guests will choose them
-- **Three Objectives**: The milestones across the program
+On My Clients, click the pencil on the operator's card to open **Manage**. Paste a link for any of these and click **Save materials**:
 
-This is the "why" behind everything in the roadmap.
+- Experience Development Guide
+- Questionnaire responses
+- Coaching Call 1 summary
+- Coaching Call 2 summary
+- Costing and pricing calculator
 
-### 3. Explain the Three Tracks
+Each card on the operator's Materials page says "Coming soon" until its link is saved, then becomes a button. Clear a link and save to hide it again. Before saving, open each link in a private window to check the operator will be able to open it.
 
-Each track covers one phase of the work:
+### 3. Add the launch plan after coaching call 2
 
-| Track | Phase | Weeks |
-|-------|-------|-------|
-| Track 1: Define the Experience | Design | 1-4 |
-| Track 2: Make It Operable | Operations | 5-7 |
-| Track 3: Make It Bookable | Launch | 8-12 |
+1. Write the plan to `PLAN_FORMAT_EXPERIENCE.md`. A launch roadmap is 8 to 12 weeks. Eight is the usual length.
+2. On the **Manage** page, choose the plan.md file. It is checked straight away, and anything that needs fixing is listed line by line.
+3. Click **Add launch plan**.
 
-Inside each track:
-- **Overview tab**: Context and rationale
-- **Implementation Steps tab**: Numbered steps with sub-bullets
-- **Success Metrics tab**: 30/60/90 day targets
-- **Tips & Resources tab**: Practical advice and links
-
-### 4. Show How the Roadmap Works
-
-The roadmap is the operator's weekly to-do list.
-
-**Each week has two columns:**
-- **This Week's Actions**: What to do (some have "how to" buttons)
-- **Completion Checklist**: What to tick off when done
-
-**"How to" buttons**: Click these to jump directly to the relevant implementation step in the tracks. This is the main way operators learn how to complete each task.
-
-**Progress tracking**: Checkboxes save automatically. Progress shows at the top of each week, each month block, and on the Home screen.
-
-**Week notes**: Operators can add notes to any week using the notes section at the bottom of each week card.
+The dashboard moves to the launch plan stage about a minute later. Guide and Materials stay exactly as they were. To correct a plan later, upload the fixed file on the same page with **Replace launch plan**.
 
 ---
 
-## Ongoing Coaching Sessions
+## Walking the Operator Through It
 
-### Weekly Check-ins
+### At the onboarding call
 
-1. Open the Roadmap and expand the current week
-2. Review which checkboxes are complete
-3. Discuss any blockers
-4. Preview next week's tasks
+Open the dashboard together. Show them:
+- **Home**: the six steps of the program, from questionnaire to launch plan
+- **Experience Development Guide**: where their guide opens, and the five sections they tick off as they work through it
+- **Materials**: where their answers and call summaries will appear
 
-### If They Get Stuck
+### When the launch plan is delivered
 
-1. Find the relevant action in the roadmap
-2. Click the "how to" button to show them the implementation step
-3. Walk through the numbered sub-bullets together
-4. Check the Tips & Resources tab for additional help
+1. **Choose the start date.** On Home, the operator picks the Monday they want Week 1 to begin and clicks **Set my start date**. Every week of the roadmap is dated from it, the current week is highlighted, and the weekly emails begin. The operator can set this once. Staff (admin or PSM) can change it afterwards with the **Change** link beside the date.
+2. **Strategy.** Their experience in one sentence, the goal, the positioning and the three objectives.
+3. **The three Tracks.** Each has an Overview, Implementation Steps, Success Metrics, and Tips & Resources.
+4. **Launch Roadmap.** Each week has actions on the left and a completion checklist on the right. A "how to" button beside an action jumps to the step that explains it. Checkboxes and notes save automatically.
+5. **Bookability Checklist.** Its own page in the sidebar: the items that must be true before the first booking.
 
-### Track Their Progress
-
-The Home screen shows:
-- Overall completion percentage
-- Current week indicator
-- Days remaining in the program
-
-Month headers in the roadmap show progress for each 4-week block.
+Until a start date is chosen, the roadmap shows no dates and no weekly emails are sent.
 
 ---
 
-## Key Features
+## Ongoing Coaching
 
-### Bookability Checklist
+1. Open the Launch Roadmap and expand the current week (it has a green edge).
+2. Review which checklist items are ticked, and read any notes.
+3. Use a "how to" button to walk through a step they are stuck on.
+4. Preview next week.
 
-At the bottom of the roadmap (scroll past Week 12), there is a Bookability Checklist. These are the non-negotiables before they can take their first booking:
-- Insurance confirmed
-- Business licence verified
-- Guest waiver ready
-- Safety protocol documented
-- Cancellation policy published
-- Photos uploaded
-- Availability set
-- First booking confirmed
+Progress shows on each week, on each phase heading, on Home and in the sidebar ring. Guide section ticks are counted separately on the Guide page and do not affect the ring.
 
-This section has its own checkboxes separate from the weekly roadmap.
-
-### Guide Page
-
-Links to the operator's Google Doc guide (if available). This is supplementary reading material.
-
-### Materials Page
-
-Contains:
-- Pre-program questionnaire
-- Session 1 recording
-- Session 2 recording
-- Pricing calculator
-
-Cards show "Coming Soon" if material is not yet available.
-
-### Print/PDF
-
-Click **Download PDF** in the roadmap header to generate a printable version. This includes:
-- Cover page with client name and goal
-- All 12 weeks with checkboxes
-- Suitable for printing or saving as PDF
+Staff and coaches also see an **Activity** page with visits and recent ticks.
 
 ---
 
 ## Common Questions
 
-**Can they access it on mobile?**
-Yes. The dashboard is responsive. On mobile, the sidebar becomes a hamburger menu.
+**Can they use it on a phone?**
+Yes. On a phone the sidebar opens from the menu icon.
 
-**Does progress sync across devices?**
-Yes. Progress saves to the cloud (Supabase). They can check boxes on their phone and see them on their laptop.
+**Does progress carry across devices?**
+Yes. Ticks and notes are saved to their account.
 
 **Can they change the start date after setting it?**
-Yes. Click the date on the Home screen to change it.
+No. Ask an admin or PSM to change it from the operator's dashboard.
 
-**What if a "how to" button doesn't work?**
-The link may point to a step that doesn't exist. Report to the technical team.
+**What happens to ticks if I replace the plan?**
+A tick stays with its position: Week 3, item 2 stays ticked. If you reorder checklist items, check the ticks still make sense.
 
 **Can they add their own tasks?**
-No. The roadmap is fixed. They can use the week notes section for personal reminders.
+No. They can add a note to any checklist item, and each week has a notes box.
+
+**Can I change wording on the dashboard without re-uploading?**
+Yes, for small text edits use Edit Mode on the dashboard. For structural changes, fix the plan.md and replace the plan.
 
 ---
 
 ## Troubleshooting
 
-| Issue | Solution |
-|-------|----------|
-| Progress not saving | Refresh the page. Check internet connection. |
-| Can't see the sidebar | On mobile, tap the hamburger menu icon |
-| "How to" link goes nowhere | Report to technical team (broken step reference) |
-| Start date not showing | Click "Choose Start Date" on Home screen |
-| Materials show "Coming Soon" | Materials are added as they become available |
+| Issue | What to do |
+|-------|------------|
+| New dashboard or change is not showing | Wait a minute and reload. Changes take about a minute to go live. |
+| A material still says "Coming soon" | Open Manage, check the link was saved, and that it starts with `https://` |
+| Operator cannot open a material | The document's sharing does not include them. Fix the sharing on the document itself. |
+| "Your start date could not be saved" | Note the message shown and tell the technical team. |
+| Roadmap has no dates | No start date has been chosen yet. See "Choose the start date" above. |
+| The plan upload lists problems | Fix each line listed in the plan.md, then choose the file again. Nothing is changed until the plan passes. |
 
 ---
 
-## Dashboard URLs
+## Where Things Are
 
-Experience dashboards live at:
-```
-https://accelerator.elearningu.com/[operator-slug]/
-```
-
-Example:
-```
-https://accelerator.elearningu.com/sample-experience/
-```
-
-The coach portal is at:
+The coach portal:
 ```
 https://accelerator.elearningu.com/my-clients/
 ```
 
-Note: Dashboard files are stored in `/clients/[slug]/` alongside accelerator dashboards.
+A sample dashboard anyone can open without signing in:
+```
+https://accelerator.elearningu.com/sample-experience/
+```
+
+Each dashboard's files are in `/clients/[slug]/`: `project.json` (name, coach, material links), `plan.md` and `plan.json` (once the plan is added) and `index.html` (the page, rebuilt from the others).
 
 ---
 

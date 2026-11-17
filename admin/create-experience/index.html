@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Create Experience Project — eLearningU</title>
+  <title>Create Experience Dashboard | Junction</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;600;700;800&family=Open+Sans:wght@400;500;600&display=swap" rel="stylesheet">
@@ -666,7 +666,7 @@
 
   <!-- ══ TOP BAR ═══════════════════════════════════════════ -->
   <header class="topbar">
-    <div class="topbar__logo">eLearningU</div>
+    <div class="topbar__logo">Junction</div>
     <div class="topbar__right">
       <a href="/my-clients/" class="topbar__back">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -684,8 +684,8 @@
 
     <div class="page-header">
       <p class="page-header__eyebrow">Admin</p>
-      <h1 class="page-header__title">Create Experience Project</h1>
-      <p class="page-header__sub">Upload a plan.md file to generate a new experience dashboard</p>
+      <h1 class="page-header__title">Create Experience Dashboard</h1>
+      <p class="page-header__sub">Create the operator's dashboard before their onboarding call. Add the launch plan now, or later from My Clients.</p>
     </div>
 
     <div id="errorMessage" class="message message--error"></div>
@@ -712,13 +712,20 @@
         </div>
 
         <div class="form-group">
-          <label class="form-label" for="assessmentDate">Call 1 Date</label>
-          <input type="date" class="form-input" id="assessmentDate" required>
-          <p class="form-hint">Date of the first coaching call. The operator will set their own launch start date.</p>
+          <label class="form-label" for="guideUrl">Experience Development Guide link <span style="font-weight:400">(optional)</span></label>
+          <input type="url" class="form-input" id="guideUrl" placeholder="https://docs.google.com/...">
+          <p class="form-hint">The operator's own guide. Check its sharing is set so the operator can open it. You can add or change this later.</p>
         </div>
 
         <div class="form-group">
-          <label class="form-label">Plan File</label>
+          <label class="form-label" for="questionnaireUrl">Questionnaire responses link <span style="font-weight:400">(optional)</span></label>
+          <input type="url" class="form-input" id="questionnaireUrl" placeholder="https://docs.google.com/...">
+          <p class="form-hint">Call summaries and the calculator are added later from My Clients.</p>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Launch plan file <span style="font-weight:400">(optional)</span></label>
+          <p class="form-hint" style="margin:0 0 10px">Leave this empty to create the dashboard at the onboarding stage: Home, Guide and Materials. Add the plan after the second coaching call.</p>
           <div class="file-upload" id="fileUpload">
             <svg class="file-upload__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
               <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
@@ -750,13 +757,13 @@
         <!-- Result of checking the chosen plan.md: what needs fixing, line by line -->
         <div id="planReport" aria-live="polite"></div>
 
-        <button type="submit" class="btn-submit" id="submitBtn">Create Experience Project</button>
+        <button type="submit" class="btn-submit" id="submitBtn">Create Experience Dashboard</button>
       </form>
     </div>
 
   </main>
 
-  <footer class="footer">eLearningU &nbsp;&middot;&nbsp; &copy; 2026</footer>
+  <footer class="footer">Junction &nbsp;&middot;&nbsp; &copy; 2026</footer>
 
   <!-- ══ ONBOARDING TOUR ═══════════════════════════════════════ -->
   <div class="tour-overlay" id="tourOverlay"></div>
@@ -774,8 +781,8 @@
     </div>
     <h2 class="tour-welcome__title">Welcome to Experience Creation</h2>
     <p class="tour-welcome__desc">
-      This tool lets you create new experience design projects by uploading a plan.md file.
-      Let's walk through the process together.
+      This tool creates an operator's Experience Design dashboard. Create it before the onboarding call,
+      then add the launch plan after the second coaching call. Let's walk through it together.
     </p>
     <div class="tour-welcome__actions">
       <button class="tour-welcome__btn tour-welcome__btn--primary" onclick="startTour()">
@@ -983,17 +990,15 @@
       const clientName = document.getElementById('clientName').value.trim();
       const slug = document.getElementById('slug').value.trim();
       const coachEmail = document.getElementById('coach').value;
-      const assessmentDate = document.getElementById('assessmentDate').value;
+      const materials = {
+        guide: document.getElementById('guideUrl').value.trim(),
+        questionnaire: document.getElementById('questionnaireUrl').value.trim()
+      };
 
       // Validate
       if (planCheck && !planCheck.ok) {
         showError('This plan needs changes before it can be uploaded. See the list above the button, fix the plan.md file, then choose it again.');
         document.getElementById('planReport').scrollIntoView({ behavior: 'smooth', block: 'center' });
-        return;
-      }
-
-      if (!planMdContent) {
-        showError('Please upload a plan.md file');
         return;
       }
 
@@ -1014,13 +1019,13 @@
           throw new Error('Not authenticated');
         }
 
-        // Build request body (no cohortStartDate - operator sets this themselves)
+        // The plan is optional. The operator chooses their own start date on the dashboard.
         const requestBody = {
           clientName,
           slug,
           coachEmail,
-          assessmentDate,
-          planMd: planMdContent
+          materials,
+          planMd: planMdContent || undefined
         };
 
         // Call Netlify Function
@@ -1051,7 +1056,9 @@
         if (result.coachAccessGranted === false) {
           showSuccess(`Experience project created, but the coach could not be given dashboard access, so it will not appear in My Clients yet. Ask an admin to add the coach's access. <a href="/${slug}/">View project</a>`);
         } else {
-          showSuccess(`Experience project created successfully! <a href="/${slug}/">View project</a>`);
+          showSuccess(result.stage === 'onboarding'
+            ? `Dashboard created at the onboarding stage. It can take a minute to go live. <a href="/${slug}/">View dashboard</a> &nbsp;·&nbsp; <a href="/admin/manage-experience/?slug=${slug}">Add materials or the launch plan</a>`
+            : `Dashboard created with its launch plan. It can take a minute to go live. <a href="/${slug}/">View dashboard</a> &nbsp;·&nbsp; <a href="/admin/manage-experience/?slug=${slug}">Add materials</a>`);
         }
         document.getElementById('createProjectForm').reset();
         document.getElementById('fileUpload').classList.remove('has-file');
@@ -1109,7 +1116,7 @@
       {
         target: '#slug',
         title: 'URL Slug',
-        desc: 'This is automatically generated from the operator name. It becomes the URL path (e.g., experience.elearningu.com/salt-spring-kayak). You can edit it if needed.',
+        desc: 'This is automatically generated from the operator name. It becomes the URL path (e.g., accelerator.elearningu.com/salt-spring-kayak). You can edit it if needed.',
         position: 'bottom'
       },
       {
@@ -1121,7 +1128,7 @@
       {
         target: '#fileUpload',
         title: 'Upload Plan File',
-        desc: 'This is the most important step! Upload the plan.md file that contains all the operator\'s goals, tracks, and weekly roadmap. The system will parse this file to generate their complete experience dashboard.',
+        desc: 'Optional. Leave it empty to create the dashboard for the onboarding call, with Home, Guide and Materials. Add the plan.md after the second coaching call from My Clients, or upload it here if it is already written.',
         position: 'bottom'
       }
     ];
