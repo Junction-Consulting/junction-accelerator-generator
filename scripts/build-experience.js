@@ -30,7 +30,7 @@ async function main() {
     process.exit(1);
   }
 
-  const { buildExperienceFiles } = await import('../shared/experience-project.js');
+  const { buildExperienceFiles, projectInputs } = await import('../shared/experience-project.js');
   const template = fs.readFileSync(path.join(ROOT, 'template', 'experience-template.html'), 'utf8');
   let failed = false;
 
@@ -46,15 +46,7 @@ async function main() {
     const project = JSON.parse(fs.readFileSync(projectPath, 'utf8'));
     const planMd = fs.existsSync(planPath) ? fs.readFileSync(planPath, 'utf8') : null;
 
-    const built = buildExperienceFiles({
-      template,
-      clientName: project.client_name,
-      slug,
-      coachEmail: project.coach_email,
-      planMd,
-      materials: project.materials,
-      welcomeMessage: project.welcome_message
-    });
+    const built = buildExperienceFiles({ ...projectInputs(project), template, slug, planMd });
 
     if (!built.ok) {
       console.log(`${slug}: NOT built (${built.step})\n${built.error}`);

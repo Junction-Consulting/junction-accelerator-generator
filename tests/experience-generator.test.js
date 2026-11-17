@@ -16,7 +16,7 @@ const {
   validateExperienceHtml,
   splitIntoPhases
 } = require('../shared/experience-generator.js');
-const { buildExperienceFiles, materialLinkProblems } = require('../shared/experience-project.js');
+const { buildExperienceFiles, materialLinkProblems, projectInputs, materialsAddedAfter } = require('../shared/experience-project.js');
 const { validatePlan } = require('../shared/plan-validator.js');
 
 const ROOT = path.join(__dirname, '..');
@@ -94,7 +94,11 @@ describe('parser', () => {
     expect(plan.pricePoint).toBe('$145 per guest');
     expect(plan.launchTarget).toContain('·');
     expect(plan.hasBookabilityChecklist).toBe(true);
-    expect(plan.bookabilityItems).toHaveLength((SAMPLE_MD.split('## Bookability Checklist')[1].match(/^### /gm) || []).length);
+    expect(plan.bookabilityItems).toHaveLength((SAMPLE_MD.split('## Bookability Checklist')[1].split('## After Launch')[0].match(/^### /gm) || []).length);
+    expect(plan.afterLaunchItems).toEqual([{ title: 'First Booking Confirmed', description: expect.stringMatching(/first paying guest/) }]);
+    expect(plan.goalTiles).toHaveLength(5);
+    expect(plan.goalTiles[0]).toEqual({ value: '$145', label: 'per guest' });
+    expect(plan.launchDate).toBe('2027-05-22');
     expect(plan.bookabilityItems[0]).toEqual({ title: 'Insurance Coverage Confirmed', description: expect.stringMatching(/liability coverage/) });
   });
 
@@ -183,7 +187,7 @@ describe('generated dashboard', () => {
   });
 
   test('the header subtitle is never cut mid-word', () => {
-    const subtitle = out.html.match(/<h1>Welcome to Your Experience Design Program<\/h1>\s*<p>([^<]*)<\/p>/)[1];
+    const subtitle = out.html.match(/<h1>Hi [^<]*<\/h1>\s*<p>([^<]*)<\/p>/)[1];
     expect(subtitle).toMatch(/[.!?…]$/);
     expect(out.plan.goal.startsWith(subtitle.replace(/…$/, ''))).toBe(true);
   });
@@ -306,7 +310,8 @@ describe('onboarding stage (dashboard created before the plan exists)', () => {
     expect(html).toMatch(/<body[^>]*data-stage="onboarding"/);
     expect(html).not.toMatch(/class="week-card"/);
     expect(html).not.toContain('id="page-bookability"');
-    expect(html).toContain('id="journey-section"');
+    expect(html).toContain('id="program-steps"');
+    expect(html).toContain('<h2 class="next-title">Complete your questionnaire</h2>');
     expect(JSON.parse(html.match(/const ALL_CHECK_IDS = (\[[\s\S]*?\]);/)[1])).toEqual([]);
     expect(html).not.toMatch(/\{\{[A-Z_0-9]+\}\}/);
   });
@@ -320,7 +325,7 @@ describe('onboarding stage (dashboard created before the plan exists)', () => {
       expect(html).toMatch(new RegExp(`<div class="nav-item"[^>]*data-page="${page}"`));
     }
     expect(html).toContain('body[data-stage="onboarding"] .plan-only{display:none!important}');
-    expect(html).toContain('<div class="start-date-card plan-only" id="start-date-card">');
+    expect(html).toMatch(/<div class="plan-only">\s*<div class="next-head">[\s\S]*?id="start-date-card"/);
   });
 
   test('adding the plan keeps the material links and moves to the plan stage', () => {
@@ -356,6 +361,130 @@ describe('onboarding stage (dashboard created before the plan exists)', () => {
     const html = build({ materials: { guide: 'javascript:alert(1)', session1: 'https://example.com/"><script>' } }).files[1].content;
     expect(html).not.toContain('javascript:alert');
     expect(html).not.toContain('"><script>');
+  });
+});
+
+describe('home page', () => {
+  const build = (extra = {}) => buildExperienceFiles({
+    template: TEMPLATE, clientName: 'Zzq Client', slug: 'zzq-client', coachEmail: 'coach@example.com', ...extra
+  });
+  const page = extra => build(extra).files.find(f => f.path.endsWith('index.html')).content;
+  const steps = html => [...html.matchAll(/<li class="program-step (\w+)"/g)].map(m => m[1]);
+
+  test('greets the owner by first name, or the business when none is given', () => {
+    expect(page({ ownerFirstName: 'Dana' })).toContain('<h1>Hi Dana</h1>');
+    expect(page()).toContain('<h1>Hi Zzq Client</h1>');
+  });
+
+  test('the next step follows the program steps staff have ticked', () => {
+    expect(steps(page())).toEqual(['current', 'upcoming', 'upcoming', 'upcoming', 'upcoming', 'upcoming']);
+    const midway = page({ program: { questionnaire_done: true, onboarding_done: true, next_call_date: '2027-01-19' } });
+    expect(steps(midway)).toEqual(['done', 'done', 'current', 'upcoming', 'upcoming', 'upcoming']);
+    expect(midway).toContain('<h2 class="next-title">Get ready for Coaching Call 1</h2>');
+    expect(midway).toContain('Your next call: January 19, 2027');
+    expect(midway).toContain('<dt>Next coaching call</dt><dd>January 19, 2027</dd>');
+    const waiting = page({ program: { questionnaire_done: true, onboarding_done: true, call1_done: true, call2_done: true } });
+    expect(steps(waiting)).toEqual(['done', 'done', 'done', 'done', 'current', 'upcoming']);
+    expect(waiting).toContain('Your launch plan is on its way');
+  });
+
+  test('with a launch plan, every earlier step is done and the roadmap is the current step', () => {
+    const html = page({ planMd: SAMPLE_MD });
+    expect(steps(html)).toEqual(['done', 'done', 'done', 'done', 'current', 'upcoming']);
+    expect(html).toContain('<dt>Next coaching call</dt><dd>Complete</dd>');
+    expect(html).toMatch(/<body[^>]*data-launch-date="2027-05-22"/);
+    expect(html).toContain('id="countdown-card"');
+    expect(html).toContain('<dt>Launch</dt><dd>May 22, 2027</dd>');
+  });
+
+  test('a launch target with no full date leaves the countdown out and warns', () => {
+    const md = SAMPLE_MD.replace(/^Launch Target:.*$/m, 'Launch Target: Late May 2027 · $1,740 in first-month bookings');
+    const html = page({ planMd: md });
+    expect(html).not.toContain('id="countdown-card"');
+    expect(html).toMatch(/<body[^>]*data-launch-date=""/);
+    expect(validatePlan(md, { type: 'experience' }).warnings.map(w => w.message).join(' ')).toMatch(/countdown to launch will be left out/);
+    expect(validateExperienceHtml(html)).toEqual([]);
+  });
+
+  test("what's new lists materials and the plan by the date they were added, newest first", () => {
+    const html = page({
+      planMd: SAMPLE_MD,
+      materials: { guide: 'https://example.com/g', session1: 'https://example.com/1' },
+      materialsAdded: { guide: '2027-01-12', session1: '2027-01-20', calculator: '2027-01-25' },
+      planAdded: '2027-02-22'
+    });
+    const news = [...html.matchAll(/class="news-link"[^>]*>([^<]+)<\/button><span class="news-date">([^<]+)</g)].map(m => m[2]);
+    expect(news).toEqual(['February 22, 2027', 'January 20, 2027', 'January 12, 2027']);
+    expect(page()).toContain('class="news-empty"');
+  });
+
+  test('material dates: new and changed links get today, unchanged keep theirs, removed lose theirs', () => {
+    const before = { guide: 'https://example.com/g', session1: 'https://example.com/1', session2: 'https://example.com/2' };
+    const added = { guide: '2027-01-12', session1: '2027-01-20', session2: '2027-02-08' };
+    const after = { guide: 'https://example.com/g', session1: 'https://example.com/new', session2: '', calculator: 'https://example.com/c' };
+    expect(materialsAddedAfter(before, added, after, '2027-03-01')).toEqual({ guide: '2027-01-12', session1: '2027-03-01', calculator: '2027-03-01' });
+  });
+
+  test('the coach card shows the name when given and always links to their email', () => {
+    const named = page({ coachName: 'Pat Example' });
+    expect(named).toContain('<div class="coach-name">Pat Example</div>');
+    expect(named).toContain('<span class="coach-avatar" aria-hidden="true">P</span>');
+    expect(page()).toContain('<div class="coach-name">Your coach</div>');
+    expect(page()).toContain('href="mailto:coach@example.com"');
+  });
+});
+
+describe('sidebar, launch strategy and bookability', () => {
+  let html;
+  beforeAll(() => { html = render(SAMPLE_MD).html; });
+
+  test('sidebar order: overview, your plan, build your experience, resources', () => {
+    const nav = html.slice(html.indexOf('<nav>'), html.indexOf('</nav>'));
+    const order = [...nav.matchAll(/class="nav-section-label[^"]*">([^<]+)<|data-page="(\w+)"/g)].map(m => m[1] || m[2]);
+    expect(order).toEqual(['Overview', 'dashboard', 'Your Plan', 'strategy', 'roadmap', 'Build Your Experience', 'tactic1', 'tactic2', 'tactic3', 'bookability', 'Resources', 'guide', 'materials', 'activity']);
+    expect(nav).toContain('Launch Strategy');
+    expect(nav).toContain('Track 1 · Define It');
+  });
+
+  test('each track is described once, with its objective, weeks, progress and link', () => {
+    const strategy = html.slice(html.indexOf('id="page-strategy"'), html.indexOf('id="page-guide"'));
+    expect(strategy).not.toMatch(/Three Objectives|The Three Build Tracks/);
+    expect((strategy.match(/class="track-card"/g) || [])).toHaveLength(3);
+    expect(strategy).toContain('<div class="track-card-eyebrow">Track 1 · Weeks 1–2</div>');
+    expect(strategy).toContain('<div class="track-card-eyebrow">Track 2 · Weeks 3–5</div>');
+    expect(strategy).toContain('<div class="track-card-eyebrow">Track 3 · Weeks 6–8</div>');
+    expect(strategy).toContain('data-editable-key="objective-2-title">Set a sustainable price and confirm operational readiness</p>');
+    expect(strategy).toContain('id="tc3-bar"');
+    expect(strategy).toContain('style="flex:2;--tc:var(--t1)');
+    expect(strategy).toContain('style="flex:3;--tc:var(--t2)');
+    expect((strategy.match(/<span><i>Week <\/i>\d+<\/span>/g) || [])).toHaveLength(8);
+  });
+
+  test('goal tiles come from the plan, or from price, date and length when it has none', () => {
+    expect((html.match(/class="goal-tile"/g) || [])).toHaveLength(5);
+    expect(html).toContain('<div class="goal-tile-value">$145</div><div class="goal-tile-label">per guest</div>');
+    const fallback = render(SAMPLE_MD.replace(/## Goal at a Glance\n[\s\S]*?\n\n/, '')).html;
+    const values = [...fallback.matchAll(/class="goal-tile-value">([^<]+)</g)].map(m => m[1]);
+    expect(values).toEqual(['$145', 'May 22', '8 weeks']);
+  });
+
+  test('bookability covers what comes before bookings open; later milestones sit apart and are not counted', () => {
+    const page = html.slice(html.indexOf('id="page-bookability"'), html.indexOf('id="page-activity"'));
+    expect(page).toContain('before you open for bookings');
+    expect(page).not.toContain('before you can accept your first booking');
+    expect(page.indexOf('After You Launch')).toBeGreaterThan(page.indexOf('id="bookability_8"'));
+    expect(page).toContain('<input type="checkbox" class="check-input" id="afterlaunch_1" data-key="after-launch-1"');
+    const allIds = JSON.parse(html.match(/const ALL_CHECK_IDS = (\[[\s\S]*?\]);/)[1]);
+    expect(allIds.filter(id => id.startsWith('afterlaunch'))).toEqual([]);
+    expect(validatePlan(SAMPLE_MD, { type: 'experience' }).warnings).toEqual([]);
+  });
+
+  test('the upload check flags a bookability item that can only happen after launch', () => {
+    const md = SAMPLE_MD.replace('### Test Booking Completed', '### First Booking Confirmed');
+    expect(validatePlan(md, { type: 'experience' }).warnings.map(w => w.message).join(' ')).toMatch(/happens after bookings open/);
+    const noAfter = render(SAMPLE_MD.replace(/## After Launch\n[\s\S]*$/, '')).html;
+    expect(noAfter).not.toContain('After You Launch');
+    expect(validateExperienceHtml(noAfter)).toEqual([]);
   });
 });
 
@@ -412,10 +541,7 @@ describe('single source of truth', () => {
   test('the committed sample matches what the generator builds today', () => {
     const dir = path.join(ROOT, 'clients', 'sample-experience');
     const project = JSON.parse(fs.readFileSync(path.join(dir, 'project.json'), 'utf8'));
-    const built = buildExperienceFiles({
-      template: TEMPLATE, clientName: project.client_name, slug: 'sample-experience', coachEmail: project.coach_email,
-      planMd: SAMPLE_MD, materials: project.materials, welcomeMessage: project.welcome_message
-    });
+    const built = buildExperienceFiles({ ...projectInputs(project), template: TEMPLATE, slug: 'sample-experience', planMd: SAMPLE_MD });
     expect(built.ok).toBe(true);
     for (const file of built.files) {
       expect(fs.readFileSync(path.join(ROOT, file.path), 'utf8')).toBe(file.content);
@@ -426,7 +552,7 @@ describe('single source of truth', () => {
 describe('sub-bullets in steps', () => {
   test('a bullet indented under the one above renders as a sub-bullet', () => {
     const lines = SAMPLE_MD.split('\n');
-    const start = lines.findIndex(l => /^\d+\. \*\*/.test(l));
+    const start = lines.findIndex(l => l.startsWith('### Implementation Steps'));
     const bullets = lines.map((l, i) => i).filter(i => i > start && /^\s*- /.test(lines[i]));
     lines[bullets[1]] = '  ' + lines[bullets[1]];
     const { html } = render(lines.join('\n'));

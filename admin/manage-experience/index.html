@@ -668,6 +668,8 @@
     .stage-pill--plan { background: #d1fae5; color: #065f46; }
     .material-status { font-size: 12px; font-weight: 600; margin-left: 8px; color: #92400e; }
     .material-status--on { color: #065f46; }
+    .step-check { display: flex; align-items: center; gap: 10px; font-size: 14px; color: var(--text); padding: 6px 0; cursor: pointer; }
+    .step-check input { width: 18px; height: 18px; accent-color: var(--navy); }
   </style>
 </head>
 <body data-page="admin-create-experience">
@@ -726,6 +728,37 @@
       </form>
     </div>
 
+    <div class="form-card" id="detailsCard" style="display:none">
+      <h2 class="section-title">Home page details</h2>
+      <p class="section-sub">These set what the operator sees when they sign in: their greeting, their coach, and where they are in the program.</p>
+      <form id="detailsForm">
+        <div class="form-group">
+          <label class="form-label" for="d-owner">Owner's first name</label>
+          <input type="text" class="form-input" id="d-owner" placeholder="e.g., Dana">
+          <p class="form-hint">Left empty, the greeting uses the business name.</p>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="d-coach">Coach's name</label>
+          <input type="text" class="form-input" id="d-coach" placeholder="e.g., Conner Galway">
+        </div>
+        <div id="programFields">
+          <div class="form-group">
+            <span class="form-label">Program steps completed</span>
+            <label class="step-check"><input type="checkbox" id="p-questionnaire_done"> Questionnaire submitted</label>
+            <label class="step-check"><input type="checkbox" id="p-onboarding_done"> Onboarding call held</label>
+            <label class="step-check"><input type="checkbox" id="p-call1_done"> Coaching Call 1 held</label>
+            <label class="step-check"><input type="checkbox" id="p-call2_done"> Coaching Call 2 held</label>
+            <p class="form-hint">The first step left unticked is shown to the operator as "Your next step". Adding the launch plan marks all four as done.</p>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="p-next_call_date">Next call date <span style="font-weight:400">(optional)</span></label>
+            <input type="date" class="form-input" id="p-next_call_date">
+          </div>
+        </div>
+        <button type="submit" class="btn-submit" id="detailsBtn">Save details</button>
+      </form>
+    </div>
+
     <div class="form-card" id="planCard" style="display:none">
       <h2 class="section-title" id="planTitle">Launch plan</h2>
       <p class="section-sub" id="planSub"></p>
@@ -762,6 +795,7 @@
   <script src="/shared/plan-report-ui.js"></script>
   <script>
     const MATERIAL_KEYS = ['guide', 'questionnaire', 'session1', 'session2', 'calculator'];
+    const PROGRAM_STEPS = ['questionnaire_done', 'onboarding_done', 'call1_done', 'call2_done'];
     const slug = (new URLSearchParams(window.location.search).get('slug') || '').trim();
     let project = null;
     let planMdContent = null;
@@ -833,7 +867,16 @@
         : 'Upload the operator\'s plan.md after the second coaching call. The dashboard gains Strategy, the three Tracks, the Launch Roadmap and the Bookability Checklist. Guide and Materials stay as they are.';
       document.getElementById('planBtn').textContent = hasPlan ? 'Replace launch plan' : 'Add launch plan';
 
+      document.getElementById('d-owner').value = project.owner_first_name || '';
+      document.getElementById('d-coach').value = project.coach_name || '';
+      const program = project.program || {};
+      PROGRAM_STEPS.forEach(key => { document.getElementById('p-' + key).checked = !!program[key]; });
+      document.getElementById('p-next_call_date').value = program.next_call_date || '';
+      // Once the launch plan is added, the earlier steps are all behind the operator
+      document.getElementById('programFields').style.display = hasPlan ? 'none' : '';
+
       document.getElementById('materialsCard').style.display = '';
+      document.getElementById('detailsCard').style.display = '';
       document.getElementById('planCard').style.display = '';
     }
 
@@ -852,6 +895,7 @@
       fileInput.addEventListener('change', () => { if (fileInput.files.length) handleFileSelect(fileInput.files[0]); });
 
       document.getElementById('materialsForm').addEventListener('submit', saveMaterials);
+      document.getElementById('detailsForm').addEventListener('submit', saveDetails);
       document.getElementById('planForm').addEventListener('submit', savePlan);
     }
 
@@ -920,10 +964,26 @@
       }
       const result = await send({ materials }, document.getElementById('materialsBtn'));
       if (!result) return;
-      project.materials = result.materials;
-      project.stage = result.stage;
+      if (result.project) project = result.project; else { project.materials = result.materials; project.stage = result.stage; }
       renderProject();
       showSuccess('Materials saved. The dashboard updates in about a minute. <a href="/' + slug + '/" target="_blank">Open the dashboard</a>');
+    }
+
+    async function saveDetails(e) {
+      e.preventDefault();
+      const details = {
+        ownerFirstName: document.getElementById('d-owner').value.trim(),
+        coachName: document.getElementById('d-coach').value.trim()
+      };
+      if (project.stage !== 'plan') {
+        details.program = { next_call_date: document.getElementById('p-next_call_date').value };
+        PROGRAM_STEPS.forEach(key => { details.program[key] = document.getElementById('p-' + key).checked; });
+      }
+      const result = await send({ details }, document.getElementById('detailsBtn'));
+      if (!result) return;
+      if (result.project) project = result.project;
+      renderProject();
+      showSuccess('Details saved. The dashboard updates in about a minute. <a href="/' + slug + '/" target="_blank">Open the dashboard</a>');
     }
 
     async function savePlan(e) {
@@ -935,7 +995,7 @@
       }
       const result = await send({ planMd: planMdContent }, document.getElementById('planBtn'));
       if (!result) return;
-      project.stage = result.stage;
+      if (result.project) project = result.project; else project.stage = result.stage;
       planMdContent = null;
       planCheck = null;
       document.getElementById('fileUpload').classList.remove('has-file');

@@ -29,7 +29,7 @@ import { validatePlan, formatReport } from './plan-validator.js';
  * Returns { ok: true, stage, files: [{ path, content }], warnings, summary }
  * or { ok: false, step, error, issues, warnings } with nothing to commit.
  */
-function buildExperienceFiles({ template, clientName, slug, coachEmail, planMd, materials, welcomeMessage }) {
+function buildExperienceFiles({ template, clientName, slug, coachEmail, planMd, materials, welcomeMessage, ownerFirstName, coachName, program, materialsAdded, planAdded }) {
   let planData = null;
   let report = { warnings: [], summary: null };
 
@@ -47,7 +47,7 @@ function buildExperienceFiles({ template, clientName, slug, coachEmail, planMd, 
   }
 
   const stage = planData ? 'plan' : 'onboarding';
-  const project = buildExperienceProject({ clientName, slug, coachEmail, stage, materials, welcomeMessage });
+  const project = buildExperienceProject({ clientName, slug, coachEmail, stage, materials, welcomeMessage, ownerFirstName, coachName, program, materialsAdded, planAdded });
 
   const { html, unfilledPlaceholders } = renderExperienceDashboard(template, {
     ...(planData || {}),
@@ -56,6 +56,11 @@ function buildExperienceFiles({ template, clientName, slug, coachEmail, planMd, 
     coachEmail,
     stage,
     materials: project.materials,
+    ownerFirstName: project.owner_first_name,
+    coachName: project.coach_name,
+    program: project.program,
+    materialsAdded: project.materials_added,
+    planAdded: project.plan_added,
     // The plan's own welcome message wins once there is a plan
     welcomeMessage: (planData && planData.welcomeMessage) || project.welcome_message
   });
@@ -107,4 +112,38 @@ function materialLinkProblems(materials) {
     .map(key => `The link for ${labels[key]} is not a web address. It must start with https:// and have no spaces.`);
 }
 
-export { buildExperienceFiles, materialLinkProblems };
+/**
+ * The build inputs held in a project record (clients/[slug]/project.json),
+ * ready to spread into buildExperienceFiles.
+ */
+function projectInputs(project) {
+  return {
+    clientName: project.client_name,
+    coachEmail: project.coach_email,
+    materials: project.materials,
+    welcomeMessage: project.welcome_message,
+    ownerFirstName: project.owner_first_name,
+    coachName: project.coach_name,
+    program: project.program,
+    materialsAdded: project.materials_added,
+    planAdded: project.plan_added
+  };
+}
+
+/**
+ * The date each material link was added, after a change to the links.
+ * A link that is new or different gets today's date; an unchanged link keeps
+ * its date; a removed link loses it.
+ */
+function materialsAddedAfter(previousLinks, previousAdded, newLinks, today) {
+  const before = normaliseMaterials(previousLinks);
+  const after = normaliseMaterials(newLinks);
+  const added = {};
+  for (const key of MATERIAL_KEYS) {
+    if (!after[key]) continue;
+    added[key] = after[key] === before[key] && previousAdded && previousAdded[key] ? previousAdded[key] : today;
+  }
+  return added;
+}
+
+export { buildExperienceFiles, materialLinkProblems, projectInputs, materialsAddedAfter };

@@ -4,13 +4,15 @@
 //   - add or replace the launch plan (plan.md, experience format). Adding the
 //     first plan moves the dashboard from the onboarding stage to the plan stage.
 //   - add, change or remove the links on the Guide and Materials pages.
+//   - change the details shown on the home page: the owner's first name, the
+//     coach's name, which program steps are done and the next call date.
 //
 // The dashboard is rebuilt from the template, the project record and the plan
 // each time, so nothing is edited by hand. Text edits made in Edit Mode are
 // stored separately and are not affected.
 
 import { createClient } from '@supabase/supabase-js';
-import { buildExperienceFiles, materialLinkProblems } from '../../shared/experience-project.js';
+import { buildExperienceFiles, materialLinkProblems, projectInputs, materialsAddedAfter } from '../../shared/experience-project.js';
 import { readRepoFile, commitToGitHub } from '../../shared/github-repo.js';
 
 const reply = (statusCode, payload) => ({ statusCode, body: JSON.stringify(payload) });
@@ -19,10 +21,10 @@ export async function handler(event) {
   if (event.httpMethod !== 'POST') return reply(405, { error: 'Method not allowed' });
 
   try {
-    const { slug, planMd, materials, welcomeMessage } = JSON.parse(event.body);
+    const { slug, planMd, materials, welcomeMessage, details } = JSON.parse(event.body);
 
     if (!slug || !/^[a-z0-9-]+$/.test(slug)) return reply(400, { error: 'Invalid slug format' });
-    if (!planMd && !materials && welcomeMessage === undefined) {
+    if (!planMd && !materials && !details && welcomeMessage === undefined) {
       return reply(400, { error: 'Nothing to update. Choose a plan file or change a material link.' });
     }
 
@@ -82,14 +84,22 @@ export async function handler(event) {
     // ─────────────────────────────────────────────────────────────────────────
     // Only the material links that were sent are changed. A link sent as an
     // empty string is removed (the card goes back to "Coming soon").
+    const today = new Date().toISOString().slice(0, 10);
+    const newLinks = { ...(project.materials || {}), ...(materials || {}) };
     const built = buildExperienceFiles({
+      ...projectInputs(project),
       template,
-      clientName: project.client_name,
       slug,
-      coachEmail: project.coach_email,
       planMd: planMd || existingPlanMd || null,
-      materials: { ...(project.materials || {}), ...(materials || {}) },
-      welcomeMessage: welcomeMessage !== undefined ? welcomeMessage : project.welcome_message
+      materials: newLinks,
+      materialsAdded: materialsAddedAfter(project.materials, project.materials_added, newLinks, today),
+      // A dashboard whose plan predates this record is treated as added today
+      planAdded: planMd ? today : (project.plan_added || (existingPlanMd ? today : '')),
+      welcomeMessage: welcomeMessage !== undefined ? welcomeMessage : project.welcome_message,
+      // Only the details that were sent are changed
+      ...(details && details.ownerFirstName !== undefined ? { ownerFirstName: details.ownerFirstName } : {}),
+      ...(details && details.coachName !== undefined ? { coachName: details.coachName } : {}),
+      ...(details && details.program ? { program: { ...(project.program || {}), ...details.program } } : {})
     });
     if (!built.ok) {
       return reply(built.step === 'generate' ? 500 : 400, { error: built.error, step: built.step, issues: built.issues, warnings: built.warnings });
@@ -101,6 +111,7 @@ export async function handler(event) {
     const what = [
       planMd ? (existingPlanMd ? 'launch plan replaced' : 'launch plan added') : null,
       materials ? 'materials updated' : null,
+      details ? 'details updated' : null,
       welcomeMessage !== undefined && !planMd && !materials ? 'welcome message updated' : null
     ].filter(Boolean).join(', ');
 
@@ -114,6 +125,7 @@ export async function handler(event) {
       stage: built.stage,
       planAdded: !!planMd && !existingPlanMd,
       materials: built.project.materials,
+      project: built.project,
       warnings: built.warnings,
       summary: built.summary,
       commitUrl: commitResult.commitUrl

@@ -944,7 +944,7 @@ Experience dashboards are built by code, never by hand. The same code runs on th
 |---|---|---|
 | Template | `template/experience-template.html` | Layout, styling, scripts, neutral program wording |
 | Project record | `clients/[slug]/project.json` | Operator name, coach email, stage, the five material links, optional welcome message |
-| Launch plan | `clients/[slug]/plan.md` | Everything on Strategy, the Tracks, the Launch Roadmap and the Bookability Checklist. Follows `PLAN_FORMAT_EXPERIENCE.md` |
+| Launch plan | `clients/[slug]/plan.md` | Everything on Launch Strategy, the Tracks, the Launch Roadmap and the Bookability Checklist. Follows `PLAN_FORMAT_EXPERIENCE.md` |
 
 Outputs: `clients/[slug]/index.html` and, once there is a plan, `clients/[slug]/plan.json` (for the weekly emails).
 
@@ -953,7 +953,7 @@ Outputs: `clients/[slug]/index.html` and, once there is a plan, `clients/[slug]/
 | Stage | When | Pages shown |
 |---|---|---|
 | `onboarding` | Created before the operator's onboarding call. No plan.md yet | Home (the program step by step), Guide, Materials |
-| `plan` | A plan.md has been added, after coaching call 2 | All of the above, plus Strategy, three Tracks, Launch Roadmap, Bookability Checklist |
+| `plan` | A plan.md has been added, after coaching call 2 | All of the above, plus Launch Strategy, Launch Roadmap, three Tracks, Bookability Checklist |
 
 The stage is set by whether a plan.md exists. Nothing else changes it. The template marks plan-stage elements with the class `plan-only` and onboarding-stage elements with `onboarding-only`; `data-stage` on `<body>` decides which show.
 
@@ -968,10 +968,15 @@ The stage is set by whether a plan.md exists. Nothing else changes it. The templ
      "type": "experience",
      "client_name": "Salt Spring Kayak Co",
      "client_slug": "salt-spring-kayak",
+     "owner_first_name": "",
      "coach_email": "coach@email.com",
+     "coach_name": "",
      "stage": "onboarding",
      "welcome_message": "",
-     "materials": { "guide": "", "questionnaire": "", "session1": "", "session2": "", "calculator": "" }
+     "program": { "questionnaire_done": false, "onboarding_done": false, "call1_done": false, "call2_done": false, "next_call_date": "" },
+     "materials": { "guide": "", "questionnaire": "", "session1": "", "session2": "", "calculator": "" },
+     "materials_added": {},
+     "plan_added": ""
    }
    ```
 2. If a plan was given, save it as `clients/[slug]/plan.md`.
@@ -1003,6 +1008,8 @@ Report after any of these: stage, number of weeks, checklist items and "how to" 
 - **Three phases, one per track.** The roadmap is shown as Phase 1, 2 and 3, and Track N's progress counts the checklist items in Phase N. `Phase 2 Starts: Week N` and `Phase 3 Starts: Week N` in the plan set the boundaries. Without them the weeks are shared out evenly (8 weeks is 3, 3, 2).
 - **Checkbox ids.** Roadmap items are `rwN_dM` with `data-key="week-N-check-M"`. Bookability items are `bookability_N`. Both are in `ALL_CHECK_IDS`. Guide section checkboxes `gs1` to `gs5` are not: they have their own count on the Guide page.
 - **The start date is the operator's choice.** `data-cohort-start` is always empty in the HTML. The operator picks a date on Home, which is saved by the `set_launch_start_date` database function (`supabase/migrations/015_experience_launch_start.sql`). The date stored on the account when the project was created is ignored for experience dashboards, and weekly emails are not sent until a start date is chosen.
+- **The home page is built from the record and the roadmap.** Before there is a plan, "Your next step" and the program steps come from `program` in `project.json` (the first step not marked done is the current one). With a plan, all four earlier steps count as done and "Your next step" is the current week's checklist, worked out in the browser from the start date. The countdown needs a full date at the start of the plan's `Launch Target`. "What's new" comes from `materials_added` and `plan_added`: when adding a material by hand, set its date there (`YYYY-MM-DD`).
+- **After-launch milestones** (`## After Launch` in the plan) appear at the bottom of the Bookability page with ids `afterlaunch_N`. They are not in `ALL_CHECK_IDS`.
 - **No Assessment page.** Experience dashboards never have one.
 - **Wording follows the plan's length.** The template never says "90 days" or "12 weeks". Success Metrics tables use the column headings written in the plan.
 
@@ -1012,7 +1019,9 @@ Report after any of these: stage, number of weeks, checklist items and "how to" 
 
 `npm test` and the build script check the structure. Read the result for these, which only a person can judge:
 
-- [ ] The Experience sentence on the Strategy page is the operator's own, word for word
+- [ ] The Experience sentence on the Launch Strategy page is the operator's own, word for word
+- [ ] Nothing on the Bookability Checklist can only happen after launch (a first booking belongs in `## After Launch`)
+- [ ] The Launch Target starts with a full date, so the home page countdown appears
 - [ ] The goal names the experience, the guest, the price and the first departure date
 - [ ] Each week's actions carry a `→ links to:` note wherever a matching step exists
 - [ ] Each track's work sits inside its own phase of the roadmap
