@@ -6576,7 +6576,7 @@ button,
                     <ul class="tactic-step-bullets">
                       <li data-editable-key="t1-bullet-1">Go to analytics.google.com and sign in with the same Google account you use for Google Ads and your Business Profile.</li>
                       <li data-editable-key="t1-bullet-2">Open Admin (the gear icon, bottom left) then Data display then Events. Every event with a filled star in the "Mark as key event" column is being counted as a conversion.</li>
-                      <li data-editable-key="t1-bullet-3">The only events that should be starred are purchase (a FareHarbor booking) and, after Step 4, your private event inquiry. If page_view, session_start, first_visit, scroll, click or form_start is starred, click the star to turn it off.</li>
+                      <li data-editable-key="t1-bullet-3">The only events that should be starred are purchase (a FareHarbor booking) and, after Step 4, your private event inquiry. If page_view, session_start, first_visit, scroll, click or form_start is starred, click the <strong>star</strong> to turn it off.</li>
                       <li data-editable-key="t1-bullet-4">Take a screenshot of the list before and after, and save both. If anything looks unfamiliar, send the screenshot to Junction before changing it.</li>
                       <li data-editable-key="t1-bullet-5">Turning a star off stops it counting from that day forward. It does not rewrite past reports, so treat everything before the change date as unreliable.</li>
                     </ul>
@@ -6623,7 +6623,7 @@ button,
                     <ul class="tactic-step-bullets">
                       <li data-editable-key="t1-bullet-10">Your pixel (ID 514399410953650) is on your Squarespace site, but the booking itself happens inside FareHarbor. Unless FareHarbor is also sending events to that pixel, Meta can see who visited but not who booked.</li>
                       <li data-editable-key="t1-bullet-11">FareHarbor sends Purchase events through Meta's Conversions API, which is server-to-server. To set this up, they need three things from you: your pixel ID, a Conversions API access token (generated in Events Manager then Settings then Generate access token), and your event source URL (your verified domain, e.g. shorelinetours.ca). Note: your domain must be verified in Business Settings before this step. If Step 10 has not been completed yet, do that first.</li>
-                      <li data-editable-key="t1-bullet-12">Once FareHarbor confirms the integration, open business.facebook.com then Events Manager then select the pixel then Overview. Within a day or two of bookings coming in, you should see Purchase listed as "Browser &amp; Server" or "Server" under Connection Method, with a recent "Last received" time.</li>
+                      <li data-editable-key="t1-bullet-12">Once FareHarbor confirms the integration, open business.facebook.com then Events Manager then select the <strong>pixel</strong> then <strong>Overview</strong>. Within a day or two of bookings coming in, you should see Purchase listed as "Browser &amp; Server" or "Server" under Connection Method, with a recent "Last received" time.</li>
                       <li data-editable-key="t1-bullet-13">Install the free Meta Pixel Helper extension in Chrome. On your homepage it will show PageView firing. It will not show Purchase, because FareHarbor sends that event from their server, not from the browser. To confirm Purchase is working, check Events Manager instead.</li>
                     </ul>
                     <div class="tactic-mockup">
@@ -6646,9 +6646,9 @@ button,
                     <ul class="tactic-step-bullets">
                       <li data-editable-key="t1-bullet-14">Private events come through the inquiry form on your website, not FareHarbor, so today they are invisible to both GA4 and Meta.</li>
                       <li data-editable-key="t1-bullet-15">Create a simple thank-you page in Squarespace: Pages then the "+" button then Blank page. Name it "Thank You" and set its URL to /thank-you-inquiry. Add one line ("Thanks, we will be in touch within one business day") and your phone number. Leave it in the Not Linked section so it does not appear in your menu.</li>
-                      <li data-editable-key="t1-bullet-16">Edit the inquiry form block (click the form then Edit). Under Post-Submit, choose Redirect and enter /thank-you-inquiry.</li>
+                      <li data-editable-key="t1-bullet-16">Edit the inquiry form block (click the <strong>form</strong> then <strong>Edit</strong>). Under Post-Submit, choose <strong>Redirect</strong> and enter /thank-you-inquiry.</li>
                       <li data-editable-key="t1-bullet-17">In GA4, go to Admin then Data display then Events then Create event. Name it private_inquiry, with the condition event_name equals page_view and page_location contains thank-you-inquiry. Save, then star it as a key event once it appears (usually within 24 hours of the first test).</li>
-                      <li data-editable-key="t1-bullet-18">In Meta Events Manager, go to Custom conversions then Create custom conversion. Choose your pixel, set the rule to "URL contains thank-you-inquiry", and name it "Private Inquiry."</li>
+                      <li data-editable-key="t1-bullet-18">In Meta Events Manager, go to Custom conversions then Create custom conversion. Choose your <strong>pixel</strong>, set the rule to "URL contains thank-you-inquiry", and name it "Private Inquiry."</li>
                       <li data-editable-key="t1-bullet-19">Submit a test inquiry yourself and check that both appear.</li>
                     </ul>
                     <div class="tactic-mockup">
@@ -6706,7 +6706,7 @@ button,
                     <ul class="tactic-step-bullets">
                       <li data-editable-key="t1-bullet-24">Your campaign is Performance Max, which means Google decides where to show the ads based on the conversions you tell it to chase. If it is chasing the wrong event, it will happily find cheap clicks that never book. This may be part of why your clicks cost 34 cents.</li>
                       <li data-editable-key="t1-bullet-25">In Google Ads, go to Goals then Conversions then Summary. Look at the list of conversion actions and the "Primary" or "Secondary" label beside each one.</li>
-                      <li data-editable-key="t1-bullet-26">The GA4 purchase event should be the only Primary conversion. If it is missing, click "+ Create conversion action" then Import then Google Analytics 4 properties then Web, tick purchase, and import it. Set anything else (page views, engagement, contact clicks) to Secondary.</li>
+                      <li data-editable-key="t1-bullet-26">The GA4 purchase event should be the only Primary conversion. If it is missing, click <strong>+ Create conversion action</strong> then <strong>Import</strong> then <strong>Google Analytics 4 properties</strong> then <strong>Web</strong>, tick <strong>purchase</strong>, and import it. Set anything else (page views, engagement, contact clicks) to Secondary.</li>
                       <li data-editable-key="t1-bullet-27">Once Step 4 is done, import private_inquiry the same way and set it to Secondary, so it is reported but does not pull summer budget away from public tour bookings.</li>
                     </ul>
                     <div class="tactic-mockup">
@@ -6729,7 +6729,7 @@ button,
                     <ul class="tactic-step-bullets">
                       <li data-editable-key="t1-bullet-28">Go to Campaigns then Insights and reports then Search terms (in some accounts this is under Campaigns then Audiences, keywords, and content then Search keywords). Set the date range to the last 90 days.</li>
                       <li data-editable-key="t1-bullet-29">Sort by cost. For each term, ask: is this person likely to book a boat cruise? On the call you found "Harrison Hot Springs Resort" and possibly "Harrison Hot Springs restaurants." Both describe a hungry person or a hotel guest, not a cruise booker.</li>
-                      <li data-editable-key="t1-bullet-30">Add terms like these as negative keywords. Go to Campaigns then Audiences, keywords, and content then Search keywords then Negative keywords then "+" then choose the Shoreline campaign. Start with: resort, hotel, restaurant, restaurants, menu, jobs, hiring, weather, hot springs pool, camping. Add new ones every time you check.</li>
+                      <li data-editable-key="t1-bullet-30">Add terms like these as negative keywords. Go to Campaigns then Audiences, keywords, and content then Search keywords then Negative keywords then "+" then choose the <strong>Shoreline</strong> campaign. Start with: resort, hotel, restaurant, restaurants, menu, jobs, hiring, weather, hot springs pool, camping. Add new ones every time you check.</li>
                       <li data-editable-key="t1-bullet-31">Keep terms that show booking intent, like "Harrison boat tour", "boat tours near me", "Harrison Lake cruise" and "attractions near me".</li>
                       <li data-editable-key="t1-bullet-32">Check how much of your spend comes from people searching "Shoreline Tours" by name. If it is a large share, those are guests who were already looking for you, and the 89 paid conversions are overstated. Bring the figure to the Week 12 review. Do not exclude your brand name yet: it is cheap traffic, and stopping it is a decision to make with full numbers.</li>
                       <li data-editable-key="t1-bullet-33">Repeat this check for 15 minutes every two weeks during booking season.</li>
@@ -6868,7 +6868,7 @@ button,
                       <li data-editable-key="t1-bullet-62">Retirees and intentional travellers (spring and fall): Lower Mainland and the Fraser Valley, age 55 and up. Message: waterfall and eagle cruises, booked ahead, with commentary from an onboard team. Destination: homepage for now.</li>
                       <li data-editable-key="t1-bullet-63">Washington State (summer and shoulder seasons): location Washington State only. Message: two nights in Harrison plus a cruise, with every price in Canadian dollars so a US dollar goes further. Check the exchange rate before you put a percentage in an ad, and update it when it moves. Destination: homepage for now.</li>
                       <li data-editable-key="t1-bullet-64">Private groups (bachelorette and stag parties, staff parties, anniversaries, birthdays): Lower Mainland, age 25 to 45 for bachelorette and stag groups, or no age limit for corporate and family celebrations. Message: your own 62-foot yacht for up to 35 guests, with food and drinks on board. Destination: the private events inquiry page.</li>
-                      <li data-editable-key="t1-bullet-65">On the audience screen, Meta will offer Advantage+ audience. Location is always a firm limit. Age is treated as a suggestion unless you choose "Switch to original audience options", which makes it firm. Use the suggestion setting for Families and Groups and the firm setting for Retirees, matching the 35-and-up rule you already use for river tours.</li>
+                      <li data-editable-key="t1-bullet-65">On the audience screen, Meta will offer Advantage+ audience. Location is always a firm limit. Age is treated as a suggestion unless you choose <strong>Switch to original audience options</strong>, which makes it firm. Use the suggestion setting for Families and Groups and the firm setting for Retirees, matching the 35-and-up rule you already use for river tours.</li>
                       <li data-editable-key="t1-bullet-66">Keep interests empty. Conner's experience across many accounts is that Meta finds the right people better when targeting is broad and the creative does the work.</li>
                     </ul>
                     <div class="tactic-mockup">
@@ -6937,7 +6937,7 @@ button,
                     <div class="tactic-step-title" data-editable-key="tactic-1-step-16-title">Add a lookalike campaign once you have enough bookers</div>
                     <ul class="tactic-step-bullets">
                       <li data-editable-key="t1-bullet-76">A lookalike audience is a group of people Meta judges similar to an audience you give it. Built from your bookers, it is usually the best new-customer audience you can buy.</li>
-                      <li data-editable-key="t1-bullet-77">Once "Bookers 180" has at least 100 people (Meta's minimum for a lookalike source), go to Audiences then Create audience then Lookalike audience. Choose "Bookers 180" as the source, Canada as the location, and 10 percent as the size. Repeat with United States as the location for a Washington version.</li>
+                      <li data-editable-key="t1-bullet-77">Once "Bookers 180" has at least 100 people (Meta's minimum for a lookalike source), go to Audiences then Create audience then Lookalike audience. Choose <strong>Bookers 180</strong> as the source, <strong>Canada</strong> as the location, and <strong>10 percent</strong> as the size. Repeat with United States as the location for a Washington version.</li>
                       <li data-editable-key="t1-bullet-78">In the ad set, narrow the location to the Lower Mainland (or Washington State for the US version). Meta builds lookalikes country-wide, so this step stops it reaching Quebec or Florida.</li>
                       <li data-editable-key="t1-bullet-79">Run it as its own two-week block in the rotation from Step 15, using your best-performing creative from the four audience campaigns.</li>
                     </ul>
@@ -6985,7 +6985,7 @@ button,
                     <ul class="tactic-step-bullets">
                       <li data-editable-key="t1-bullet-84">When a creator posts about you as a collab post, you can run that post as an ad from both accounts, which Meta calls a partnership ad. People engage more with a creator's face and voice than with a brand.</li>
                       <li data-editable-key="t1-bullet-85">The creator has to give permission inside Instagram. Ask them to add Shoreline Tours as a brand partner on the post and allow you to run it as an ad (Instagram places this in the post's partnership label and ad settings), or to send you a partnership ad code. Instagram moves these menus often, so the creator may need to search its help pages for "partnership ads".</li>
-                      <li data-editable-key="t1-bullet-86">In Ads Manager, when creating the ad, switch on the partnership ad option in the ad setup and select the creator's post or enter the code. Put the permission request in the release from Step 17 so it is agreed before the visit.</li>
+                      <li data-editable-key="t1-bullet-86">In Ads Manager, when creating the ad, switch on the partnership ad option in the ad setup and select the <strong>creator's post</strong> or enter the code. Put the permission request in the release from Step 17 so it is agreed before the visit.</li>
                       <li data-editable-key="t1-bullet-87">Run it first in the retargeting campaign, where warm audiences will recognize you, and then in whichever audience campaign matches the creator. A family creator goes to Families. A couple goes to Retirees.</li>
                     </ul>
                   </div>
@@ -7228,10 +7228,10 @@ button,
                     <div class="tactic-step-title" data-editable-key="tactic-2-step-2-title">Fix the homepage headings</div>
                     <ul class="tactic-step-bullets">
                       <li data-editable-key="t2-bullet-5">Headings tell Google what a page is about. Each page should have exactly one Heading 1 (the page's main topic), then Heading 2s for sections and Heading 3s for items inside a section. The assessment found four Heading 1s on your homepage: "Shoreline Tours | Harrison Hot Springs Tours", "CHOOSE YOUR ADVENTURE", "Come cruise with us", and one empty one.</li>
-                      <li data-editable-key="t2-bullet-6">In Squarespace, open Pages then Home then Edit. Click into the "CHOOSE YOUR ADVENTURE" text. A small toolbar appears. Open the dropdown that shows the text style (it will say "Heading 1") and choose "Heading 2".</li>
+                      <li data-editable-key="t2-bullet-6">In Squarespace, open Pages then Home then Edit. Click into the <strong>CHOOSE YOUR ADVENTURE</strong> text. A small toolbar appears. Open the dropdown that shows the text style (it will say "Heading 1") and choose <strong>Heading 2</strong>.</li>
                       <li data-editable-key="t2-bullet-7">Do the same for "Come cruise with us": change it to Heading 2.</li>
-                      <li data-editable-key="t2-bullet-8">Click into each of the season card titles (Lake Cruise, Waterfall Cruise, River Cruise) and set them to Heading 3.</li>
-                      <li data-editable-key="t2-bullet-9">The empty Heading 1 is usually a blank line inside a text block that still has the Heading 1 style. Click at the end of each text block near the top of the page and press Delete or Backspace to remove any empty lines. If you cannot find it, send Junction a screenshot of the page in edit mode.</li>
+                      <li data-editable-key="t2-bullet-8">Click into each of the <strong>season card titles</strong> (Lake Cruise, Waterfall Cruise, River Cruise) and set them to Heading 3.</li>
+                      <li data-editable-key="t2-bullet-9">The empty Heading 1 is usually a blank line inside a text block that still has the Heading 1 style. Click at the end of each <strong>text block</strong> near the top of the page and press Delete or Backspace to remove any empty lines. If you cannot find it, send Junction a screenshot of the page in edit mode.</li>
                       <li data-editable-key="t2-bullet-10">Keep "Shoreline Tours | Harrison Hot Springs Tours" as the only Heading 1. Save.</li>
                       <li data-editable-key="t2-bullet-11">Changing a style may change how big the text looks. If "CHOOSE YOUR ADVENTURE" looks too small as a Heading 2, adjust its size in the same toolbar rather than switching it back.</li>
                     </ul>
@@ -7255,7 +7255,7 @@ button,
                     <div class="tactic-step-title" data-editable-key="tactic-2-step-3-title">Rewrite the homepage title and description</div>
                     <ul class="tactic-step-bullets">
                       <li data-editable-key="t2-bullet-12">The title tag is the blue headline Google shows in search results. Yours is 72 characters and gets cut off. The meta description is the grey text underneath. Yours is 119 characters and does not mention the seasons.</li>
-                      <li data-editable-key="t2-bullet-13">In Squarespace, go to Pages then hover over Home then click the gear icon then SEO tab.</li>
+                      <li data-editable-key="t2-bullet-13">In Squarespace, go to Pages then hover over Home then click the <strong>gear icon</strong> then <strong>SEO</strong> tab.</li>
                       <li data-editable-key="t2-bullet-14">SEO title (59 characters): Shoreline Tours | Harrison Hot Springs Lake &amp; River Cruises</li>
                       <li data-editable-key="t2-bullet-15">SEO description (146 characters): Harrison Lake and River cruises on a 62-foot yacht. Waterfall cruises Feb to Apr, lake cruises May to Sept, eagle cruises Oct to Nov. Book online.</li>
                       <li data-editable-key="t2-bullet-16">Save. Google can take a few weeks to show the new text.</li>
@@ -7279,7 +7279,7 @@ button,
                     <div class="tactic-step-title" data-editable-key="tactic-2-step-4-title">Put the phone number where last-minute callers will see it</div>
                     <ul class="tactic-step-bullets">
                       <li data-editable-key="t2-bullet-17">Many of your guests call before booking, especially older guests and same-weekend summer bookers. The assessment found your number only in the footer.</li>
-                      <li data-editable-key="t2-bullet-18">In Squarespace, open Edit on any page, click the site header then Edit Site Header then Elements. If the header button is free, turn it on, set the label to "Call (604) 796-3100", and set the link to tel:6047963100.</li>
+                      <li data-editable-key="t2-bullet-18">In Squarespace, open Edit on any page, click the <strong>site header</strong> then <strong>Edit Site Header</strong> then <strong>Elements</strong>. If the header button is free, turn it on, set the label to "Call (604) 796-3100", and set the link to tel:6047963100.</li>
                       <li data-editable-key="t2-bullet-19">If the header button is already used for Book Now (keep it if so), add the number to an announcement bar instead. In the Squarespace menu, open Website Tools then Announcement Bar (on older layouts, Design then Announcement Bar). Use text like "Questions? Call us at (604) 796-3100" and link it to tel:6047963100.</li>
                       <li data-editable-key="t2-bullet-20">Check it on your phone. Tapping the number should open the dialler.</li>
                     </ul>
@@ -7373,7 +7373,7 @@ button,
                     <div class="tactic-step-title" data-editable-key="tactic-2-step-8-title">Write each page to the same structure</div>
                     <ul class="tactic-step-bullets">
                       <li data-editable-key="t2-bullet-33">Top of the page, visible without scrolling on a phone: a headline that matches the ad (for example, "Two-Hour Harrison Lake Cruise"), one line on where and when ("Departs the Harrison Hot Springs dock at 100 Esplanade Avenue, May to September"), the price, and a Book Now button.</li>
-                      <li data-editable-key="t2-bullet-34">The Book Now button must open the booking calendar for that specific cruise, not the general one. In edit mode, click the Book button on your current tour page to see which FareHarbor link it uses, or ask FareHarbor Support for the item link for each cruise.</li>
+                      <li data-editable-key="t2-bullet-34">The Book Now button must open the booking calendar for that specific cruise, not the general one. In edit mode, click the <strong>Book</strong> button on your current tour page to see which FareHarbor link it uses, or ask FareHarbor Support for the item link for each cruise.</li>
                       <li data-editable-key="t2-bullet-35">Then, in this order: what you will see (the falls, the eagles, the river mouth), what is on board (indoor and outdoor decks, food and drinks), who it suits (families, grandparents, anyone who does not want a strenuous outing), accessibility details, what to bring, the weather and cancellation policy, three recent Google reviews that mention this cruise, a short FAQ, and the phone number.</li>
                       <li data-editable-key="t2-bullet-36">The FAQ answers the questions you get on the phone. Start with these: Do I need to be staying at the resort? Is it suitable for young children and grandparents? What happens if the weather is bad? Where do I park? Are prices in Canadian dollars? Use ChatGPT to tidy your answers, but write the facts yourself.</li>
                       <li data-editable-key="t2-bullet-37">End with a short "Other seasons" strip linking to the other cruise pages.</li>
@@ -7413,7 +7413,7 @@ button,
                       <li data-editable-key="t2-bullet-39">One Heading 1 per page, matching what people search: "Harrison Lake Cruise", "Harrison Lake Waterfall Cruise", "Harrison River Eagle Cruise", "Private Boat Charters on Harrison Lake". Sections are Heading 2s.</li>
                       <li data-editable-key="t2-bullet-40">In the gear icon then SEO tab, write a title under 60 characters and a description of 140 to 155 characters for each page. For example: Harrison Lake Cruise | 2-Hour Boat Tour | Shoreline Tours.</li>
                       <li data-editable-key="t2-bullet-41">In the gear icon then General, check the URL slug is short and plain, such as /lake-cruise. If you change the slug of an existing page, add a redirect from the old address (Settings then Developer tools then URL mappings) so old links and search results still work.</li>
-                      <li data-editable-key="t2-bullet-42">Add alt text to every image: click the image then Edit then find the alt text field, and describe what is in the photo ("Guests on the upper deck passing Rainbow Falls on Harrison Lake").</li>
+                      <li data-editable-key="t2-bullet-42">Add alt text to every image: click the <strong>image</strong> then <strong>Edit</strong> then find the alt text field, and describe what is in the photo ("Guests on the upper deck passing Rainbow Falls on Harrison Lake").</li>
                     </ul>
                     <div class="tactic-mockup">
                       <div class="tactic-mockup-chrome">
@@ -7851,8 +7851,8 @@ button,
                   <div class="tactic-step-content">
                     <div class="tactic-step-title" data-editable-key="tactic-3-step-7-title">Schedule a month at a time in Meta Business Suite</div>
                     <ul class="tactic-step-bullets">
-                      <li data-editable-key="t3-bullet-26">Go to business.facebook.com then Planner (or Content then Planner). Click Create post or Create reel, and choose both Facebook and Instagram so one upload covers both accounts.</li>
-                      <li data-editable-key="t3-bullet-27">Add the clip, paste the caption, then click the arrow next to Publish then Schedule, and pick the date and time. Evenings between 6 and 8 p.m. are a reasonable start. Check your own Insights after a month and adjust.</li>
+                      <li data-editable-key="t3-bullet-26">Go to business.facebook.com then Planner (or Content then Planner). Click <strong>Create post</strong> or <strong>Create reel</strong>, and choose both <strong>Facebook</strong> and <strong>Instagram</strong> so one upload covers both accounts.</li>
+                      <li data-editable-key="t3-bullet-27">Add the clip, paste the caption, then click the <strong>arrow</strong> next to Publish then <strong>Schedule</strong>, and pick the date and time. Evenings between 6 and 8 p.m. are a reasonable start. Check your own Insights after a month and adjust.</li>
                       <li data-editable-key="t3-bullet-28">Block out one two-hour session at the start of each month to schedule all twelve or thirteen posts. In summer, do it before the season starts and schedule six weeks at once.</li>
                       <li data-editable-key="t3-bullet-29">Leave one slot a week empty for something that happens that week, such as a sighting, a great sunset or a creator visit.</li>
                     </ul>
@@ -7909,7 +7909,7 @@ button,
                     <div class="tactic-step-title" data-editable-key="tactic-3-step-10-title">Move the winners into the ad account</div>
                     <ul class="tactic-step-bullets">
                       <li data-editable-key="t3-bullet-36">Each fortnight, add the best one or two winners as new ads in the campaign that matches them: a family post to Families, an eagle POV to Retirees, a group toast to Groups.</li>
-                      <li data-editable-key="t3-bullet-37">In Ads Manager, create the ad and choose "Use existing post" so the likes and comments come with it.</li>
+                      <li data-editable-key="t3-bullet-37">In Ads Manager, create the ad and choose <strong>Use existing post</strong> so the likes and comments come with it.</li>
                       <li data-editable-key="t3-bullet-38">Replace the weakest ad in that campaign at the same time (Tactic 1, Step 14), so each campaign keeps six to ten ads and always has fresh ones.</li>
                       <li data-editable-key="t3-bullet-39">A post that did poorly organically is not banned from ads, but start with the proven ones.</li>
                     </ul>
