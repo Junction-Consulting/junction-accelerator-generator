@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<!-- v3 - Redesigned with Assessments section and linked workflow -->
+<!-- v4 - One searchable client list with section tabs -->
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Client Dashboard — eLearningU</title>
+  <title>My Clients | eLearningU</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;600;700;800&family=Open+Sans:wght@400;500;600&display=swap" rel="stylesheet">
@@ -17,15 +17,18 @@
       --navy-mid:  #1d2260;
       --mint:      #aadab6;
       --mint-dark: #7fbf8e;
+      --mint-deep: #2f7d47;
       --cream:     #fcf5ec;
       --cream-mid: #f5ede0;
       --muted:     #6b6b8a;
       --text:      #1a1a2e;
       --border:    rgba(17,21,75,0.1);
+      --border-strong: rgba(17,21,75,0.22);
       --success:   #22c55e;
       --warning:   #f59e0b;
       --error:     #ef4444;
       --blue:      #3b82f6;
+      --topbar-h:  64px;
     }
 
     html, body {
@@ -33,6 +36,18 @@
       font-family: 'Open Sans', sans-serif;
       background: var(--cream);
       color: var(--text);
+    }
+
+    body { font-size: 14px; line-height: 1.45; }
+
+    .sr-only {
+      position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+      overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+    }
+
+    :focus-visible {
+      outline: 2px solid var(--navy);
+      outline-offset: 2px;
     }
 
     /* ── Top bar ────────────────────────────────────────── */
@@ -90,110 +105,80 @@
     .topbar__link svg {
       opacity: 0.8;
     }
-
     /* ── Main content ───────────────────────────────────── */
     .main {
-      max-width: 1000px;
+      max-width: 1120px;
       margin: 0 auto;
-      padding: 56px 40px 80px;
+      padding: 40px 40px 80px;
     }
 
     /* ── Page header ────────────────────────────────────── */
     .page-header {
-      margin-bottom: 48px;
-      animation: fadeUp 0.5s ease both;
-    }
-
-    .page-header__eyebrow {
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--mint-dark);
-      margin-bottom: 10px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 24px;
+      margin-bottom: 20px;
     }
 
     .page-header__title {
       font-family: 'Raleway', sans-serif;
-      font-weight: 700;
+      font-weight: 800;
       font-size: 32px;
+      line-height: 1.15;
       color: var(--navy);
-      margin-bottom: 8px;
+      letter-spacing: -0.01em;
     }
 
     .page-header__sub {
+      margin-top: 6px;
       font-size: 14px;
       color: var(--muted);
     }
 
-    .page-header__row {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 20px;
-    }
-
-    /* ── Section headers ────────────────────────────────── */
-    .section-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 20px;
-      gap: 16px;
-    }
-
-    .section-header__title {
-      font-family: 'Raleway', sans-serif;
-      font-weight: 700;
-      font-size: 20px;
-      color: var(--navy);
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .section-header__count {
-      font-size: 12px;
-      font-weight: 600;
-      background: var(--cream-mid);
-      color: var(--muted);
-      padding: 4px 10px;
-      border-radius: 12px;
-    }
-
-    .content-section {
-      margin-bottom: 48px;
-    }
-
-    /* ── Buttons ────────────────────────────────────────── */
-    .btn-create {
+    /* ── Buttons ─────────────────────────────────────────── */
+    .btn {
       display: inline-flex;
       align-items: center;
-      gap: 8px;
-      height: 40px;
-      padding: 0 18px;
-      background: var(--navy);
-      color: var(--mint);
-      border: none;
-      border-radius: 10px;
+      justify-content: center;
+      gap: 7px;
+      height: 36px;
+      padding: 0 13px;
+      background: #fff;
+      color: var(--navy);
+      border: 1.5px solid var(--border-strong);
+      border-radius: 8px;
       font-family: 'Raleway', sans-serif;
       font-size: 13px;
       font-weight: 700;
       text-decoration: none;
       cursor: pointer;
-      transition: background 0.2s, transform 0.15s;
       white-space: nowrap;
+      transition: background 0.15s, border-color 0.15s, color 0.15s;
     }
 
-    .btn-create:hover {
-      background: var(--navy-mid);
-      transform: translateY(-1px);
-    }
+    .btn:hover { border-color: var(--navy); background: rgba(17,21,75,0.04); }
+    .btn svg { width: 15px; height: 15px; flex-shrink: 0; }
 
-    .btn-create svg {
-      width: 16px;
-      height: 16px;
+    .btn--accent {
+      background: var(--navy);
+      border-color: var(--navy);
+      color: #fff;
     }
+    .btn--accent:hover { background: var(--navy-mid); border-color: var(--navy-mid); }
+
+    .btn--icon { width: 36px; padding: 0; }
+
+    .btn--new {
+      height: 42px;
+      padding: 0 18px;
+      border-radius: 10px;
+      background: var(--navy);
+      border-color: var(--navy);
+      color: var(--mint);
+      font-size: 14px;
+    }
+    .btn--new:hover { background: var(--navy-mid); border-color: var(--navy-mid); }
 
     .btn-secondary {
       display: inline-flex;
@@ -247,356 +232,450 @@
       background: #16a34a;
       border-color: #16a34a;
     }
-
-    /* ── Card gallery ────────────────────────────────────── */
-    .card-gallery {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 20px;
+    /* ── Sticky toolbar: search and section tabs ─────────── */
+    .toolbar {
+      position: sticky;
+      top: var(--topbar-h);
+      z-index: 50;
+      margin: 0 -12px;
+      padding: 12px 12px 10px;
+      background: var(--cream);
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.2s, box-shadow 0.2s;
     }
 
-    /* ── Assessment cards ────────────────────────────────── */
-    .assessment-card {
+    .toolbar--stuck {
+      border-bottom-color: var(--border);
+      box-shadow: 0 8px 16px -14px rgba(17,21,75,0.35);
+    }
+
+    .search {
+      position: relative;
+    }
+
+    .search__input {
+      width: 100%;
+      height: 48px;
+      padding: 0 84px 0 46px;
+      border: 1.5px solid var(--border-strong);
+      border-radius: 12px;
+      font-family: 'Open Sans', sans-serif;
+      font-size: 15px;
+      color: var(--text);
       background: #fff;
-      border: 1.5px solid var(--border);
-      border-radius: 14px;
-      padding: 24px;
-      transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s;
-      animation: fadeUp 0.5s ease both;
+      transition: border-color 0.15s, box-shadow 0.15s;
     }
 
-    .assessment-card:hover {
+    .search__input::placeholder { color: var(--muted); }
+
+    .search__input:focus {
+      outline: none;
       border-color: var(--navy);
-      box-shadow: 0 6px 24px rgba(17,21,75,0.1);
-      transform: translateY(-2px);
+      box-shadow: 0 0 0 3px rgba(17,21,75,0.12);
     }
 
-    .assessment-card__header {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      margin-bottom: 12px;
-    }
-
-    .assessment-card__name {
-      font-family: 'Raleway', sans-serif;
-      font-weight: 700;
-      font-size: 17px;
-      color: var(--navy);
-      margin-bottom: 4px;
-    }
-
-    .assessment-card__url {
-      font-size: 12px;
+    .search__icon {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 18px;
+      height: 18px;
       color: var(--muted);
-      word-break: break-all;
+      pointer-events: none;
     }
 
-    .assessment-card__grade {
-      width: 44px;
-      height: 44px;
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: 'Raleway', sans-serif;
-      font-weight: 800;
-      font-size: 18px;
-      color: #fff;
-      flex-shrink: 0;
-    }
-
-    .grade-a { background: linear-gradient(135deg, #22c55e, #16a34a); }
-    .grade-b { background: linear-gradient(135deg, #3b82f6, #2563eb); }
-    .grade-c { background: linear-gradient(135deg, #f59e0b, #d97706); }
-    .grade-d { background: linear-gradient(135deg, #f97316, #ea580c); }
-    .grade-f { background: linear-gradient(135deg, #ef4444, #dc2626); }
-    .grade-pending { background: var(--cream-mid); color: var(--muted); font-size: 12px; }
-
-    .assessment-card__meta {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      margin-bottom: 16px;
-      font-size: 12px;
-      color: var(--muted);
-    }
-
-    .assessment-card__meta-item {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-    }
-
-    .assessment-card__meta-item svg {
-      width: 14px;
-      height: 14px;
-      opacity: 0.6;
-    }
-
-    .status-badge {
+    .search__key {
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      min-width: 24px;
+      height: 24px;
+      padding: 0 7px;
       display: inline-flex;
       align-items: center;
-      gap: 5px;
-      padding: 4px 10px;
-      border-radius: 12px;
-      font-size: 11px;
+      justify-content: center;
+      border: 1px solid var(--border-strong);
+      border-radius: 6px;
+      font-size: 12px;
       font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
+      color: var(--muted);
+      background: var(--cream);
+      pointer-events: none;
     }
 
-    .status-completed { background: rgba(34,197,94,0.12); color: #16a34a; }
-    .status-processing { background: rgba(59,130,246,0.12); color: #2563eb; }
-    .status-pending { background: rgba(245,158,11,0.12); color: #d97706; }
-    .status-failed { background: rgba(239,68,68,0.12); color: #dc2626; }
-    .status-elevated { background: rgba(107,91,149,0.12); color: #6b5b95; }
+    .search__clear {
+      position: absolute;
+      right: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 32px;
+      height: 32px;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      border: none;
+      border-radius: 8px;
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+    }
 
-    .status-badge__dot {
+    .search__clear:hover { background: rgba(17,21,75,0.06); color: var(--navy); }
+    .search__clear svg { width: 16px; height: 16px; }
+    .search--has-value .search__clear { display: inline-flex; }
+    .search--has-value .search__key,
+    .search__input:focus ~ .search__key { display: none; }
+
+    .tabs {
+      display: flex;
+      gap: 6px;
+      margin-top: 10px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+    }
+    .tabs::-webkit-scrollbar { display: none; }
+
+    .tab {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      height: 38px;
+      padding: 0 14px;
+      border: 1.5px solid transparent;
+      border-radius: 999px;
+      background: transparent;
+      font-family: 'Raleway', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--muted);
+      cursor: pointer;
+      white-space: nowrap;
+      flex-shrink: 0;
+      transition: background 0.15s, color 0.15s;
+    }
+
+    .tab:hover { background: rgba(17,21,75,0.05); color: var(--navy); }
+
+    .tab[aria-pressed="true"] {
+      background: var(--navy);
+      color: #fff;
+    }
+
+    .tab__count {
+      min-width: 22px;
+      padding: 1px 7px;
+      border-radius: 999px;
+      background: rgba(17,21,75,0.08);
+      font-family: 'Open Sans', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      text-align: center;
+      color: inherit;
+    }
+
+    .tab[aria-pressed="true"] .tab__count { background: rgba(255,255,255,0.18); }
+
+    /* ── Controls row: result count, coach filter, sort ──── */
+    .controls {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin: 14px 0 18px;
+      min-height: 36px;
+    }
+
+    .controls__summary {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .controls__summary strong { color: var(--navy); font-weight: 600; }
+
+    .controls__filters {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .select {
+      height: 36px;
+      max-width: 220px;
+      padding: 0 30px 0 12px;
+      border: 1.5px solid var(--border-strong);
+      border-radius: 8px;
+      background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%236b6b8a'%3E%3Cpath d='M5.3 7.3a1 1 0 011.4 0L10 10.6l3.3-3.3a1 1 0 111.4 1.4l-4 4a1 1 0 01-1.4 0l-4-4a1 1 0 010-1.4z'/%3E%3C/svg%3E") no-repeat right 8px center / 16px;
+      -webkit-appearance: none;
+      appearance: none;
+      font-family: 'Open Sans', sans-serif;
+      font-size: 13px;
+      color: var(--text);
+      cursor: pointer;
+      text-overflow: ellipsis;
+    }
+
+    .select:hover { border-color: var(--navy); }
+
+    .link-btn {
+      border: none;
+      background: none;
+      padding: 0;
+      font: inherit;
+      font-weight: 600;
+      color: var(--navy);
+      text-decoration: underline;
+      text-underline-offset: 2px;
+      cursor: pointer;
+    }
+
+    /* ── Sections ────────────────────────────────────────── */
+    .section {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      margin-bottom: 20px;
+      overflow: hidden;
+    }
+
+    .section__header {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      flex-wrap: wrap;
+      padding: 16px 20px 14px;
+      border-bottom: 1px solid var(--border);
+      background: linear-gradient(180deg, #fff 0%, rgba(252,245,236,0.55) 100%);
+    }
+
+    .section__title {
+      font-family: 'Raleway', sans-serif;
+      font-weight: 700;
+      font-size: 16px;
+      color: var(--navy);
+    }
+
+    .section__count {
+      padding: 1px 8px;
+      border-radius: 999px;
+      background: var(--mint);
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--navy);
+    }
+
+    .section__desc {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    /* ── Rows ────────────────────────────────────────────── */
+    .rows { list-style: none; }
+
+    .row {
+      display: grid;
+      grid-template-columns: minmax(0, 2fr) minmax(0, 1.4fr) minmax(0, 1.1fr) 312px;
+      gap: 16px;
+      align-items: center;
+      padding: 12px 20px;
+      min-height: 64px;
+      border-top: 1px solid var(--border);
+      transition: background 0.12s;
+    }
+
+    .rows .row:first-child { border-top: none; }
+    .row:hover { background: rgba(252,245,236,0.6); }
+
+    .row__name {
+      display: block;
+      font-family: 'Raleway', sans-serif;
+      font-weight: 700;
+      font-size: 15px;
+      color: var(--navy);
+      text-decoration: none;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    a.row__name:hover { text-decoration: underline; text-underline-offset: 3px; }
+
+    .row__sub {
+      margin-top: 2px;
+      font-size: 12.5px;
+      color: var(--muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .row__status {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      min-width: 0;
+      font-size: 13px;
+    }
+
+    .row__meta {
+      font-size: 13px;
+      color: var(--muted);
+      min-width: 0;
+    }
+
+    .row__actions {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
+    .row__wait {
+      font-size: 13px;
+      color: var(--muted);
+      padding: 0 4px;
+    }
+
+    .progress { width: 100%; max-width: 220px; }
+
+    .progress__label {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--text);
+    }
+
+    .progress__label span:last-child { color: var(--muted); font-variant-numeric: tabular-nums; }
+
+    .progress__bar {
+      height: 5px;
+      margin-top: 5px;
+      border-radius: 3px;
+      background: var(--cream-mid);
+      overflow: hidden;
+    }
+
+    .progress__fill {
+      height: 100%;
+      border-radius: 3px;
+      background: var(--mint-dark);
+      transition: width 0.4s ease;
+    }
+
+    .grade {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 30px;
+      height: 26px;
+      padding: 0 6px;
+      border-radius: 7px;
+      font-family: 'Raleway', sans-serif;
+      font-weight: 800;
+      font-size: 13px;
+      color: #fff;
+    }
+
+    .grade-a { background: var(--success); }
+    .grade-b { background: #4a9d5b; }
+    .grade-c { background: #c98206; }
+    .grade-d { background: #e0701a; }
+    .grade-f { background: var(--error); }
+    .grade-pending { background: var(--cream-mid); color: var(--muted); }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      height: 24px;
+      padding: 0 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      white-space: nowrap;
+      background: rgba(17,21,75,0.07);
+      color: var(--navy);
+    }
+
+    .chip::before {
+      content: '';
       width: 6px;
       height: 6px;
       border-radius: 50%;
       background: currentColor;
     }
 
-    .status-processing .status-badge__dot {
-      animation: pulse 1.5s ease-in-out infinite;
-    }
+    .chip--completed  { background: rgba(34,197,94,0.14);  color: #15803d; }
+    .chip--processing { background: rgba(59,130,246,0.13); color: #1d4ed8; }
+    .chip--pending    { background: rgba(245,158,11,0.16); color: #b45309; }
+    .chip--failed     { background: rgba(239,68,68,0.13);  color: #b91c1c; }
+    .chip--onboarding { background: rgba(245,158,11,0.16); color: #b45309; }
+    .chip--plan       { background: rgba(34,197,94,0.14);  color: #15803d; }
+    .chip--sandbox    { background: rgba(155,89,182,0.14); color: #7d3c98; }
+
+    .chip--processing::before { animation: pulse 1.5s ease-in-out infinite; }
 
     @keyframes pulse {
       0%, 100% { opacity: 1; }
-      50% { opacity: 0.4; }
+      50% { opacity: 0.35; }
     }
 
-    .assessment-card__actions {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding-top: 16px;
-      border-top: 1px solid var(--border);
+    /* ── Empty, error and loading states ─────────────────── */
+    .state {
+      padding: 36px 24px;
+      text-align: center;
     }
 
-    .assessment-card__actions .btn-secondary {
-      flex: 1;
-      justify-content: center;
-    }
-
-    .assessment-card--has-plan {
-      border-left: 4px solid var(--mint-dark);
-    }
-
-    .assessment-card:has(.actions-menu--open) {
-      z-index: 100;
-      position: relative;
-    }
-
-    .assessment-card__plan-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      padding: 4px 10px;
-      border-radius: 12px;
-      font-size: 11px;
-      font-weight: 600;
-      background: rgba(170,218,182,0.2);
-      color: var(--mint-dark);
-    }
-
-    /* ── Project cards (existing accelerator projects) ──── */
-    .project-card {
-      display: block;
-      background: #fff;
-      border: 1.5px solid var(--border);
-      border-radius: 14px;
-      padding: 24px;
-      text-decoration: none;
-      color: inherit;
-      transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s;
-      animation: fadeUp 0.5s ease both;
-    }
-
-    .project-card:hover {
-      border-color: var(--navy);
-      box-shadow: 0 6px 24px rgba(17,21,75,0.1);
-      transform: translateY(-2px);
-    }
-
-    .project-card__name {
+    .state__title {
       font-family: 'Raleway', sans-serif;
       font-weight: 700;
-      font-size: 17px;
-      color: var(--navy);
-      margin-bottom: 6px;
-    }
-
-    .project-card__week {
-      font-size: 13px;
-      color: var(--muted);
-      margin-bottom: 16px;
-    }
-
-    .project-card__progress {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .project-card__bar {
-      flex: 1;
-      height: 8px;
-      background: var(--cream-mid);
-      border-radius: 4px;
-      overflow: hidden;
-    }
-
-    .project-card__bar-fill {
-      height: 100%;
-      background: linear-gradient(90deg, var(--mint-dark), var(--mint));
-      border-radius: 4px;
-      transition: width 0.4s ease;
-    }
-
-    .project-card__percent {
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--navy);
-      min-width: 40px;
-      text-align: right;
-    }
-
-    .project-card__header {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 12px;
-      margin-bottom: 6px;
-    }
-
-    .project-card__edit-btn {
-      flex-shrink: 0;
-      width: 32px;
-      height: 32px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: transparent;
-      border: 1.5px solid var(--border);
-      border-radius: 8px;
-      color: var(--muted);
-      cursor: pointer;
-      transition: background 0.2s, border-color 0.2s, color 0.2s;
-    }
-
-    .project-card__edit-btn:hover {
-      background: rgba(17,21,75,0.04);
-      border-color: var(--navy);
-      color: var(--navy);
-    }
-
-    .project-card__edit-btn svg {
-      width: 16px;
-      height: 16px;
-    }
-
-    .project-card__actions {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      flex-shrink: 0;
-    }
-
-    .project-card__edit-btn--plan {
-      background: linear-gradient(135deg, #8b5cf6 0%, #d946ef 100%);
-      border-color: transparent;
-      color: white;
-      text-decoration: none;
-    }
-
-    .project-card__edit-btn--plan:hover {
-      background: linear-gradient(135deg, #7c3aed 0%, #c026d3 100%);
-      border-color: transparent;
-      color: white;
-      transform: translateY(-1px);
-      box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
-    }
-
-    .project-card__info {
-      flex: 1;
-      min-width: 0;
-    }
-
-    .project-card__meta {
-      font-size: 11px;
-      color: var(--muted);
-      margin-top: 2px;
-    }
-
-    /* ── Empty state ────────────────────────────────────── */
-    .empty-state {
-      text-align: center;
-      padding: 48px 20px;
-      color: var(--muted);
-      background: rgba(255,255,255,0.5);
-      border: 1.5px dashed var(--border);
-      border-radius: 14px;
-    }
-
-    .empty-state__icon {
-      width: 48px;
-      height: 48px;
-      margin: 0 auto 16px;
-      color: var(--border);
-    }
-
-    .empty-state__title {
-      font-family: 'Raleway', sans-serif;
-      font-weight: 600;
       font-size: 16px;
       color: var(--navy);
       margin-bottom: 6px;
     }
 
-    .empty-state__text {
-      font-size: 13px;
-      margin-bottom: 20px;
+    .state__text {
+      max-width: 460px;
+      margin: 0 auto;
+      font-size: 14px;
+      color: var(--muted);
     }
 
-    /* ── Loading skeleton ───────────────────────────────── */
-    .skeleton-card {
+    .state .btn { margin-top: 16px; }
+
+    .state--panel {
       background: #fff;
-      border: 1.5px solid var(--border);
+      border: 1px dashed var(--border-strong);
       border-radius: 14px;
-      padding: 24px;
+      padding: 48px 24px;
     }
+
+    .skeleton-row {
+      display: grid;
+      grid-template-columns: 2.2fr 1.5fr 1.2fr 1fr;
+      gap: 16px;
+      align-items: center;
+      padding: 20px;
+      border-top: 1px solid var(--border);
+    }
+
+    .skeleton-row:first-child { border-top: none; }
 
     .skeleton-line {
-      background: linear-gradient(90deg, var(--cream-mid) 25%, var(--cream) 50%, var(--cream-mid) 75%);
-      background-size: 200% 100%;
-      animation: shimmer 1.5s infinite;
-      border-radius: 4px;
-    }
-
-    .skeleton-line--title {
-      height: 20px;
-      width: 70%;
-      margin-bottom: 8px;
-    }
-
-    .skeleton-line--url {
       height: 12px;
-      width: 50%;
-      margin-bottom: 16px;
-    }
-
-    .skeleton-line--meta {
-      height: 24px;
-      width: 100%;
-      margin-bottom: 16px;
-    }
-
-    .skeleton-line--actions {
-      height: 36px;
-      width: 100%;
+      border-radius: 6px;
+      background: linear-gradient(90deg, var(--cream-mid) 25%, #fff 50%, var(--cream-mid) 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.4s infinite;
     }
 
     @keyframes shimmer {
@@ -604,103 +683,101 @@
       100% { background-position: -200% 0; }
     }
 
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(12px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    /* ── Actions menu (dropdown) ────────────────────────── */
-    .actions-menu {
-      position: relative;
-    }
-
-    .actions-menu__trigger {
-      width: 32px;
-      height: 32px;
-      border: 1.5px solid var(--border);
-      border-radius: 6px;
-      background: transparent;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--muted);
-      transition: background 0.15s, border-color 0.15s;
-    }
-
-    .actions-menu__trigger:hover {
-      background: rgba(17,21,75,0.04);
-      border-color: var(--navy);
-      color: var(--navy);
-    }
-
-    .actions-menu__trigger svg {
-      width: 16px;
-      height: 16px;
-    }
-
-    .actions-menu__dropdown {
+    /* ── Menu (row actions and New) ──────────────────────── */
+    .menu {
       position: absolute;
-      top: 100%;
-      right: 0;
-      margin-top: 6px;
+      z-index: 400;
+      min-width: 220px;
+      padding: 6px;
       background: #fff;
-      border: 1.5px solid var(--border);
-      border-radius: 10px;
-      box-shadow: 0 8px 24px rgba(17,21,75,0.15);
-      min-width: 160px;
-      z-index: 200;
-      opacity: 0;
-      visibility: hidden;
-      transform: translateY(-8px);
-      transition: opacity 0.15s, transform 0.15s, visibility 0.15s;
+      border: 1px solid var(--border-strong);
+      border-radius: 12px;
+      box-shadow: 0 12px 32px rgba(17,21,75,0.18);
     }
 
-    .actions-menu--open .actions-menu__dropdown {
-      opacity: 1;
-      visibility: visible;
-      transform: translateY(0);
-    }
+    .menu[hidden] { display: none; }
 
-    .actions-menu__item {
+    .menu__title { display: none; }
+
+    .menu__item {
       display: flex;
       align-items: center;
       gap: 10px;
       width: 100%;
-      padding: 10px 14px;
+      min-height: 40px;
+      padding: 8px 12px;
       border: none;
-      background: transparent;
+      border-radius: 8px;
+      background: none;
       font-family: 'Open Sans', sans-serif;
-      font-size: 13px;
+      font-size: 14px;
       color: var(--text);
-      cursor: pointer;
       text-align: left;
-      transition: background 0.15s;
+      text-decoration: none;
+      cursor: pointer;
     }
 
-    .actions-menu__item:first-child {
-      border-radius: 8px 8px 0 0;
+    .menu__item:hover, .menu__item:focus-visible { background: var(--cream); outline: none; }
+    .menu__item svg { width: 16px; height: 16px; color: var(--muted); flex-shrink: 0; }
+    .menu__item--danger, .menu__item--danger svg { color: #b91c1c; }
+    .menu__item--danger:hover, .menu__item--danger:focus-visible { background: rgba(239,68,68,0.08); }
+
+    .menu-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 390;
+      background: rgba(17,21,75,0.4);
     }
 
-    .actions-menu__item:last-child {
-      border-radius: 0 0 8px 8px;
+    /* ── Toasts ──────────────────────────────────────────── */
+    .toasts {
+      position: fixed;
+      right: 24px;
+      bottom: 24px;
+      z-index: 1200;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      max-width: min(420px, calc(100vw - 32px));
     }
 
-    .actions-menu__item:hover {
-      background: var(--cream);
+    .toast {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 14px 14px 14px 16px;
+      border-radius: 12px;
+      background: var(--navy);
+      color: #fff;
+      font-size: 14px;
+      box-shadow: 0 12px 32px rgba(17,21,75,0.28);
+      animation: toastIn 0.2s ease both;
     }
 
-    .actions-menu__item--danger {
-      color: var(--error);
+    .toast--success { border-left: 4px solid var(--mint); }
+    .toast--warning { border-left: 4px solid var(--warning); }
+    .toast--error   { border-left: 4px solid var(--error); }
+
+    .toast__text { flex: 1; }
+
+    .toast__close {
+      border: none;
+      background: none;
+      color: rgba(255,255,255,0.7);
+      cursor: pointer;
+      padding: 2px;
+      border-radius: 4px;
+    }
+    .toast__close:hover { color: #fff; }
+    .toast__close svg { width: 16px; height: 16px; display: block; }
+
+    @keyframes toastIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
     }
 
-    .actions-menu__item svg {
-      width: 16px;
-      height: 16px;
-      opacity: 0.7;
-    }
-
-    /* ── Confirm modal ────────────────────────────────────── */
+    /* ── Modals ──────────────────────────────────────────── */
     .modal-overlay {
       position: fixed;
       inset: 0;
@@ -823,459 +900,19 @@
     .modal__actions--edit {
       margin-top: 8px;
     }
-
-    /* ── Footer ─────────────────────────────────────────── */
-    .footer {
-      text-align: center;
-      padding: 24px;
-      font-size: 12px;
-      color: var(--muted);
-      letter-spacing: 0.02em;
-    }
-
-    /* ── Search input ────────────────────────────────────── */
-    .search-container {
-      position: relative;
-      width: 100%;
-      max-width: 400px;
-    }
-
-    .search-input {
-      width: 100%;
-      height: 44px;
-      padding: 0 16px 0 44px;
-      background: #fff;
-      border: 1.5px solid var(--border);
+    .modal__error {
+      margin-top: 16px;
+      padding: 12px 14px;
       border-radius: 10px;
-      font-family: 'Open Sans', sans-serif;
-      font-size: 14px;
-      color: var(--text);
-      transition: border-color 0.2s, box-shadow 0.2s;
+      background: rgba(239,68,68,0.1);
+      color: #b91c1c;
+      font-size: 13px;
+      line-height: 1.5;
     }
 
-    .search-input:focus {
-      outline: none;
-      border-color: var(--navy);
-      box-shadow: 0 0 0 3px rgba(17,21,75,0.08);
-    }
+    .modal__error[hidden] { display: none; }
+    .modal__error + .modal__actions { margin-top: 16px; }
 
-    .search-input::placeholder {
-      color: var(--muted);
-    }
-
-    .search-icon {
-      position: absolute;
-      left: 14px;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 18px;
-      height: 18px;
-      color: var(--muted);
-      pointer-events: none;
-    }
-
-    .search-clear {
-      position: absolute;
-      right: 10px;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 24px;
-      height: 24px;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      background: var(--cream-mid);
-      border: none;
-      border-radius: 50%;
-      cursor: pointer;
-      color: var(--muted);
-      transition: background 0.2s, color 0.2s;
-    }
-
-    .search-clear:hover {
-      background: var(--navy);
-      color: #fff;
-    }
-
-    .search-clear.visible {
-      display: flex;
-    }
-
-    .search-clear svg {
-      width: 12px;
-      height: 12px;
-    }
-
-    .no-results {
-      text-align: center;
-      padding: 32px 20px;
-      color: var(--muted);
-      font-size: 14px;
-    }
-
-    .no-results strong {
-      color: var(--navy);
-    }
-
-    .card-hidden {
-      display: none !important;
-    }
-
-    /* ── Responsive ─────────────────────────────────────── */
-    @media (max-width: 600px) {
-      .topbar {
-        padding: 0 20px;
-      }
-
-      .main {
-        padding: 32px 20px 60px;
-      }
-
-      .card-gallery {
-        grid-template-columns: 1fr;
-      }
-
-      .topbar__email {
-        display: none;
-      }
-
-      .page-header__row {
-        flex-direction: column;
-        gap: 16px;
-      }
-
-      .search-container {
-        max-width: none;
-      }
-
-      .section-header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 12px;
-      }
-    }
-  </style>
-</head>
-<body data-page="my-clients">
-
-  <!-- ══ TOP BAR ═══════════════════════════════════════════ -->
-  <header class="topbar">
-    <div class="topbar__logo">eLearningU</div>
-    <div class="topbar__right">
-      <a href="/admin/analytics/" class="topbar__link" id="analyticsLink" style="display:none;">
-        <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16">
-          <path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zm6-4a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zm6-3a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"/>
-        </svg>
-        Analytics
-      </a>
-      <span class="topbar__email" id="topbarEmail"></span>
-      <div id="userMenuContainer"></div>
-    </div>
-  </header>
-
-  <!-- ══ MAIN ══════════════════════════════════════════════ -->
-  <main class="main">
-
-    <div class="page-header">
-      <div class="page-header__row">
-        <div>
-          <p class="page-header__eyebrow">Coach Dashboard</p>
-          <h1 class="page-header__title">Client Management</h1>
-          <p class="page-header__sub">Manage assessments and accelerator implementation plans</p>
-        </div>
-        <div class="search-container">
-          <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="11" cy="11" r="8"/>
-            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
-          </svg>
-          <input type="text" class="search-input" id="searchInput" placeholder="Search clients..." autocomplete="off">
-          <button class="search-clear" id="searchClear" type="button">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-              <line x1="18" y1="6" x2="6" y2="18"/>
-              <line x1="6" y1="6" x2="18" y2="18"/>
-            </svg>
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <!-- ══ SAMPLE DASHBOARD SECTION ════════════════════════════ -->
-    <section class="content-section" id="sampleSection">
-      <div class="section-header">
-        <h2 class="section-header__title">
-          Sandboxes
-          <span class="section-header__count" style="background: var(--navy); color: #fff;">2</span>
-        </h2>
-      </div>
-      <p style="font-size: 14px; color: var(--muted); margin-bottom: 16px;">
-        Internal dashboards for demos and design testing. Conner's Cabins shows prospects what an accelerator looks like. Andrea's Resort is for testing design changes before they go live.
-      </p>
-      <div class="card-gallery">
-        <div class="assessment-card" style="border-color: var(--mint); background: linear-gradient(135deg, #fff 0%, rgba(170,218,182,0.08) 100%);">
-          <div class="assessment-card__header">
-            <div>
-              <div class="assessment-card__name">Conner's Cabins</div>
-              <div class="assessment-card__url">Sample cabin rental business</div>
-            </div>
-            <div class="assessment-card__grade grade-c">C+</div>
-          </div>
-          <div class="assessment-card__meta">
-            <span class="assessment-card__meta-item">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-              Day 21 of 90
-            </span>
-            <span class="assessment-card__meta-item">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-              25% complete
-            </span>
-          </div>
-          <span class="status-badge status-processing">
-            <span class="status-badge__dot"></span>
-            In Progress
-          </span>
-          <div class="assessment-card__actions" style="margin-top: 16px;">
-            <a href="/clients/sample-demo/" class="btn-secondary btn-small" target="_blank">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
-                <polyline points="15 3 21 3 21 9"/>
-                <line x1="10" y1="14" x2="21" y2="3"/>
-              </svg>
-              View Demo
-            </a>
-          </div>
-        </div>
-        <div class="assessment-card" style="border-color: #9b59b6; background: linear-gradient(135deg, #fff 0%, rgba(155,89,182,0.08) 100%);">
-          <div class="assessment-card__header">
-            <div>
-              <div class="assessment-card__name">Andrea's Resort</div>
-              <div class="assessment-card__url">Design sandbox for testing improvements</div>
-            </div>
-            <div class="assessment-card__grade" style="background: #9b59b6; width: auto; padding: 0 12px; font-size: 13px;">Demo</div>
-          </div>
-          <div class="assessment-card__meta">
-            <span class="assessment-card__meta-item">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
-              Design Testing
-            </span>
-            <span class="assessment-card__meta-item">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
-              Sandbox
-            </span>
-          </div>
-          <span class="status-badge" style="background: rgba(155,89,182,0.15); color: #9b59b6;">
-            <span class="status-badge__dot" style="background: #9b59b6;"></span>
-            Design Demo
-          </span>
-          <div class="assessment-card__actions" style="margin-top: 16px;">
-            <a href="/clients/andreas-resort/" class="btn-secondary btn-small" target="_blank">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
-                <polyline points="15 3 21 3 21 9"/>
-                <line x1="10" y1="14" x2="21" y2="3"/>
-              </svg>
-              Open Sandbox
-            </a>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ══ ASSESSMENTS SECTION ════════════════════════════════ -->
-    <section class="content-section" id="assessmentsSection">
-      <div class="section-header">
-        <h2 class="section-header__title">
-          Assessments
-          <span class="section-header__count" id="assessmentCount">0</span>
-        </h2>
-        <a href="/admin/generate-assessment/" class="btn-create" id="generateAssessmentBtn" style="display:none">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="12" y1="5" x2="12" y2="19"></line>
-            <line x1="5" y1="12" x2="19" y2="12"></line>
-          </svg>
-          New Assessment
-        </a>
-      </div>
-      <div class="card-gallery" id="assessmentGallery">
-        <!-- Loading skeletons -->
-        <div class="skeleton-card">
-          <div class="skeleton-line skeleton-line--title"></div>
-          <div class="skeleton-line skeleton-line--url"></div>
-          <div class="skeleton-line skeleton-line--meta"></div>
-          <div class="skeleton-line skeleton-line--actions"></div>
-        </div>
-        <div class="skeleton-card">
-          <div class="skeleton-line skeleton-line--title"></div>
-          <div class="skeleton-line skeleton-line--url"></div>
-          <div class="skeleton-line skeleton-line--meta"></div>
-          <div class="skeleton-line skeleton-line--actions"></div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ══ ELEVATED LEARNERS SECTION ══════════════════════════ -->
-    <section class="content-section" id="elevatedSection">
-      <div class="section-header">
-        <h2 class="section-header__title">
-          Elevated Learners
-          <span class="section-header__count" id="elevatedCount">0</span>
-        </h2>
-      </div>
-      <p class="section-desc" style="margin-bottom: 20px; font-size: 14px; color: var(--muted);">
-        Assessment-only dashboards for Elevated Tourism Marketing Masterclass participants
-      </p>
-      <div class="card-gallery" id="elevatedGallery">
-        <!-- Will be populated by JavaScript -->
-      </div>
-    </section>
-
-    <!-- ══ EXPERIENCE DESIGN SECTION ══════════════════════════ -->
-    <section class="content-section" id="experienceSection">
-      <div class="section-header">
-        <h2 class="section-header__title">
-          Experience Design
-          <span class="section-header__count" id="experienceCount">0</span>
-        </h2>
-        <a href="/admin/create-experience/" class="btn-create" id="createExperienceBtn" style="display:none">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="12" y1="5" x2="12" y2="19"></line>
-            <line x1="5" y1="12" x2="19" y2="12"></line>
-          </svg>
-          Create Experience Dashboard
-        </a>
-      </div>
-      <p class="section-desc" style="margin-bottom: 20px; font-size: 14px; color: var(--muted);">
-        Launch-focused dashboards for operators designing bookable experiences
-      </p>
-      <div class="card-gallery" id="experienceGallery">
-        <!-- Will be populated by JavaScript -->
-      </div>
-    </section>
-
-    <!-- ══ ACCELERATOR PROJECTS SECTION ═══════════════════════ -->
-    <section class="content-section" id="projectsSection">
-      <div class="section-header">
-        <h2 class="section-header__title">
-          Accelerator Projects
-          <span class="section-header__count" id="projectCount">0</span>
-        </h2>
-      </div>
-      <div class="card-gallery" id="projectGallery">
-        <!-- Loading skeletons -->
-        <div class="skeleton-card">
-          <div class="skeleton-line skeleton-line--title"></div>
-          <div class="skeleton-line skeleton-line--url"></div>
-          <div class="skeleton-line skeleton-line--meta"></div>
-          <div class="skeleton-line skeleton-line--actions"></div>
-        </div>
-      </div>
-    </section>
-
-  </main>
-
-  <!-- ══ DELETE CONFIRMATION MODAL ════════════════════════════ -->
-  <div class="modal-overlay" id="deleteModal">
-    <div class="modal">
-      <h3 class="modal__title">Delete Assessment</h3>
-      <p class="modal__text" id="deleteModalText">Are you sure you want to delete this assessment? This action cannot be undone.</p>
-      <div class="modal__actions">
-        <button class="btn-secondary" onclick="closeDeleteModal()">Cancel</button>
-        <button class="btn-secondary btn-danger" id="confirmDeleteBtn">Delete</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ══ REGENERATE PROGRESS MODAL ════════════════════════════ -->
-  <div class="modal-overlay" id="regenerateModal">
-    <div class="modal" style="text-align: center;">
-      <div class="regenerate-spinner"></div>
-      <h3 class="modal__title" style="margin-top: 20px;">Regenerating Assessment</h3>
-      <p class="modal__text" id="regenerateModalText">Please wait while we generate a fresh assessment...</p>
-      <p class="regenerate-status" id="regenerateStatus">Starting...</p>
-    </div>
-  </div>
-
-  <!-- ══ CHANGE COACH MODAL ════════════════════════════════════ -->
-  <div class="modal-overlay" id="changeCoachModal">
-    <div class="modal modal--edit">
-      <h3 class="modal__title">Change Assigned Coach</h3>
-      <p class="modal__text">Assign a coach to this assessment. The coach will have access to the client dashboard.</p>
-      <form class="modal__form" id="changeCoachForm" onsubmit="return false;">
-        <div class="form-group">
-          <label class="form-group__label" for="changeCoachName">Assessment</label>
-          <input type="text" class="form-group__input" id="changeCoachName" disabled>
-        </div>
-        <div class="form-group">
-          <label class="form-group__label" for="changeCoachEmail">Assigned Coach</label>
-          <select class="form-group__input" id="changeCoachEmail" required>
-            <option value="">Select a coach...</option>
-          </select>
-          <span class="form-group__hint">Select the coach to assign to this assessment</span>
-        </div>
-        <div class="form-group" id="changeCoachNotifyGroup" style="display: none;">
-          <label class="form-group__checkbox-label" style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
-            <input type="checkbox" id="changeCoachNotifyCheckbox" checked style="width: 18px; height: 18px; accent-color: var(--navy);">
-            <span style="font-size: 13px; color: var(--text);">Notify coach of this assignment</span>
-          </label>
-          <span class="form-group__hint">The coach will receive an email with a link to the client dashboard</span>
-        </div>
-        <div class="modal__actions modal__actions--edit">
-          <button type="button" class="btn-secondary" onclick="closeChangeCoachModal()">Cancel</button>
-          <button type="submit" class="btn-secondary btn-success" id="saveCoachBtn" onclick="saveCoachChanges()">Save Changes</button>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <!-- ══ EDIT PROJECT MODAL ════════════════════════════════════ -->
-  <div class="modal-overlay" id="editProjectModal">
-    <div class="modal modal--edit">
-      <h3 class="modal__title">Edit Project</h3>
-      <p class="modal__text">Update project settings. Changes will take effect immediately.</p>
-      <form class="modal__form" id="editProjectForm" onsubmit="return false;">
-        <div class="form-group">
-          <label class="form-group__label" for="editProjectName">Project Name</label>
-          <input type="text" class="form-group__input" id="editProjectName" disabled>
-        </div>
-        <div class="form-group">
-          <label class="form-group__label" for="editStartDate">Onboarding Call Date</label>
-          <input type="date" class="form-group__input" id="editStartDate" required>
-          <span class="form-group__hint">Changing this will recalculate milestone due dates (30/60/90 day)</span>
-        </div>
-        <div class="form-group">
-          <label class="form-group__label" for="editCoachEmail">Assigned Coach</label>
-          <input type="email" class="form-group__input" id="editCoachEmail" placeholder="coach@elearningu.com">
-        </div>
-        <div class="form-group" id="notifyCoachGroup" style="display: none;">
-          <label class="form-group__checkbox-label" style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
-            <input type="checkbox" id="notifyCoachCheckbox" checked style="width: 18px; height: 18px; accent-color: var(--navy);">
-            <span style="font-size: 13px; color: var(--text);">Notify coach of this assignment</span>
-          </label>
-          <span class="form-group__hint">The coach will receive an email with a link to the client dashboard</span>
-        </div>
-        <div class="modal__actions modal__actions--edit">
-          <button type="button" class="btn-secondary" onclick="closeEditProjectModal()">Cancel</button>
-          <button type="submit" class="btn-secondary btn-success" id="saveProjectBtn" onclick="saveProjectChanges()">Save Changes</button>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <!-- ══ TRIGGER MILESTONE MODAL ════════════════════════════════ -->
-  <div class="modal-overlay" id="triggerMilestoneModal">
-    <div class="modal modal--edit">
-      <h3 class="modal__title">Trigger Reassessment</h3>
-      <p class="modal__text" id="triggerMilestoneText">Select a milestone to generate for this client.</p>
-      <div class="milestone-options" id="milestoneOptions">
-        <div class="milestone-loading">Loading milestones...</div>
-      </div>
-      <div class="modal__actions modal__actions--edit">
-        <button type="button" class="btn-secondary" onclick="closeTriggerMilestoneModal()">Cancel</button>
-        <button type="button" class="btn-secondary btn-success" id="triggerMilestoneBtn" onclick="triggerSelectedMilestone()" disabled>Trigger</button>
-      </div>
-    </div>
-  </div>
-
-  <style>
     .milestone-options {
       display: flex;
       flex-direction: column;
@@ -1369,28 +1006,288 @@
       background: rgba(239,68,68,0.1);
       color: #dc2626;
     }
-  </style>
+    /* ── Footer ─────────────────────────────────────────── */
+    .footer {
+      text-align: center;
+      padding: 24px;
+      font-size: 12px;
+      color: var(--muted);
+      letter-spacing: 0.02em;
+    }
 
-  <style>
-    .regenerate-spinner {
-      width: 48px;
-      height: 48px;
-      border: 4px solid var(--cream-mid);
-      border-top-color: var(--navy);
-      border-radius: 50%;
-      margin: 0 auto;
-      animation: spin 1s linear infinite;
+    /* ── Tablet ─────────────────────────────────────────── */
+    @media (max-width: 960px) {
+      .row {
+        grid-template-columns: minmax(0, 1fr) auto;
+        grid-template-areas:
+          "main actions"
+          "status meta";
+        row-gap: 10px;
+      }
+      .row__main    { grid-area: main; }
+      .row__actions { grid-area: actions; }
+      .row__status  { grid-area: status; }
+      .row__meta    { grid-area: meta; text-align: right; }
+      .row__meta:empty { display: none; }
     }
-    @keyframes spin {
-      to { transform: rotate(360deg); }
+
+    /* ── Phone ──────────────────────────────────────────── */
+    @media (max-width: 640px) {
+      :root { --topbar-h: 0px; }
+
+      .topbar { position: static; padding: 0 16px; }
+      .topbar__email { display: none; }
+
+      .main { padding: 24px 16px 60px; }
+
+      .page-header { align-items: center; margin-bottom: 12px; }
+      .page-header__title { font-size: 26px; }
+      .page-header__sub { display: none; }
+
+      .toolbar { margin: 0 -16px; padding: 10px 16px 8px; }
+      .search__key { display: none; }
+      .search__input { padding-right: 46px; font-size: 16px; }
+      .tabs { margin-left: -16px; margin-right: -16px; padding: 0 16px; }
+
+      .controls { margin: 12px 0 14px; }
+      .controls__filters { width: 100%; }
+      .controls__filters .select { flex: 1 1 0; width: 0; min-width: 0; max-width: none; height: 44px; font-size: 16px; }
+
+      .section { border-radius: 12px; margin-bottom: 16px; }
+      .section__header { padding: 14px 16px 12px; }
+      .section__desc { flex-basis: 100%; }
+
+      .row {
+        display: block;
+        padding: 16px;
+      }
+      .row__name { white-space: normal; font-size: 16px; }
+      .row__status { margin-top: 10px; }
+      .row__meta { margin-top: 8px; text-align: left; }
+      .row__actions { margin-top: 14px; justify-content: flex-start; }
+      .row__actions .btn { height: 44px; flex: 1; }
+      .row__actions .btn--icon { flex: 0 0 44px; width: 44px; }
+      .progress { max-width: none; }
+
+      .skeleton-row { grid-template-columns: 1fr 1fr; }
+
+      .menu {
+        position: fixed;
+        left: 0 !important;
+        right: 0;
+        top: auto !important;
+        bottom: 0;
+        min-width: 0;
+        padding: 10px 10px calc(14px + env(safe-area-inset-bottom));
+        border: none;
+        border-radius: 18px 18px 0 0;
+      }
+      .menu__title {
+        display: block;
+        padding: 8px 12px 10px;
+        font-family: 'Raleway', sans-serif;
+        font-weight: 700;
+        font-size: 14px;
+        color: var(--navy);
+      }
+      .menu__item { min-height: 48px; font-size: 16px; }
+      .menu-backdrop--visible { display: block; }
+
+      .toasts { left: 16px; right: 16px; bottom: 16px; max-width: none; }
+
+      .modal-overlay { align-items: flex-end; }
+      .modal, .modal--edit {
+        width: 100%;
+        max-width: none;
+        max-height: 92vh;
+        overflow-y: auto;
+        border-radius: 18px 18px 0 0;
+        padding: 24px 20px calc(24px + env(safe-area-inset-bottom));
+        transform: translateY(24px);
+      }
+      .modal-overlay--visible .modal { transform: translateY(0); }
+      .modal__actions .btn-secondary { flex: 1; height: 44px; justify-content: center; }
+      .form-group__input { font-size: 16px; }
     }
-    .regenerate-status {
-      font-size: 13px;
-      color: var(--mint-dark);
-      margin-top: 8px;
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition: none !important; }
     }
   </style>
+</head>
+<body data-page="my-clients">
 
+  <!-- ══ TOP BAR ═══════════════════════════════════════════ -->
+  <header class="topbar">
+    <div class="topbar__logo">eLearningU</div>
+    <div class="topbar__right">
+      <a href="/admin/analytics/" class="topbar__link" id="analyticsLink" style="display:none;">
+        <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16" aria-hidden="true">
+          <path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zm6-4a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zm6-3a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"/>
+        </svg>
+        Analytics
+      </a>
+      <span class="topbar__email" id="topbarEmail"></span>
+      <div id="userMenuContainer"></div>
+    </div>
+  </header>
+
+  <!-- ══ MAIN ══════════════════════════════════════════════ -->
+  <main class="main">
+
+    <div class="page-header">
+      <div>
+        <h1 class="page-header__title">My Clients</h1>
+        <p class="page-header__sub" id="pageSub">Assessments, plans and dashboards for the clients you work with.</p>
+      </div>
+      <button type="button" class="btn btn--new" id="newMenuBtn" aria-haspopup="menu" aria-expanded="false" style="display:none">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        New
+        <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M5.3 7.3a1 1 0 011.4 0L10 10.6l3.3-3.3a1 1 0 111.4 1.4l-4 4a1 1 0 01-1.4 0l-4-4a1 1 0 010-1.4z"/></svg>
+      </button>
+    </div>
+
+    <!-- Search and section tabs stay in view while the list scrolls -->
+    <div class="toolbar" id="toolbar">
+      <div class="search" id="searchBox" role="search">
+        <svg class="search__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="11" cy="11" r="8"/>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        <label class="sr-only" for="searchInput">Search clients</label>
+        <input type="text" class="search__input" id="searchInput" placeholder="Search by client, website or coach" autocomplete="off" spellcheck="false">
+        <span class="search__key" aria-hidden="true" title="Press / to search">/</span>
+        <button class="search__clear" id="searchClear" type="button" aria-label="Clear search">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+      <nav class="tabs" id="tabs" aria-label="Sections"></nav>
+    </div>
+
+    <div class="controls">
+      <div class="controls__summary" id="summary" aria-live="polite"></div>
+      <div class="controls__filters">
+        <label class="sr-only" for="coachFilter">Filter by coach</label>
+        <select class="select" id="coachFilter" style="display:none">
+          <option value="all">All coaches</option>
+        </select>
+        <label class="sr-only" for="sortSelect">Sort clients</label>
+        <select class="select" id="sortSelect">
+          <option value="name">Sort: Name</option>
+          <option value="newest">Sort: Newest first</option>
+          <option value="progress">Sort: Most progress</option>
+        </select>
+      </div>
+    </div>
+
+    <div id="clientList"></div>
+
+  </main>
+
+  <!-- Shared menu for row actions and the New button -->
+  <div class="menu-backdrop" id="menuBackdrop"></div>
+  <div class="menu" id="menu" role="menu" hidden></div>
+
+  <div class="toasts" id="toasts" role="status" aria-live="polite"></div>
+
+  <!-- ══ DELETE CONFIRMATION MODAL ════════════════════════════ -->
+  <div class="modal-overlay" id="deleteModal">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="deleteModalTitle">
+      <h3 class="modal__title" id="deleteModalTitle">Delete Assessment</h3>
+      <p class="modal__text" id="deleteModalText">Are you sure you want to delete this assessment? This action cannot be undone.</p>
+      <p class="modal__error" role="alert" hidden></p>
+      <div class="modal__actions">
+        <button class="btn-secondary" onclick="closeDeleteModal()">Cancel</button>
+        <button class="btn-secondary btn-danger" id="confirmDeleteBtn">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ CHANGE COACH MODAL ════════════════════════════════════ -->
+  <div class="modal-overlay" id="changeCoachModal">
+    <div class="modal modal--edit" role="dialog" aria-modal="true" aria-labelledby="changeCoachModalTitle">
+      <h3 class="modal__title" id="changeCoachModalTitle">Change Assigned Coach</h3>
+      <p class="modal__text">Assign a coach to this assessment. The coach will have access to the client dashboard.</p>
+      <form class="modal__form" id="changeCoachForm" onsubmit="return false;">
+        <div class="form-group">
+          <label class="form-group__label" for="changeCoachName">Assessment</label>
+          <input type="text" class="form-group__input" id="changeCoachName" disabled>
+        </div>
+        <div class="form-group">
+          <label class="form-group__label" for="changeCoachEmail">Assigned Coach</label>
+          <select class="form-group__input" id="changeCoachEmail" required>
+            <option value="">Select a coach...</option>
+          </select>
+          <span class="form-group__hint">Select the coach to assign to this assessment</span>
+        </div>
+        <div class="form-group" id="changeCoachNotifyGroup" style="display: none;">
+          <label class="form-group__checkbox-label" style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+            <input type="checkbox" id="changeCoachNotifyCheckbox" checked style="width: 18px; height: 18px; accent-color: var(--navy);">
+            <span style="font-size: 13px; color: var(--text);">Notify coach of this assignment</span>
+          </label>
+          <span class="form-group__hint">The coach will receive an email with a link to the client dashboard</span>
+        </div>
+        <p class="modal__error" role="alert" hidden></p>
+        <div class="modal__actions modal__actions--edit">
+          <button type="button" class="btn-secondary" onclick="closeChangeCoachModal()">Cancel</button>
+          <button type="submit" class="btn-secondary btn-success" id="saveCoachBtn" onclick="saveCoachChanges()">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ══ EDIT PROJECT MODAL ════════════════════════════════════ -->
+  <div class="modal-overlay" id="editProjectModal">
+    <div class="modal modal--edit" role="dialog" aria-modal="true" aria-labelledby="editProjectModalTitle">
+      <h3 class="modal__title" id="editProjectModalTitle">Edit Project</h3>
+      <p class="modal__text">Update project settings. Changes will take effect immediately.</p>
+      <form class="modal__form" id="editProjectForm" onsubmit="return false;">
+        <div class="form-group">
+          <label class="form-group__label" for="editProjectName">Project Name</label>
+          <input type="text" class="form-group__input" id="editProjectName" disabled>
+        </div>
+        <div class="form-group">
+          <label class="form-group__label" for="editStartDate">Onboarding Call Date</label>
+          <input type="date" class="form-group__input" id="editStartDate" required>
+          <span class="form-group__hint">Changing this will recalculate milestone due dates (30/60/90 day)</span>
+        </div>
+        <div class="form-group">
+          <label class="form-group__label" for="editCoachEmail">Assigned Coach</label>
+          <input type="email" class="form-group__input" id="editCoachEmail" placeholder="coach@elearningu.com">
+        </div>
+        <div class="form-group" id="notifyCoachGroup" style="display: none;">
+          <label class="form-group__checkbox-label" style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+            <input type="checkbox" id="notifyCoachCheckbox" checked style="width: 18px; height: 18px; accent-color: var(--navy);">
+            <span style="font-size: 13px; color: var(--text);">Notify coach of this assignment</span>
+          </label>
+          <span class="form-group__hint">The coach will receive an email with a link to the client dashboard</span>
+        </div>
+        <p class="modal__error" role="alert" hidden></p>
+        <div class="modal__actions modal__actions--edit">
+          <button type="button" class="btn-secondary" onclick="closeEditProjectModal()">Cancel</button>
+          <button type="submit" class="btn-secondary btn-success" id="saveProjectBtn" onclick="saveProjectChanges()">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ══ TRIGGER MILESTONE MODAL ════════════════════════════════ -->
+  <div class="modal-overlay" id="triggerMilestoneModal">
+    <div class="modal modal--edit" role="dialog" aria-modal="true" aria-labelledby="triggerMilestoneModalTitle">
+      <h3 class="modal__title" id="triggerMilestoneModalTitle">Trigger Reassessment</h3>
+      <p class="modal__text" id="triggerMilestoneText">Select a milestone to generate for this client.</p>
+      <div class="milestone-options" id="milestoneOptions">
+        <div class="milestone-loading">Loading milestones...</div>
+      </div>
+      <div class="modal__actions modal__actions--edit">
+        <button type="button" class="btn-secondary" onclick="closeTriggerMilestoneModal()">Cancel</button>
+        <button type="button" class="btn-secondary btn-success" id="triggerMilestoneBtn" onclick="triggerSelectedMilestone()" disabled>Trigger</button>
+      </div>
+    </div>
+  </div>
   <footer class="footer">eLearningU &nbsp;&middot;&nbsp; &copy; 2026</footer>
 
   <script src="/shared/supabase-client.js"></script>
@@ -1402,14 +1299,98 @@
     // ══════════════════════════════════════════════════════════════
     let currentUser = null;
     let hasWildcardAccess = false; // True if user has client_slug='*' (can see all clients)
-    let assessments = [];
+    let assessments = [];          // Accelerator assessments (with and without plans)
+    let elevatedClients = [];
+    let experienceProjects = [];
     let projects = [];
     let projectSlugs = new Set(); // Slugs that have implementation plans
     let deleteTargetSlug = null;
 
+    // Sandbox slugs appear in the Sandboxes section, not Accelerator Projects
+    const SANDBOXES = [
+      {
+        slug: 'sample-demo',
+        name: "Conner's Cabins",
+        desc: 'Shows prospects what an accelerator looks like',
+        chip: 'Sales demo',
+        href: '/clients/sample-demo/',
+        action: 'View demo'
+      },
+      {
+        slug: 'andreas-resort',
+        name: "Andrea's Resort",
+        desc: 'For testing design changes before they go live',
+        chip: 'Design sandbox',
+        href: '/clients/andreas-resort/',
+        action: 'Open sandbox'
+      }
+    ];
+
+    // The order sections appear in, on the page and in the tabs
+    const SECTIONS = [
+      { id: 'assessments', hash: 'assessments', title: 'Assessments',          tab: 'Assessments',       desc: 'Clients with an assessment and no implementation plan yet' },
+      { id: 'projects',    hash: 'accelerator', title: 'Accelerator Projects', tab: 'Accelerator',       desc: 'Clients working through their implementation plan' },
+      { id: 'experience',  hash: 'experience',  title: 'Experience Design',    tab: 'Experience Design', desc: 'Launch-focused dashboards for operators designing bookable experiences' },
+      { id: 'elevated',    hash: 'elevated',    title: 'Elevated Learners',    tab: 'Elevated',          desc: 'Assessment-only dashboards for Elevated Tourism Marketing Masterclass participants' },
+      { id: 'sandboxes',   hash: 'sandboxes',   title: 'Sandboxes',            tab: 'Sandboxes',         desc: 'Internal dashboards for demos and design testing' }
+    ];
+
+    // 'loading' | 'ready' | 'error' for each section that loads data
+    const loadState = { assessments: 'loading', projects: 'loading', experience: 'loading', elevated: 'loading' };
+
+    // What the person has chosen to look at
+    const ui = { tab: 'all', query: '', coach: 'all', sort: 'name' };
+
+    const ICONS = {
+      external: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>',
+      plus: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>',
+      dots: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/></svg>',
+      pencil: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>',
+      gear: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/></svg>',
+      refresh: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/></svg>',
+      user: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>',
+      trash: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>',
+      clipboard: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/></svg>',
+      compass: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>',
+      close: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>'
+    };
+
+    // ══════════════════════════════════════════════════════════════
+    // ROLES
+    // ══════════════════════════════════════════════════════════════
+    // Admins and PSMs. Only they can open the staff pages under /admin/
+    // (coaches are also let into /admin/create-project/ to add a plan).
+    function isStaffRole() {
+      return currentUser.role === 'admin' || currentUser.role === 'psm';
+    }
+
+    // Admins, PSMs and coaches with wildcard access see every client
+    function seesAllClients() {
+      return isStaffRole() || hasWildcardAccess;
+    }
+
+    function canEditProjects() {
+      return currentUser.role === 'admin' || currentUser.role === 'psm' || currentUser.role === 'coach';
+    }
+
+    // Shows only the controls this person can actually use
+    function applyRoleUI() {
+      document.getElementById('analyticsLink').style.display = isStaffRole() ? '' : 'none';
+      document.getElementById('newMenuBtn').style.display = isStaffRole() ? 'inline-flex' : 'none';
+      document.getElementById('coachFilter').style.display = seesAllClients() ? '' : 'none';
+      document.getElementById('pageSub').textContent = seesAllClients()
+        ? 'Assessments, plans and dashboards for every client.'
+        : 'Assessments, plans and dashboards for the clients you work with.';
+    }
+
     // ══════════════════════════════════════════════════════════════
     // INITIALIZATION
     // ══════════════════════════════════════════════════════════════
+    // Assessments wait for this, because a client with a plan belongs under
+    // Accelerator Projects and the plan check happens while projects load.
+    let resolvePlansChecked;
+    const plansChecked = new Promise(resolve => { resolvePlansChecked = resolve; });
+
     (async function init() {
       const user = await window.__authReady;
       currentUser = user;
@@ -1433,38 +1414,67 @@
         if (wildcardError) {
           console.error('Error checking wildcard access:', wildcardError);
         }
-        hasWildcardAccess = wildcardEntries && wildcardEntries.length > 0;
-        console.log('Wildcard access check:', { email: user.email, hasWildcardAccess, wildcardEntries });
+        hasWildcardAccess = !!(wildcardEntries && wildcardEntries.length > 0);
       }
 
-      // Show admin buttons for admin/psm users or coaches with wildcard access
-      if (user.role === 'admin' || user.role === 'psm' || hasWildcardAccess) {
-        document.getElementById('generateAssessmentBtn').style.display = 'inline-flex';
-        document.getElementById('createExperienceBtn').style.display = 'inline-flex';
-        document.getElementById('analyticsLink').style.display = '';
-      }
+      applyRoleUI();
+      restorePreferences();
+      readTabFromHash();
+      render();
+      showQueuedToast();
 
-      // Close action menus when clicking outside
-      document.addEventListener('click', (e) => {
-        if (!e.target.closest('.actions-menu')) {
-          document.querySelectorAll('.actions-menu--open').forEach(m => m.classList.remove('actions-menu--open'));
-        }
-      });
-
-      // Load data - loadProjects must complete first to populate projectSlugs
-      // (used by loadAssessments to filter out clients that have implementation plans)
-      await loadProjects();
-      await Promise.all([loadAssessments(), loadElevatedClients(), loadExperienceProjects()]);
+      loadProjects();
+      loadAssessments();
+      loadElevatedClients();
+      loadExperienceProjects();
     })();
+
+    // ══════════════════════════════════════════════════════════════
+    // DATA LOADING - WHICH CLIENTS A COACH CAN SEE
+    // ══════════════════════════════════════════════════════════════
+    // Slugs where this user is assigned as coach (two methods):
+    // 1. Rows where coach_email = user's email (legacy: coach assigned to manage client's user)
+    // 2. Rows where email = user's email AND role = 'coach' (direct coach assignment)
+    let coachSlugsPromise = null;
+    function getCoachSlugs() {
+      if (!coachSlugsPromise) {
+        coachSlugsPromise = Promise.all([
+          supabaseClient
+            .from('user_plans')
+            .select('client_slug')
+            .eq('coach_email', currentUser.email)
+            .eq('active', true),
+          supabaseClient
+            .from('user_plans')
+            .select('client_slug')
+            .eq('email', currentUser.email)
+            .eq('role', 'coach')
+            .eq('active', true)
+            .neq('client_slug', '*')
+        ]).then(([coachEmailResult, directCoachResult]) => {
+          const coachSlugsFromEmail = (coachEmailResult.data || []).map(a => a.client_slug);
+          const coachSlugsFromDirect = (directCoachResult.data || []).map(a => a.client_slug);
+          return [...new Set([...coachSlugsFromEmail, ...coachSlugsFromDirect])];
+        });
+      }
+      return coachSlugsPromise;
+    }
+
+    // Users with wildcard access see every assessment. Others only see
+    // assessments they created or are assigned to coach.
+    async function limitToOwnClients(query) {
+      if (hasWildcardAccess) return query;
+      const coachSlugs = await getCoachSlugs();
+      if (coachSlugs.length > 0) {
+        return query.or(`created_by.eq.${currentUser.email},client_slug.in.(${coachSlugs.join(',')})`);
+      }
+      return query.eq('created_by', currentUser.email);
+    }
 
     // ══════════════════════════════════════════════════════════════
     // DATA LOADING - ASSESSMENTS
     // ══════════════════════════════════════════════════════════════
     async function loadAssessments() {
-      const gallery = document.getElementById('assessmentGallery');
-      const countEl = document.getElementById('assessmentCount');
-
-      // Fetch assessments from client_assessments table
       // Exclude elevated clients (they appear in the Elevated Learners section)
       let query = supabaseClient
         .from('client_assessments')
@@ -1472,344 +1482,123 @@
         .or('client_type.is.null,client_type.eq.accelerator')
         .order('created_at', { ascending: false });
 
-      // Users with wildcard access see all assessments
-      // Others only see assessments they created or are assigned to coach
-      if (!hasWildcardAccess) {
-        // Get slugs where user is assigned as coach (two methods):
-        // 1. Rows where coach_email = user's email (legacy: coach assigned to manage client's user)
-        // 2. Rows where email = user's email AND role = 'coach' (direct coach assignment)
-        const [coachEmailResult, directCoachResult] = await Promise.all([
-          supabaseClient
-            .from('user_plans')
-            .select('client_slug')
-            .eq('coach_email', currentUser.email)
-            .eq('active', true),
-          supabaseClient
-            .from('user_plans')
-            .select('client_slug')
-            .eq('email', currentUser.email)
-            .eq('role', 'coach')
-            .eq('active', true)
-            .neq('client_slug', '*')
-        ]);
-
-        // Combine both results into a unique set of slugs
-        const coachSlugsFromEmail = (coachEmailResult.data || []).map(a => a.client_slug);
-        const coachSlugsFromDirect = (directCoachResult.data || []).map(a => a.client_slug);
-        const coachSlugs = [...new Set([...coachSlugsFromEmail, ...coachSlugsFromDirect])];
-
-        // Filter to assessments user created OR is assigned to coach
-        if (coachSlugs.length > 0) {
-          query = query.or(`created_by.eq.${currentUser.email},client_slug.in.(${coachSlugs.join(',')})`);
-        } else {
-          query = query.eq('created_by', currentUser.email);
-        }
-      }
-
+      query = await limitToOwnClients(query);
       const { data: rows, error } = await query;
+
+      // Clients that have a plan are listed under Accelerator Projects instead
+      await plansChecked;
 
       if (error) {
         console.error('Error loading assessments:', error);
-        gallery.innerHTML = `<div class="empty-state">
-          <p>Could not load assessments. Please try refreshing the page.</p>
-        </div>`;
-        return;
+        loadState.assessments = 'error';
+      } else {
+        assessments = rows || [];
+        loadState.assessments = 'ready';
       }
-
-      assessments = rows || [];
-      countEl.textContent = assessments.length;
-
-      if (assessments.length === 0) {
-        gallery.innerHTML = `<div class="empty-state">
-          <svg class="empty-state__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-            <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/>
-            <rect x="9" y="3" width="6" height="4" rx="1"/>
-          </svg>
-          <h3 class="empty-state__title">No assessments yet</h3>
-          <p class="empty-state__text">Generate your first client assessment to get started.</p>
-          ${hasWildcardAccess ? `<a href="/admin/generate-assessment/" class="btn-create">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <line x1="12" y1="5" x2="12" y2="19"></line>
-              <line x1="5" y1="12" x2="19" y2="12"></line>
-            </svg>
-            New Assessment
-          </a>` : ''}
-        </div>`;
-        return;
-      }
-
-      renderAssessments();
+      render();
     }
 
     // ══════════════════════════════════════════════════════════════
     // DATA LOADING - ELEVATED LEARNERS
     // ══════════════════════════════════════════════════════════════
     async function loadElevatedClients() {
-      const gallery = document.getElementById('elevatedGallery');
-      const countEl = document.getElementById('elevatedCount');
-      const section = document.getElementById('elevatedSection');
-
-      // Fetch elevated clients from client_assessments table
       let query = supabaseClient
         .from('client_assessments')
         .select('*')
         .eq('client_type', 'elevated')
         .order('created_at', { ascending: false });
 
-      // Users with wildcard access see all elevated clients
-      // Others only see those they created or are assigned to coach
-      if (!hasWildcardAccess) {
-        // Get slugs where user is assigned as coach (two methods):
-        // 1. Rows where coach_email = user's email (legacy: coach assigned to manage client's user)
-        // 2. Rows where email = user's email AND role = 'coach' (direct coach assignment)
-        const [coachEmailResult, directCoachResult] = await Promise.all([
-          supabaseClient
-            .from('user_plans')
-            .select('client_slug')
-            .eq('coach_email', currentUser.email)
-            .eq('active', true),
-          supabaseClient
-            .from('user_plans')
-            .select('client_slug')
-            .eq('email', currentUser.email)
-            .eq('role', 'coach')
-            .eq('active', true)
-            .neq('client_slug', '*')
-        ]);
-
-        // Combine both results into a unique set of slugs
-        const coachSlugsFromEmail = (coachEmailResult.data || []).map(a => a.client_slug);
-        const coachSlugsFromDirect = (directCoachResult.data || []).map(a => a.client_slug);
-        const coachSlugs = [...new Set([...coachSlugsFromEmail, ...coachSlugsFromDirect])];
-
-        if (coachSlugs.length > 0) {
-          query = query.or(`created_by.eq.${currentUser.email},client_slug.in.(${coachSlugs.join(',')})`);
-        } else {
-          query = query.eq('created_by', currentUser.email);
-        }
-      }
-
+      query = await limitToOwnClients(query);
       const { data: rows, error } = await query;
 
       if (error) {
         console.error('Error loading elevated clients:', error);
-        gallery.innerHTML = `<div class="empty-state">
-          <p>Could not load elevated learners. Please try refreshing the page.</p>
-        </div>`;
-        return;
+        loadState.elevated = 'error';
+      } else {
+        elevatedClients = rows || [];
+        loadState.elevated = 'ready';
       }
-
-      const elevatedClients = rows || [];
-      countEl.textContent = elevatedClients.length;
-
-      // Hide section if no elevated clients
-      if (elevatedClients.length === 0) {
-        section.style.display = 'none';
-        return;
-      }
-
-      section.style.display = 'block';
-      renderElevatedClients(elevatedClients);
+      render();
     }
 
-    function renderElevatedClients(clients) {
-      const gallery = document.getElementById('elevatedGallery');
-      const isAdmin = currentUser.role === 'admin' || currentUser.role === 'psm' || hasWildcardAccess;
+    // ══════════════════════════════════════════════════════════════
+    // DATA LOADING - PROJECT ROWS FROM user_plans
+    // ══════════════════════════════════════════════════════════════
+    // Users without wildcard access see projects where:
+    // 1. coach_email = their email (they're assigned as coach), OR
+    // 2. email = their email AND role = 'coach' (direct coach assignment)
+    async function loadPlanRows(applyDashboardState) {
+      const columns = 'client_slug, cohort_start_date, coach_email, dashboard_state';
 
-      gallery.innerHTML = clients.map((client, i) => {
-        const gradeClass = getGradeClass(client.overall_grade);
-        const statusClass = `status-${client.status}`;
-        const statusLabel = client.status.charAt(0).toUpperCase() + client.status.slice(1);
-        const dateStr = formatDate(client.assessment_date || client.created_at);
-        const url = client.website_url ? new URL(client.website_url).hostname : '';
+      if (hasWildcardAccess) {
+        const result = await applyDashboardState(
+          supabaseClient.from('user_plans').select(columns).eq('active', true)
+        ).neq('client_slug', '*');
+        return { rows: result.data || [], error: result.error };
+      }
 
-        return `
-          <div class="assessment-card" style="animation-delay: ${i * 0.05}s" data-slug="${client.client_slug}">
-            <div class="assessment-card__header">
-              <div>
-                <h3 class="assessment-card__name">${escapeHtml(client.business_name || client.client_slug)}</h3>
-                <p class="assessment-card__url">${escapeHtml(url)}</p>
-              </div>
-              ${client.status === 'completed' ? `
-                <div class="assessment-card__grade ${gradeClass}">${client.overall_grade || '?'}</div>
-              ` : `
-                <div class="assessment-card__grade grade-pending">...</div>
-              `}
-            </div>
-            <div class="assessment-card__meta">
-              <span class="status-badge status-elevated">
-                <span class="status-badge__dot"></span>
-                Elevated
-              </span>
-              <span class="status-badge ${statusClass}">
-                <span class="status-badge__dot"></span>
-                ${statusLabel}
-              </span>
-              <span class="assessment-card__meta-item">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
-                  <line x1="16" y1="2" x2="16" y2="6"/>
-                  <line x1="8" y1="2" x2="8" y2="6"/>
-                  <line x1="3" y1="10" x2="21" y2="10"/>
-                </svg>
-                ${dateStr}
-              </span>
-            </div>
-            <div class="assessment-card__actions">
-              ${client.status === 'completed' ? `
-                <a href="/elevated/${client.client_slug}/" class="btn-secondary" target="_blank">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/>
-                    <polyline points="15 3 21 3 21 9"/>
-                    <line x1="10" y1="14" x2="21" y2="3"/>
-                  </svg>
-                  View Assessment
-                </a>
-              ` : `
-                <button class="btn-secondary" disabled>
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <circle cx="12" cy="12" r="10"/>
-                    <polyline points="12 6 12 12 16 14"/>
-                  </svg>
-                  ${client.status === 'processing' ? 'Processing...' : 'Pending'}
-                </button>
-              `}
-              ${isAdmin ? `
-                <div class="actions-menu">
-                  <button class="actions-menu__trigger" onclick="toggleActionsMenu(event, '${client.client_slug}')">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <circle cx="12" cy="12" r="1"/>
-                      <circle cx="12" cy="5" r="1"/>
-                      <circle cx="12" cy="19" r="1"/>
-                    </svg>
-                  </button>
-                  <div class="actions-menu__dropdown">
-                    <button class="actions-menu__item" onclick="openChangeCoachModal('${client.client_slug}', '${escapeHtml(client.business_name || client.client_slug)}', 'elevated')">
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-                        <circle cx="12" cy="7" r="4"/>
-                      </svg>
-                      Change Coach
-                    </button>
-                    <button class="actions-menu__item" onclick="regenerateAssessment('${client.client_slug}', 'elevated')">
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <polyline points="23 4 23 10 17 10"/>
-                        <path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/>
-                      </svg>
-                      Regenerate
-                    </button>
-                    <button class="actions-menu__item actions-menu__item--danger" onclick="confirmDeleteAssessment('${client.client_slug}', '${escapeHtml(client.business_name || client.client_slug)}')">
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <polyline points="3 6 5 6 21 6"/>
-                        <path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/>
-                      </svg>
-                      Delete
-                    </button>
-                  </div>
-                </div>
-              ` : ''}
-            </div>
-          </div>
-        `;
-      }).join('');
+      const [coachEmailResult, directCoachResult] = await Promise.all([
+        applyDashboardState(
+          supabaseClient.from('user_plans').select(columns).eq('active', true)
+        )
+          .eq('coach_email', currentUser.email)
+          .neq('client_slug', '*'),
+        applyDashboardState(
+          supabaseClient.from('user_plans').select(columns).eq('active', true)
+        )
+          .eq('email', currentUser.email)
+          .eq('role', 'coach')
+          .neq('client_slug', '*')
+      ]);
+
+      return {
+        rows: [...(coachEmailResult.data || []), ...(directCoachResult.data || [])],
+        error: coachEmailResult.error || directCoachResult.error
+      };
+    }
+
+    // One entry per client. A client can have several rows (the client, the
+    // coach), and not every row carries the coach's email.
+    function uniqueProjects(rows, skipSlugs) {
+      const projectMap = new Map();
+      for (const row of (rows || [])) {
+        if (skipSlugs.includes(row.client_slug)) continue;
+        const existing = projectMap.get(row.client_slug);
+        if (existing) {
+          if (!existing.coach_email && row.coach_email) existing.coach_email = row.coach_email;
+          continue;
+        }
+        projectMap.set(row.client_slug, {
+          slug: row.client_slug,
+          name: toTitleCase(row.client_slug),
+          cohort_start_date: row.cohort_start_date,
+          coach_email: row.coach_email
+        });
+      }
+      return Array.from(projectMap.values());
     }
 
     // ══════════════════════════════════════════════════════════════
     // DATA LOADING - EXPERIENCE PROJECTS
     // ══════════════════════════════════════════════════════════════
     async function loadExperienceProjects() {
-      const gallery = document.getElementById('experienceGallery');
-      const countEl = document.getElementById('experienceCount');
-      const section = document.getElementById('experienceSection');
-
-      // Fetch experience projects from user_plans table
-      // Users without wildcard access see projects where:
-      // 1. coach_email = their email (they're assigned as coach), OR
-      // 2. email = their email AND role = 'coach' (direct coach assignment)
-      let rows = [];
-      let error = null;
-
-      if (hasWildcardAccess) {
-        const result = await supabaseClient
-          .from('user_plans')
-          .select('client_slug, cohort_start_date, coach_email, dashboard_state')
-          .eq('active', true)
-          .eq('dashboard_state', 'experience')
-          .neq('client_slug', '*');
-        rows = result.data || [];
-        error = result.error;
-      } else {
-        // Query for both coach assignment methods
-        const [coachEmailResult, directCoachResult] = await Promise.all([
-          supabaseClient
-            .from('user_plans')
-            .select('client_slug, cohort_start_date, coach_email, dashboard_state')
-            .eq('active', true)
-            .eq('dashboard_state', 'experience')
-            .eq('coach_email', currentUser.email)
-            .neq('client_slug', '*'),
-          supabaseClient
-            .from('user_plans')
-            .select('client_slug, cohort_start_date, coach_email, dashboard_state')
-            .eq('active', true)
-            .eq('dashboard_state', 'experience')
-            .eq('email', currentUser.email)
-            .eq('role', 'coach')
-            .neq('client_slug', '*')
-        ]);
-        error = coachEmailResult.error || directCoachResult.error;
-        // Combine results, deduping by client_slug
-        const combined = [...(coachEmailResult.data || []), ...(directCoachResult.data || [])];
-        const seen = new Set();
-        rows = combined.filter(r => {
-          if (seen.has(r.client_slug)) return false;
-          seen.add(r.client_slug);
-          return true;
-        });
-      }
+      const { rows, error } = await loadPlanRows(q => q.eq('dashboard_state', 'experience'));
 
       if (error) {
         console.error('Error loading experience projects:', error);
-        gallery.innerHTML = `<div class="empty-state">
-          <p>Could not load experience projects. Please try refreshing the page.</p>
-        </div>`;
+        loadState.experience = 'error';
+        render();
         return;
       }
 
-      // Get unique projects
-      const projectMap = new Map();
-      for (const row of (rows || [])) {
-        if (!projectMap.has(row.client_slug)) {
-          projectMap.set(row.client_slug, {
-            slug: row.client_slug,
-            name: toTitleCase(row.client_slug),
-            cohort_start_date: row.cohort_start_date,
-            coach_email: row.coach_email
-          });
-        }
-      }
+      const list = uniqueProjects(rows, []);
 
-      const experienceProjects = Array.from(projectMap.values());
-      countEl.textContent = experienceProjects.length;
+      // Load the stage, name and progress for each project
+      await Promise.all(list.map(loadExperienceProjectProgress));
 
-      // With no experience projects, hide the section from coaches. Staff
-      // still see it, because the Create button lives in its header.
-      if (experienceProjects.length === 0) {
-        const isStaff = currentUser.role === 'admin' || currentUser.role === 'psm' || hasWildcardAccess;
-        section.style.display = isStaff ? 'block' : 'none';
-        gallery.innerHTML = `<div class="empty-state"><p>No experience dashboards yet. Create one before an operator's onboarding call, then add their launch plan after the second coaching call.</p></div>`;
-        return;
-      }
-
-      section.style.display = 'block';
-
-      // Load progress for each project
-      await Promise.all(experienceProjects.map(loadExperienceProjectProgress));
-
-      // Sort by name
-      experienceProjects.sort((a, b) => a.name.localeCompare(b.name));
-
-      renderExperienceProjects(experienceProjects);
+      experienceProjects = list;
+      loadState.experience = 'ready';
+      render();
     }
 
     async function loadExperienceProjectProgress(project) {
@@ -1872,173 +1661,46 @@
       }
     }
 
-    function renderExperienceProjects(experienceProjects) {
-      const gallery = document.getElementById('experienceGallery');
-      const canEdit = currentUser.role === 'admin' || currentUser.role === 'psm' || currentUser.role === 'coach';
-
-      gallery.innerHTML = experienceProjects.map((p, i) => {
-        const percent = p.totalItems > 0
-          ? Math.round((p.checkedCount / p.totalItems) * 100)
-          : 0;
-
-        const onboarding = p.stage === 'onboarding';
-        const startDateDisplay = onboarding
-          ? 'Onboarding'
-          : (p.cohort_start_date
-            ? 'Started ' + new Date(p.cohort_start_date + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
-            : 'Start date not chosen yet');
-
-        const weekDisplay = onboarding
-          ? 'Launch plan not added yet'
-          : (p.week !== null ? `Week ${p.week} of ${p.totalWeeks}` : 'Launch plan ready');
-
-        const manageButton = canEdit ? `
-              <div class="project-card__actions">
-                <button class="project-card__edit-btn" onclick="event.preventDefault(); event.stopPropagation(); window.location.href='/admin/manage-experience/?slug=${p.slug}'" title="Add the launch plan or materials">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M12 20h9"/>
-                    <path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/>
-                  </svg>
-                </button>
-              </div>` : '';
-
-        return `
-          <a href="/${p.slug}/" class="project-card" style="animation-delay: ${i * 0.05}s" data-slug="${p.slug}">
-            <div class="project-card__header">
-              <div class="project-card__info">
-                <h2 class="project-card__name">${escapeHtml(p.name)}</h2>
-                <p class="project-card__meta">${startDateDisplay}</p>
-              </div>${manageButton}
-            </div>
-            <p class="project-card__week">${weekDisplay}</p>
-            <div class="project-card__progress">
-              <div class="project-card__bar">
-                <div class="project-card__bar-fill" style="width: ${percent}%"></div>
-              </div>
-              <span class="project-card__percent">${percent}%</span>
-            </div>
-          </a>
-        `;
-      }).join('');
-    }
-
     // ══════════════════════════════════════════════════════════════
-    // DATA LOADING - PROJECTS
+    // DATA LOADING - ACCELERATOR PROJECTS
     // ══════════════════════════════════════════════════════════════
     async function loadProjects() {
-      const gallery = document.getElementById('projectGallery');
-      const countEl = document.getElementById('projectCount');
+      try {
+        // Exclude experience projects: they have their own section
+        const { rows, error } = await loadPlanRows(q => q.or('dashboard_state.is.null,dashboard_state.eq.accelerator'));
 
-      // Sandbox slugs - these appear in the Sandboxes section, not Accelerator Projects
-      const sandboxSlugs = ['sample-demo', 'andreas-resort'];
-
-      // Fetch projects this user has access to (exclude experience - they have their own section)
-      // Users without wildcard access see projects where:
-      // 1. coach_email = their email (they're assigned as coach), OR
-      // 2. email = their email AND role = 'coach' (direct coach assignment)
-      let rows = [];
-      let error = null;
-
-      if (hasWildcardAccess) {
-        const result = await supabaseClient
-          .from('user_plans')
-          .select('client_slug, cohort_start_date, coach_email, dashboard_state')
-          .eq('active', true)
-          .or('dashboard_state.is.null,dashboard_state.eq.accelerator')
-          .neq('client_slug', '*');
-        rows = result.data || [];
-        error = result.error;
-      } else {
-        // Query for both coach assignment methods
-        const [coachEmailResult, directCoachResult] = await Promise.all([
-          supabaseClient
-            .from('user_plans')
-            .select('client_slug, cohort_start_date, coach_email, dashboard_state')
-            .eq('active', true)
-            .or('dashboard_state.is.null,dashboard_state.eq.accelerator')
-            .eq('coach_email', currentUser.email)
-            .neq('client_slug', '*'),
-          supabaseClient
-            .from('user_plans')
-            .select('client_slug, cohort_start_date, coach_email, dashboard_state')
-            .eq('active', true)
-            .or('dashboard_state.is.null,dashboard_state.eq.accelerator')
-            .eq('email', currentUser.email)
-            .eq('role', 'coach')
-            .neq('client_slug', '*')
-        ]);
-        error = coachEmailResult.error || directCoachResult.error;
-        // Combine results, deduping by client_slug
-        const combined = [...(coachEmailResult.data || []), ...(directCoachResult.data || [])];
-        const seen = new Set();
-        rows = combined.filter(r => {
-          if (seen.has(r.client_slug)) return false;
-          seen.add(r.client_slug);
-          return true;
-        });
-      }
-
-      if (error) {
-        gallery.innerHTML = `<div class="empty-state">
-          <p>Could not load projects. Please try refreshing the page.</p>
-        </div>`;
-        return;
-      }
-
-      // Get unique projects - but only if they have a plan.json (actual implementation plan)
-      // Skip sandbox slugs - they appear in the Sandboxes section instead
-      const projectMap = new Map();
-      for (const row of (rows || [])) {
-        if (!projectMap.has(row.client_slug) && !sandboxSlugs.includes(row.client_slug)) {
-          projectMap.set(row.client_slug, {
-            slug: row.client_slug,
-            name: toTitleCase(row.client_slug),
-            cohort_start_date: row.cohort_start_date,
-            coach_email: row.coach_email,
-            hasPlan: false // Will be set true if plan.json exists
-          });
+        if (error) {
+          console.error('Error loading projects:', error);
+          loadState.projects = 'error';
+          return;
         }
-      }
 
-      // Check which projects actually have implementation plans (plan.json exists)
-      // Files are stored at /clients/{slug}/plan.json, not /{slug}/plan.json
-      // Use redirect: 'manual' because missing files redirect to /login (200)
-      const projectCandidates = Array.from(projectMap.values());
-      await Promise.all(projectCandidates.map(async (project) => {
-        try {
-          const res = await fetch(`/clients/${project.slug}/plan.json`, { method: 'HEAD', redirect: 'manual' });
-          project.hasPlan = res.status === 200;
-          if (project.hasPlan) {
-            projectSlugs.add(project.slug); // Only add to projectSlugs if plan exists
+        // Check which projects actually have implementation plans (plan.json exists)
+        // Files are stored at /clients/{slug}/plan.json, not /{slug}/plan.json
+        // Use redirect: 'manual' because missing files redirect to /login (200)
+        const projectCandidates = uniqueProjects(rows, SANDBOXES.map(s => s.slug));
+        await Promise.all(projectCandidates.map(async (project) => {
+          try {
+            const res = await fetch(`/clients/${project.slug}/plan.json`, { method: 'HEAD', redirect: 'manual' });
+            project.hasPlan = res.status === 200;
+            if (project.hasPlan) {
+              projectSlugs.add(project.slug); // Only add to projectSlugs if plan exists
+            }
+          } catch (_) {
+            project.hasPlan = false;
           }
-        } catch (_) {
-          project.hasPlan = false;
-        }
-      }));
+        }));
 
-      // Filter to only projects with actual plans
-      projects = projectCandidates.filter(p => p.hasPlan);
-      countEl.textContent = projects.length;
-
-      if (projects.length === 0) {
-        gallery.innerHTML = `<div class="empty-state">
-          <svg class="empty-state__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-            <path d="M4 19.5A2.5 2.5 0 016.5 17H20"/>
-            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/>
-          </svg>
-          <h3 class="empty-state__title">No implementation plans yet</h3>
-          <p class="empty-state__text">Create an implementation plan from a completed assessment.</p>
-        </div>`;
-        return;
+        // Filter to only projects with actual plans
+        projects = projectCandidates.filter(p => p.hasPlan);
+        loadState.projects = 'ready';
+      } finally {
+        resolvePlansChecked();
+        render();
       }
 
-      // Load progress for each project
-      await Promise.all(projects.map(loadProjectProgress));
-
-      // Sort by name
-      projects.sort((a, b) => a.name.localeCompare(b.name));
-
-      renderProjects();
+      // Progress fills in as it arrives, so the list is usable straight away
+      projects.forEach(project => loadProjectProgress(project).then(scheduleRender));
     }
 
     async function loadProjectProgress(project) {
@@ -2069,248 +1731,864 @@
         project.checkedCount = 0;
       }
 
-      // Calculate current week from cohort start date
-      if (project.cohort_start_date) {
-        const start = new Date(project.cohort_start_date);
-        const days = Math.floor((Date.now() - start.getTime()) / 86400000);
-        project.week = Math.min(Math.max(Math.floor(days / 7) + 1, 1), 12);
-      } else {
-        project.week = 1;
-      }
+      project.progressLoaded = true;
     }
 
     // ══════════════════════════════════════════════════════════════
-    // RENDERING - ASSESSMENTS
+    // LIST ITEMS
     // ══════════════════════════════════════════════════════════════
-    function renderAssessments() {
-      const gallery = document.getElementById('assessmentGallery');
-      const countEl = document.getElementById('assessmentCount');
-      const isAdmin = currentUser.role === 'admin' || currentUser.role === 'psm' || hasWildcardAccess;
+    function percentOf(p) {
+      return p.totalItems > 0 ? Math.round((p.checkedCount / p.totalItems) * 100) : 0;
+    }
 
-      // Filter out assessments that have implementation plans - they show in Projects section
-      const assessmentsWithoutPlans = assessments.filter(a => !projectSlugs.has(a.client_slug));
+    function websiteHost(url) {
+      if (!url) return '';
+      try {
+        return new URL(url).hostname.replace(/^www\./, '');
+      } catch (_) {
+        return url;
+      }
+    }
 
-      // Update count to reflect only assessments without plans
-      countEl.textContent = assessmentsWithoutPlans.length;
+    // Dates saved as YYYY-MM-DD are calendar days, not moments in time
+    function formatDay(dateStr) {
+      if (!dateStr) return '';
+      const value = /^\d{4}-\d{2}-\d{2}$/.test(dateStr) ? dateStr + 'T00:00:00' : dateStr;
+      return new Date(value).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    }
 
-      if (assessmentsWithoutPlans.length === 0) {
-        gallery.innerHTML = `<div class="empty-state">
-          <svg class="empty-state__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-            <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/>
-            <rect x="9" y="3" width="6" height="4" rx="1"/>
-          </svg>
-          <h3 class="empty-state__title">No pending assessments</h3>
-          <p class="empty-state__text">All assessments have been converted to implementation plans, or generate a new assessment to get started.</p>
-          ${(isAdmin) ? `<a href="/admin/generate-assessment/" class="btn-create">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <line x1="12" y1="5" x2="12" y2="19"></line>
-              <line x1="5" y1="12" x2="19" y2="12"></line>
-            </svg>
-            New Assessment
-          </a>` : ''}
+    // Where an accelerator project is in its 12 weeks
+    function projectTiming(p) {
+      if (!p.cohort_start_date) return 'Start date not set';
+      const start = new Date(p.cohort_start_date);
+      const days = Math.floor((Date.now() - start.getTime()) / 86400000);
+      if (days >= 84) return '12 weeks finished';
+      const week = Math.min(Math.max(Math.floor(days / 7) + 1, 1), 12);
+      return `Week ${week} of 12`;
+    }
+
+    // Every section's records in one common shape, so search, filter and
+    // sort work the same way everywhere.
+    function getItems(sectionId) {
+      if (sectionId === 'assessments' || sectionId === 'elevated') {
+        const source = sectionId === 'assessments'
+          ? assessments.filter(a => !projectSlugs.has(a.client_slug)) // those with plans show under Accelerator Projects
+          : elevatedClients;
+        return source.map(a => ({
+          section: sectionId,
+          slug: a.client_slug,
+          name: a.business_name || a.client_slug,
+          host: websiteHost(a.website_url),
+          coach: a.coach_email || '',
+          date: a.assessment_date || a.created_at || '',
+          progress: null,
+          record: a
+        }));
+      }
+      if (sectionId === 'projects' || sectionId === 'experience') {
+        const source = sectionId === 'projects' ? projects : experienceProjects;
+        const seen = new Set();
+        return source
+          .filter(p => {
+            if (!p || !p.slug || !p.name || seen.has(p.slug)) return false;
+            seen.add(p.slug);
+            return true;
+          })
+          .map(p => ({
+            section: sectionId,
+            slug: p.slug,
+            name: p.name,
+            host: '',
+            coach: p.coach_email || '',
+            date: p.cohort_start_date || '',
+            progress: percentOf(p),
+            record: p
+          }));
+      }
+      return SANDBOXES.map(s => ({
+        section: 'sandboxes',
+        slug: s.slug,
+        name: s.name,
+        host: s.desc,
+        coach: '',
+        date: '',
+        progress: null,
+        record: s
+      }));
+    }
+
+    function findItem(sectionId, slug) {
+      return getItems(sectionId).find(item => item.slug === slug);
+    }
+
+    function isFiltering() {
+      return ui.query.trim() !== '' || (seesAllClients() && ui.coach !== 'all');
+    }
+
+    function matchesFilters(item) {
+      const q = ui.query.trim().toLowerCase();
+      if (q) {
+        const haystack = [item.name, item.slug, item.host, item.coach].join(' ').toLowerCase();
+        if (!haystack.includes(q)) return false;
+      }
+      if (seesAllClients() && ui.coach !== 'all') {
+        if (item.section === 'sandboxes') return false;
+        const coach = item.coach.toLowerCase();
+        if (ui.coach === 'mine') return coach === currentUser.email.toLowerCase();
+        if (ui.coach === 'none') return coach === '';
+        return coach === ui.coach;
+      }
+      return true;
+    }
+
+    function sortItems(items) {
+      const byName = (a, b) => a.name.localeCompare(b.name);
+      if (ui.sort === 'newest') {
+        return items.sort((a, b) => {
+          if (a.date && b.date) return a.date < b.date ? 1 : (a.date > b.date ? -1 : byName(a, b));
+          if (a.date) return -1;
+          if (b.date) return 1;
+          return byName(a, b);
+        });
+      }
+      if (ui.sort === 'progress') {
+        return items.sort((a, b) => {
+          const pa = a.progress === null ? -1 : a.progress;
+          const pb = b.progress === null ? -1 : b.progress;
+          return pb - pa || byName(a, b);
+        });
+      }
+      return items.sort(byName);
+    }
+
+    // ══════════════════════════════════════════════════════════════
+    // WHICH SECTIONS SHOW
+    // ══════════════════════════════════════════════════════════════
+    function sectionState(sectionId) {
+      return sectionId === 'sandboxes' ? 'ready' : loadState[sectionId];
+    }
+
+    function sectionShown(sectionId) {
+      const state = sectionState(sectionId);
+      if (sectionId === 'elevated') {
+        // Hidden when there are no elevated learners
+        if (state === 'loading') return ui.tab === 'elevated';
+        return state === 'error' || elevatedClients.length > 0;
+      }
+      if (sectionId === 'experience') {
+        // With no experience dashboards, the section is hidden from coaches.
+        // Staff still see it, because they are the ones who create them.
+        if (state === 'loading') return isStaffRole() || ui.tab === 'experience';
+        return state === 'error' || experienceProjects.length > 0 || isStaffRole();
+      }
+      return true;
+    }
+
+    // ══════════════════════════════════════════════════════════════
+    // RENDERING
+    // ══════════════════════════════════════════════════════════════
+    let renderQueued = false;
+    function scheduleRender() {
+      if (renderQueued) return;
+      renderQueued = true;
+      requestAnimationFrame(() => {
+        renderQueued = false;
+        render();
+      });
+    }
+
+    function render() {
+      if (!currentUser) return;
+
+      // A tab from the address bar may point at a section this person has none of
+      const stillLoading = Object.values(loadState).includes('loading');
+      if (ui.tab !== 'all' && !stillLoading && !sectionShown(ui.tab)) {
+        ui.tab = 'all';
+      }
+
+      const shown = SECTIONS.filter(s => sectionShown(s.id));
+      const counts = {};
+      let anyLoading = false;
+      shown.forEach(s => {
+        if (sectionState(s.id) === 'ready') {
+          counts[s.id] = getItems(s.id).filter(matchesFilters).length;
+        } else if (sectionState(s.id) === 'loading') {
+          anyLoading = true;
+        }
+      });
+
+      renderCoachOptions(stillLoading);
+      renderTabs(shown, counts, anyLoading);
+      renderList(shown, counts);
+    }
+
+    function renderTabs(shown, counts, anyLoading) {
+      const nav = document.getElementById('tabs');
+      const focusedTab = document.activeElement && document.activeElement.dataset
+        ? document.activeElement.dataset.tab
+        : null;
+
+      const total = Object.values(counts).reduce((sum, n) => sum + n, 0);
+      const tab = (id, label, count) => `
+        <button type="button" class="tab" data-tab="${id}" aria-pressed="${ui.tab === id}">
+          ${label}${count === undefined ? '' : `<span class="tab__count">${count}</span>`}
+        </button>`;
+
+      nav.innerHTML = tab('all', 'All', anyLoading ? undefined : total)
+        + shown.map(s => tab(s.id, s.tab, counts[s.id])).join('');
+
+      if (focusedTab) {
+        const again = nav.querySelector(`[data-tab="${focusedTab}"]`);
+        if (again) again.focus();
+      }
+    }
+
+    function renderList(shown, counts) {
+      const list = document.getElementById('clientList');
+      const filtering = isFiltering();
+      const visible = shown.filter(s => ui.tab === 'all' || ui.tab === s.id);
+
+      let total = 0;
+      let anyLoading = false;
+      const parts = [];
+
+      visible.forEach(s => {
+        const state = sectionState(s.id);
+        if (state === 'loading') {
+          anyLoading = true;
+          parts.push(sectionHtml(s, undefined, skeletonHtml()));
+          return;
+        }
+        if (state === 'error') {
+          parts.push(sectionHtml(s, undefined, `<div class="state"><p class="state__text">Could not load ${escapeHtml(s.title.toLowerCase())}. Please try refreshing the page.</p></div>`));
+          return;
+        }
+
+        const items = sortItems(getItems(s.id).filter(matchesFilters));
+        total += items.length;
+
+        if (items.length === 0) {
+          // While searching, sections with nothing to show step out of the way
+          if (!filtering) parts.push(sectionHtml(s, 0, emptyStateHtml(s.id)));
+          return;
+        }
+        parts.push(sectionHtml(s, items.length, `<ul class="rows">${items.map(rowHtml).join('')}</ul>`));
+      });
+
+      if (filtering && total === 0 && !anyLoading) {
+        parts.push(`
+          <div class="state state--panel">
+            <h2 class="state__title">No clients match</h2>
+            <p class="state__text">${escapeHtml(noMatchText())}</p>
+            <button type="button" class="btn" data-action="clear-filters">Clear search and filters</button>
+          </div>`);
+      }
+
+      list.innerHTML = parts.join('');
+      renderSummary(total, anyLoading, filtering);
+    }
+
+    function noMatchText() {
+      const q = ui.query.trim();
+      const where = ui.tab === 'all' ? '' : ` in ${SECTIONS.find(s => s.id === ui.tab).title}`;
+      if (q) return `Nothing matches "${q}"${where}. Check the spelling, or try the website or coach's email.`;
+      return `No clients match this coach filter${where}.`;
+    }
+
+    function renderSummary(total, anyLoading, filtering) {
+      const el = document.getElementById('summary');
+      if (anyLoading) {
+        el.textContent = 'Loading clients…';
+        return;
+      }
+      const noun = total === 1 ? 'client' : 'clients';
+      if (filtering) {
+        el.innerHTML = `<span><strong>${total}</strong> ${noun} ${total === 1 ? 'matches' : 'match'}</span>
+          <button type="button" class="link-btn" data-action="clear-filters">Clear search and filters</button>`;
+      } else {
+        el.innerHTML = `<span><strong>${total}</strong> ${noun}</span>`;
+      }
+    }
+
+    function sectionHtml(section, count, bodyHtml) {
+      return `
+        <section class="section" id="section-${section.id}" aria-labelledby="section-title-${section.id}">
+          <div class="section__header">
+            <h2 class="section__title" id="section-title-${section.id}">${section.title}</h2>
+            ${count === undefined ? '' : `<span class="section__count">${count}</span>`}
+            <p class="section__desc">${section.desc}</p>
+          </div>
+          ${bodyHtml}
+        </section>`;
+    }
+
+    function skeletonHtml() {
+      const row = `
+        <div class="skeleton-row">
+          <div class="skeleton-line" style="width:70%"></div>
+          <div class="skeleton-line" style="width:55%"></div>
+          <div class="skeleton-line" style="width:60%"></div>
+          <div class="skeleton-line" style="width:80%"></div>
         </div>`;
+      return `<div aria-hidden="true">${row}${row}${row}</div>`;
+    }
+
+    function emptyStateHtml(sectionId) {
+      const newAssessment = isStaffRole()
+        ? `<a href="/admin/generate-assessment/" class="btn btn--accent">${ICONS.plus} New assessment</a>`
+        : '';
+
+      if (sectionId === 'assessments') {
+        if (assessments.length === 0) {
+          return `<div class="state">
+            <h3 class="state__title">No assessments yet</h3>
+            <p class="state__text">${isStaffRole() ? 'Generate your first client assessment to get started.' : 'Assessments for your clients will appear here.'}</p>
+            ${newAssessment}
+          </div>`;
+        }
+        return `<div class="state">
+          <h3 class="state__title">No pending assessments</h3>
+          <p class="state__text">Every assessment has been turned into an implementation plan.${isStaffRole() ? ' Generate a new assessment to add another client.' : ''}</p>
+          ${newAssessment}
+        </div>`;
+      }
+      if (sectionId === 'projects') {
+        return `<div class="state">
+          <h3 class="state__title">No implementation plans yet</h3>
+          <p class="state__text">Create an implementation plan from a completed assessment.</p>
+        </div>`;
+      }
+      if (sectionId === 'experience') {
+        return `<div class="state">
+          <h3 class="state__title">No experience dashboards yet</h3>
+          <p class="state__text">Create one before an operator's onboarding call, then add their launch plan after the second coaching call.</p>
+          ${isStaffRole() ? `<a href="/admin/create-experience/" class="btn btn--accent">${ICONS.plus} Create experience dashboard</a>` : ''}
+        </div>`;
+      }
+      return '<div class="state"><p class="state__text">Nothing here yet.</p></div>';
+    }
+
+    // ── Rows ───────────────────────────────────────────────────────
+    function coachLabel(item) {
+      if (!seesAllClients() || item.section === 'sandboxes') return '';
+      if (!item.coach) return 'No coach assigned';
+      if (item.coach.toLowerCase() === currentUser.email.toLowerCase()) return 'Coach: you';
+      return 'Coach: ' + item.coach;
+    }
+
+    function subLine(item) {
+      const text = [item.host, coachLabel(item)].filter(Boolean).join(' · ');
+      return text ? `<div class="row__sub" title="${escapeHtml(text)}">${escapeHtml(text)}</div>` : '';
+    }
+
+    function progressHtml(label, percent, loaded) {
+      return `
+        <div class="progress">
+          <div class="progress__label"><span>${escapeHtml(label)}</span><span>${loaded ? percent + '%' : '…'}</span></div>
+          <div class="progress__bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${loaded ? percent : 0}" aria-label="Checklist progress">
+            <div class="progress__fill" style="width: ${loaded ? percent : 0}%"></div>
+          </div>
+        </div>`;
+    }
+
+    function moreButton(item) {
+      return `<button type="button" class="btn btn--icon" data-menu="row" aria-haspopup="menu" aria-expanded="false" aria-label="More actions for ${escapeHtml(item.name)}" title="More actions">${ICONS.dots}</button>`;
+    }
+
+    function rowHtml(item) {
+      const slug = escapeHtml(item.slug);
+      const name = escapeHtml(item.name);
+      let nameHtml = `<span class="row__name">${name}</span>`;
+      let status = '';
+      let meta = '';
+      let actions = '';
+
+      if (item.section === 'assessments' || item.section === 'elevated') {
+        const a = item.record;
+        const elevated = item.section === 'elevated';
+        const viewHref = elevated ? `/elevated/${slug}/` : `/${slug}/`;
+        const statusLabel = a.status ? a.status.charAt(0).toUpperCase() + a.status.slice(1) : 'Pending';
+        const completed = a.status === 'completed';
+
+        if (completed) {
+          nameHtml = `<a class="row__name" href="${viewHref}" target="_blank" rel="noopener">${name}</a>`;
+        }
+        status = `
+          ${completed
+            ? `<span class="grade ${getGradeClass(a.overall_grade)}" title="Overall grade">${escapeHtml(a.overall_grade || '?')}</span>`
+            : ''}
+          <span class="chip chip--${escapeHtml(a.status || 'pending')}">${escapeHtml(statusLabel)}</span>`;
+        meta = item.date ? `Assessed ${formatDay(item.date)}` : '';
+
+        if (completed) {
+          if (!elevated && (seesAllClients() || currentUser.role === 'coach')) {
+            actions += `<a href="/admin/create-project/?from=${slug}" class="btn btn--accent">${ICONS.plus} Add plan</a>`;
+          }
+          actions += `<a href="${viewHref}" class="btn" target="_blank" rel="noopener">${ICONS.external} View assessment</a>`;
+        } else {
+          actions += `<span class="row__wait">${a.status === 'processing' ? 'Processing…' : (a.status === 'failed' ? 'Not available' : 'Pending')}</span>`;
+        }
+        if (seesAllClients()) actions += moreButton(item);
+      }
+
+      else if (item.section === 'projects') {
+        const p = item.record;
+        nameHtml = `<a class="row__name" href="/${slug}/">${name}</a>`;
+        status = progressHtml(projectTiming(p), item.progress, !!p.progressLoaded);
+        meta = p.cohort_start_date ? `Onboarding: ${formatDay(p.cohort_start_date)}` : '';
+        actions = `<a href="/${slug}/" class="btn">Open dashboard</a>`;
+        if (canEditProjects()) actions += moreButton(item);
+      }
+
+      else if (item.section === 'experience') {
+        const p = item.record;
+        const onboarding = p.stage === 'onboarding';
+        const weekDisplay = onboarding
+          ? 'Launch plan not added yet'
+          : (p.week !== null ? `Week ${p.week} of ${p.totalWeeks}` : 'Launch plan ready');
+
+        nameHtml = `<a class="row__name" href="/${slug}/">${name}</a>`;
+        status = onboarding
+          ? `<span class="chip chip--onboarding">Onboarding</span><span>${weekDisplay}</span>`
+          : `<span class="chip chip--plan">Launch plan</span>${progressHtml(weekDisplay, item.progress, true)}`;
+        meta = onboarding
+          ? ''
+          : (p.cohort_start_date ? 'Started ' + formatDay(p.cohort_start_date) : 'Start date not chosen yet');
+        actions = `<a href="/${slug}/" class="btn">Open dashboard</a>`;
+        if (isStaffRole()) {
+          actions += `<a href="/admin/manage-experience/?slug=${slug}" class="btn" title="Add the launch plan or materials">${ICONS.pencil} Manage</a>`;
+        }
+      }
+
+      else {
+        const s = item.record;
+        nameHtml = `<a class="row__name" href="${s.href}" target="_blank" rel="noopener">${name}</a>`;
+        status = `<span class="chip chip--sandbox">${s.chip}</span>`;
+        actions = `<a href="${s.href}" class="btn" target="_blank" rel="noopener">${ICONS.external} ${s.action}</a>`;
+      }
+
+      return `
+        <li class="row" data-section="${item.section}" data-slug="${slug}">
+          <div class="row__main">${nameHtml}${subLine(item)}</div>
+          <div class="row__status">${status}</div>
+          <div class="row__meta">${meta}</div>
+          <div class="row__actions">${actions}</div>
+        </li>`;
+    }
+
+    // ══════════════════════════════════════════════════════════════
+    // SEARCH, TABS, COACH FILTER AND SORT
+    // ══════════════════════════════════════════════════════════════
+    const searchInput = document.getElementById('searchInput');
+    const searchBox = document.getElementById('searchBox');
+
+    searchInput.addEventListener('input', () => {
+      ui.query = searchInput.value;
+      searchBox.classList.toggle('search--has-value', ui.query.length > 0);
+      render();
+    });
+
+    function clearSearch() {
+      searchInput.value = '';
+      ui.query = '';
+      searchBox.classList.remove('search--has-value');
+    }
+
+    document.getElementById('searchClear').addEventListener('click', () => {
+      clearSearch();
+      render();
+      searchInput.focus();
+    });
+
+    function clearFilters() {
+      clearSearch();
+      ui.coach = 'all';
+      document.getElementById('coachFilter').value = 'all';
+      savePreferences();
+      render();
+    }
+
+    // Tabs. The chosen tab is kept in the address, so Back and bookmarks work.
+    document.getElementById('tabs').addEventListener('click', (e) => {
+      const button = e.target.closest('[data-tab]');
+      if (!button) return;
+      ui.tab = button.dataset.tab;
+      const section = SECTIONS.find(s => s.id === ui.tab);
+      const url = window.location.pathname + window.location.search + (section ? '#' + section.hash : '');
+      history.pushState(null, '', url);
+      render();
+      const toolbar = document.getElementById('toolbar');
+      if (toolbar.classList.contains('toolbar--stuck')) {
+        const top = document.querySelector('.controls').getBoundingClientRect().top + window.scrollY;
+        window.scrollTo({ top: top - toolbar.offsetHeight - toolbar.getBoundingClientRect().top - 8 });
+      }
+    });
+
+    function readTabFromHash() {
+      const hash = window.location.hash.replace('#', '');
+      const section = SECTIONS.find(s => s.hash === hash);
+      ui.tab = section ? section.id : 'all';
+    }
+
+    window.addEventListener('popstate', () => { readTabFromHash(); render(); });
+    window.addEventListener('hashchange', () => { readTabFromHash(); render(); });
+
+    // Coach filter: only for people who see every client
+    function renderCoachOptions(stillLoading) {
+      const select = document.getElementById('coachFilter');
+      if (!seesAllClients()) return;
+
+      const me = currentUser.email.toLowerCase();
+      const emails = new Set();
+      ['assessments', 'projects', 'experience', 'elevated'].forEach(id => {
+        if (sectionState(id) !== 'ready') return;
+        getItems(id).forEach(item => { if (item.coach) emails.add(item.coach.toLowerCase()); });
+      });
+      emails.delete(me);
+
+      const options = [
+        ['all', 'All coaches'],
+        ['mine', 'My clients'],
+        ...[...emails].sort().map(email => [email, email]),
+        ['none', 'No coach assigned']
+      ];
+
+      // A remembered coach who no longer has clients would hide everything
+      if (!stillLoading && !options.some(([value]) => value === ui.coach)) {
+        ui.coach = 'all';
+        savePreferences();
+      }
+
+      const signature = options.map(([value]) => value).join('|');
+      if (select.dataset.signature !== signature) {
+        select.innerHTML = options
+          .map(([value, label]) => `<option value="${escapeHtml(value)}">${escapeHtml(label)}</option>`)
+          .join('');
+        select.dataset.signature = signature;
+      }
+      if (options.some(([value]) => value === ui.coach)) select.value = ui.coach;
+    }
+
+    document.getElementById('coachFilter').addEventListener('change', (e) => {
+      ui.coach = e.target.value;
+      savePreferences();
+      render();
+    });
+
+    document.getElementById('sortSelect').addEventListener('change', (e) => {
+      ui.sort = e.target.value;
+      savePreferences();
+      render();
+    });
+
+    // The coach filter and sort order are remembered on this device
+    function savePreferences() {
+      try {
+        localStorage.setItem('myClients.coach', ui.coach);
+        localStorage.setItem('myClients.sort', ui.sort);
+      } catch (_) { /* storage unavailable: the choice lasts for this visit */ }
+    }
+
+    function restorePreferences() {
+      try {
+        const sort = localStorage.getItem('myClients.sort');
+        if (['name', 'newest', 'progress'].includes(sort)) ui.sort = sort;
+        const coach = localStorage.getItem('myClients.coach');
+        if (coach && seesAllClients()) ui.coach = coach;
+      } catch (_) { /* storage unavailable */ }
+      document.getElementById('sortSelect').value = ui.sort;
+    }
+
+    // Shadow under the toolbar once it is pinned
+    const toolbarEl = document.getElementById('toolbar');
+    function updateToolbarShadow() {
+      const pinnedAt = parseInt(getComputedStyle(toolbarEl).top, 10) || 0;
+      toolbarEl.classList.toggle('toolbar--stuck', window.scrollY > 0 && toolbarEl.getBoundingClientRect().top <= pinnedAt + 1);
+    }
+    window.addEventListener('scroll', updateToolbarShadow, { passive: true });
+
+    // Clicks inside the list
+    document.getElementById('clientList').addEventListener('click', (e) => {
+      const menuButton = e.target.closest('[data-menu="row"]');
+      if (menuButton) {
+        const row = menuButton.closest('.row');
+        const item = findItem(row.dataset.section, row.dataset.slug);
+        if (item) toggleMenu(menuButton, item.name, rowMenuItems(item));
+        return;
+      }
+      if (e.target.closest('[data-action="clear-filters"]')) clearFilters();
+    });
+
+    document.getElementById('summary').addEventListener('click', (e) => {
+      if (e.target.closest('[data-action="clear-filters"]')) clearFilters();
+    });
+
+    // ══════════════════════════════════════════════════════════════
+    // MENUS
+    // ══════════════════════════════════════════════════════════════
+    const menuEl = document.getElementById('menu');
+    const menuBackdrop = document.getElementById('menuBackdrop');
+    let menuTrigger = null;
+    let menuActions = [];
+
+    // The actions behind a row's More button
+    function rowMenuItems(item) {
+      if (item.section === 'projects') {
+        return [
+          { label: 'Edit plan content', icon: ICONS.pencil, href: `/edit/${item.slug}/`, newTab: true },
+          { label: 'Project settings', icon: ICONS.gear, run: () => openEditProjectModal(item.slug) },
+          { label: 'Trigger reassessment', icon: ICONS.refresh, run: () => openTriggerMilestoneModal(item.slug, item.name) }
+        ];
+      }
+      const clientType = item.section === 'elevated' ? 'elevated' : 'accelerator';
+      const items = [
+        { label: 'Change coach', icon: ICONS.user, run: () => openChangeCoachModal(item.slug, item.name, clientType) }
+      ];
+      // Regenerating opens a staff page, so only staff are offered it
+      if (isStaffRole()) {
+        items.push({ label: 'Regenerate', icon: ICONS.refresh, run: () => regenerateAssessment(item.slug, clientType) });
+      }
+      items.push({ label: 'Delete', icon: ICONS.trash, danger: true, run: () => confirmDeleteAssessment(item.slug, item.name) });
+      return items;
+    }
+
+    function toggleMenu(trigger, title, items) {
+      if (menuTrigger === trigger) {
+        closeMenu();
+        return;
+      }
+      closeMenu();
+
+      menuTrigger = trigger;
+      menuActions = items;
+      menuEl.innerHTML = `<div class="menu__title">${escapeHtml(title)}</div>` + items.map((item, i) => {
+        const cls = `menu__item${item.danger ? ' menu__item--danger' : ''}`;
+        return item.href
+          ? `<a role="menuitem" class="${cls}" href="${escapeHtml(item.href)}"${item.newTab ? ' target="_blank" rel="noopener"' : ''} data-index="${i}">${item.icon}${escapeHtml(item.label)}</a>`
+          : `<button type="button" role="menuitem" class="${cls}" data-index="${i}">${item.icon}${escapeHtml(item.label)}</button>`;
+      }).join('');
+
+      menuEl.hidden = false;
+      menuBackdrop.classList.add('menu-backdrop--visible');
+      trigger.setAttribute('aria-expanded', 'true');
+
+      // Sits under the button, lined up with its right edge. Opens upward
+      // when there is no room below. On phones the stylesheet turns it
+      // into a sheet at the bottom of the screen.
+      const rect = trigger.getBoundingClientRect();
+      const width = menuEl.offsetWidth;
+      const height = menuEl.offsetHeight;
+      let top = rect.bottom + 6;
+      if (top + height > window.innerHeight - 8 && rect.top - height - 6 > 8) {
+        top = rect.top - height - 6;
+      }
+      const left = Math.max(8, rect.right - width);
+      menuEl.style.top = (top + window.scrollY) + 'px';
+      menuEl.style.left = (left + window.scrollX) + 'px';
+
+      const first = menuEl.querySelector('[role="menuitem"]');
+      if (first) first.focus();
+    }
+
+    function closeMenu(returnFocus) {
+      if (!menuTrigger) return;
+      const trigger = menuTrigger;
+      menuTrigger = null;
+      menuActions = [];
+      menuEl.hidden = true;
+      menuBackdrop.classList.remove('menu-backdrop--visible');
+      trigger.setAttribute('aria-expanded', 'false');
+      if (returnFocus && document.contains(trigger)) trigger.focus();
+    }
+
+    menuEl.addEventListener('click', (e) => {
+      const el = e.target.closest('[role="menuitem"]');
+      if (!el) return;
+      const action = menuActions[Number(el.dataset.index)];
+      closeMenu(true);
+      if (action && action.run) action.run();
+    });
+
+    menuEl.addEventListener('keydown', (e) => {
+      const items = [...menuEl.querySelectorAll('[role="menuitem"]')];
+      const index = items.indexOf(document.activeElement);
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        items[(index + 1) % items.length].focus();
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        items[(index - 1 + items.length) % items.length].focus();
+      } else if (e.key === 'Home') {
+        e.preventDefault();
+        items[0].focus();
+      } else if (e.key === 'End') {
+        e.preventDefault();
+        items[items.length - 1].focus();
+      } else if (e.key === 'Tab') {
+        closeMenu();
+      }
+    });
+
+    // Close the menu when clicking anywhere else, or when the page moves under it
+    document.addEventListener('click', (e) => {
+      if (!menuTrigger) return;
+      if (e.target.closest('#menu') || e.target.closest('[data-menu]') || e.target.closest('#newMenuBtn')) return;
+      closeMenu();
+    });
+    window.addEventListener('resize', () => closeMenu());
+
+    // New: the two things staff can create from here
+    document.getElementById('newMenuBtn').addEventListener('click', (e) => {
+      toggleMenu(e.currentTarget, 'New', [
+        { label: 'New assessment', icon: ICONS.clipboard, href: '/admin/generate-assessment/' },
+        { label: 'Create experience dashboard', icon: ICONS.compass, href: '/admin/create-experience/' }
+      ]);
+    });
+
+    // ══════════════════════════════════════════════════════════════
+    // MESSAGES
+    // ══════════════════════════════════════════════════════════════
+    // Confirmations disappear on their own. Warnings and errors stay until closed.
+    function toast(message, type = 'success') {
+      const el = document.createElement('div');
+      el.className = `toast toast--${type}`;
+      el.innerHTML = `<span class="toast__text"></span><button type="button" class="toast__close" aria-label="Dismiss message">${ICONS.close}</button>`;
+      el.querySelector('.toast__text').textContent = message;
+      el.querySelector('.toast__close').addEventListener('click', () => el.remove());
+      document.getElementById('toasts').appendChild(el);
+      if (type === 'success') setTimeout(() => el.remove(), 6000);
+    }
+
+    // For a message that has to survive the page reloading
+    function queueToast(message, type = 'success') {
+      try {
+        sessionStorage.setItem('myClients.toast', JSON.stringify({ message, type }));
+      } catch (_) { /* storage unavailable: the message is skipped */ }
+    }
+
+    function showQueuedToast() {
+      try {
+        const saved = sessionStorage.getItem('myClients.toast');
+        if (!saved) return;
+        sessionStorage.removeItem('myClients.toast');
+        const { message, type } = JSON.parse(saved);
+        if (message) toast(message, type);
+      } catch (_) { /* nothing to show */ }
+    }
+
+    // ══════════════════════════════════════════════════════════════
+    // MODALS
+    // ══════════════════════════════════════════════════════════════
+    let modalReturnFocus = null;
+
+    function openModal(id) {
+      const overlay = document.getElementById(id);
+      modalReturnFocus = document.activeElement;
+      showModalError(id, '');
+      overlay.classList.add('modal-overlay--visible');
+      // Wait for the overlay to become visible before moving focus into it
+      setTimeout(() => {
+        const first = overlay.querySelector('input:not([disabled]), select:not([disabled]), button:not([disabled])');
+        if (first && overlay.classList.contains('modal-overlay--visible')) first.focus();
+      }, 60);
+    }
+
+    function closeModal(id) {
+      const overlay = document.getElementById(id);
+      const wasOpen = overlay.classList.contains('modal-overlay--visible');
+      overlay.classList.remove('modal-overlay--visible');
+      if (wasOpen && modalReturnFocus && document.contains(modalReturnFocus)) {
+        modalReturnFocus.focus();
+      }
+      if (wasOpen) modalReturnFocus = null;
+    }
+
+    // Problems are shown inside the modal, next to what caused them
+    function showModalError(id, message) {
+      const el = document.querySelector(`#${id} .modal__error`);
+      if (!el) return;
+      el.textContent = message || '';
+      el.hidden = !message;
+    }
+
+    function openModalOverlay() {
+      return document.querySelector('.modal-overlay--visible');
+    }
+
+    const MODAL_CLOSERS = {
+      deleteModal: () => closeDeleteModal(),
+      changeCoachModal: () => closeChangeCoachModal(),
+      editProjectModal: () => closeEditProjectModal(),
+      triggerMilestoneModal: () => closeTriggerMilestoneModal()
+    };
+
+    // Click the dimmed background to close
+    Object.keys(MODAL_CLOSERS).forEach(id => {
+      document.getElementById(id).addEventListener('mousedown', (e) => {
+        if (e.target === e.currentTarget) MODAL_CLOSERS[id]();
+      });
+    });
+
+    document.addEventListener('keydown', function(e) {
+      const overlay = openModalOverlay();
+
+      if (e.key === 'Escape') {
+        if (menuTrigger) {
+          closeMenu(true);
+        } else if (overlay) {
+          MODAL_CLOSERS[overlay.id]();
+        } else if (document.activeElement === searchInput) {
+          clearSearch();
+          render();
+          searchInput.blur();
+        }
         return;
       }
 
-      gallery.innerHTML = assessmentsWithoutPlans.map((a, i) => {
-        const hasPlan = false; // We've already filtered these out
-        const gradeClass = getGradeClass(a.overall_grade);
-        const statusClass = `status-${a.status}`;
-        const statusLabel = a.status.charAt(0).toUpperCase() + a.status.slice(1);
-        const dateStr = formatDate(a.assessment_date || a.created_at);
-        const url = a.website_url ? new URL(a.website_url).hostname : '';
-
-        return `
-          <div class="assessment-card" style="animation-delay: ${i * 0.05}s" data-slug="${a.client_slug}">
-            <div class="assessment-card__header">
-              <div>
-                <h3 class="assessment-card__name">${escapeHtml(a.business_name)}</h3>
-                <p class="assessment-card__url">${escapeHtml(url)}</p>
-              </div>
-              ${a.status === 'completed' ? `
-                <div class="assessment-card__grade ${gradeClass}">${a.overall_grade || '?'}</div>
-              ` : `
-                <div class="assessment-card__grade grade-pending">...</div>
-              `}
-            </div>
-            <div class="assessment-card__meta">
-              <span class="status-badge ${statusClass}">
-                <span class="status-badge__dot"></span>
-                ${statusLabel}
-              </span>
-              <span class="assessment-card__meta-item">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
-                  <line x1="16" y1="2" x2="16" y2="6"/>
-                  <line x1="8" y1="2" x2="8" y2="6"/>
-                  <line x1="3" y1="10" x2="21" y2="10"/>
-                </svg>
-                ${dateStr}
-              </span>
-            </div>
-            <div class="assessment-card__actions">
-              ${a.status === 'completed' ? `
-                <a href="/${a.client_slug}/" class="btn-secondary" target="_blank">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/>
-                    <polyline points="15 3 21 3 21 9"/>
-                    <line x1="10" y1="14" x2="21" y2="3"/>
-                  </svg>
-                  View Assessment
-                </a>
-              ` : `
-                <button class="btn-secondary" disabled>
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <circle cx="12" cy="12" r="10"/>
-                    <polyline points="12 6 12 12 16 14"/>
-                  </svg>
-                  ${a.status === 'processing' ? 'Processing...' : 'Pending'}
-                </button>
-              `}
-              ${(a.status === 'completed' && (isAdmin || currentUser.role === 'coach')) ? `
-                <a href="/admin/create-project/?from=${a.client_slug}" class="btn-secondary btn-success">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <line x1="12" y1="5" x2="12" y2="19"/>
-                    <line x1="5" y1="12" x2="19" y2="12"/>
-                  </svg>
-                  Add Plan
-                </a>
-              ` : ''}
-              ${isAdmin ? `
-                <div class="actions-menu">
-                  <button class="actions-menu__trigger" onclick="toggleActionsMenu(event, '${a.client_slug}')">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <circle cx="12" cy="12" r="1"/>
-                      <circle cx="12" cy="5" r="1"/>
-                      <circle cx="12" cy="19" r="1"/>
-                    </svg>
-                  </button>
-                  <div class="actions-menu__dropdown">
-                    <button class="actions-menu__item" onclick="openChangeCoachModal('${a.client_slug}', '${escapeHtml(a.business_name)}', 'accelerator')">
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-                        <circle cx="12" cy="7" r="4"/>
-                      </svg>
-                      Change Coach
-                    </button>
-                    <button class="actions-menu__item" onclick="regenerateAssessment('${a.client_slug}')">
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <polyline points="23 4 23 10 17 10"/>
-                        <path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/>
-                      </svg>
-                      Regenerate
-                    </button>
-                    <button class="actions-menu__item actions-menu__item--danger" onclick="confirmDeleteAssessment('${a.client_slug}', '${escapeHtml(a.business_name)}')">
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <polyline points="3 6 5 6 21 6"/>
-                        <path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/>
-                      </svg>
-                      Delete
-                    </button>
-                  </div>
-                </div>
-              ` : ''}
-            </div>
-          </div>
-        `;
-      }).join('');
-    }
-
-    // ══════════════════════════════════════════════════════════════
-    // RENDERING - PROJECTS
-    // ══════════════════════════════════════════════════════════════
-    function renderProjects() {
-      const gallery = document.getElementById('projectGallery');
-      const canEdit = currentUser.role === 'admin' || currentUser.role === 'psm' || currentUser.role === 'coach';
-
-      // Filter to valid projects only and dedupe by slug
-      const seen = new Set();
-      const validProjects = projects.filter(p => {
-        if (!p || !p.slug || !p.name || seen.has(p.slug)) return false;
-        seen.add(p.slug);
-        return true;
-      });
-
-      gallery.innerHTML = validProjects.map((p, i) => {
-        const percent = p.totalItems > 0
-          ? Math.round((p.checkedCount / p.totalItems) * 100)
-          : 0;
-
-        const startDate = p.cohort_start_date
-          ? new Date(p.cohort_start_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
-          : 'Not set';
-
-        const editButton = canEdit ? `
-          <div class="project-card__actions">
-            <button class="project-card__edit-btn project-card__edit-btn--plan" onclick="event.preventDefault(); event.stopPropagation(); window.open('/edit/${p.slug}/', '_blank')" title="Edit plan content">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M12 20h9"/>
-                <path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/>
-              </svg>
-            </button>
-            <button class="project-card__edit-btn" onclick="event.preventDefault(); event.stopPropagation(); openEditProjectModal('${p.slug}')" title="Edit project settings">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="3"/>
-                <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/>
-              </svg>
-            </button>
-            <button class="project-card__edit-btn" onclick="event.preventDefault(); event.stopPropagation(); openTriggerMilestoneModal('${p.slug}', '${escapeHtml(p.name)}')" title="Trigger reassessment">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="23 4 23 10 17 10"/>
-                <path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/>
-              </svg>
-            </button>
-          </div>
-        ` : '';
-
-        return `
-          <a href="/${p.slug}/" class="project-card" style="animation-delay: ${i * 0.05}s" data-slug="${p.slug}">
-            <div class="project-card__header">
-              <div class="project-card__info">
-                <h2 class="project-card__name">${escapeHtml(p.name)}</h2>
-                <p class="project-card__meta">Onboarding: ${startDate}</p>
-              </div>
-              ${editButton}
-            </div>
-            <p class="project-card__week">Week ${p.week} of 12</p>
-            <div class="project-card__progress">
-              <div class="project-card__bar">
-                <div class="project-card__bar-fill" style="width: ${percent}%"></div>
-              </div>
-              <span class="project-card__percent">${percent}%</span>
-            </div>
-          </a>
-        `;
-      }).join('');
-    }
-
-    // ══════════════════════════════════════════════════════════════
-    // ACTIONS
-    // ══════════════════════════════════════════════════════════════
-    function toggleActionsMenu(event, slug) {
-      event.stopPropagation();
-      const menu = event.target.closest('.actions-menu');
-      const isOpen = menu.classList.contains('actions-menu--open');
-
-      // Close all menus first
-      document.querySelectorAll('.actions-menu--open').forEach(m => m.classList.remove('actions-menu--open'));
-
-      if (!isOpen) {
-        menu.classList.add('actions-menu--open');
+      // Keep Tab inside the open modal
+      if (e.key === 'Tab' && overlay) {
+        const focusable = [...overlay.querySelectorAll('input:not([disabled]), select:not([disabled]), button:not([disabled]), [tabindex="0"]')]
+          .filter(el => el.offsetParent !== null);
+        if (focusable.length === 0) return;
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (!overlay.contains(document.activeElement)) {
+          e.preventDefault();
+          first.focus();
+        } else if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+        return;
       }
-    }
 
+      // Press / to jump to search
+      if (e.key === '/' && !overlay && !e.metaKey && !e.ctrlKey && !e.altKey) {
+        const tag = (document.activeElement && document.activeElement.tagName) || '';
+        if (['INPUT', 'TEXTAREA', 'SELECT'].includes(tag)) return;
+        e.preventDefault();
+        searchInput.focus();
+        searchInput.select();
+      }
+    });
+
+    // ══════════════════════════════════════════════════════════════
+    // DELETE ASSESSMENT
+    // ══════════════════════════════════════════════════════════════
     function confirmDeleteAssessment(slug, businessName) {
       deleteTargetSlug = slug;
       document.getElementById('deleteModalText').textContent =
-        `Are you sure you want to delete the assessment for "${businessName}"? This will also delete the client dashboard. This action cannot be undone.`;
-      document.getElementById('deleteModal').classList.add('modal-overlay--visible');
+        `Delete the assessment for "${businessName}"? It will be removed from My Clients. The client's dashboard page is not deleted. This cannot be undone.`;
+      openModal('deleteModal');
 
       document.getElementById('confirmDeleteBtn').onclick = () => deleteAssessment(slug);
     }
 
     function closeDeleteModal() {
-      document.getElementById('deleteModal').classList.remove('modal-overlay--visible');
+      closeModal('deleteModal');
       deleteTargetSlug = null;
     }
 
@@ -2318,6 +2596,7 @@
       const btn = document.getElementById('confirmDeleteBtn');
       btn.textContent = 'Deleting...';
       btn.disabled = true;
+      showModalError('deleteModal', '');
 
       try {
         // Delete from Supabase
@@ -2332,18 +2611,14 @@
 
         // Remove from local state and re-render
         assessments = assessments.filter(a => a.client_slug !== slug);
-        document.getElementById('assessmentCount').textContent = assessments.length;
-
-        if (assessments.length === 0) {
-          loadAssessments(); // Show empty state
-        } else {
-          renderAssessments();
-        }
+        elevatedClients = elevatedClients.filter(a => a.client_slug !== slug);
+        render();
 
         closeDeleteModal();
+        toast('Assessment deleted.');
       } catch (err) {
         console.error('Delete error:', err);
-        alert('Failed to delete assessment. Please try again.');
+        showModalError('deleteModal', 'The assessment could not be deleted. Please try again.');
       } finally {
         btn.textContent = 'Delete';
         btn.disabled = false;
@@ -2373,7 +2648,7 @@
       document.getElementById('notifyCoachCheckbox').checked = true;
 
       // Show the modal
-      document.getElementById('editProjectModal').classList.add('modal-overlay--visible');
+      openModal('editProjectModal');
     }
 
     // Show/hide notify checkbox when coach email changes
@@ -2392,7 +2667,7 @@
     });
 
     function closeEditProjectModal() {
-      document.getElementById('editProjectModal').classList.remove('modal-overlay--visible');
+      closeModal('editProjectModal');
       editTargetSlug = null;
     }
 
@@ -2418,7 +2693,7 @@
       const existingResult = document.querySelector('#triggerMilestoneModal .milestone-result');
       if (existingResult) existingResult.remove();
 
-      document.getElementById('triggerMilestoneModal').classList.add('modal-overlay--visible');
+      openModal('triggerMilestoneModal');
 
       // Fetch milestones for this client
       try {
@@ -2502,7 +2777,7 @@
     }
 
     function closeTriggerMilestoneModal() {
-      document.getElementById('triggerMilestoneModal').classList.remove('modal-overlay--visible');
+      closeModal('triggerMilestoneModal');
       triggerMilestoneSlug = null;
       triggerMilestoneName = null;
       selectedMilestoneId = null;
@@ -2652,7 +2927,6 @@
           await notifyCoachAssigned(newCoachEmail, editTargetSlug, project?.name || toTitleCase(editTargetSlug));
         }
 
-        if (revokeWarning) alert(revokeWarning);
 
         // Update local state
         if (project) {
@@ -2668,16 +2942,18 @@
         }
 
         // Re-render projects and close modal
-        renderProjects();
+        render();
         closeEditProjectModal();
 
-        if (coachAccessError) {
-          alert('The project was saved, but ' + newCoachEmail + ' could not be given access to the dashboard. Please try saving again or contact an admin.');
+        if (revokeWarning) {
+          toast(revokeWarning, 'warning');
+        } else {
+          toast('Project settings saved.');
         }
 
       } catch (err) {
         console.error('Update error:', err);
-        alert('Failed to update project. ' + (err.message || 'Please try again.'));
+        showModalError('editProjectModal', 'The project could not be updated. ' + (err.message || 'Please try again.'));
       } finally {
         btn.textContent = originalText;
         btn.disabled = false;
@@ -2781,16 +3057,6 @@
         // Don't throw - notification failure shouldn't block the save
       }
     }
-
-    // Close modal on Escape key
-    document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape') {
-        closeEditProjectModal();
-        closeDeleteModal();
-        closeChangeCoachModal();
-      }
-    });
-
     // ══════════════════════════════════════════════════════════════
     // CHANGE COACH MODAL
     // ══════════════════════════════════════════════════════════════
@@ -2849,7 +3115,7 @@
       document.getElementById('changeCoachNotifyCheckbox').checked = true;
 
       // Show the modal
-      document.getElementById('changeCoachModal').classList.add('modal-overlay--visible');
+      openModal('changeCoachModal');
     }
 
     // Show/hide notify checkbox when coach selection changes
@@ -2867,7 +3133,7 @@
     });
 
     function closeChangeCoachModal() {
-      document.getElementById('changeCoachModal').classList.remove('modal-overlay--visible');
+      closeModal('changeCoachModal');
       changeCoachTargetSlug = null;
       changeCoachClientType = null;
       changeCoachOriginalEmail = null;
@@ -2933,14 +3199,14 @@
 
         // Close modal and show success
         closeChangeCoachModal();
-        alert(revokeWarning || 'Coach assignment updated successfully.');
+        queueToast(revokeWarning || 'Coach updated.', revokeWarning ? 'warning' : 'success');
 
         // Reload the page to reflect changes
         window.location.reload();
 
       } catch (err) {
         console.error('Update coach error:', err);
-        alert('Failed to update coach assignment: ' + err.message);
+        showModalError('changeCoachModal', 'The coach could not be updated. ' + err.message);
       } finally {
         btn.textContent = originalText;
         btn.disabled = false;
@@ -2948,144 +3214,10 @@
     }
 
     async function regenerateAssessment(slug, clientType = 'accelerator') {
-      // Close the menu
-      document.querySelectorAll('.actions-menu--open').forEach(m => m.classList.remove('actions-menu--open'));
-
       // Redirect to the assessment form with edit parameter
       // The form will pre-populate with existing data and create a fresh assessment
       window.location.href = `/admin/generate-assessment/?edit=${encodeURIComponent(slug)}`;
     }
-
-    // Legacy regeneration function kept for reference but no longer used
-    async function _legacyRegenerateAssessment(slug, clientType = 'accelerator') {
-      // Find the assessment - check both regular assessments and query DB for elevated
-      let assessment = assessments.find(a => a.client_slug === slug);
-
-      // If not found in local array, query the database directly
-      if (!assessment) {
-        const { data } = await supabaseClient
-          .from('client_assessments')
-          .select('*')
-          .eq('client_slug', slug)
-          .single();
-        assessment = data;
-      }
-
-      if (!assessment) {
-        alert('Assessment not found');
-        return;
-      }
-
-      // Show progress modal
-      document.getElementById('regenerateModal').classList.add('modal-overlay--visible');
-      document.getElementById('regenerateModalText').textContent =
-        `Regenerating assessment for ${assessment.business_name}...`;
-      document.getElementById('regenerateStatus').textContent = 'Preparing...';
-
-      try {
-        // Get auth token
-        const { data: { session } } = await supabaseClient.auth.getSession();
-        if (!session) {
-          throw new Error('Not authenticated');
-        }
-
-        // Build request with existing assessment data
-        const requestBody = {
-          businessName: assessment.business_name,
-          slug: assessment.client_slug,
-          websiteUrl: assessment.website_url,
-          location: assessment.location || '',
-          social: {
-            instagram: assessment.social_instagram || '',
-            facebook: assessment.social_facebook || '',
-            tiktok: assessment.social_tiktok || '',
-            youtube: assessment.social_youtube || '',
-            pinterest: assessment.social_pinterest || '',
-            twitter: assessment.social_twitter || '',
-            linkedin: assessment.social_linkedin || ''
-          },
-          googlePlaceId: assessment.google_place_id || null,
-          clientType: clientType,  // Pass client type for elevated vs accelerator
-          regenerate: true  // Flag to indicate this is a regeneration
-        };
-
-        document.getElementById('regenerateStatus').textContent = 'Calling assessment API...';
-
-        // Call the regenerate endpoint
-        const response = await fetch('/.netlify/functions/regenerate-assessment-background', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${session.access_token}`
-          },
-          body: JSON.stringify(requestBody)
-        });
-
-        if (!response.ok) {
-          const result = await response.json();
-          throw new Error(result.error || 'Failed to start regeneration');
-        }
-
-        document.getElementById('regenerateStatus').textContent = 'Assessment started, polling for completion...';
-
-        // Poll for completion
-        const maxPolls = 180; // 6 minutes
-        for (let i = 0; i < maxPolls; i++) {
-          await new Promise(r => setTimeout(r, 2000));
-
-          const { data: updated } = await supabaseClient
-            .from('client_assessments')
-            .select('status, overall_grade')
-            .eq('client_slug', slug)
-            .single();
-
-          if (updated?.status === 'completed') {
-            document.getElementById('regenerateStatus').textContent = 'Complete! Refreshing...';
-            await new Promise(r => setTimeout(r, 1000));
-            window.location.reload();
-            return;
-          } else if (updated?.status === 'failed') {
-            // Get the error message from the database
-            const { data: failedRecord } = await supabaseClient
-              .from('client_assessments')
-              .select('error_message')
-              .eq('client_slug', slug)
-              .single();
-            throw new Error(failedRecord?.error_message || 'Assessment generation failed');
-          }
-
-          // Show actual progress from database if available
-          const { data: progressCheck } = await supabaseClient
-            .from('client_assessments')
-            .select('error_message')
-            .eq('client_slug', slug)
-            .single();
-
-          if (progressCheck?.error_message?.startsWith('Progress:')) {
-            document.getElementById('regenerateStatus').textContent = progressCheck.error_message.replace('Progress: ', '');
-          } else {
-            // Fallback to generic messages
-            const phrases = [
-              'Analyzing website performance...',
-              'Checking Google reviews...',
-              'Evaluating SEO factors...',
-              'Assessing social presence...',
-              'Generating recommendations...',
-              'Almost there...'
-            ];
-            document.getElementById('regenerateStatus').textContent = phrases[i % phrases.length];
-          }
-        }
-
-        throw new Error('Assessment timed out');
-
-      } catch (err) {
-        console.error('Regenerate error:', err);
-        alert('Failed to regenerate assessment: ' + err.message);
-        document.getElementById('regenerateModal').classList.remove('modal-overlay--visible');
-      }
-    }
-
     // ══════════════════════════════════════════════════════════════
     // UTILITIES
     // ══════════════════════════════════════════════════════════════
@@ -3115,173 +3247,6 @@
       if (!grade) return 'grade-pending';
       const letter = grade.charAt(0).toUpperCase();
       return `grade-${letter.toLowerCase()}`;
-    }
-
-    // ══════════════════════════════════════════════════════════════
-    // SEARCH FUNCTIONALITY
-    // ══════════════════════════════════════════════════════════════
-    const searchInput = document.getElementById('searchInput');
-    const searchClear = document.getElementById('searchClear');
-
-    function filterCards(query) {
-      const normalizedQuery = query.toLowerCase().trim();
-
-      // Define sections to filter (excluding sampleSection which is static)
-      const sections = [
-        {
-          id: 'assessmentsSection',
-          galleryId: 'assessmentGallery',
-          countId: 'assessmentCount',
-          getCardName: (card) => card.querySelector('.assessment-card__name')?.textContent || '',
-          getCardSlug: (card) => card.dataset.slug || ''
-        },
-        {
-          id: 'elevatedSection',
-          galleryId: 'elevatedGallery',
-          countId: 'elevatedCount',
-          getCardName: (card) => card.querySelector('.assessment-card__name')?.textContent || '',
-          getCardSlug: (card) => card.dataset.slug || ''
-        },
-        {
-          id: 'experienceSection',
-          galleryId: 'experienceGallery',
-          countId: 'experienceCount',
-          getCardName: (card) => card.querySelector('.project-card__name')?.textContent || '',
-          getCardSlug: (card) => card.dataset.slug || ''
-        },
-        {
-          id: 'projectsSection',
-          galleryId: 'projectGallery',
-          countId: 'projectCount',
-          getCardName: (card) => card.querySelector('.project-card__name')?.textContent || '',
-          getCardSlug: (card) => card.dataset.slug || ''
-        }
-      ];
-
-      let totalVisibleCards = 0;
-
-      sections.forEach(section => {
-        const gallery = document.getElementById(section.galleryId);
-        const countEl = document.getElementById(section.countId);
-        const sectionEl = document.getElementById(section.id);
-
-        if (!gallery || !sectionEl) return;
-
-        const cards = gallery.querySelectorAll('.assessment-card, .project-card');
-        let visibleCount = 0;
-
-        cards.forEach(card => {
-          // Skip skeleton cards
-          if (card.classList.contains('skeleton-card')) return;
-
-          const name = section.getCardName(card).toLowerCase();
-          const slug = section.getCardSlug(card).toLowerCase();
-
-          const matches = !normalizedQuery ||
-            name.includes(normalizedQuery) ||
-            slug.includes(normalizedQuery);
-
-          if (matches) {
-            card.classList.remove('card-hidden');
-            visibleCount++;
-            totalVisibleCards++;
-          } else {
-            card.classList.add('card-hidden');
-          }
-        });
-
-        // Update the count display
-        if (countEl && normalizedQuery) {
-          // Show filtered count if searching
-          const totalCards = Array.from(cards).filter(c => !c.classList.contains('skeleton-card')).length;
-          countEl.textContent = visibleCount === totalCards ? totalCards : `${visibleCount}/${totalCards}`;
-        }
-
-        // Show/hide empty state message within gallery if needed
-        const existingNoResults = gallery.querySelector('.no-results');
-        if (existingNoResults) {
-          existingNoResults.remove();
-        }
-
-        if (normalizedQuery && visibleCount === 0 && cards.length > 0) {
-          const noResults = document.createElement('div');
-          noResults.className = 'no-results';
-          noResults.innerHTML = `No matches for "<strong>${escapeHtml(query)}</strong>"`;
-          gallery.appendChild(noResults);
-        }
-      });
-
-      // Show/hide sample section when searching
-      const sampleSection = document.getElementById('sampleSection');
-      if (sampleSection) {
-        sampleSection.style.display = normalizedQuery ? 'none' : 'block';
-      }
-
-      return totalVisibleCards;
-    }
-
-    function clearSearch() {
-      searchInput.value = '';
-      searchClear.classList.remove('visible');
-      filterCards('');
-
-      // Reset counts to original values
-      resetCounts();
-    }
-
-    function resetCounts() {
-      // Reset assessment count
-      const assessmentGallery = document.getElementById('assessmentGallery');
-      const assessmentCount = document.getElementById('assessmentCount');
-      if (assessmentGallery && assessmentCount) {
-        const cards = assessmentGallery.querySelectorAll('.assessment-card:not(.skeleton-card)');
-        assessmentCount.textContent = cards.length;
-      }
-
-      // Reset elevated count
-      const elevatedGallery = document.getElementById('elevatedGallery');
-      const elevatedCount = document.getElementById('elevatedCount');
-      if (elevatedGallery && elevatedCount) {
-        const cards = elevatedGallery.querySelectorAll('.assessment-card:not(.skeleton-card)');
-        elevatedCount.textContent = cards.length;
-      }
-
-      // Reset experience count
-      const experienceGallery = document.getElementById('experienceGallery');
-      const experienceCount = document.getElementById('experienceCount');
-      if (experienceGallery && experienceCount) {
-        const cards = experienceGallery.querySelectorAll('.project-card:not(.skeleton-card), .assessment-card:not(.skeleton-card)');
-        experienceCount.textContent = cards.length;
-      }
-
-      // Reset project count
-      const projectGallery = document.getElementById('projectGallery');
-      const projectCount = document.getElementById('projectCount');
-      if (projectGallery && projectCount) {
-        const cards = projectGallery.querySelectorAll('.project-card:not(.skeleton-card)');
-        projectCount.textContent = cards.length;
-      }
-    }
-
-    // Event listeners for search
-    if (searchInput) {
-      searchInput.addEventListener('input', (e) => {
-        const query = e.target.value;
-        searchClear.classList.toggle('visible', query.length > 0);
-        filterCards(query);
-      });
-
-      // Clear on Escape key
-      searchInput.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') {
-          clearSearch();
-          searchInput.blur();
-        }
-      });
-    }
-
-    if (searchClear) {
-      searchClear.addEventListener('click', clearSearch);
     }
   </script>
 </body>
