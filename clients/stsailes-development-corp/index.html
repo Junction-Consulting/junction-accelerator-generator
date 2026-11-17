@@ -5071,6 +5071,7 @@ body:not(.has-plan) .plan-content{display:none}
   margin-left:22px;
   list-style-type:square;
 }
+.tactic-step-bullets code{overflow-wrap:anywhere}
 
 /* Step Resource Link */
 .tactic-step-resource{
@@ -5164,12 +5165,91 @@ body:not(.has-plan) .plan-content{display:none}
   height:auto;
   display:block;
 }
+.tactic-mockup-body{aspect-ratio:16/10;overflow:hidden}
+.tactic-mockup-body img{width:100%;height:100%;object-fit:cover;object-position:top center;cursor:zoom-in}
+.tactic-mockup--page .tactic-mockup-body::after{content:"Full page ↗";position:absolute;right:10px;bottom:10px;background:rgba(20,26,26,.72);color:#fff;font-size:11px;letter-spacing:.3px;padding:4px 9px;border-radius:20px;pointer-events:none}
+.tactic-embed .tactic-mockup-body{aspect-ratio:16/9}
+.tactic-embed iframe{width:100%;height:100%;border:0;display:block}
 .tactic-mockup-label{
   padding:12px 16px;
   font-size:12px;
   color:#8a7f68;
   text-align:center;
   background:#f7f2e9;
+}
+
+/* Linked mockup: opens the real site in a new tab (no lightbox) */
+.tactic-mockup-link{
+  display:block;
+  max-width:640px;
+  color:inherit;
+  text-decoration:none;
+  border-radius:12px;
+}
+.tactic-mockup-link .tactic-mockup{
+  transition:transform .2s ease,box-shadow .2s ease;
+}
+.tactic-mockup-link:hover .tactic-mockup,
+.tactic-mockup-link:focus-visible .tactic-mockup{
+  transform:translateY(-3px);
+  box-shadow:0 10px 24px rgba(30,25,15,.16);
+}
+.tactic-mockup-link:hover,
+.tactic-mockup-link:focus-visible{text-decoration:none}
+.tactic-mockup-link:focus-visible{
+  outline:2px solid var(--link-blue);
+  outline-offset:3px;
+}
+.tactic-mockup-open{
+  flex-shrink:0;
+  margin-left:4px;
+  font-size:11px;
+  font-weight:600;
+  color:#8a7f68;
+  white-space:nowrap;
+  transition:color .2s ease;
+}
+.tactic-mockup-link .tactic-mockup-url{min-width:0}
+.tactic-mockup-link:hover .tactic-mockup-open,
+.tactic-mockup-link:focus-visible .tactic-mockup-open{
+  color:var(--link-blue);
+}
+@media(max-width:480px){
+  .tactic-mockup-open-text{display:none}
+}
+@media(prefers-reduced-motion:reduce){
+  .tactic-mockup-link .tactic-mockup{transition:none}
+  .tactic-mockup-link:hover .tactic-mockup,
+  .tactic-mockup-link:focus-visible .tactic-mockup{transform:none}
+}
+
+/* Two mockups side by side, stacked on mobile */
+.tactic-mockup-pair{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:16px;
+  margin-top:16px;
+}
+.tactic-mockup-pair > *{min-width:0}
+.tactic-mockup-pair .tactic-mockup{margin-top:0}
+@media(max-width:768px){
+  .tactic-mockup-pair{grid-template-columns:1fr}
+}
+
+/* Four mockups in one row, stacked on mobile */
+.tactic-mockup-pair.tactic-mockup-four{grid-template-columns:repeat(4,1fr)}
+@media(max-width:768px){
+  .tactic-mockup-pair.tactic-mockup-four{grid-template-columns:1fr}
+}
+
+/* "Example" badge in the top corner of a mockup */
+.tactic-mockup-body{position:relative}
+.tactic-mockup-badge{
+  position:absolute;
+  top:10px;
+  left:10px;
+  z-index:1;
+  box-shadow:0 2px 6px rgba(17,21,75,.18);
 }
 
 /* Two-column step layout */
@@ -6559,6 +6639,18 @@ button,
               <li data-editable-key="t1-bullet-6">The kayak tour is booked by email, but its button says BOOK NOW and opens the Tour Calendar page. Change the button text to &quot;Email to Book a Kayak Tour&quot;. In the link editor, choose <strong>Email</strong> and enter journeys@stsailes.com.</li>
               <li data-editable-key="t1-bullet-7">Click <strong>Save</strong>, exit the editor, and tap <strong>every button</strong> on your phone to check it.</li>
             </ul>
+            <div class="tactic-mockup">
+              <div class="tactic-mockup-chrome">
+                <span class="tactic-mockup-dot red"></span>
+                <span class="tactic-mockup-dot yellow"></span>
+                <span class="tactic-mockup-dot green"></span>
+                <div class="tactic-mockup-url">sasqetsjourneys.com · Book Boat Tour</div>
+              </div>
+              <div class="tactic-mockup-body">
+                <span class="tactic-step-media-badge tactic-mockup-badge">Mockup</span>
+                <img src="/assets/stsailes-development-corp-mockups/media/t1-s1-broken-vs-rezgo.png" alt="Before and after on a phone: Book Boat Tour opens a 404 error page because the link is missing https://, then opens the boat tour&#039;s own booking page in Rezgo" class="lightbox-trigger" onclick="openLightbox(this.src, this.alt)" loading="lazy">
+              </div>
+            </div>
           </div>
         </li>
         <li class="tactic-step-item" id="step-t1-2">
@@ -6580,6 +6672,18 @@ button,
               <li data-editable-key="t1-bullet-19">Put the season at the top of the page in plain words, for example: &quot;Tours run [season]. Book ahead for spring, or give a Sasq&#039;ets Journeys gift card.&quot; <code>[CONFIRM: tour season dates]</code></li>
               <li data-editable-key="t1-bullet-20">Replace the template banner with one of your own river photos.</li>
             </ul>
+            <div class="tactic-mockup">
+              <div class="tactic-mockup-chrome">
+                <span class="tactic-mockup-dot red"></span>
+                <span class="tactic-mockup-dot yellow"></span>
+                <span class="tactic-mockup-dot green"></span>
+                <div class="tactic-mockup-url">sasqetsjourneys.com/tours</div>
+              </div>
+              <div class="tactic-mockup-body">
+                <span class="tactic-step-media-badge tactic-mockup-badge">Mockup</span>
+                <img src="/assets/stsailes-development-corp-mockups/media/t1-s2-tours-page.png" alt="New Tours page on desktop and mobile with a season note, the boat and land tours each with a Book button, and an Email to Book a Kayak Tour button" class="lightbox-trigger" onclick="openLightbox(this.src, this.alt)" loading="lazy">
+              </div>
+            </div>
           </div>
         </li>
         <li class="tactic-step-item" id="step-t1-3">
@@ -6609,6 +6713,17 @@ button,
               <li data-editable-key="t1-bullet-32">Tours page SEO description: <code>Two-hour and four-hour boat journeys, land storytelling tours and kayak tours on Sts&#039;ailes territory. Book online or email journeys@stsailes.com.</code></li>
               <li data-editable-key="t1-bullet-33">Changes can take a few weeks to show in Google. Nothing else needs to be done.</li>
             </ul>
+            <div class="tactic-mockup">
+              <div class="tactic-mockup-chrome">
+                <span class="tactic-mockup-dot red"></span>
+                <span class="tactic-mockup-dot yellow"></span>
+                <span class="tactic-mockup-dot green"></span>
+                <div class="tactic-mockup-url">Squarespace · Page settings</div>
+              </div>
+              <div class="tactic-mockup-body">
+                <img src="/assets/stsailes-development-corp-mockups/media/t1-s4-squarespace-seo.png" alt="Squarespace page settings SEO tab for the homepage with the new SEO title and description and a search results preview" class="lightbox-trigger" onclick="openLightbox(this.src, this.alt)" loading="lazy">
+              </div>
+            </div>
           </div>
         </li>
         <li class="tactic-step-item" id="step-t1-5">
@@ -6622,6 +6737,18 @@ button,
               <li data-editable-key="t1-bullet-37">Add a &quot;Give a Tour&quot; button to the homepage and the Tours page that links to the Rezgo gift card page. <code>[CONFIRM: Rezgo gift card page URL]</code></li>
               <li data-editable-key="t1-bullet-38">Tactic 3 covers how to post about it.</li>
             </ul>
+            <div class="tactic-mockup">
+              <div class="tactic-mockup-chrome">
+                <span class="tactic-mockup-dot red"></span>
+                <span class="tactic-mockup-dot yellow"></span>
+                <span class="tactic-mockup-dot green"></span>
+                <div class="tactic-mockup-url">sasqetsjourneys.com</div>
+              </div>
+              <div class="tactic-mockup-body">
+                <span class="tactic-step-media-badge tactic-mockup-badge">Mockup</span>
+                <img src="/assets/stsailes-development-corp-mockups/media/t1-s5-give-a-tour.png" alt="Sasq&#039;ets Journeys homepage on desktop and mobile with a Give a Tour gift card button next to Book Now" class="lightbox-trigger" onclick="openLightbox(this.src, this.alt)" loading="lazy">
+              </div>
+            </div>
           </div>
         </li>
       </ol>
@@ -6667,6 +6794,18 @@ button,
               <li data-editable-key="t1-bullet-54">Set the SEO title (gear icon, then <strong>SEO</strong>) to <code>Sasq&#039;ets Burger | Indigenous-Owned Café, Agassiz BC</code> and write a description that names the café, catering and the meeting room.</li>
               <li data-editable-key="t1-bullet-55">Leave the design alone. The job is a new address, not a new website.</li>
             </ul>
+            <div class="tactic-mockup">
+              <div class="tactic-mockup-chrome">
+                <span class="tactic-mockup-dot red"></span>
+                <span class="tactic-mockup-dot yellow"></span>
+                <span class="tactic-mockup-dot green"></span>
+                <div class="tactic-mockup-url">Sasq&#039;ets Burger · new site</div>
+              </div>
+              <div class="tactic-mockup-body">
+                <span class="tactic-step-media-badge tactic-mockup-badge">Mockup</span>
+                <img src="/assets/stsailes-development-corp-mockups/media/t1-s7-burger-homepage.png" alt="New Sasq&#039;ets Burger homepage on desktop and mobile with an Order Takeout Online button, a tap-to-call phone button, café hours, catering and meeting room details" class="lightbox-trigger" onclick="openLightbox(this.src, this.alt)" loading="lazy">
+              </div>
+            </div>
           </div>
         </li>
         <li class="tactic-step-item" id="step-t1-8">
@@ -6677,6 +6816,7 @@ button,
               <li data-editable-key="t1-bullet-56">In the new site, open <strong>Settings</strong>, then <strong>Billing</strong>, and subscribe to the approved plan. Then go to <strong>Settings</strong>, then <strong>Domains</strong>, and connect the new domain.</li>
               <li data-editable-key="t1-bullet-57">On the Development Corporation site, open the Sasq&#039;ets Burger page settings, change its URL slug to <code>/sasqetsburger-old</code>, and disable the page. A redirect only works once no live page is using the old address.</li>
               <li data-editable-key="t1-bullet-58">Open <strong>Settings</strong>, then <strong>Developer tools</strong>, then <strong>URL mappings</strong> (or search &quot;URL mappings&quot; in the dashboard). Add this line, using your new domain, and save:</li>
+              <li class="tactic-step-sub" data-editable-key="t1-bullet-82"><code>/sasqetsburger -&gt; https://[new-domain] 301</code></li>
               <li data-editable-key="t1-bullet-59">Change the &quot;Sasq&#039;ets Burger&quot; link in the Our Businesses menu so it points to the new domain.</li>
               <li data-editable-key="t1-bullet-60">Update the website link in the café&#039;s Facebook and Instagram profiles.</li>
               <li data-editable-key="t1-bullet-61">Type stsailesdevcorp.com/sasqetsburger into your phone&#039;s browser and check that it lands on the new site.</li>
@@ -6722,6 +6862,17 @@ button,
               <li data-editable-key="t1-bullet-73">Add the Journeys pixel to Rezgo by following Rezgo&#039;s help article &quot;How to set up Meta Pixel tracking with Rezgo&quot;.</li>
               <li data-editable-key="t1-bullet-74">Check that it works using <strong>Test events</strong> in Events Manager. Open the site in another tab and watch for the PageView event to appear.</li>
             </ul>
+            <div class="tactic-mockup">
+              <div class="tactic-mockup-chrome">
+                <span class="tactic-mockup-dot red"></span>
+                <span class="tactic-mockup-dot yellow"></span>
+                <span class="tactic-mockup-dot green"></span>
+                <div class="tactic-mockup-url">Squarespace · Meta Pixel &amp; Ads</div>
+              </div>
+              <div class="tactic-mockup-body">
+                <img src="/assets/stsailes-development-corp-mockups/media/t1-s10-meta-pixel.png" alt="Squarespace Meta Pixel and Ads settings showing a Connected status, the Pixel ID field and server events switched on" class="lightbox-trigger" onclick="openLightbox(this.src, this.alt)" loading="lazy">
+              </div>
+            </div>
           </div>
         </li>
         <li class="tactic-step-item" id="step-t1-11">
@@ -6946,6 +7097,17 @@ button,
               <li data-editable-key="t2-bullet-3">If a profile exists but you do not manage it, open it on Google Maps, click <strong>Own this business?</strong> or <strong>Claim this business</strong>, and follow the steps to request access. Google notifies the current owner. Ask JJ whether a former coordinator set it up, since they may simply be able to add you.</li>
               <li data-editable-key="t2-bullet-4">For each profile, note who owns it, who manages it, the number of reviews and the star rating. These go into the baseline from Tactic 1, Step 11.</li>
             </ul>
+            <div class="tactic-mockup">
+              <div class="tactic-mockup-chrome">
+                <span class="tactic-mockup-dot red"></span>
+                <span class="tactic-mockup-dot yellow"></span>
+                <span class="tactic-mockup-dot green"></span>
+                <div class="tactic-mockup-url">Google Maps · Sasq&#039;ets Journeys</div>
+              </div>
+              <div class="tactic-mockup-body">
+                <img src="/assets/stsailes-development-corp-mockups/media/t2-s1-claim-business.png" alt="Sasq&#039;ets Journeys listing on Google Maps with the Own this business? link highlighted" class="lightbox-trigger" onclick="openLightbox(this.src, this.alt)" loading="lazy">
+              </div>
+            </div>
           </div>
         </li>
         <li class="tactic-step-item" id="step-t2-2">
@@ -6959,6 +7121,17 @@ button,
               <li data-editable-key="t2-bullet-8">Two businesses can share an address on Google when they are genuinely separate. Verification is often done with a short video showing the business&#039;s signage and where guests meet, so make sure some Sasq&#039;ets Journeys sign is visible at the hub. <code>[CONFIRM: Sasq&#039;ets Journeys signage at the hub]</code></li>
               <li data-editable-key="t2-bullet-9">Start this in Week 2. Verification can take several days, and nothing else on this profile can go live until it is done.</li>
             </ul>
+            <div class="tactic-mockup">
+              <div class="tactic-mockup-chrome">
+                <span class="tactic-mockup-dot red"></span>
+                <span class="tactic-mockup-dot yellow"></span>
+                <span class="tactic-mockup-dot green"></span>
+                <div class="tactic-mockup-url">Google Business Profile · Business category</div>
+              </div>
+              <div class="tactic-mockup-body">
+                <img src="/assets/stsailes-development-corp-mockups/media/t2-s2-gbp-category.png" alt="Google Business Profile category settings with Tour operator as the primary category and Boat tour agency as an additional category" class="lightbox-trigger" onclick="openLightbox(this.src, this.alt)" loading="lazy">
+              </div>
+            </div>
           </div>
         </li>
       </ol>
@@ -6988,6 +7161,17 @@ button,
               <li class="tactic-step-sub" data-editable-key="t2-bullet-17">the interior, the dining hall and the meeting room</li>
               <li class="tactic-step-sub" data-editable-key="t2-bullet-18">your five best dishes, for example the Sasq&#039;ets Burger, the Sasq&#039;ets Bowl, the wings, the Crispy Thai Wrap and the bannock dessert</li>
             </ul>
+            <div class="tactic-mockup">
+              <div class="tactic-mockup-chrome">
+                <span class="tactic-mockup-dot red"></span>
+                <span class="tactic-mockup-dot yellow"></span>
+                <span class="tactic-mockup-dot green"></span>
+                <div class="tactic-mockup-url">Google Search · Sasq&#039;ets Burger</div>
+              </div>
+              <div class="tactic-mockup-body">
+                <img src="/assets/stsailes-development-corp-mockups/media/t2-s3-burger-profile.png" alt="A complete Sasq&#039;ets Burger profile on a phone, showing photos, the Identifies as Indigenous-owned attribute, opening hours, order and menu links" class="lightbox-trigger" onclick="openLightbox(this.src, this.alt)" loading="lazy">
+              </div>
+            </div>
           </div>
         </li>
         <li class="tactic-step-item" id="step-t2-4">
@@ -7008,10 +7192,22 @@ button,
             <div class="tactic-step-title" data-editable-key="tactic-2-step-5-title">Add the booking, order and menu links (about 20 minutes)</div>
             <ul class="tactic-step-bullets">
               <li data-editable-key="t2-bullet-23"><strong>Sasq&#039;ets Journeys:</strong> on Google Search, find your profile and select <strong>Booking</strong>, then <strong>Add link</strong>. On Google Maps, the route is <strong>Edit profile</strong>, then <strong>Booking</strong>. Paste your Rezgo address with a tracking tag so the visits show up in GA4, then mark it as the preferred link. For example:</li>
+              <li class="tactic-step-sub" data-editable-key="t2-bullet-45"><code>https://sasqets.rezgo.com/?utm_source=google&amp;utm_medium=organic&amp;utm_campaign=gbp</code></li>
               <li data-editable-key="t2-bullet-24"><strong>Sasq&#039;ets Burger:</strong> in <strong>Edit profile</strong>, find the menu and food ordering link fields. Google shows them in slightly different places depending on the category. Link the order field to your Square Online ordering page, and the menu field to the menu on the new Burger site once it is live.</li>
               <li data-editable-key="t2-bullet-25">Email Rezgo&#039;s customer success team and ask whether your plan includes their Google Things to Do connection. That connection can show your tours with a booking button in Google&#039;s Things to Do results, alongside your profile. <code>[CONFIRM: whether Google Things to Do is included in the Rezgo plan]</code></li>
               <li data-editable-key="t2-bullet-26">The coaching call also mentioned a booking link for the lodge. It is outside this plan, but the same step applies if JJ wants it done.</li>
             </ul>
+            <div class="tactic-mockup">
+              <div class="tactic-mockup-chrome">
+                <span class="tactic-mockup-dot red"></span>
+                <span class="tactic-mockup-dot yellow"></span>
+                <span class="tactic-mockup-dot green"></span>
+                <div class="tactic-mockup-url">Google Business Profile · Bookings</div>
+              </div>
+              <div class="tactic-mockup-body">
+                <img src="/assets/stsailes-development-corp-mockups/media/t2-s5-booking-link.png" alt="Google Business Profile booking link field with the Rezgo address and tracking tag, set as the preferred link" class="lightbox-trigger" onclick="openLightbox(this.src, this.alt)" loading="lazy">
+              </div>
+            </div>
           </div>
         </li>
       </ol>
@@ -7037,6 +7233,17 @@ button,
               <li data-editable-key="t2-bullet-30">Reply to negative reviews by thanking them, acknowledging the problem without arguing, and offering to continue the conversation by email at sasqetsbasket@stsailes.com or journeys@stsailes.com. Keep it short and calm. Future guests read your reply more closely than the complaint.</li>
               <li data-editable-key="t2-bullet-31">Never offer a discount or reward in exchange for a review. Google&#039;s policies prohibit it.</li>
             </ul>
+            <div class="tactic-mockup">
+              <div class="tactic-mockup-chrome">
+                <span class="tactic-mockup-dot red"></span>
+                <span class="tactic-mockup-dot yellow"></span>
+                <span class="tactic-mockup-dot green"></span>
+                <div class="tactic-mockup-url">Google Business Profile · Reviews</div>
+              </div>
+              <div class="tactic-mockup-body">
+                <img src="/assets/stsailes-development-corp-mockups/media/t2-s6-review-replies.png" alt="Example owner replies to a positive five-star review and a negative two-star review" class="lightbox-trigger" onclick="openLightbox(this.src, this.alt)" loading="lazy">
+              </div>
+            </div>
           </div>
         </li>
         <li class="tactic-step-item" id="step-t2-7">
@@ -7051,6 +7258,17 @@ button,
               <li class="tactic-step-sub" data-editable-key="t2-bullet-36">Ask the guides to mention reviews at the end of each tour. A personal ask works far better than an email alone.</li>
               <li class="tactic-step-sub" data-editable-key="t2-bullet-37">Send one email now to guests from the past season, from Rezgo&#039;s contacts, thanking them and asking for a review. It is the fastest way to give the new profile its first reviews in the off-season.</li>
             </ul>
+            <div class="tactic-mockup">
+              <div class="tactic-mockup-chrome">
+                <span class="tactic-mockup-dot red"></span>
+                <span class="tactic-mockup-dot yellow"></span>
+                <span class="tactic-mockup-dot green"></span>
+                <div class="tactic-mockup-url">Till card and table card</div>
+              </div>
+              <div class="tactic-mockup-body">
+                <img src="/assets/stsailes-development-corp-mockups/media/t2-s7-qr-review-card.png" alt="Sasq&#039;ets Burger till card and table card with a QR code that opens the Google review link" class="lightbox-trigger" onclick="openLightbox(this.src, this.alt)" loading="lazy">
+              </div>
+            </div>
           </div>
         </li>
         <li class="tactic-step-item" id="step-t2-8">
@@ -7274,6 +7492,17 @@ button,
               <li data-editable-key="t3-bullet-4">Add yourself and JJ as admins with your own logins on every account, so no account depends on one person&#039;s password.</li>
               <li data-editable-key="t3-bullet-5">Update the social links on both websites to point to the correct Pages and Instagram accounts.</li>
             </ul>
+            <div class="tactic-mockup">
+              <div class="tactic-mockup-chrome">
+                <span class="tactic-mockup-dot red"></span>
+                <span class="tactic-mockup-dot yellow"></span>
+                <span class="tactic-mockup-dot green"></span>
+                <div class="tactic-mockup-url">Social account audit</div>
+              </div>
+              <div class="tactic-mockup-body">
+                <img src="/assets/stsailes-development-corp-mockups/media/t3-s1-account-audit.png" alt="Social account audit table listing each Facebook and Instagram account for both businesses, with type, admins, website link and the action to take" class="lightbox-trigger" onclick="openLightbox(this.src, this.alt)" loading="lazy">
+              </div>
+            </div>
           </div>
         </li>
         <li class="tactic-step-item" id="step-t3-2">
@@ -7304,6 +7533,17 @@ button,
               <li class="tactic-step-sub" data-editable-key="t3-bullet-18"><strong>Burger:</strong> a &quot;plate in three shots&quot;: the order, the cook, the finished plate.</li>
               <li data-editable-key="t3-bullet-19">Use the same format every week. Repetition is what makes this quick, and audiences come to recognize it.</li>
             </ul>
+            <div class="tactic-mockup">
+              <div class="tactic-mockup-chrome">
+                <span class="tactic-mockup-dot red"></span>
+                <span class="tactic-mockup-dot yellow"></span>
+                <span class="tactic-mockup-dot green"></span>
+                <div class="tactic-mockup-url">Edits · Saved formats</div>
+              </div>
+              <div class="tactic-mockup-body">
+                <img src="/assets/stsailes-development-corp-mockups/media/t3-s3-storyboards.png" alt="Two storyboards: a four-clip River moment format for Sasq&#039;ets Journeys and a three-shot Plate in three shots format for Sasq&#039;ets Burger" class="lightbox-trigger" onclick="openLightbox(this.src, this.alt)" loading="lazy">
+              </div>
+            </div>
           </div>
         </li>
       </ol>
@@ -7344,6 +7584,17 @@ button,
               <li class="tactic-step-sub" data-editable-key="t3-bullet-30">&quot;spring dates are open&quot; in late winter</li>
               <li data-editable-key="t3-bullet-31">Copy the week&#039;s best post onto the matching Google profile (Tactic 2, Step 8).</li>
             </ul>
+            <div class="tactic-mockup">
+              <div class="tactic-mockup-chrome">
+                <span class="tactic-mockup-dot red"></span>
+                <span class="tactic-mockup-dot yellow"></span>
+                <span class="tactic-mockup-dot green"></span>
+                <div class="tactic-mockup-url">Meta Business Suite · Planner</div>
+              </div>
+              <div class="tactic-mockup-body">
+                <img src="/assets/stsailes-development-corp-mockups/media/t3-s5-business-suite-planner.png" alt="Meta Business Suite Create post window posting to both the Facebook Page and Instagram, with scheduling options for date and time" class="lightbox-trigger" onclick="openLightbox(this.src, this.alt)" loading="lazy">
+              </div>
+            </div>
           </div>
         </li>
         <li class="tactic-step-item" id="step-t3-6">
@@ -7355,6 +7606,17 @@ button,
               <li data-editable-key="t3-bullet-33">Pick the ideas that fit footage you already have. Write the captions yourself in your own words, or edit AI drafts heavily. Captions that sound like you are what stop posts feeling static.</li>
               <li data-editable-key="t3-bullet-34">Never use AI-generated images of people, food or cultural content. Real faces are what your guests respond to.</li>
             </ul>
+            <div class="tactic-mockup">
+              <div class="tactic-mockup-chrome">
+                <span class="tactic-mockup-dot red"></span>
+                <span class="tactic-mockup-dot yellow"></span>
+                <span class="tactic-mockup-dot green"></span>
+                <div class="tactic-mockup-url">Any AI chat tool · Once a month</div>
+              </div>
+              <div class="tactic-mockup-body">
+                <img src="/assets/stsailes-development-corp-mockups/media/t3-s6-ai-ideas-prompt.png" alt="A monthly AI prompt asking for 20 short video ideas across five themes, with the first nine ideas in the reply" class="lightbox-trigger" onclick="openLightbox(this.src, this.alt)" loading="lazy">
+              </div>
+            </div>
           </div>
         </li>
       </ol>
@@ -7393,6 +7655,17 @@ button,
               <li data-editable-key="t3-bullet-43">Shortlist five Fraser Valley or Vancouver food and travel creators whose audiences are mostly local. Plan their visits for the first weeks of the tour season.</li>
               <li data-editable-key="t3-bullet-44">JJ asked about paid UGC and AI content platforms. Leave those until this free system has run for a season and you know what your audience responds to.</li>
             </ul>
+            <div class="tactic-mockup">
+              <div class="tactic-mockup-chrome">
+                <span class="tactic-mockup-dot red"></span>
+                <span class="tactic-mockup-dot yellow"></span>
+                <span class="tactic-mockup-dot green"></span>
+                <div class="tactic-mockup-url">Spring creator brief</div>
+              </div>
+              <div class="tactic-mockup-body">
+                <img src="/assets/stsailes-development-corp-mockups/media/t3-s8-creator-brief.png" alt="One-page spring creator brief with what to feature, what not to film, what we need back, what we offer and who we are looking for" class="lightbox-trigger" onclick="openLightbox(this.src, this.alt)" loading="lazy">
+              </div>
+            </div>
           </div>
         </li>
       </ol>
@@ -7595,6 +7868,17 @@ button,
               <li data-editable-key="t4-bullet-4">Decide who pays and on which card. Make sure both ad accounts belong to the corporation, not to a person. <code>[CONFIRM: approved ad budget for the café test and the spring tour campaign]</code></li>
               <li data-editable-key="t4-bullet-5">Agree on what counts as success before you start, so the result is a decision rather than a debate. Step 5 suggests how.</li>
             </ul>
+            <div class="tactic-mockup">
+              <div class="tactic-mockup-chrome">
+                <span class="tactic-mockup-dot red"></span>
+                <span class="tactic-mockup-dot yellow"></span>
+                <span class="tactic-mockup-dot green"></span>
+                <div class="tactic-mockup-url">Ad test budget</div>
+              </div>
+              <div class="tactic-mockup-body">
+                <img src="/assets/stsailes-development-corp-mockups/media/t4-s1-budget-card.png" alt="Ad test budget card for the $210 Meta test and the spring Google Ads budget, next to the day 21 decision rule" class="lightbox-trigger" onclick="openLightbox(this.src, this.alt)" loading="lazy">
+              </div>
+            </div>
           </div>
         </li>
         <li class="tactic-step-item" id="step-t4-2">
@@ -7606,6 +7890,17 @@ button,
               <li data-editable-key="t4-bullet-7">Add the payment method JJ approved.</li>
               <li data-editable-key="t4-bullet-8">Connect the Sasq&#039;ets Burger Facebook Page, its Instagram account, and the Burger pixel from Tactic 1, Step 10 to this ad account.</li>
             </ul>
+            <div class="tactic-mockup">
+              <div class="tactic-mockup-chrome">
+                <span class="tactic-mockup-dot red"></span>
+                <span class="tactic-mockup-dot yellow"></span>
+                <span class="tactic-mockup-dot green"></span>
+                <div class="tactic-mockup-url">Meta Business Settings · Ad accounts</div>
+              </div>
+              <div class="tactic-mockup-body">
+                <img src="/assets/stsailes-development-corp-mockups/media/t4-s2-ad-account.png" alt="Create a new ad account window with the time zone set to Pacific and the currency set to Canadian dollars" class="lightbox-trigger" onclick="openLightbox(this.src, this.alt)" loading="lazy">
+              </div>
+            </div>
           </div>
         </li>
       </ol>
@@ -7631,6 +7926,17 @@ button,
               <li data-editable-key="t4-bullet-12"><strong>Audience:</strong> age 18 and over. Leave placements on <strong>Advantage+ placements</strong>.</li>
               <li data-editable-key="t4-bullet-13"><strong>Budget and schedule:</strong> set the agreed daily budget, with a 21-day schedule and an end date so nothing runs on by accident.</li>
             </ul>
+            <div class="tactic-mockup">
+              <div class="tactic-mockup-chrome">
+                <span class="tactic-mockup-dot red"></span>
+                <span class="tactic-mockup-dot yellow"></span>
+                <span class="tactic-mockup-dot green"></span>
+                <div class="tactic-mockup-url">Ads Manager · Audience</div>
+              </div>
+              <div class="tactic-mockup-body">
+                <img src="/assets/stsailes-development-corp-mockups/media/t4-s3-location-radius.png" alt="Meta Ads Manager audience settings with a 30 km radius around 16300 Morris Valley Road shown on a map" class="lightbox-trigger" onclick="openLightbox(this.src, this.alt)" loading="lazy">
+              </div>
+            </div>
           </div>
         </li>
         <li class="tactic-step-item" id="step-t4-4">
@@ -7645,6 +7951,17 @@ button,
               <li data-editable-key="t4-bullet-18">After 7 days, compare <strong>cost per link click</strong> and <strong>click-through rate</strong>. Pause the weaker ad and add a new challenger against the winner, for example a catering ad aimed at holiday events and staff lunches.</li>
               <li data-editable-key="t4-bullet-19">This simple side-by-side test is enough at this budget. Meta&#039;s formal A/B test tool needs more spend before its results mean much.</li>
             </ul>
+            <div class="tactic-mockup">
+              <div class="tactic-mockup-chrome">
+                <span class="tactic-mockup-dot red"></span>
+                <span class="tactic-mockup-dot yellow"></span>
+                <span class="tactic-mockup-dot green"></span>
+                <div class="tactic-mockup-url">Ads Manager · Ad A vs Ad B</div>
+              </div>
+              <div class="tactic-mockup-body">
+                <img src="/assets/stsailes-development-corp-mockups/media/t4-s4-ab-ads.png" alt="Two versions of the same Sasq&#039;ets Burger ad on phones: Ad A with a food video and Ad B with a staff member saying hello" class="lightbox-trigger" onclick="openLightbox(this.src, this.alt)" loading="lazy">
+              </div>
+            </div>
           </div>
         </li>
         <li class="tactic-step-item" id="step-t4-5">
@@ -7683,6 +8000,17 @@ button,
               <li data-editable-key="t4-bullet-28">Link GA4 to Google Ads: in GA4, open <strong>Admin</strong>, then <strong>Product links</strong>, then <strong>Google Ads links</strong>, and click <strong>Link</strong>.</li>
               <li data-editable-key="t4-bullet-29">Import the Rezgo booking as your conversion: in Google Ads, open <strong>Goals</strong>, then <strong>Conversions</strong>, then <strong>Summary</strong>, then <strong>+ New conversion action</strong>, then <strong>Import</strong>, then <strong>Google Analytics 4 properties</strong>, then <strong>Web</strong>, and choose <strong>purchase</strong>.</li>
             </ul>
+            <div class="tactic-mockup">
+              <div class="tactic-mockup-chrome">
+                <span class="tactic-mockup-dot red"></span>
+                <span class="tactic-mockup-dot yellow"></span>
+                <span class="tactic-mockup-dot green"></span>
+                <div class="tactic-mockup-url">ads.google.com</div>
+              </div>
+              <div class="tactic-mockup-body">
+                <img src="/assets/stsailes-development-corp-mockups/media/t4-s6-expert-mode.png" alt="Google Ads goal selection screen with the Switch to Expert Mode link highlighted" class="lightbox-trigger" onclick="openLightbox(this.src, this.alt)" loading="lazy">
+              </div>
+            </div>
           </div>
         </li>
         <li class="tactic-step-item" id="step-t4-7">
@@ -7703,6 +8031,17 @@ button,
               <li class="tactic-step-sub" data-editable-key="t4-bullet-40">2 and 4 Hour Boat Journeys</li>
               <li data-editable-key="t4-bullet-41">Set the agreed daily budget.</li>
             </ul>
+            <div class="tactic-mockup">
+              <div class="tactic-mockup-chrome">
+                <span class="tactic-mockup-dot red"></span>
+                <span class="tactic-mockup-dot yellow"></span>
+                <span class="tactic-mockup-dot green"></span>
+                <div class="tactic-mockup-url">Google Ads · Search ad preview</div>
+              </div>
+              <div class="tactic-mockup-body">
+                <img src="/assets/stsailes-development-corp-mockups/media/t4-s7-search-ad-preview.png" alt="Indigenous tours ad group with five headlines and phrase match keywords, next to a phone showing the sponsored search ad" class="lightbox-trigger" onclick="openLightbox(this.src, this.alt)" loading="lazy">
+              </div>
+            </div>
           </div>
         </li>
         <li class="tactic-step-item" id="step-t4-8">
