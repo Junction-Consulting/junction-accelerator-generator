@@ -180,9 +180,14 @@ function parsePlanMd(rawContent) {
             const boldTitle = (step[1] || step[2]).trim();
             const titleNote = stripMarkdown(step[3] || '');
             const stepTitle = titleNote ? `${boldTitle} ${titleNote}` : boldTitle;
-            const bullets = step[4].trim().split('\n')
-              .filter(line => isListItem(line))
-              .map(line => line.replace(/^\s*-\s*/, '').trim());
+            const bulletLines = step[4].split('\n').filter(line => isListItem(line));
+            const bullets = bulletLines.map(line => line.replace(/^\s*-\s*/, '').trim());
+            // A bullet indented further than the step's own bullets is a
+            // sub-bullet of the one above it. Keep the list flat (so the
+            // t{N}-bullet-{M} edit keys stay the same) and record the level.
+            const indents = bulletLines.map(line => line.match(/^\s*/)[0].length);
+            const baseIndent = indents.length ? Math.min(...indents) : 0;
+            const bulletLevels = indents.map((n, i) => (i > 0 && n > baseIndent ? 1 : 0));
 
             if (!firstStepTitle) {
               firstStepTitle = stepTitle;
@@ -192,7 +197,8 @@ function parsePlanMd(rawContent) {
               number: stepNum++,
               partLabel: partTitle,
               title: stepTitle,
-              bullets
+              bullets,
+              bulletLevels
             });
           }
 
@@ -1161,10 +1167,11 @@ function generateImplementationStepsHtml(steps, tacticNum) {
       html += `            <div class="tactic-step-title" data-editable-key="tactic-${tacticNum}-step-${step.number}-title">${plainText(step.title)}</div>\n`;
       if (step.bullets && step.bullets.length > 0) {
         html += `            <ul class="tactic-step-bullets">\n`;
-        for (const bullet of step.bullets) {
-          html += `              <li data-editable-key="t${tacticNum}-bullet-${bulletNum}">${inlineMarkdown(bullet)}</li>\n`;
+        step.bullets.forEach((bullet, i) => {
+          const subClass = step.bulletLevels && step.bulletLevels[i] ? ' class="tactic-step-sub"' : '';
+          html += `              <li${subClass} data-editable-key="t${tacticNum}-bullet-${bulletNum}">${inlineMarkdown(bullet)}</li>\n`;
           bulletNum++;
-        }
+        });
         html += `            </ul>\n`;
       }
       html += `          </div>\n`;
