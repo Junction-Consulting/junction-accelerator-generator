@@ -1348,6 +1348,14 @@
         chip: 'Design sandbox',
         href: '/clients/andreas-resort/',
         action: 'Open sandbox'
+      },
+      {
+        slug: 'sample-experience',
+        name: 'Foothills Quarter Horses',
+        desc: 'Shows prospects what an experience dashboard looks like',
+        chip: 'Experience demo',
+        href: 'https://accelerator.elearningu.com/sample-experience/',
+        action: 'View demo'
       }
     ];
 
@@ -1620,7 +1628,7 @@
         return;
       }
 
-      const list = uniqueProjects(rows, []);
+      const list = uniqueProjects(rows, SANDBOXES.map(s => s.slug));
 
       // Load the stage, name and progress for each project
       await Promise.all(list.map(loadExperienceProjectProgress));
