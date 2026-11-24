@@ -5,6 +5,8 @@
  *   node shared/accelerator-v2/cli.mjs convert <slug>           report only, writes nothing
  *   node shared/accelerator-v2/cli.mjs convert <slug> --save    write content.json and plan.json
  *   node shared/accelerator-v2/cli.mjs check <slug>             run the publishing checks on content.json
+ *   node shared/accelerator-v2/cli.mjs build <slug>             build the dashboard from content.json (report only)
+ *   node shared/accelerator-v2/cli.mjs build <slug> --save      write clients/<slug>/index.html
  *
  * Options for convert (used on the first conversion; later runs keep the
  * values already in content.json unless given again):
@@ -25,7 +27,8 @@ import { fileURLToPath } from 'url';
 import { convertPlan } from './convert.js';
 import { checkContent, formatCheckIssue } from './checks.js';
 import { generatePlanJsonV2 } from './plan-json.js';
-import { loadOtherClients, assetChecker, readContent, toJson } from './repo.js';
+import { loadOtherClients, assetChecker, readContent, toJson, findAsset } from './repo.js';
+import { renderDashboard, validateDashboardV2 } from './render.js';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
 export const V2_CLIENTS = ['andreas-resort'];
@@ -56,10 +59,21 @@ function printChecks(checks) {
   for (const e of [...checks.errors, ...checks.warnings]) console.log(`  ${formatCheckIssue(e)}`);
 }
 
+/** Build a v2 dashboard page from content.json, with assets from the media library. */
+export function buildPage(slug, content) {
+  const template = fs.readFileSync(path.join(ROOT, 'template', 'v2', 'accelerator.html'), 'utf8');
+  const assetUrl = id => {
+    const file = findAsset(ROOT, slug, id);
+    return file ? `/${path.relative(ROOT, file).split(path.sep).join('/')}` : '';
+  };
+  const { html, problems } = renderDashboard(content, { template, assetUrl });
+  return { html, problems: [...problems, ...validateDashboardV2(html, content)] };
+}
+
 async function main() {
   const [command, slug, ...rest] = process.argv.slice(2);
-  if (!['convert', 'check'].includes(command) || !slug) {
-    console.log('Usage: node shared/accelerator-v2/cli.mjs convert|check <client-slug> [--save] [--confirm-matches]');
+  if (!['convert', 'check', 'build'].includes(command) || !slug) {
+    console.log('Usage: node shared/accelerator-v2/cli.mjs convert|check|build <client-slug> [--save] [--confirm-matches]');
     process.exit(1);
   }
   const dir = path.join(ROOT, 'clients', slug);
@@ -71,6 +85,20 @@ async function main() {
     const checks = checkContent(existing, checkOptions);
     printChecks(checks);
     process.exit(checks.ok ? 0 : 1);
+  }
+
+  if (command === 'build') {
+    if (!existing) { console.log(`clients/${slug}/content.json does not exist.`); process.exit(1); }
+    const checks = checkContent(existing, checkOptions);
+    printChecks(checks);
+    const result = buildPage(slug, existing);
+    result.problems.forEach(p => console.log(`  ERROR ${p}`));
+    if (!checks.ok || result.problems.length) { console.log('\nNot built: fix the errors above first.'); process.exit(1); }
+    if (!rest.includes('--save')) { console.log(`\nBuilt ${result.html.length} characters. Nothing written (add --save to write index.html).`); return; }
+    if (!V2_CLIENTS.includes(slug)) { console.log(`\nNot saved: clients/${slug} is not a v2 client.`); process.exit(1); }
+    fs.writeFileSync(path.join(dir, 'index.html'), result.html);
+    console.log(`\nSaved clients/${slug}/index.html.`);
+    return;
   }
 
   const planPath = path.join(dir, 'plan.md');
@@ -108,4 +136,4 @@ async function main() {
   console.log(`\nSaved clients/${slug}/content.json and clients/${slug}/plan.json.`);
 }
 
-main().catch(e => { console.error(e); process.exit(1); });
+if (process.argv[1] && process.argv[1].endsWith('cli.mjs')) main().catch(e => { console.error(e); process.exit(1); });

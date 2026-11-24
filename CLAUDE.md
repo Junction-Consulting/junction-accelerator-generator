@@ -1152,8 +1152,14 @@ Accelerator v2 replaces hand-edited client pages with one structured content fil
 | `shared/accelerator-v2/convert.js` | The converter: `plan.md` in, `content.json` out, keeping existing IDs |
 | `shared/accelerator-v2/checks.js` | The publishing checks: errors that block and warnings |
 | `shared/accelerator-v2/plan-json.js` | `plan.json` (weekly emails) generated from `content.json` |
-| `shared/accelerator-v2/cli.mjs` | `convert` and `check` from the command line. Reports only unless `--save` is given, and saves only into v2 client folders |
+| `shared/accelerator-v2/cli.mjs` | `convert`, `check` and `build` from the command line. Reports only unless `--save` is given, and saves only into v2 client folders |
+| `shared/accelerator-v2/render.js`, `components.js` | The v2 generator: `content.json` in, dashboard HTML out, one function per component |
+| `template/v2/accelerator.html` | The v2 page layout and fixed labels |
+| `assets/v2/tokens.css` | Every colour, font, size, spacing, radius and shadow. `accelerator.css` may only use `var(--...)` |
+| `assets/v2/accelerator.css`, `accelerator.js`, `accelerator-after.js` | Shared by every v2 page, never copied into one |
 | `clients/andreas-resort/content.json` | The sandbox's content, the single source of truth for its v2 page |
 | `tests/v2/` | v2 tests, including a conversion of every real plan in memory |
 
 Never edit IDs in a `content.json` by hand. Re-run the converter instead: it keeps every existing ID.
+
+A v2 client's `index.html` is generated: never edit it, and never run the v1 tools (`scripts/regenerate-dashboards.js --write`, the Add Plan upload) on a v2 client folder. Part 7 above describes the v1 sandbox workflow; for Andrea's Resort on v2, see `clients/andreas-resort/README.md`.

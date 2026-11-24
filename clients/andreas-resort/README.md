@@ -1,69 +1,70 @@
-# Andrea's Resort - Design Sandbox
+# Andrea's Resort: Accelerator v2 sandbox
 
-A sandbox dashboard for testing design improvements before they go into production.
+This is the first dashboard built by Accelerator v2 (see `shared/accelerator-v2/SCHEMA.md`). It is a sandbox: it is not a real client, and no weekly emails are meant to go out for it (`flags.send_emails` is `false`).
 
-## How It Works
-
-1. **Andrea makes changes** - Edit `index.html` using Claude Code
-2. **Changes are tracked automatically** - Git captures every edit
-3. **Conner reviews** - Views the diff to see exactly what changed
-4. **Selective approval** - Approved changes get applied to the master template
-
-## Workflow for Andrea
-
-### Making Changes
-
-Use Claude Code to edit this dashboard. Just describe what you want to change:
-
-- "Make the button hover colour lighter"
-- "Increase the spacing between week cards"
-- "Add a subtle shadow to the tactic cards"
-
-Each change is automatically committed to git, so Conner can see exactly what you changed and when.
-
-### Letting Conner Know
-
-When you have changes ready for review, just message him:
-> "I've made some improvements to the card shadows and button states in Andrea's Resort - ready for review"
-
-## Workflow for Conner
-
-### Viewing Andrea's Changes
-
-See all uncommitted changes:
-```bash
-git diff clients/andreas-resort/index.html
-```
-
-See recent commits to the sandbox:
-```bash
-git log --oneline -10 -- clients/andreas-resort/
-```
-
-View a specific commit's changes:
-```bash
-git show <commit-hash> -- clients/andreas-resort/index.html
-```
-
-### Approving Changes
-
-Use Claude Code to apply changes to the master template AND Conner's Cabins (the sales demo):
-
-> "Apply the card shadow changes from Andrea's Resort to the template and Conner's Cabins"
-
-Or be specific:
-> "Update the .week-card box-shadow in template/accelerator-template.html and clients/sample-demo/index.html to match Andrea's Resort"
-
-**Important:** Always update both files so Conner's Cabins stays in sync with the template.
+**Do not edit `index.html`.** It is generated from `content.json` and is overwritten by the next build. `tests/v2/render.test.js` fails if the committed page differs from what the generator builds.
 
 ## Files
 
-| File | Purpose |
-|------|---------|
-| `index.html` | The sandbox dashboard - Andrea edits this |
-| `README.md` | This workflow documentation |
+| File | What it is | How it changes |
+|---|---|---|
+| `plan.md` | The coach's plan, in the `PLAN_FORMAT.md` format | Edited by hand, then converted |
+| `content.json` | The single source of truth for the page: every item with its permanent ID, plus media | Written by the converter and the media script only |
+| `assets/` | Media files, named by media ID (`med_xxxxxx.svg`). Neutral placeholders for now | Written by the media script |
+| `index.html` | The dashboard | Built from `content.json` |
+| `plan.json` | The weekly email feed | Built from `content.json` |
+| `sandbox-media.md` | The media this sandbox carries, and the cases it is built to test | Edited by hand |
+| `add-sandbox-media.mjs` | Adds the media in `sandbox-media.md`. A stand-in for the media tool | Run by hand |
+
+The page's stylesheet and scripts are shared, not copied in: `assets/v2/tokens.css`, `assets/v2/accelerator.css`, `assets/v2/accelerator.js` and `assets/v2/accelerator-after.js`, with the page layout in `template/v2/accelerator.html`.
+
+## Workflow
+
+### Change the plan
+
+1. Edit `plan.md`.
+2. Convert it. This reports what changed and writes nothing:
+
+       node shared/accelerator-v2/cli.mjs convert andreas-resort
+
+   Items that were reworded keep their IDs, and are listed so you can check the match. Media, Next Step details and other fields that are not in `plan.md` are kept.
+3. Save it, adding `--confirm-matches` if the report listed matches you have checked:
+
+       node shared/accelerator-v2/cli.mjs convert andreas-resort --save
+
+4. Build the page:
+
+       node shared/accelerator-v2/cli.mjs build andreas-resort --save
+
+5. Run `npm test`, then commit.
+
+### Change the design
+
+Edit the shared files, not the page:
+
+- Colours, fonts, sizes, spacing, radii and shadows: `assets/v2/tokens.css`. `assets/v2/accelerator.css` may only use `var(--...)`; `tests/v2/styles.test.js` checks this.
+- A component's markup: `shared/accelerator-v2/components.js`.
+- The page layout and fixed labels: `template/v2/accelerator.html`.
+- Behaviour: `assets/v2/accelerator.js`.
+
+Then rebuild the page (step 4 above) and run `npm test`. Every v2 page picks up the change, because they all load the same files.
+
+### Add or change media
+
+For now, edit `add-sandbox-media.mjs` and run it. It only adds media to steps that have none, so existing IDs and files never change. The real media tool is open decision 2 in `SCHEMA.md`.
+
+## Not yet in v2
+
+- The PDFs (the roadmap prints from the browser, as in v1).
+- Notes and Quick Wins ticks are saved in this browser only, as in v1. Checklist ticks are saved to the account, keyed by `chk_` ID.
+- Edit Mode edits are saved by the existing Edit Mode, keyed by item ID and field (for example `stp_xxxxxx.title`), but they are not yet written back into `content.json`.
+- There is no Assessment page, because `content.json` has no assessment.
+
+## Do not use the v1 tools on this folder
+
+`scripts/regenerate-dashboards.js andreas-resort --write` and the Add Plan upload would replace this page with a v1 page. `scripts/validate-client.js` reads it as v1 and reports it as "assessment-only, 0 checklist items"; use `node shared/accelerator-v2/cli.mjs check andreas-resort` instead.
 
 ## Access
 
-- Production: https://accelerator.elearningu.com/clients/andreas-resort/
+- Production: https://accelerator.elearningu.com/andreas-resort/
 - Requires login (admin/PSM access or explicit permission in Supabase)

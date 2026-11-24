@@ -13,6 +13,9 @@ Code for v2 of the accelerator dashboard, as defined in `SCHEMA.md`. Nothing in 
 | `checks.js` | `checkContent(content, { previous, otherClients, assetExists })`: blocking errors, warnings and the list of hidden optional content | yes |
 | `plan-json.js` | `generatePlanJsonV2(content)`: the email feed, in today's `plan.json` shape | yes |
 | `media.js` | Builds media entries with IDs, and neutral placeholder images | yes |
+| `render.js` | `renderDashboard(content, { template, assetUrl })`: the dashboard HTML, with every count, total and grid computed from the content. `validateDashboardV2()` checks the result | yes |
+| `components.js` | One function per recurring piece: tactic header, part, step, step labels, bullets, table, each media type and frame, metrics, tips, resources, week card, checklist item, quick win, objective, phase | yes |
+| `tools/tokenise-css.mjs` | Used once to move the v1 stylesheet's values into `assets/v2/tokens.css` | no |
 | `repo.js` | Reads other clients and the media library from the repository (Node only) | no |
 | `cli.mjs` | The command line, below | no |
 
@@ -33,6 +36,10 @@ Saving is refused for a client folder that is not on v2 (no `content.json`, and 
 Check a saved `content.json`:
 
     node shared/accelerator-v2/cli.mjs check andreas-resort
+
+Build the dashboard from `content.json` (add `--save` to write `index.html`):
+
+    node shared/accelerator-v2/cli.mjs build andreas-resort
 
 ## Interpretations of SCHEMA.md
 
