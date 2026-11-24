@@ -1120,3 +1120,48 @@ Conner's Cabins is the client-facing sales demo and must always reflect the late
 **Required files to update:**
 - `template/accelerator-template.html` (master template)
 - `clients/sample-demo/index.html` (Conner's Cabins - sales demo)
+
+---
+
+# Accelerator v2 (in development)
+
+Accelerator v2 replaces hand-edited client pages with one structured content file per client. The design is in `shared/accelerator-v2/SCHEMA.md`. Read it fully before any v2 work. Nothing in the live system uses v2 yet. `clients/andreas-resort/` is the only v2 client.
+
+## Safety rules for v2 work (these override everything else)
+
+- Work on the `v2-foundation` branch. Never push to `main` or merge anything. Andrea decides when to merge.
+- v2 work may create or change files only in:
+  - `clients/andreas-resort/`
+  - `shared/accelerator-v2/`
+  - `template/v2/`
+  - `assets/v2/`
+  - `tests/v2/`
+  - `.github/workflows/`
+- Everything else is read-only for v2 work: `shared/*.js`, `template/accelerator-template.html`, `shared/plan-generator.js`, `shared/plan-validator.js`, every other client folder, `netlify/`, `supabase/`, `scripts/` and the existing tests. v2 code may import and call existing code, but not edit it.
+- **v1 files and live clients must not be changed as part of v2 work.** Existing clients stay on v1, untouched.
+- If something v2 needs would require changing a read-only file, or an existing test or script fails because it assumes every client page is v1, stop and ask. Do not work around it by editing those files.
+- Do not call any Netlify function, write to Supabase, or run any script with `--write` as part of v2 work.
+- `npm test` must pass before each commit.
+
+## Where things are
+
+| File | Purpose |
+|---|---|
+| `shared/accelerator-v2/SCHEMA.md` | The content schema (draft for review) |
+| `shared/accelerator-v2/README.md` | The v2 modules and commands |
+| `shared/accelerator-v2/convert.js` | The converter: `plan.md` in, `content.json` out, keeping existing IDs |
+| `shared/accelerator-v2/checks.js` | The publishing checks: errors that block and warnings |
+| `shared/accelerator-v2/plan-json.js` | `plan.json` (weekly emails) generated from `content.json` |
+| `shared/accelerator-v2/cli.mjs` | `convert`, `check` and `build` from the command line. Reports only unless `--save` is given, and saves only into v2 client folders |
+| `shared/accelerator-v2/render.js`, `components.js` | The v2 generator: `content.json` in, dashboard HTML out, one function per component |
+| `template/v2/accelerator.html` | The v2 page layout and fixed labels |
+| `assets/v2/tokens.css` | Every colour, font, size, spacing, radius and shadow. `accelerator.css` may only use `var(--...)` |
+| `assets/v2/accelerator.css`, `accelerator.js`, `accelerator-after.js` | Shared by every v2 page, never copied into one |
+| `shared/accelerator-v2/CUTOVER.md` | Everything outside the v2 paths that must change before a real client moves to v2 |
+| `clients/andreas-resort/content.json` | The sandbox's content, the single source of truth for its v2 page |
+| `clients/andreas-resort/assessment.json` | The sandbox's assessment, in the shape of a `client_assessments` record. Real clients' come from Supabase |
+| `tests/v2/` | v2 tests, including a conversion of every real plan in memory |
+
+Never edit IDs in a `content.json` by hand. Re-run the converter instead: it keeps every existing ID.
+
+A v2 client's `index.html` is generated: never edit it, and never run the v1 tools (`scripts/regenerate-dashboards.js --write`, the Add Plan upload) on a v2 client folder. Part 7 above describes the v1 sandbox workflow; for Andrea's Resort on v2, see `clients/andreas-resort/README.md`.

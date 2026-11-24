@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>{{PROGRAM_DAYS}}-Day Accelerator: {{CLIENT_NAME}}</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link rel="stylesheet" href="{{ASSET_BASE}}/tokens.css">
+<link rel="stylesheet" href="{{ASSET_BASE}}/accelerator.css">
+</head>
+<body data-client-slug="{{CLIENT_SLUG}}" data-client-name="{{CLIENT_NAME}}" data-cohort-start="{{COHORT_START}}" data-total-days="{{PROGRAM_DAYS}}" data-total-weeks="{{PROGRAM_WEEKS}}" data-template-version="v2">
+<a href="#main" class="skip-link">Skip to main content</a>
+
+<!-- ── Sidebar ──────────────────────────────────────────────── -->
+<aside id="sidebar">
+  <div class="sidebar-logo">
+    <img id="sidebar-logo-img" src="{{ASSET_BASE}}/elearningu-logo-white.png" alt="eLearningU">
+  </div>
+  <div class="sidebar-progress-wrap">
+    <div class="sidebar-ring-wrap">
+      <svg class="sidebar-ring-svg" viewBox="0 0 56 56">
+        <circle class="sidebar-ring-bg" cx="28" cy="28" r="23"/>
+        <circle class="sidebar-ring-progress" id="sidebar-ring" cx="28" cy="28" r="23" stroke-dasharray="144.51" stroke-dashoffset="144.51"/>
+      </svg>
+    </div>
+    <div class="sidebar-progress-text">
+      <div class="sidebar-progress-main">
+        <span class="sidebar-progress-count-big" id="sidebar-done">0</span>
+        <span class="sidebar-progress-of">of <span id="sidebar-total">{{TOTAL_TASKS}}</span></span>
+      </div>
+      <div class="sidebar-progress-label">tasks checked off</div>
+    </div>
+  </div>
+  <nav>
+    <div class="nav-item active" data-page="dashboard" onclick="navigate('dashboard')">
+      <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"/></svg>
+      Dashboard
+    </div>
+    {{NAV_ASSESSMENT}}
+    <div class="nav-section-label">Your Strategy</div>
+    <div class="nav-item" data-page="strategy" onclick="navigate('strategy')">
+      <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 6a3 3 0 013-3h10a1 1 0 01.8 1.6L14.25 8l2.55 3.4A1 1 0 0116 13H6a1 1 0 00-1 1v3a1 1 0 11-2 0V6z" clip-rule="evenodd"/></svg>
+      Strategy
+    </div>
+    <div class="nav-section-label">The Tactics</div>
+    {{NAV_TACTICS}}
+    <div class="nav-section-label">Your Plan</div>
+    <div class="nav-item" id="nav-roadmap" data-page="roadmap" onclick="navigate('roadmap')">
+      <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"/></svg>
+      {{PROGRAM_DAYS}}-Day Roadmap
+      <span class="nav-badge" id="roadmap-badge">0%</span>
+    </div>
+    {{NAV_QUICK_WINS}}
+
+    <!-- Activity Nav (Admin/PSM/Coach only) -->
+    <div class="nav-section-label" id="nav-activity-label" hidden>Insights</div>
+    <div class="nav-item" id="nav-activity" onclick="navigate('activity')" hidden>
+      <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zm6-4a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zm6-3a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"/></svg>
+      Activity
+    </div>
+  </nav>
+  <div class="sidebar-footer">
+    <button id="replayTour" class="restart-tour-btn" onclick="startWelcome()">
+      <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>
+      Replay welcome tour
+    </button>
+  </div>
+  <div class="sidebar-user">
+    <div class="user-menu-container" id="sidebarUserMenu"></div>
+  </div>
+</aside>
+
+<!-- ── Mobile header ────────────────────────────────────────── -->
+<header class="mobile-header">
+  <img id="mobile-logo-img" src="{{ASSET_BASE}}/elearningu-logo-white.png" alt="eLearningU">
+  <div class="user-menu-container" id="mobileUserMenu"></div>
+  <button class="hamburger" id="nav-hamburger" onclick="toggleMobileDrawer()" aria-label="Menu">
+    <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"/></svg>
+  </button>
+</header>
+<div id="drawerOverlay" onclick="closeMobileDrawer()"></div>
+
+<!-- ── Main ─────────────────────────────────────────────────── -->
+<main id="main">
+
+<!-- DASHBOARD -->
+<section id="page-dashboard" class="page active">
+  <div class="dash-v2">
+    <div class="dash-header">
+      <h1 class="dash-greeting" id="dash-greeting">Good to see you, {{CLIENT_NAME}}</h1>
+    </div>
+
+    <div class="dash-progress-hero" id="goal-section">
+      <div class="dash-ring-large-wrap">
+        <svg class="dash-ring-large" width="200" height="200" viewBox="0 0 200 200">
+          <circle cx="100" cy="100" r="85" fill="none" stroke="var(--surface-sunken)" stroke-width="17"></circle>
+          <circle id="dash-ring" class="dash-ring-bar" cx="100" cy="100" r="85" fill="none" stroke="var(--mint-500)" stroke-width="17" stroke-linecap="round" stroke-dasharray="534.1" stroke-dashoffset="534.1"></circle>
+        </svg>
+        <div class="dash-ring-large-text">
+          <div class="dash-ring-pct" id="dash-pct">0%</div>
+          <div class="dash-ring-label"><span id="dash-done-count">0</span> of <span id="dash-total-count">{{TOTAL_TASKS}}</span> tasks</div>
+        </div>
+      </div>
+      <div class="dash-progress-content">
+        <h2 class="dash-headline" id="dash-headline">{{FIRST_HEADLINE}}</h2>
+        <p class="dash-subcopy" id="dash-subcopy">{{FIRST_SUBCOPY}}</p>
+        <div class="dash-phases-label">THE {{PROGRAM_DAYS}} DAYS</div>
+        <div class="dash-phases-grid" style="--columns:{{PHASE_COUNT}}">
+          {{DASHBOARD_PHASES}}
+        </div>
+      </div>
+    </div>
+
+    <div class="dash-next-step" id="objectives-section">
+      <div class="dash-next-main">
+        <div class="dash-next-eyebrow" id="dash-next-eyebrow">{{NEXT_EYEBROW}}</div>
+        <h2 class="dash-next-title" id="dash-next-title">{{NEXT_TITLE}}</h2>
+        <div class="dash-next-tasks" id="dash-next-tasks">{{NEXT_TASKS}}</div>
+        <div class="dash-next-actions">
+          <button class="dash-btn-primary" onclick="navigate('roadmap')">Open the roadmap</button>
+          <span class="dash-next-link" id="dash-next-link" onclick="navigate('tactic{{NEXT_TACTIC_NUM}}')">Open the full guide for this tactic →</span>
+        </div>
+      </div>
+      <div class="dash-next-sidebar">
+        <div class="dash-next-meta">
+          <div class="dash-next-meta-label">TACTIC</div>
+          <div class="dash-next-meta-value" id="dash-next-tactic">{{NEXT_TACTIC}}</div>
+        </div>
+        <div class="dash-next-meta" id="dash-next-time-wrap"{{NEXT_TIME_HIDDEN}}>
+          <div class="dash-next-meta-label">TIME NEEDED</div>
+          <div class="dash-next-meta-value" id="dash-next-time">{{NEXT_TIME}}</div>
+        </div>
+        <div class="dash-next-meta" id="dash-next-who-wrap"{{NEXT_WHO_HIDDEN}}>
+          <div class="dash-next-meta-label">WHO</div>
+          <div class="dash-next-meta-value" id="dash-next-who">{{NEXT_WHO}}</div>
+        </div>
+        <div class="dash-next-week-progress">
+          <div class="dash-next-week-header">
+            <span id="dash-week-progress-title">Week {{NEXT_WEEK}} tasks</span>
+            <span id="dash-week-progress-label">0/{{NEXT_TASK_COUNT}}</span>
+          </div>
+          <div class="dash-next-week-bar">
+            <div class="dash-next-week-bar-fill" id="dash-week-bar"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dash-tactics-grid" id="tactic-cards-section" style="--columns:{{TACTIC_COUNT}}">
+      {{TACTIC_PILLS}}
+    </div>
+  </div>
+</section>
+
+{{ASSESSMENT_PAGE}}
+
+<!-- STRATEGY -->
+<section id="page-strategy" class="page">
+  <div class="page-header">
+    <div class="page-header-eyebrow">Your Strategy</div>
+    <h1>{{PROGRAM_DAYS}}-Day Marketing Strategy</h1>
+    <p>Your customised roadmap to marketing success</p>
+  </div>
+  <div class="content-area">
+    <div class="strategy-goal">
+      <div class="strategy-goal-quote">&ldquo;</div>
+      <div class="strategy-goal-inner">
+        <div class="strategy-goal-label">Your {{PROGRAM_DAYS}}-Day Goal</div>
+        <p class="strategy-goal-text" data-editable-key="strategy.goal">{{GOAL}}</p>
+      </div>
+    </div>
+
+    <div class="strategy-positioning">
+      <div class="strategy-positioning-label">Strategic Positioning</div>
+      <p class="strategy-positioning-text" data-editable-key="strategy.positioning">{{POSITIONING}}</p>
+    </div>
+
+    <div class="strategy-objectives">
+      <div class="strategy-objectives-label">Your Objectives</div>
+      <div class="strategy-objectives-grid">
+        {{OBJECTIVES}}
+      </div>
+    </div>
+
+    <div class="tactics-overview">
+      <div class="tactics-overview-label">Your Tactics</div>
+      <div class="tactics-overview-grid" style="--columns:{{TACTIC_OVERVIEW_COLUMNS}}">
+        {{TACTIC_OVERVIEW_CARDS}}
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TACTICS -->
+{{TACTIC_PAGES}}
+
+<!-- ROADMAP -->
+<section id="page-roadmap" class="page">
+  <div class="page-header" id="roadmap-page-header">
+    <div class="page-header-eyebrow">{{PROGRAM_DAYS}}-Day Roadmap · Your Action Plan</div>
+    <h1>Week-by-Week Accelerator Plan</h1>
+    <p>Check off each completion item as you go. Your progress is saved automatically and will be here when you return.</p>
+    <button class="download-pdf-btn no-print" onclick="printRoadmap()">
+      <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+      Download PDF
+    </button>
+  </div>
+  <div class="content-area">
+
+    <div class="print-only">
+      <div class="print-cover">
+        <div class="print-cover-logo">e<span>Learning</span>U</div>
+        <div class="print-cover-badge">Tourism Digital Marketing Accelerator</div>
+        <h1 class="print-cover-title">{{PROGRAM_DAYS}}-Day Roadmap</h1>
+        <p class="print-cover-client">{{CLIENT_NAME}}</p>
+        <div class="print-cover-divider"></div>
+        <p class="print-cover-meta">
+          {{PRINT_COHORT_START}}<strong>Program Duration:</strong> {{PROGRAM_WEEKS}} Weeks
+        </p>
+        <div class="print-cover-footer">
+          <p>Prepared by eLearningU Accelerator Program</p>
+        </div>
+      </div>
+
+      <div class="print-overview">
+        <div class="print-section">
+          <h2>About This Document</h2>
+          <p>This roadmap was created as part of the eLearningU Tourism Digital Marketing Accelerator program. It is a customised {{PROGRAM_DAYS}}-day action plan designed specifically for {{CLIENT_NAME}} based on a comprehensive digital assessment and strategy session with your coach.</p>
+          <p>The plan is structured as {{PROGRAM_WEEKS}} weekly sprints across {{PHASE_COUNT_WORD}} phases: {{PRINT_PHASES}}.</p>
+        </div>
+        <div class="print-section">
+          <h2>How to Use This Roadmap</h2>
+          <p>Each week contains two sections:</p>
+          <ul>
+            <li><strong>This Week's Actions:</strong> The tasks to complete, with guidance on how to do each one</li>
+            <li><strong>Completion Checklist:</strong> Specific outcomes to verify before moving to the next week</li>
+          </ul>
+          <p>Work through one week at a time. The tasks build on each other, so completing them in order matters. If you get stuck, contact your coach.</p>
+        </div>
+        <div class="print-goal-box">
+          <h3>Your Goal</h3>
+          <p>{{GOAL}}</p>
+        </div>
+      </div>
+    </div>
+
+    {{ROADMAP_PHASES}}
+
+    {{ROADMAP_CLOSING}}
+
+    {{PRINT_FOOTER}}
+  </div>
+</section>
+
+{{QUICK_WINS_PAGE}}
+
+<!-- WELCOME MODAL -->
+<div id="wm-overlay" class="wm-overlay" hidden onclick="handleOverlayClick(event)">
+  <div class="wm-card" id="wm-card" onclick="event.stopPropagation()">
+    <div class="wm-header">
+      <div class="wm-header-glow-a"></div>
+      <div class="wm-header-glow-b"></div>
+      <img class="wm-logo-img" src="{{ASSET_BASE}}/elearningu-logo-white.png" alt="eLearningU">
+      <div class="wm-eyebrow">eLearningU · Accelerator Program</div>
+      <div class="wm-headline">Welcome to your<br>Implementation Plan.</div>
+      {{WELCOME_MESSAGE}}
+    </div>
+    <div class="wm-body">
+      <div class="wm-goal-block">
+        <div class="wm-goal-eyebrow">Your Goal</div>
+        <p class="wm-goal-text">{{GOAL}}</p>
+      </div>
+      <div class="wm-how-label">What's inside</div>
+      <div class="wm-steps">
+        <div class="wm-step">
+          <div class="wm-step-icon wm-step-icon--tactics">
+            <svg width="18" height="18" viewBox="0 0 20 20" fill="currentColor"><path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z"/></svg>
+          </div>
+          <div class="wm-step-lbl">{{TACTIC_COUNT}} Tactics</div>
+          <div class="wm-step-sub">Deep-dive guides for each strategy</div>
+        </div>
+        <div class="wm-step">
+          <div class="wm-step-icon wm-step-icon--roadmap">
+            <svg width="18" height="18" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"/></svg>
+          </div>
+          <div class="wm-step-lbl">{{PROGRAM_DAYS}}-Day Roadmap</div>
+          <div class="wm-step-sub">Week-by-week action plan</div>
+        </div>
+        <div class="wm-step">
+          <div class="wm-step-icon wm-step-icon--progress">
+            <svg width="18" height="18" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+          </div>
+          <div class="wm-step-lbl">Progress Tracking</div>
+          <div class="wm-step-sub">Checkboxes + notes, auto-saved</div>
+        </div>
+      </div>
+      <div class="wm-actions">
+        <button class="wm-btn-primary" onclick="closeWelcomeStartTour()">
+          <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"/></svg>
+          Take a quick tour
+        </button>
+        <button class="wm-btn-secondary" onclick="closeWelcome()">Explore on my own</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TOUR -->
+<div id="tour-backdrop" class="tour-backdrop" onclick="advanceTour()"></div>
+<div id="tour-spotlight-box" class="tour-spotlight-box"></div>
+<div id="tour-tooltip-box" class="tour-tooltip-box">
+  <div class="tour-tt-eyebrow">
+    <span id="tt-step-label">Step 1</span>
+    <button class="tour-tt-close" onclick="endTour()" title="Close tour">
+      <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="1" y1="1" x2="11" y2="11"/><line x1="11" y1="1" x2="1" y2="11"/></svg>
+    </button>
+  </div>
+  <div class="tour-tt-title" id="tt-title"></div>
+  <div class="tour-tt-desc" id="tt-desc"></div>
+  <div class="tour-tt-footer">
+    <div class="tour-dots" id="tt-dots"></div>
+    <div class="tour-nav">
+      <button class="tour-btn" id="tt-prev" onclick="prevTourStep()">← Back</button>
+      <button class="tour-btn next" id="tt-next" onclick="nextTourStep()">Next →</button>
+    </div>
+  </div>
+</div>
+
+  <!-- ACTIVITY (Admin/PSM/Coach only) -->
+  <section id="page-activity" class="page">
+    <div class="activity">
+      <div class="activity__header">
+        <h1 class="activity__title">Client Activity</h1>
+        <p class="activity__subtitle">View engagement and progress for this client</p>
+      </div>
+      <div class="activity__stats" id="activity-stats">
+        <div class="activity__stat-card"><div class="activity__stat-label">Total Sessions</div><div class="activity__stat-value" id="stat-sessions">-</div></div>
+        <div class="activity__stat-card"><div class="activity__stat-label">Unique Users</div><div class="activity__stat-value" id="stat-users">-</div></div>
+        <div class="activity__stat-card"><div class="activity__stat-label">Tasks Completed</div><div class="activity__stat-value" id="stat-tasks">-</div></div>
+        <div class="activity__stat-card"><div class="activity__stat-label">Avg Session</div><div class="activity__stat-value" id="stat-duration">-</div></div>
+      </div>
+      <div class="activity__section">
+        <h2 class="activity__section-title">Recent Activity</h2>
+        <div class="activity__timeline" id="activity-timeline"><div class="activity__loading">Loading activity...</div></div>
+      </div>
+      <div class="activity__section">
+        <h2 class="activity__section-title">Session History</h2>
+        <div class="activity__sessions" id="activity-sessions"><div class="activity__loading">Loading sessions...</div></div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<div class="lightbox-overlay" id="lightbox" onclick="closeLightbox()">
+  <img id="lightbox-img" src="" alt="">
+</div>
+
+<script type="application/json" id="accelerator-data">{{PAGE_DATA}}</script>
+<script src="{{ASSET_BASE}}/accelerator.js"></script>
+
+<!-- Shared scripts: login, progress, Edit Mode, analytics, sharing (unchanged from v1) -->
+<script src="/shared/supabase-client.js"></script>
+<script src="/shared/auth.js"></script>
+<script src="/shared/analytics.js"></script>
+<script src="/shared/user-menu.js"></script>
+<script src="/shared/content-editor.js"></script>
+<script src="/shared/progress.js"></script>
+<script src="/shared/milestone.js"></script>
+<script src="/shared/share-modal.js"></script>
+<script src="{{ASSET_BASE}}/accelerator-after.js"></script>
+</body>
+</html>
