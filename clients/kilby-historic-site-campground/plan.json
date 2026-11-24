@@ -1,0 +1,226 @@
+{
+  "client_name": "Kilby Historic Site & Campground",
+  "client_slug": "kilby-historic-site-campground",
+  "goal": "Kilby is running a museum, a working farm, a cafe, and a campground, and it is doing it with one marketing day a week. That context makes the results more impressive: a single post announcing the new breakfast reached about 70,000 people organically, the Facebook following is 5,200, the Google rating is 4.6 stars across 433 reviews, Tourism Harrison partnerships bring in new followers, and locals are returning for the cafe and the rotating workshops. The campground books itself, so the work in this plan is not about filling it. The gap is everything that sits between a person discovering Kilby and a person walking through the door. The WordPress site has been built by many hands over many years, with 257 images on the homepage, a 67 out of 100 speed score, and no clear path to the museum, the cafe, or the campground. There are no Reels on Instagram, engagement sits at 0.3 percent, outdated third-party pages show the wrong information in search, and booking is manual and heavy on admin time. The next ninety days are designed around your calendar. You are open to the public for a few more weeks, so the first two weeks capture content while the animals, the store, and the cafe are in front of you. Then the break begins, and that quiet season is the best time to rebuild the website and write the content that makes AI tools and search engines describe Kilby accurately. By the February campground announcement, which gets your highest email open rate, everything points to a faster and clearer site. The three results you named are the ones this plan is built to move: steady website traffic growth, more social followers, and stronger reach among locals. Every week is sized to fit one day.",
+  "coach_email": "damon@wearejunction.com",
+  "weeks": [
+    {
+      "week": 1,
+      "month": 1,
+      "title": "Week 1: Capture, Baselines, and Quick Fixes",
+      "actions": [
+        "Capture photos and short video of the animals, the store, the cafe, and any December event while you are still open → links to: Tactic 2 / Step 3",
+        "Reply to the four-star rabbit hutch review and write three review reply templates → links to: Tactic 2 / Step 4",
+        "Install Site Kit, Google Analytics 4, and the Meta Pixel, and record your baselines: followers, engagement rate, PageSpeed score, and Search Console clicks → links to: Tactic 1 / Step 6",
+        "Read your Wikipedia article and the top Google results for Kilby, and list everything that is wrong or out of date → links to: Tactic 3 / Step 1"
+      ],
+      "checklist": [
+        "20 or more photos and 5 or more clips from the open season are saved in one folder",
+        "The rabbit hutch review has a reply and three templates are saved",
+        "GA4, Search Console, and the Meta Pixel are installed and verified",
+        "A baseline sheet records followers, engagement rate, and the PageSpeed score",
+        "A list of outdated pages and Wikipedia errors exists"
+      ],
+      "deep_link": "https://accelerator.elearningu.com/kilby-historic-site-campground/#week-1"
+    },
+    {
+      "week": 2,
+      "month": 1,
+      "title": "Week 2: Image Audit and the Last Open Week",
+      "actions": [
+        "Find what is producing the 257 images on the homepage and cut the list → links to: Tactic 1 / Step 1",
+        "Resize and compress the homepage images and install an image optimization plugin → links to: Tactic 1 / Step 2",
+        "Study your best posts, including the 70,000-reach breakfast post, and write the one-page note and caption formula → links to: Tactic 2 / Step 1",
+        "Capture any final footage and schedule December and January content in Plannable, swapping two or three static posts a week for Reels → links to: Tactic 2 / Step 3"
+      ],
+      "checklist": [
+        "The homepage image count is under 100 and the new PageSpeed score is recorded",
+        "The image optimization plugin is installed and the homepage images are compressed",
+        "A one-page \"what works\" note and caption formula are written",
+        "December and January content is scheduled"
+      ],
+      "deep_link": "https://accelerator.elearningu.com/kilby-historic-site-campground/#week-2"
+    },
+    {
+      "week": 3,
+      "month": 1,
+      "title": "Week 3: Speed, Fact Sheets, and First Reels",
+      "actions": [
+        "Finish compressing the media library as the plugin's free tier allows → links to: Tactic 1 / Step 2",
+        "Check lazy loading and install one caching plugin → links to: Tactic 1 / Step 3",
+        "Create the program fact sheet and set the six-week lock date for spring events → links to: Tactic 2 / Step 2",
+        "Turn the best six to eight YouTube videos into Reels → links to: Tactic 2 / Step 3",
+        "Write down any questions for the follow-up call with your coach"
+      ],
+      "checklist": [
+        "The homepage scores 75 or higher in PageSpeed Insights on mobile",
+        "One caching plugin is active and tested on mobile data",
+        "The program fact sheet and lock date are shared with the program director",
+        "Six Reels are edited and scheduled"
+      ],
+      "deep_link": "https://accelerator.elearningu.com/kilby-historic-site-campground/#week-3"
+    },
+    {
+      "week": 4,
+      "month": 1,
+      "title": "Week 4: Homepage Calls to Action and the AI Baseline",
+      "actions": [
+        "Build the homepage call-to-action carousel for the museum, cafe, and campground → links to: Tactic 1 / Step 4",
+        "Make the phone number tap-to-call and add Book and Reserve buttons on the event, cafe, and contact pages → links to: Tactic 1 / Step 5",
+        "Run the 12-prompt AI baseline across ChatGPT, Perplexity, Gemini, and Google AI Overviews → links to: Tactic 3 / Step 1",
+        "Schedule the holiday-week posts in Plannable → links to: Tactic 2 / Step 3"
+      ],
+      "checklist": [
+        "The homepage carousel is live with Museum, Cafe, and Campground buttons",
+        "The phone number is tappable on every page and Book buttons are visible",
+        "AI baseline results are recorded in a sheet",
+        "Holiday-week posts are scheduled"
+      ],
+      "deep_link": "https://accelerator.elearningu.com/kilby-historic-site-campground/#week-4"
+    },
+    {
+      "week": 5,
+      "month": 2,
+      "title": "Week 5: Holiday Week, Light",
+      "actions": [
+        "Reply to any new comments, messages, and reviews, even briefly → links to: Tactic 2 / Step 4",
+        "Choose the five clusters and list 8 to 10 candidate questions for each → links to: Tactic 3 / Step 5",
+        "Confirm the Plannable schedule runs through early January"
+      ],
+      "checklist": [
+        "No review or comment has gone unanswered for more than a week",
+        "Five clusters and their questions are saved in a sheet",
+        "Posts are scheduled through the first week of January"
+      ],
+      "deep_link": "https://accelerator.elearningu.com/kilby-historic-site-campground/#week-5"
+    },
+    {
+      "week": 6,
+      "month": 2,
+      "title": "Week 6: Correct the Record and Build the FAQ",
+      "actions": [
+        "Post your Wikipedia edit request on the Talk page with your connection disclosed and sources attached → links to: Tactic 3 / Step 2",
+        "Contact the owners of outdated pages and update your Tourism Harrison, FVRD, Destination BC, TripAdvisor, and Google listings → links to: Tactic 3 / Step 2",
+        "Build the FAQ page with direct first-sentence answers → links to: Tactic 3 / Step 3",
+        "Add a \"last updated\" date to the hours and admission section of your visit page → links to: Tactic 1 / Step 5"
+      ],
+      "checklist": [
+        "The Wikipedia edit request is posted with sources",
+        "A message has been sent to each outdated publisher on your list",
+        "The FAQ page is live with confirmed facts and no placeholders",
+        "The visit page shows a current \"last updated\" date"
+      ],
+      "deep_link": "https://accelerator.elearningu.com/kilby-historic-site-campground/#week-6"
+    },
+    {
+      "week": 7,
+      "month": 2,
+      "title": "Week 7: Booking Options and the History Cluster",
+      "actions": [
+        "Map your current booking process, record minutes per booking, and shortlist two or three options → links to: Tactic 1 / Step 7",
+        "Build the Plan Your Harrison Mills Day Trip hub page → links to: Tactic 3 / Step 4",
+        "Publish the history question post and the history pillar page → links to: Tactic 3 / Step 7",
+        "Do the 15-minute review routine and reply to any new comments → links to: Tactic 2 / Step 4"
+      ],
+      "checklist": [
+        "Booking pain points and baseline minutes per booking are written down",
+        "A shortlist of booking options is saved",
+        "The Plan Your Visit hub is live and in the main menu",
+        "The history question post and pillar page are published"
+      ],
+      "deep_link": "https://accelerator.elearningu.com/kilby-historic-site-campground/#week-7"
+    },
+    {
+      "week": 8,
+      "month": 2,
+      "title": "Week 8: Pilot, Animals, and Reddit",
+      "actions": [
+        "Set up a booking pilot on one spring event in your preferred option → links to: Tactic 1 / Step 8",
+        "Publish the animals and families question post and pillar page → links to: Tactic 3 / Step 7",
+        "Search for relevant subreddits, read their rules, and make your first contribution → links to: Tactic 2 / Step 7",
+        "Add a story to the next newsletter and write the issue → links to: Tactic 2 / Step 6"
+      ],
+      "checklist": [
+        "The pilot event has its own booking page live",
+        "The animals and families posts are published",
+        "Three or four subreddits are identified and one contribution is made",
+        "The newsletter has a story first and the events second"
+      ],
+      "deep_link": "https://accelerator.elearningu.com/kilby-historic-site-campground/#week-8"
+    },
+    {
+      "week": 9,
+      "month": 3,
+      "title": "Week 9: Cafe, Locals, and Structured Data",
+      "actions": [
+        "Publish the cafe question post and pillar page → links to: Tactic 3 / Step 7",
+        "Build the locals plan: Facebook Events, community groups, and a regular \"what is on this month\" post → links to: Tactic 2 / Step 5",
+        "Add Museum, Cafe, Campground, and Event schema and test with the Rich Results Test → links to: Tactic 3 / Step 8",
+        "Run a small boost on your best-performing post, linked to the matching page → links to: Tactic 2 / Step 8"
+      ],
+      "checklist": [
+        "The cafe question post and pillar page are published",
+        "Facebook Events and local group shares are in place for confirmed workshops",
+        "Schema passes the Rich Results Test on the key pages",
+        "The first boost is logged with spend and clicks"
+      ],
+      "deep_link": "https://accelerator.elearningu.com/kilby-historic-site-campground/#week-9"
+    },
+    {
+      "week": 10,
+      "month": 3,
+      "title": "Week 10: Planning, Camping, and the February Announcement",
+      "actions": [
+        "Publish the planning and camping question post and pillar page → links to: Tactic 3 / Step 7",
+        "Update the campground page, confirm the booking link and dates, and draft the February announcement with a UTM tag → links to: Tactic 2 / Step 6",
+        "Run the second AI visibility test and compare it with the baseline → links to: Tactic 3 / Step 8",
+        "Check that GA4 is recording clicks on Book buttons, phone taps, and booking page visits → links to: Tactic 1 / Step 6"
+      ],
+      "checklist": [
+        "The planning and camping posts are published",
+        "The February announcement is drafted and scheduled",
+        "The second AI test is logged and compared with the baseline",
+        "GA4 key events are recording"
+      ],
+      "deep_link": "https://accelerator.elearningu.com/kilby-historic-site-campground/#week-10"
+    },
+    {
+      "week": 11,
+      "month": 3,
+      "title": "Week 11: Workshops, Announcement, and Pilot Results",
+      "actions": [
+        "Send the campground announcement by newsletter, and share it on Facebook and Google Business Profile → links to: Tactic 2 / Step 6",
+        "Publish the workshops and school programs question post and pillar page → links to: Tactic 3 / Step 7",
+        "Compare the pilot with your current booking process on minutes per booking, guest questions, and bookings → links to: Tactic 1 / Step 8",
+        "Run the monthly review: top posts, best format, boost cost per click → links to: Tactic 2 / Step 8"
+      ],
+      "checklist": [
+        "The campground announcement is sent and its UTM-tagged bookings are tracked",
+        "The workshops question post and pillar page are published",
+        "The pilot comparison is written on one page",
+        "The monthly review is saved with the top three posts"
+      ],
+      "deep_link": "https://accelerator.elearningu.com/kilby-historic-site-campground/#week-11"
+    },
+    {
+      "week": 12,
+      "month": 3,
+      "title": "Week 12: 90-Day Review and Plan Forward",
+      "actions": [
+        "Run the final AI visibility test and compare it with the baseline and Week 10 → links to: Tactic 3 / Step 8",
+        "Compare website traffic, speed score, and Search Console clicks with your Week 1 baseline → links to: Tactic 1 / Step 6",
+        "Pull the 90-day social summary: followers, engagement rate, Reels reach, and share of reach from locals → links to: Tactic 2 / Step 8",
+        "Decide on the booking system based on the pilot, and write the next steps → links to: Tactic 1 / Step 8",
+        "Write three things that worked and one thing to change, and plan the content for the reopening"
+      ],
+      "checklist": [
+        "The final AI test is logged with the progression across all three tests",
+        "Traffic, speed, and Search Console comparisons are written with numbers",
+        "The 90-day social summary exists with specific numbers",
+        "The booking decision is made with a written reason",
+        "The next 90-day priorities are decided"
+      ],
+      "deep_link": "https://accelerator.elearningu.com/kilby-historic-site-campground/#week-12"
+    }
+  ]
+}
