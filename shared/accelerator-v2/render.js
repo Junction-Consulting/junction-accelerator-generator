@@ -246,7 +246,7 @@ export function renderDashboard(content, options = {}) {
     ROADMAP_PHASES: roadmapPhases,
     ROADMAP_CLOSING: has(roadmap.closing) ? `<div class="callout callout-roadmap" data-editable-key="roadmap.closing">${C.md(roadmap.closing)}</div>` : '',
     PRINT_FOOTER: has(client.coach_email) ? `<div class="print-only print-footer">
-      <div class="print-footer-brand">e<span>Learning</span>U</div>
+      <div class="print-footer-brand"><img src="${C.attr(assetBase)}/junction-wordmark.png" alt="Junction"></div>
       <div class="print-footer-contact">
         <strong>Questions?</strong> Contact your coach at ${C.attr(client.coach_email)}
       </div>

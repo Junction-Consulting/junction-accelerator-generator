@@ -10,10 +10,12 @@
 :root {
   /* Layout, fonts, radii, shadows and motion */
   --sidebar-w: 268px;
-  --font-display: 'Raleway', sans-serif;
-  --font-body: 'Open Sans', sans-serif;
-  --font-d: 'Raleway', sans-serif;
-  --font-b: 'Open Sans', sans-serif;
+  --font-display: 'Epilogue', sans-serif; /* headings */
+  --font-body: 'DM Sans', sans-serif; /* body, labels and buttons */
+  --font-number: 'Bebas Neue', sans-serif; /* numbers only */
+  --font-quote: 'Fraunces', serif; /* the positioning statement */
+  --font-d: var(--font-display);
+  --font-b: var(--font-body);
   --radius-sm: 8px;
   --radius-md: 12px;
   --radius-lg: 16px;
@@ -23,132 +25,135 @@
   --r-md: 12px;
   --r-lg: 16px;
   --r-xl: 24px;
-  --shadow-sm: 0 1px 4px rgba(17,21,75,.07);
-  --shadow-md: 0 4px 20px rgba(17,21,75,.11);
-  --shadow-lg: 0 8px 40px rgba(17,21,75,.16);
+  --shadow-sm: 0 1px 4px rgba(28,28,26,.07);
+  --shadow-md: 0 4px 20px rgba(28,28,26,.11);
+  --shadow-lg: 0 8px 40px rgba(28,28,26,.16);
   --ease-spring: cubic-bezier(0.22, 0.61, 0.36, 1);
   --ease-spring-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
   --ease-snap: cubic-bezier(0.5, 0, 0.1, 1);
 
   /* Colour: grounds */
-  --color-page: #f0ece5; /* page ground */
-  --color-surface: #ffffff; /* cards and panels */
-  --color-surface-raised: #fcf5ec; /* the tactic page panel, and the tab that joins it */
-  --color-surface-sunken: #f5f1ea; /* inset fills inside cards, progress ring tracks */
-  --color-sidebar: #11154b; /* sidebar and mobile header ground */
-  --color-sidebar-translucent: rgba(17,21,75,.9); /* sidebar and mobile header where the backdrop blurs through */
-  --color-dark: #11154b; /* dark sections: page headers, the next-step card, the tactic hero */
-  --color-dark-raised: #1a1f6b; /* tabs on a dark section, the far end of dark gradients */
-  --color-overlay: rgba(17,21,75,.55); /* behind modals and the mobile drawer */
-  --color-overlay-media: rgba(0,0,0,.75); /* behind the lightbox and over video thumbnails */
+  --color-page: #F4F0E8; /* page ground */
+  --color-surface: #FFFFFF; /* cards and panels */
+  --color-surface-raised: #F4F0E8; /* the tactic page panel, and the tab that joins it */
+  --color-surface-sunken: #F4F0E8; /* inset fills inside cards, progress ring tracks */
+  --color-sidebar: #1A4D2E; /* sidebar and mobile header ground */
+  --color-sidebar-translucent: rgba(26,77,46,.94); /* sidebar and mobile header where the backdrop blurs through */
+  --color-dark: #1A4D2E; /* dark sections: page headers, the next-step card, the tactic hero */
+  --color-dark-raised: #1A4D2E; /* tabs on a dark section, the far end of dark gradients */
+  --color-overlay: rgba(28,28,26,.55); /* behind modals and the mobile drawer */
+  --color-overlay-media: rgba(28,28,26,.8); /* behind the lightbox and over video thumbnails */
 
   /* Colour: text */
-  --color-text: #181c2d; /* body text */
-  --color-text-strong: #11154b; /* headings and emphasis on light grounds */
-  --color-text-body: #1a1f6b; /* long-form copy in the tactic guides */
-  --color-text-secondary: #708090; /* secondary text, chevrons, checked-off items */
-  --color-text-muted: #4a5568; /* descriptions and supporting paragraphs */
-  --color-text-faint: rgba(17,21,75,.25); /* placeholders and print footer */
-  --color-text-on-dark: #ffffff; /* text on dark grounds */
-  --color-text-on-dark-soft: rgba(255,255,255,.88); /* paragraphs on dark grounds */
-  --color-text-on-dark-secondary: rgba(255,255,255,.65); /* secondary text on dark grounds */
-  --color-text-on-dark-faint: rgba(255,255,255,.4); /* labels and control outlines on dark grounds */
-  --color-meta: #708090; /* small labels: eyebrows, column labels, meta */
-  --color-stat: #11154b; /* numbers: percentages, scores, counts */
+  --color-text: #1C1C1A; /* body text */
+  --color-text-strong: var(--color-text); /* headings and emphasis on light grounds */
+  --color-text-body: var(--color-text); /* long-form copy in the tactic guides */
+  --color-text-secondary: #6A6862; /* secondary text, chevrons, checked-off items */
+  --color-text-muted: #6A6862; /* descriptions and supporting paragraphs */
+  --color-text-faint: rgba(28,28,26,.4); /* placeholders and print footer */
+  --color-text-on-dark: #F4F0E8; /* text on dark grounds */
+  --color-text-on-dark-soft: rgba(244,240,232,.88); /* paragraphs on dark grounds */
+  --color-text-on-dark-secondary: rgba(244,240,232,.72); /* secondary text on dark grounds */
+  --color-text-on-dark-faint: rgba(244,240,232,.5); /* labels and control outlines on dark grounds */
+  --color-meta: #A55527; /* small labels: eyebrows, column labels, meta */
+  --color-stat-small: #A55527; /* small numbers on light grounds (under 24px) */
+  --color-stat: #A57E31; /* numbers on light grounds, 24px and up */
 
   /* Colour: lines */
-  --color-border: rgba(17,21,75,.06); /* card and component outlines */
-  --color-border-strong: rgba(17,21,75,.12); /* inputs, buttons and emphasised outlines */
-  --color-border-hover: rgba(17,21,75,.35); /* outlines of hovered buttons */
-  --color-control: rgba(17,21,75,.2); /* checkbox outlines */
-  --color-divider: rgba(17,21,75,.06); /* lines between rows and sections */
-  --color-rule: #11154b; /* accent bars and strong rules */
-  --color-divider-on-dark: rgba(255,255,255,.08); /* lines on dark grounds */
-  --color-border-on-dark: rgba(255,255,255,.14); /* outlines and splits on dark grounds */
+  --color-border: #EDE6DA; /* card and component outlines */
+  --color-border-strong: #EDE6DA; /* inputs, buttons and emphasised outlines */
+  --color-border-hover: #CD1561; /* outlines of hovered buttons */
+  --color-control: #2E7D4F; /* checkbox outlines */
+  --color-divider: #2E7D4F; /* lines between rows and sections */
+  --color-rule: #2E7D4F; /* accent bars and strong rules */
+  --color-divider-on-dark: rgba(127,201,154,.3); /* lines on dark grounds */
+  --color-border-on-dark: rgba(127,201,154,.4); /* outlines and splits on dark grounds */
 
   /* Colour: brand and action */
-  --color-brand: #aadab6; /* progress lines and fills, bullets, brand marks */
-  --color-brand-strong: #11154b; /* filled number badges and table headers */
-  --color-on-brand: #11154b; /* text on brand fills */
-  --color-accent: #7bc490; /* accent text, icons and bars on light grounds */
-  --color-accent-on-dark: #aadab6; /* eyebrows, counts, indicators and progress on dark grounds */
-  --color-action: #aadab6; /* primary button fill */
-  --color-on-action: #11154b; /* primary button text */
-  --color-action-hover: #7bc490; /* primary button hover */
-  --color-action-hover-on-dark: #aadab6; /* hovered links on dark grounds */
-  --color-link: #067cbc; /* links, "how to" buttons, checked checkboxes */
-  --color-link-hover: #0560a0; /* hovered links */
-  --color-focus: #aadab6; /* keyboard focus outline */
+  --color-brand: #2E7D4F; /* progress lines and fills, bullets, brand marks */
+  --color-brand-strong: #1A4D2E; /* filled number badges and table headers */
+  --color-on-brand: #F4F0E8; /* text on brand fills */
+  --color-accent: #2B764A; /* accent text, icons and bars on light grounds */
+  --color-accent-on-dark: #7FC99A; /* eyebrows, counts, indicators and progress on dark grounds */
+  --color-action: #2B764A; /* primary button fill */
+  --color-on-action: #F4F0E8; /* primary button text */
+  --color-action-hover: #CD1561; /* primary button hover */
+  --color-action-on-dark: #F4F0E8; /* primary button fill on dark grounds */
+  --color-on-action-on-dark: #1A4D2E; /* primary button text on dark grounds */
+  --color-action-hover-on-dark: #ED5192; /* hovered links on dark grounds */
+  --color-link: #2B764A; /* links, "how to" buttons, checked checkboxes */
+  --color-link-hover: #CD1561; /* hovered links */
+  --color-focus: #2B764A; /* keyboard focus outline */
 
   /* Colour: fills and tints */
-  --color-hover: rgba(17,21,75,.04); /* hover fills and faint tints on light grounds */
-  --color-fill: rgba(17,21,75,.07); /* chips and small fills on light grounds */
-  --color-fill-strong: rgba(17,21,75,.14); /* pressed and inactive fills */
-  --color-hover-on-dark: rgba(255,255,255,.07); /* hover fills on dark grounds */
-  --color-fill-on-dark: rgba(255,255,255,.12); /* tracks and chips on dark grounds */
-  --color-note: rgba(17,21,75,.02); /* note fields */
-  --color-box: #fcf5ec; /* boxes inside cards */
-  --color-brand-tint: rgba(170,218,182,.2); /* brand-tinted chips */
-  --color-brand-tint-soft: rgba(170,218,182,.1); /* brand-tinted boxes and callouts */
-  --color-brand-tint-border: rgba(170,218,182,.4); /* outlines of brand-tinted chips and boxes */
-  --color-accent-on-dark-tint: rgba(170,218,182,.12); /* the selected nav item */
-  --color-link-tint: rgba(6,124,188,.1); /* link-tinted chips and buttons */
-  --color-link-tint-border: rgba(6,124,188,.25); /* outlines of link-tinted buttons */
-  --color-ghost: rgba(17,21,75,.06); /* oversized background numbers */
-  --color-glow: rgba(170,218,182,.15); /* soft light on dark headers */
-  --color-glow-cool: rgba(6,124,188,.12); /* second soft light on dark headers */
+  --color-hover: #EDE6DA; /* hover fills and faint tints on light grounds */
+  --color-fill: #EDE6DA; /* chips and small fills on light grounds */
+  --color-fill-strong: rgba(28,28,26,.1); /* pressed and inactive fills */
+  --color-hover-on-dark: rgba(244,240,232,.08); /* hover fills on dark grounds */
+  --color-fill-on-dark: rgba(244,240,232,.14); /* tracks and chips on dark grounds */
+  --color-note: #E9EEE3; /* note fields */
+  --color-box: #C8E8D4; /* boxes inside cards */
+  --color-brand-tint: #C8E8D4; /* brand-tinted chips */
+  --color-brand-tint-soft: #C8E8D4; /* brand-tinted boxes and callouts */
+  --color-brand-tint-border: #2E7D4F; /* outlines of brand-tinted chips and boxes */
+  --color-accent-on-dark-tint: rgba(127,201,154,.16); /* the selected nav item */
+  --color-link-tint: #E9EEE3; /* link-tinted chips and buttons */
+  --color-link-tint-border: #2E7D4F; /* outlines of link-tinted buttons */
+  --color-ghost: rgba(28,28,26,.06); /* oversized background numbers */
+  --color-glow: rgba(127,201,154,.12); /* soft light on dark headers */
+  --color-glow-cool: rgba(244,240,232,.05); /* second soft light on dark headers */
 
   /* Colour: states */
-  --color-good: #2e7d32; /* good: text and marks */
-  --color-good-ground: #e8f5e9; /* good: box ground */
-  --color-good-ground-strong: #c8e6c9; /* good: deeper box ground */
-  --color-good-bright: #22c55e; /* good: badges and icons */
-  --color-caution: #ed6c02; /* caution: text and marks */
-  --color-caution-strong: #c2410c; /* caution: text in tags */
-  --color-caution-ground: #fff3e0; /* caution: box ground */
-  --color-caution-bright: #f59e0b; /* caution: status dots */
-  --color-critical: #d32f2f; /* critical: text and marks */
-  --color-critical-ground: #fbe6e6; /* critical: box ground */
-  --color-critical-bright: #ef4444; /* critical: badges and icons */
-  --color-info: #067cbc; /* information: text in tags */
-  --color-info-ground: #e3f2fa; /* information: tag ground */
-  --color-highlight: #fff3cd; /* highlighted text, such as an item to confirm */
+  --color-good: #2E7D4F; /* good: text and marks */
+  --color-good-ground: #E9EEE3; /* good: box ground */
+  --color-good-ground-strong: #C8E8D4; /* good: deeper box ground */
+  --color-good-bright: #2E7D4F; /* good: badges and icons */
+  --color-caution: #A57E31; /* caution: text and marks */
+  --color-caution-strong: #A57E31; /* caution: text in tags */
+  --color-caution-ground: rgba(165,126,49,.14); /* caution: box ground */
+  --color-caution-bright: #A57E31; /* caution: status dots */
+  --color-critical: #A63A32; /* critical: text and marks */
+  --color-critical-ground: rgba(166,58,50,.1); /* critical: box ground */
+  --color-critical-bright: #A63A32; /* critical: badges and icons */
+  --color-info: #1A4D2E; /* information: text in tags */
+  --color-info-ground: #E9EEE3; /* information: tag ground */
+  --color-highlight: #C8E8D4; /* highlighted text, such as an item to confirm */
 
   /* Colour: assessment grades */
-  --color-grade-a: #155724;
-  --color-grade-a-ground: #d4edda;
-  --color-grade-b: #0c5460;
-  --color-grade-b-ground: #d1ecf1;
-  --color-grade-c: #856404;
-  --color-grade-c-ground: #fff3cd;
-  --color-grade-d: #721c24;
-  --color-grade-d-ground: #f8d7da;
+  --color-grade-a: #1A4D2E;
+  --color-grade-a-ground: #C8E8D4;
+  --color-grade-b: #2B764A;
+  --color-grade-b-ground: #E9EEE3;
+  --color-grade-c: #A57E31;
+  --color-grade-c-ground: var(--color-caution-ground);
+  --color-grade-d: #A63A32;
+  --color-grade-d-ground: var(--color-critical-ground);
 
   /* Colour: assessment category icons */
-  --color-category-website: #1976d2;
-  --color-category-website-ground: #e3f2fd;
-  --color-category-reviews: #f57c00;
-  --color-category-reviews-ground: #fff3e0;
-  --color-category-booking: #388e3c;
-  --color-category-booking-ground: #e8f5e9;
-  --color-category-social: #c2185b;
-  --color-category-social-ground: #fce4ec;
-  --color-category-experience: #5e35b1;
-  --color-category-experience-ground: #ede7f6;
-  --color-category-local: #0097a7;
-  --color-category-local-ground: #e0f7fa;
-  --color-category-seo: #8b5cf6;
+  --color-category-website: #2B764A;
+  --color-category-website-ground: #E9EEE3;
+  --color-category-reviews: #2B764A;
+  --color-category-reviews-ground: #E9EEE3;
+  --color-category-booking: #2B764A;
+  --color-category-booking-ground: #E9EEE3;
+  --color-category-social: #2B764A;
+  --color-category-social-ground: #E9EEE3;
+  --color-category-experience: #2B764A;
+  --color-category-experience-ground: #E9EEE3;
+  --color-category-local: #2B764A;
+  --color-category-local-ground: #E9EEE3;
+  --color-category-seo: #2B764A;
 
   /* Colour: media frames (drawn browser and phone frames around screenshots) */
-  --color-frame-chrome: #e9e2d2; /* browser frame top bar */
-  --color-frame-body: #f7f2e9; /* browser frame body and caption */
-  --color-frame-border: #d8cdb8; /* browser frame outline */
-  --color-frame-text: #8a7f68; /* browser frame address and caption text */
-  --color-frame-text-strong: #3a3326; /* emphasised caption text */
-  --color-frame-dot-1: #e3a99a;
-  --color-frame-dot-2: #e8cf98;
-  --color-frame-dot-3: #a9c8a2;
-  --color-device: #16191d; /* phone frame */
+  --color-frame-chrome: #EDE6DA; /* browser frame top bar */
+  --color-frame-body: #F4F0E8; /* browser frame body and caption */
+  --color-frame-border: #EDE6DA; /* browser frame outline */
+  --color-frame-text: #6A6862; /* browser frame address and caption text */
+  --color-frame-text-strong: #1C1C1A; /* emphasised caption text */
+  --color-frame-dot-1: rgba(106,104,98,.35);
+  --color-frame-dot-2: rgba(106,104,98,.35);
+  --color-frame-dot-3: rgba(106,104,98,.35);
+  --color-device: #1C1C1A; /* phone frame */
 
   /* Names the shared scripts read (share-modal.js), kept on the roles above */
   --navy: var(--color-dark);
@@ -199,6 +204,12 @@
   --text-120: 120px;
 
   /* Font weights */
+  --weight-heading: 900;
+  --weight-heading-small: 600;
+  --weight-body: 400;
+  --weight-label: 500;
+  --weight-number: 400;
+  --weight-quote: 900;
   --weight-400: 400;
   --weight-500: 500;
   --weight-600: 600;
@@ -362,6 +373,7 @@
   --size-1200: 1200px;
 
   /* Border and line widths */
+  --line-divider: 2px; /* dividers are 2px */
   --line-1: 1px;
   --line-1_5: 1.5px;
   --line-2: 2px;
@@ -380,20 +392,20 @@
   --radius-100: 100px;
 
   /* Shadows */
-  --shadow-1: 0 2px 12px rgba(17,21,75,.3);
+  --shadow-1: 0 2px 12px rgba(28,28,26,.3);
   --shadow-2: 0 2px 12px rgba(0,0,0,.06);
   --shadow-3: 0 2px 8px rgba(0,0,0,.06);
-  --shadow-4: 0 0 8px rgba(239,68,68,.4);
-  --shadow-5: 0 0 8px rgba(249,115,22,.35);
-  --shadow-6: 0 0 8px rgba(252,211,77,.4);
-  --shadow-7: 0 4px 12px rgba(17,21,75,.2);
-  --shadow-8: 0 6px 16px rgba(17,21,75,.25);
-  --shadow-9: 0 40px 100px rgba(17,21,75,.35),0 8px 32px rgba(17,21,75,.2);
-  --shadow-10: 0 6px 20px rgba(17,21,75,.25);
-  --shadow-11: 0 0 0 9999px rgba(17,21,75,.72);
-  --shadow-12: 0 28px 70px rgba(17,21,75,.28),0 4px 12px rgba(17,21,75,.12);
-  --shadow-13: 0 0 0 4px rgba(170,218,182,.25);
-  --shadow-14: 0 0 0 4px rgba(170,218,182,.12);
+  --shadow-4: 0 0 8px rgba(166,58,50,.4);
+  --shadow-5: 0 0 8px rgba(165,126,49,.35);
+  --shadow-6: 0 0 8px rgba(196,150,58,.4);
+  --shadow-7: 0 4px 12px rgba(28,28,26,.2);
+  --shadow-8: 0 6px 16px rgba(28,28,26,.25);
+  --shadow-9: 0 40px 100px rgba(28,28,26,.35),0 8px 32px rgba(28,28,26,.2);
+  --shadow-10: 0 6px 20px rgba(28,28,26,.25);
+  --shadow-11: 0 0 0 9999px rgba(28,28,26,.72);
+  --shadow-12: 0 28px 70px rgba(28,28,26,.28),0 4px 12px rgba(28,28,26,.12);
+  --shadow-13: 0 0 0 4px rgba(46,125,79,.25);
+  --shadow-14: 0 0 0 4px rgba(46,125,79,.12);
   --shadow-15: 0 1px 3px rgba(0,0,0,.1);
   --shadow-16: 0 4px 14px rgba(30,25,15,.1);
   --shadow-17: 0 8px 32px rgba(0,0,0,0.4);
@@ -405,30 +417,30 @@
   --shadow-23: 0 1px 2px rgba(0,0,0,0.02), 0 2px 4px rgba(0,0,0,0.02);
   --shadow-24: 0 2px 4px rgba(0,0,0,0.03), 0 4px 12px rgba(0,0,0,0.04);
   --shadow-25: 0 4px 12px rgba(0,0,0,0.08), 0 12px 32px rgba(0,0,0,0.06);
-  --shadow-26: 0 2px 4px rgba(0,0,0,0.08), 0 4px 12px rgba(170,218,182,0.3);
-  --shadow-27: 0 4px 8px rgba(0,0,0,0.1), 0 8px 20px rgba(170,218,182,0.4);
+  --shadow-26: 0 2px 4px rgba(0,0,0,0.08), 0 4px 12px rgba(46,125,79,0.3);
+  --shadow-27: 0 4px 8px rgba(0,0,0,0.1), 0 8px 20px rgba(46,125,79,0.4);
   --shadow-28: 0 1px 3px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.5);
   --shadow-29: 0 10px 24px rgba(30,25,15,.16);
-  --shadow-30: 0 2px 6px rgba(17,21,75,.18);
+  --shadow-30: 0 2px 6px rgba(28,28,26,.18);
   --shadow-31: 0 12px 28px -14px rgba(30,25,15,.45);
   --shadow-32: 0 18px 32px -14px rgba(30,25,15,.5);
 
   /* v2 components: named roles, built from the values above */
   --frame-narrow-max: 320px;
   --tactic-card-min: var(--size-200);
-  --tactic-color-1: var(--color-link);
+  --tactic-color-1: var(--color-brand);
   --tactic-color-2: var(--color-brand-strong);
-  --tactic-color-3: var(--color-brand);
+  --tactic-color-3: var(--color-meta);
   --tactic-color-4: var(--color-text-secondary);
-  --objective-color-1: var(--color-link);
+  --objective-color-1: var(--color-brand);
   --objective-color-2: var(--color-brand-strong);
-  --objective-color-3: var(--color-accent);
+  --objective-color-3: var(--color-meta);
   --objective-color-4: var(--color-text-secondary);
   --tactic-ring-1: var(--color-brand);
-  --tactic-ring-2: var(--color-link);
-  --tactic-ring-3: var(--color-caution);
-  --tactic-ring-4: var(--color-good);
-  --confirm-bg: var(--color-highlight);
+  --tactic-ring-2: var(--color-brand-strong);
+  --tactic-ring-3: var(--color-accent-on-dark);
+  --tactic-ring-4: var(--color-stat);
+  --confirm-bg: var(--color-box);
   --confirm-text: var(--color-text-strong);
   --confirm-radius: var(--radius-3);
   --confirm-pad-x: var(--space-4);

@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>{{PROGRAM_DAYS}}-Day Accelerator: {{CLIENT_NAME}}</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,400..700;1,9..40,400..700&family=Epilogue:wght@600;900&family=Fraunces:ital,opsz,wght@1,9..144,900&display=swap">
 <link rel="stylesheet" href="{{ASSET_BASE}}/tokens.css">
 <link rel="stylesheet" href="{{ASSET_BASE}}/accelerator.css">
 </head>
@@ -14,7 +17,7 @@
 <!-- ── Sidebar ──────────────────────────────────────────────── -->
 <aside id="sidebar">
   <div class="sidebar-logo">
-    <img id="sidebar-logo-img" src="{{ASSET_BASE}}/elearningu-logo-white.png" alt="eLearningU">
+    <img id="sidebar-logo-img" src="{{ASSET_BASE}}/junction-wordmark-reversed.png" alt="Junction">
   </div>
   <div class="sidebar-progress-wrap">
     <div class="sidebar-ring-wrap">
@@ -72,7 +75,7 @@
 
 <!-- ── Mobile header ────────────────────────────────────────── -->
 <header class="mobile-header">
-  <img id="mobile-logo-img" src="{{ASSET_BASE}}/elearningu-logo-white.png" alt="eLearningU">
+  <img id="mobile-logo-img" src="{{ASSET_BASE}}/junction-wordmark-reversed.png" alt="Junction">
   <div class="user-menu-container" id="mobileUserMenu"></div>
   <button class="hamburger" id="nav-hamburger" onclick="toggleMobileDrawer()" aria-label="Menu">
     <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"/></svg>
@@ -209,7 +212,7 @@
 
     <div class="print-only">
       <div class="print-cover">
-        <div class="print-cover-logo">e<span>Learning</span>U</div>
+        <div class="print-cover-logo"><img src="{{ASSET_BASE}}/junction-wordmark.png" alt="Junction"></div>
         <div class="print-cover-badge">Tourism Digital Marketing Accelerator</div>
         <h1 class="print-cover-title">{{PROGRAM_DAYS}}-Day Roadmap</h1>
         <p class="print-cover-client">{{CLIENT_NAME}}</p>
@@ -218,14 +221,14 @@
           {{PRINT_COHORT_START}}<strong>Program Duration:</strong> {{PROGRAM_WEEKS}} Weeks
         </p>
         <div class="print-cover-footer">
-          <p>Prepared by eLearningU Accelerator Program</p>
+          <p>Prepared by Junction Accelerator Program</p>
         </div>
       </div>
 
       <div class="print-overview">
         <div class="print-section">
           <h2>About This Document</h2>
-          <p>This roadmap was created as part of the eLearningU Tourism Digital Marketing Accelerator program. It is a customised {{PROGRAM_DAYS}}-day action plan designed specifically for {{CLIENT_NAME}} based on a comprehensive digital assessment and strategy session with your coach.</p>
+          <p>This roadmap was created as part of the Junction Tourism Digital Marketing Accelerator program. It is a customised {{PROGRAM_DAYS}}-day action plan designed specifically for {{CLIENT_NAME}} based on a comprehensive digital assessment and strategy session with your coach.</p>
           <p>The plan is structured as {{PROGRAM_WEEKS}} weekly sprints across {{PHASE_COUNT_WORD}} phases: {{PRINT_PHASES}}.</p>
         </div>
         <div class="print-section">
@@ -260,8 +263,8 @@
     <div class="wm-header">
       <div class="wm-header-glow-a"></div>
       <div class="wm-header-glow-b"></div>
-      <img class="wm-logo-img" src="{{ASSET_BASE}}/elearningu-logo-white.png" alt="eLearningU">
-      <div class="wm-eyebrow">eLearningU · Accelerator Program</div>
+      <img class="wm-logo-img" src="{{ASSET_BASE}}/junction-wordmark-reversed.png" alt="Junction">
+      <div class="wm-eyebrow">Junction · Accelerator Program</div>
       <div class="wm-headline">Welcome to your<br>Implementation Plan.</div>
       {{WELCOME_MESSAGE}}
     </div>
