@@ -85,6 +85,7 @@ export function textFields(content) {
     push(T, t.id, 'title', t.title);
     push(T, t.id, 'short_label', t.short_label);
     push(T, t.id, 'subtitle', t.subtitle);
+    if (t.phase_label != null) push(T, t.id, 'phase label', t.phase_label, false);
     for (const key of ['what_we_heard', 'what_this_is', 'why_it_matters']) (t[key] || []).forEach((p, i) => push(T, t.id, `${key}[${i}]`, p));
     if (t.time_commitment) {
       push(T, t.id, 'time_commitment.amount', t.time_commitment.amount, false);
@@ -116,7 +117,6 @@ export function textFields(content) {
           }
         });
         (st.links || []).forEach(l => push(S, st.id, 'link title', l.title));
-        (st.confirm || []).forEach(c => push(S, c.id, 'confirm', c.text));
         (st.media || []).forEach(m => mediaTexts(m).forEach(([field, text, required]) => push(S, m.id, `media ${field}`, text, required)));
       });
     });
@@ -144,6 +144,7 @@ export function textFields(content) {
   if (roadmap.closing != null) push('Roadmap', null, 'closing', roadmap.closing, false);
 
   const qw = content.quick_wins || {};
+  if (qw.intro != null) push('Quick Wins intro', null, 'text', qw.intro, false);
   (qw.groups || []).forEach((g, gi) => {
     push(`Quick Wins group ${gi + 1}`, null, 'title', g.title);
     (g.items || []).forEach(q => {
@@ -200,7 +201,6 @@ function idItems(content) {
       add('bullet', item, where, item.text);
       (item.children || []).forEach(c => add('bullet', c, where, c.text));
     }));
-    (step.confirm || []).forEach(c => add('confirm', c, where, c.text));
     const media = m => {
       add('media', m, where, m.caption || m.title || m.alt || '');
       (m.items || []).forEach(item => { if (item && item.id) media(item); });
@@ -351,13 +351,11 @@ export function checkContent(content, options = {}) {
     if (t.short_label && t.short_label.length > SHORT_LABEL_MAX) warn(T, t.id, `The short label "${t.short_label}" is ${t.short_label.length} characters, over ${SHORT_LABEL_MAX}.`, 'It may not fit the sidebar.');
   });
 
-  // Steps: tags, confirm notes, media
+  // Steps: tags, links, media
   const stepIds = new Set();
   for (const { step, where } of allSteps(content)) {
     stepIds.add(step.id);
     (step.tags || []).forEach(tag => { if (!STEP_TAGS.includes(tag)) err(where, step.id, `"${tag}" is not a step tag.`, `Use ${STEP_TAGS.join(' or ')}.`); });
-    const bulletIds = new Set((step.body || []).filter(b => b.type === 'bullets').flatMap(b => (b.items || []).flatMap(i => [i.id, ...(i.children || []).map(c => c.id)])));
-    (step.confirm || []).forEach(c => { if (c.bullet != null && !bulletIds.has(c.bullet)) err(where, c.id, `A confirm note names the bullet ${c.bullet}, which is not in this step.`, 'Correct or remove "bullet".'); });
     (step.links || []).forEach(l => { if (!l.url || !/^https?:\/\//.test(l.url)) err(where, step.id, `The step link "${l.title}" has no full web address.`, 'Use an address starting with https://.'); });
     (step.media || []).forEach(m => checkMedia(m, where, err, warn, options.assetExists));
     (step.body || []).forEach(b => {
@@ -396,8 +394,6 @@ export function checkContent(content, options = {}) {
     else if (covered.get(n) > 1) err('Phases', null, `Week ${n} is in ${covered.get(n)} phases.`, 'Adjust the phase ranges so they do not overlap.');
   }
   [...covered.keys()].filter(n => n < 1 || n > weekCount).forEach(n => err('Phases', null, `A phase covers week ${n}, which is outside the program.`, 'Adjust the phase ranges.'));
-  const phaseIds = new Set((content.phases || []).map(p => p.id));
-  (content.tactics || []).forEach((t, i) => { if (!phaseIds.has(t.phase)) err(`Tactic ${i + 1}`, t.id, 'The tactic is in no phase.', 'Set its phase.'); });
 
   // Objectives and tactics pair up
   const tacticIds = new Set((content.tactics || []).map(t => t.id));
@@ -481,6 +477,8 @@ export function hiddenContent(content) {
   const s = content.strategy || {};
   group('strategy.welcome_message', 'Welcome message', isEmpty(s.welcome_message) ? ['Welcome screen'] : []);
   group('strategy.positioning_statement', 'Positioning statement', isEmpty(s.positioning_statement) ? ['Strategy page'] : []);
+  if (((content.quick_wins || {}).groups || []).length) group('quick_wins.intro', 'Quick Wins introduction', (content.quick_wins || {}).intro ? [] : ['Quick Wins page']);
+  group('tactics[].phase_label', 'Tactic phase label', (content.tactics || []).map((t, i) => ({ t, where: `Tactic ${i + 1}` })).filter(({ t }) => isEmpty(t.phase_label)).map(x => x.where));
   group('quick_wins.note', 'Quick Wins closing note', (content.quick_wins || {}).note ? [] : ['Quick Wins page']);
   return groups;
 }

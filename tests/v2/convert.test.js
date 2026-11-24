@@ -6,7 +6,7 @@ const fs = require('fs');
 const path = require('path');
 
 const { convertPlan } = require('../../shared/accelerator-v2/convert.js');
-const { splitStepNote, extractConfirms, parseResource } = require('../../shared/accelerator-v2/parse-plan.js');
+const { splitStepNote, normaliseConfirms, parseResource } = require('../../shared/accelerator-v2/parse-plan.js');
 const { makeIdFactory, collectIds, ID_PATTERN } = require('../../shared/accelerator-v2/ids.js');
 const { similarity } = require('../../shared/accelerator-v2/match.js');
 const { checkContent, allSteps } = require('../../shared/accelerator-v2/checks.js');
@@ -89,12 +89,15 @@ describe('the whole plan', () => {
     expect(s.welcome_message).toMatch(/^You already deliver a five-star stay/);
   });
 
-  test('makes one phase per month, covering every week once, and puts each tactic in its phase', () => {
-    const { phases, tactics } = result.content;
+  test('makes one time phase per month, covering every week once', () => {
+    const { phases } = result.content;
     expect(phases.map(p => [p.name, p.weeks])).toEqual([['Foundation', [1, 4]], ['Growth', [5, 8]], ['Scale', [9, 12]]]);
     expect(phases.every(p => p.description === null)).toBe(true);
-    const phaseName = id => phases.find(p => p.id === id).name;
-    expect(tactics.map(t => phaseName(t.phase))).toEqual(['Foundation', 'Growth', 'Scale', 'Scale']);
+  });
+
+  test("keeps each tactic's Phase line exactly as written, as a theme separate from the time phases", () => {
+    expect(result.content.tactics.map(t => t.phase_label)).toEqual(['Foundation', 'Growth', 'Search Visibility', 'Booking and Retention']);
+    expect(result.content.tactics.every(t => !('phase' in t))).toBe(true);
   });
 
   test('parses each objective pill into a tactic and a week range', () => {
@@ -127,6 +130,7 @@ describe('the whole plan', () => {
     expect(qw.groups.map(g => [g.title, g.items.length])).toEqual([['On the Google Business Profile', 3], ['On the Website', 2]]);
     expect(qw.groups[0].items[0]).toMatchObject({ title: 'Reply to all 20 Google reviews', text: expect.stringMatching(/^None of them has a response/) });
     expect(qw.note).toBeNull();
+    expect(qw.intro).toMatch(/^Each of these takes less than an hour/);
   });
 });
 
@@ -163,7 +167,7 @@ describe('steps', () => {
 
   test('inline formatting is kept: bold, code and links', () => {
     const texts = steps(content).flatMap(s => s.body.filter(b => b.type === 'bullets').flatMap(b => b.items.map(i => i.text)));
-    expect(texts).toContain('On Instagram, tap **Edit profile** and rewrite the bio to say what the resort is and where it is, including the drive time from the nearest city.');
+    expect(texts).toContain('On Instagram, tap **Edit profile** and rewrite the bio to say what the resort is and where it is, including the drive time from the nearest city. [CONFIRM: drive time from Kelowna]');
     expect(texts).toContain('Create three folders named `cabins`, `activities` and `guests`.');
     expect(texts).toContain('Open [Meta Business Suite](https://business.facebook.com/) and choose **Planner**, then **Schedule post**.');
   });
@@ -176,25 +180,26 @@ describe('steps', () => {
     expect(body[1].rows[0]).toEqual(['Apple Maps', 'Default on every iPhone', '15 minutes']);
   });
 
-  test('[CONFIRM] notes become confirm entries pointing at their bullet, and leave the text', () => {
+  test('[CONFIRM] reminders stay inline, where the coach wrote them, and add nothing else', () => {
     const s = step(content, 1, 1);
-    expect(s.confirm).toEqual([{ id: expect.stringMatching(/^cnf_/), text: 'Drive time from Kelowna', bullet: s.body[0].items[0].id }]);
-    const all = steps(content).flatMap(x => x.confirm.map(c => c.text));
-    expect(all).toEqual(['Drive time from Kelowna', 'Which booking system the resort uses', 'Send date with the owners']);
-    expect(JSON.stringify(content)).not.toContain('[CONFIRM');
+    expect(s.body[0].items[0].text).toMatch(/nearest city\. \[CONFIRM: drive time from Kelowna\]$/);
+    expect('confirm' in s).toBe(false);
+    expect(JSON.stringify(content).match(/\[CONFIRM: [^\]]+\]/g)).toEqual([
+      '[CONFIRM: drive time from Kelowna]', '[CONFIRM: which booking system the resort uses]', '[CONFIRM: send date with the owners]'
+    ]);
   });
 
-  test('extractConfirms: end of text is removed, a blank in a sentence stays, shouting is calmed', () => {
-    expect(extractConfirms('Add the link. [CONFIRM: page URL]')).toEqual({ text: 'Add the link.', notes: [{ text: 'Page URL', inline: false }] });
-    expect(extractConfirms('Add the link `[CONFIRM: page URL]`.')).toEqual({ text: 'Add the link.', notes: [{ text: 'Page URL', inline: false }] });
-    expect(extractConfirms('Pets stay in [CONFIRM WHICH ROOMS] for a fee.')).toEqual({ text: 'Pets stay in [CONFIRM WHICH ROOMS] for a fee.', notes: [{ text: 'Which rooms', inline: true }] });
+  test('normaliseConfirms tidies the marker for display and leaves it in place', () => {
+    expect(normaliseConfirms('Add the link `[CONFIRM: page URL]`.')).toBe('Add the link [CONFIRM: page URL].');
+    expect(normaliseConfirms('Pets stay in [CONFIRM WHICH ROOMS] for [CONFIRM FEE].')).toBe('Pets stay in [CONFIRM: which rooms] for [CONFIRM: fee].');
+    expect(normaliseConfirms('No marker here.')).toBe('No marker here.');
   });
 
-  test('a bullet that is only a [CONFIRM] note becomes a confirm entry with no bullet', () => {
+  test('a bullet that is only a [CONFIRM] reminder stays a bullet', () => {
     const md = PLAN.replace('   - Keep the email to three sentences: thank them, ask, give the link.\n', '   - Keep the email to three sentences: thank them, ask, give the link.\n   - [CONFIRM: email sender name]\n');
-    const s = step(convert(md).content, 2, 2);
-    expect(s.body[0].items).toHaveLength(2);
-    expect(s.confirm.map(c => [c.text, 'bullet' in c])).toEqual([['Email sender name', false], ['Which booking system the resort uses', true]]);
+    const result = convert(md);
+    expect(step(result.content, 2, 2).body[0].items.map(i => i.text)).toContain('[CONFIRM: email sender name]');
+    expect(result.warnings.filter(w => /CONFIRM/.test(w.message))).toEqual([]);
   });
 
   test('an indented line straight after a bullet continues it', () => {

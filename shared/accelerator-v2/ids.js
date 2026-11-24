@@ -17,12 +17,11 @@ export const PREFIXES = {
   check: 'chk',
   quickWin: 'qw',
   phase: 'phs',
-  objective: 'obj',
-  confirm: 'cnf'
+  objective: 'obj'
 };
 
 const ALPHABET = 'abcdefghijklmnopqrstuvwxyz0123456789';
-export const ID_PATTERN = /^(tac|prt|stp|blt|med|wk|act|chk|qw|phs|obj|cnf)_[a-z0-9]{6}$/;
+export const ID_PATTERN = /^(tac|prt|stp|blt|med|wk|act|chk|qw|phs|obj)_[a-z0-9]{6}$/;
 
 export function isId(value, prefix) {
   if (typeof value !== 'string' || !ID_PATTERN.test(value)) return false;

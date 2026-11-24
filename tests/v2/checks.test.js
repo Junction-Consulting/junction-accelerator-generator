@@ -160,6 +160,7 @@ describe('warnings', () => {
     expect(result.hidden.map(h => h.field)).toEqual([
       'phases[].description', 'roadmap.weeks[].next_step', 'tactics[].parts[].card', 'roadmap.closing', 'tactics[].time_commitment', 'quick_wins.note'
     ]);
+    expect(result.hidden.map(h => h.field)).not.toContain('quick_wins.intro');
     expect(result.hidden.find(h => h.field === 'roadmap.weeks[].next_step').where).toHaveLength(12);
     expect(result.warnings.filter(w => /is empty, so it is hidden/.test(w.message))).toHaveLength(6);
   });
@@ -169,6 +170,21 @@ describe('warnings', () => {
     c.phases.forEach(p => { p.description = 'Words.'; });
     c.roadmap.closing = 'Words.';
     expect(checkContent(c).hidden.map(h => h.field)).not.toEqual(expect.arrayContaining(['phases[].description', 'roadmap.closing']));
+  });
+
+  test('a Quick Wins page with no introduction is listed as hidden', () => {
+    const c = copy();
+    c.quick_wins.intro = null;
+    expect(checkContent(c).hidden.map(h => h.field)).toContain('quick_wins.intro');
+  });
+
+  test('[CONFIRM] reminders neither block nor warn', () => {
+    const c = copy();
+    step(c, 1, 2).body[0].items[0].text = 'Post in [CONFIRM: which rooms] style.';
+    const before = checkContent(base);
+    const after = checkContent(c);
+    expect(after.errors).toEqual([]);
+    expect(after.warnings.length).toBe(before.warnings.length);
   });
 
   test('[INSERT] and [ADD] left in visible text', () => {

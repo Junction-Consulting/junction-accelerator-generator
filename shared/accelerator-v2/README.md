@@ -38,9 +38,9 @@ Check a saved `content.json`:
 
 Where the schema left a choice open, the code does this:
 
-- **Phases** are the three `Month N Name:` blocks, with the weeks shared out evenly (4, 4, 4). A tactic's `Phase:` line picks the phase with the same name. When no phase has that name (most real plans), the tactic goes in the phase where its objective starts, and the converter warns that the label is not kept.
+- **Phases** are the three `Month N Name:` blocks, with the weeks shared out evenly (4, 4, 4). They are time periods only. A tactic's `Phase:` line is kept as written in `phase_label`.
 - **Step notes** are split on commas and full stops. Time is anything with a unit of time; cost is anything with `$`, "cost" or "budget"; "contractor" and "Critical" become tags. Words that are neither stay with the part before them ("about 45 minutes, once verified" is all time). A note that is none of these is kept as the time, with a warning.
-- **`[CONFIRM ...]`** at the end of a bullet is removed from the text and becomes a confirm note pointing at that bullet. In the middle of a sentence it is a blank to fill in, so it stays in the text and also becomes a note. A bullet that is only a `[CONFIRM]` becomes a note with no bullet.
+- **`[CONFIRM ...]`** stays inline where the coach wrote it, tidied to `[CONFIRM: text]`. Nothing blocks or warns on it.
 - **Asset IDs** are the `med_` ID of the image they belong to. Each image-bearing item (images, social posts, gallery items, images in a group) has its own `med_` ID. Files are `clients/[slug]/assets/[asset ID].[ext]`.
 - **Another client's wording** is a warning, not an error: real plans legitimately share instruction wording. Another client's name or website is an error.
 - **Optional fields** are always present in `content.json`, as `null` or `[]` when empty, so every file has the same shape.

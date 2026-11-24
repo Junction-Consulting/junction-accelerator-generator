@@ -28,12 +28,11 @@ const SLUGS = fs.readdirSync(CLIENTS).filter(slug => {
 
 const STEP = /^\s{0,3}(?:\d+\.\s+\*\*.+?\*\*|\*\*\d+\.\s+.+?\*\*)/;
 const LIST = /^\s*-\s+\S/;
-const CONFIRM_ONLY = /^\s*-\s+`?\[CONFIRM\b[^\]]*\]`?\s*$/i;
 
 /** Counts read directly from the Markdown. */
 function sourceCounts(md) {
   const lines = normalisePlanMd(md).split('\n');
-  const counts = { tactics: 0, parts: 0, steps: 0, bullets: 0, confirmOnlyBullets: 0, tables: 0, weeks: 0, actions: 0, how_to: 0, checklist: 0, quick_wins: 0 };
+  const counts = { tactics: 0, parts: 0, steps: 0, bullets: 0, tables: 0, weeks: 0, actions: 0, how_to: 0, checklist: 0, quick_wins: 0 };
   let section = null;     // 'steps' | 'roadmap' | 'quick_wins' | null
   let inStep = false;
   let weekMode = null;
@@ -50,8 +49,7 @@ function sourceCounts(md) {
       if (/^#### Part [A-Z]:/.test(line)) { counts.parts += 1; inStep = false; continue; }
       if (STEP.test(line)) { counts.steps += 1; inStep = true; previousTableRow = false; continue; }
       if (!inStep) continue;
-      if (CONFIRM_ONLY.test(line)) counts.confirmOnlyBullets += 1;
-      else if (LIST.test(line)) counts.bullets += 1;
+      if (LIST.test(line)) counts.bullets += 1;
       const isTableRow = /^\s*\|.*\|\s*$/.test(line);
       if (isTableRow && !previousTableRow) counts.tables += 1;
       previousTableRow = isTableRow;
@@ -123,13 +121,17 @@ describe.each(SLUGS)('%s', slug => {
       checklist: source.checklist,
       quick_wins: source.quick_wins
     });
-    // A bullet that is only a [CONFIRM] note becomes a confirm entry instead
-    expect(counts.confirm).toBeGreaterThanOrEqual(source.confirmOnlyBullets);
   });
 
-  test('keeps every [CONFIRM] note as a confirm entry', () => {
-    const inSteps = md.split(/^### Implementation Steps/m).slice(1).map(s => s.split(/^### Success Metrics/m)[0]).join('\n');
-    expect(countContent(result.content).confirm).toBe((inSteps.match(/\[CONFIRM\b/gi) || []).length);
+  test('keeps every [CONFIRM] reminder inline, in one tidy form', () => {
+    const json = JSON.stringify(result.content);
+    expect((json.match(/\[CONFIRM: [^\]]+\]/g) || []).length).toBe((md.match(/\[CONFIRM\b/gi) || []).length);
+    expect(json).not.toMatch(/`\[CONFIRM|\[CONFIRM(?!: )/);
+  });
+
+  test('keeps each tactic\'s Phase line as its phase label', () => {
+    const labels = [...md.matchAll(/^(?:\*\*)?Phase:(?:\*\*)?[ \t]*(.+)$/gm)].map(m => m[1].trim());
+    expect(result.content.tactics.map(t => t.phase_label)).toEqual(labels);
   });
 
   test('passes the blocking checks', () => {

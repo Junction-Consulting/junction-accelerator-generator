@@ -36,7 +36,7 @@ After upload, three things write to `content.json`, and nothing else does: the m
 
 ## IDs
 
-- Format: a type prefix and six random characters, for example `stp_k4m9qx`. Prefixes: `tac` tactic, `prt` part, `stp` step, `blt` bullet, `med` media, `wk` week, `act` action, `chk` checklist item, `qw` quick win, `phs` phase, `obj` objective, `cnf` confirm note.
+- Format: a type prefix and six random characters, for example `stp_k4m9qx`. Prefixes: `tac` tactic, `prt` part, `stp` step, `blt` bullet, `med` media, `wk` week, `act` action, `chk` checklist item, `qw` quick win, `phs` phase, `obj` objective.
 - Assigned once by the converter. Never changed, never reused, never derived from position or wording.
 - On a re-upload, the converter matches items to their existing IDs (by previous position and text similarity) and shows the coach what it matched before saving. New items get new IDs.
 - `legacy_keys` (optional, any item): the old positional keys for a migrated client, for example `["week-3-check-2", "rw3_d2"]`, so saved progress and edits can be carried over.
@@ -76,6 +76,8 @@ After upload, three things write to `content.json`, and nothing else does: the m
 
 `phases[].weeks` and `objectives[].weeks` are ranges. Phases must cover every week once, with no overlap. The objective pill ("Tactic 1 · Weeks 1-4") is built from `tactic` and `weeks`, not typed.
 
+Phases are time periods: the three month blocks of the roadmap. They are not linked to tactics. Tactics overlap in time, and steps from different tactics can fall in the same week. A tactic's own theme ("Search Visibility") is its `phase_label`.
+
 ### Tactic
 
 ```json
@@ -84,7 +86,7 @@ After upload, three things write to `content.json`, and nothing else does: the m
   "title": "Social Media Activation",
   "short_label": "Social Media",
   "subtitle": "One sentence.",
-  "phase": "phs_a1b2c3",
+  "phase_label": "Search Visibility",
   "what_we_heard": ["Paragraph."],
   "what_this_is": ["Paragraph."],
   "why_it_matters": ["Paragraph."],
@@ -98,6 +100,8 @@ After upload, three things write to `content.json`, and nothing else does: the m
   "resources": [{ "title": "Meta Business Suite", "url": "https://business.facebook.com/", "description": "Optional." }]
 }
 ```
+
+`phase_label` is the tactic's `Phase:` line, kept exactly as written. It is a theme, not a time period, and is shown as written (for example on the tactic cards). Optional: if it is empty, it is hidden.
 
 `time_commitment` is optional. It is never estimated from step counts.
 
@@ -131,8 +135,7 @@ After upload, three things write to `content.json`, and nothing else does: the m
     { "type": "table", "columns": ["Directory", "Why it matters", "Time"], "rows": [["Apple Maps", "Default on every iPhone", "15 minutes"]] }
   ],
   "links": [{ "title": "About story highlights", "url": "https://help.instagram.com/813938898787367" }],
-  "media": [],
-  "confirm": [{ "id": "cnf_e4f5g6", "text": "Drive time from Kelowna", "bullet": "blt_m4n5o6" }]
+  "media": []
 }
 ```
 
@@ -141,7 +144,7 @@ After upload, three things write to `content.json`, and nothing else does: the m
 - `body` is an ordered list of blocks. Block types: `bullets` (one level of `children`) and `table`.
 - `links` are resource links for this step only, separate from the tactic's resource list.
 - Media always sits below the step text. There is no layout option in the content.
-- `confirm` holds the things the client needs to confirm before carrying out the step. They are shown to the client as their own component, not as bracketed text inside a sentence. `bullet` (optional) is the bullet the note came from.
+- `[CONFIRM ...]` reminders stay inline in the text, exactly where the coach wrote them. They remind the client to adapt the step to their own business. The converter stores each one in a single form, `[CONFIRM: which rooms]`, with the text tidied for display (code backticks removed, capitals calmed), and a component shows it as a light highlight reading "which rooms". They can appear in any text field. They never block or warn. A bullet that is only a reminder stays a bullet.
 
 ### Media
 
@@ -160,7 +163,7 @@ Every entry also has `id`.
 
 `image` fields:
 
-- `asset`: an asset ID, resolved by the media library. Never a file path. Files are stored under the client slug and named by media ID, so renumbering a step can never break an image.
+- `asset`: an asset ID, resolved by the media library. Never a file path. Files are stored under the client slug and named by media ID, so renumbering a step can never break an image. For now, an asset ID is the `med_` ID of the image it belongs to, and every image-bearing item (an image, a social post, each gallery item, each image in a group) has its own `med_` ID. The file is `clients/[slug]/assets/[asset ID].[ext]`. See Open decisions.
 - `alt`: required.
 - `frame`: `website`, `document`, `phone`, `email` or `none`. This fixes the overloaded URL bar: a website frame shows an address, a document frame shows a title.
 - `bar`: the address (website) or the title (document). Omitted for other frames.
@@ -197,6 +200,7 @@ Hand-coded HTML mockups (the booking bar, the booking page, the emails) are not 
 
 ```json
 {
+  "intro": "One or two sentences shown above the groups.",
   "groups": [
     { "title": "On the Google Business Profile", "items": [
       { "id": "qw_b1c2d3", "title": "Reply to all 20 Google reviews", "text": "None of them has a response." }
@@ -225,7 +229,7 @@ All saved state moves to Supabase and is keyed by item ID:
 
 - Empty items, or items that are only `---`
 - Placeholder or template text (`[Step title]`, `{{NAME}}`)
-- Another client's name, domain or wording
+- Another client's name or website (domain)
 - A `how_to` that points at a step that does not exist
 - A media entry with no `alt`, or an `asset` the library cannot find
 - A resource whose title is a bare URL
@@ -233,12 +237,15 @@ All saved state moves to Supabase and is keyed by item ID:
 - Phases that do not cover every week exactly once
 - An objective without a tactic, or a tactic without an objective
 
+`[CONFIRM ...]` reminders are content, not problems: nothing blocks or warns on them. `[INSERT ...]` and `[ADD ...]` still warn.
+
 Warnings (do not block). The coach sees these in the upload report and in Edit Mode:
 
-- Optional content that is empty and will therefore be hidden: phase descriptions, Next Step time and who, part card descriptions, the roadmap closing note, time commitment
+- Optional content that is empty and will therefore be hidden: phase descriptions, Next Step time and who, part card descriptions, the roadmap closing note, time commitment, tactic phase labels, the Quick Wins intro and closing note
 - `[INSERT ...]` or `[ADD ...]` left in visible text, which usually means an unfinished draft
 - House copy rules: no em dashes, no "--", "then" in place of arrows, Canadian spelling
 - A short label over 28 characters
+- Wording shared with another client's plan (a run of 12 words in one field). Plans legitimately share tactics and instructions, so this only asks the coach to check.
 
 ## How `plan.md` maps to this
 
@@ -247,29 +254,48 @@ Coaches keep writing and uploading `plan.md` in the format in `PLAN_FORMAT.md`. 
 | In `plan.md` | Becomes |
 |---|---|
 | `## Goal`, `## Strategic Positioning`, blockquote, `## Welcome Message` | `strategy` |
-| `Phase:` on each tactic, `Month N Name:` | `phases` (ranges from the month blocks until a plan says otherwise) |
+| `Phase:` on each tactic | `phase_label`, exactly as written |
+| `Month N Name:` | `phases` (ranges from the month blocks until a plan says otherwise) |
 | `## Tactic N`, its header lines and seven sections | `tactics[]` |
 | `#### Part X: Name` | `parts[]` |
 | `1. **Title.** *(note)*` | `title`, and the note is split into `time`, `cost` and `tags` |
 | Bullets and sub-bullets | `body` bullets and `children` |
 | A Markdown table under a step | `body` table (v1 drops these) |
-| `[CONFIRM: ...]` anywhere | a `confirm` entry on that step, shown to the client as a designed callout |
+| `[CONFIRM: ...]` anywhere | kept inline, as `[CONFIRM: text]`, shown as a light highlight |
 | `→ links to: Tactic 2 / Step 5` | `how_to` with that step's ID |
 | `## Objectives` | `objectives[]`, with the pill parsed into `tactic` and `weeks` |
-| `## GBP Quick Wins` | `quick_wins` |
+| `## GBP Quick Wins` | `quick_wins`: text above the first group is `intro`, a heading with paragraphs and no bullets ("One Thing Worth Watching") is `note` |
 
 Fields with no `plan.md` equivalent (`card`, `next_step`, `phases[].description`, `roadmap.closing`, `time_commitment`, `voice`) are optional. They can be added to the drafting instructions later as extra labelled lines, so coaches still type nothing new. Until then those components are hidden, not filled with defaults.
 
 Media is never written in `plan.md`. It is added afterwards through the media tool.
 
+## Planned: draft and published plans (not built yet)
+
+Each plan will have a status, `draft` or `published`.
+
+- A draft exists so media and edits can be added after upload. The client cannot open it. Staff and the coach can.
+- Publishing makes the dashboard visible to the client, and can notify them (an email with the link).
+- The status is not part of `content.json` until it is built. Deciding where it lives (most likely the client's project record in Supabase) is part of the work.
+
+This needs changes to login and access (`shared/auth.js`, the access rules in Supabase and the notification function), which are outside the v2 paths. It is listed for Conner.
+
 ## Open decisions
 
 1. **Edit Mode.** Recommended: keep edits as an overlay in Supabase, keyed by item ID and field, and write them into `content.json` whenever the plan is rebuilt. Committing every small edit to the repo would trigger a site deploy per edit. Either way, the PDF must show the edited text.
-2. **Media library handoff.** The media tool writes `media` entries in the shape above and owns `asset` IDs. To agree with Conner before either side builds.
+2. **Media library handoff.** The media tool writes `media` entries in the shape above and owns `asset` IDs. To agree with Conner before either side builds. Until then, an asset ID is the `med_` ID of its image, and each gallery item and group image has its own `med_` ID (see Media). The Andrea's Resort sandbox uses this.
 3. **Program length.** `program.weeks` and phase ranges allow plans that are not 12 weeks. The weekly emails and `week_completions` currently assume 1 to 12.
 4. **Existing clients.** They stay on v1 untouched. Migration (including `legacy_keys`) is a separate, later decision.
+5. **Draft and published.** See Planned above. Needs login and access changes, for Conner.
 
 ## Changelog
 
 - 2026-11-23: first draft.
 - 2026-11-24: Andrea's decisions. Media always below the step (no side layout). `[CONFIRM]` notes are client-facing and become `confirm` entries; nothing blocks on them. Empty optional content is hidden from clients and listed for the coach.
+- 2026-11-24 (later): Andrea's decisions after the Stage 1 converter.
+  - A tactic's `Phase:` is a theme, kept as `phase_label`. `tactics[].phase` is removed. Phases are time periods only, from the months.
+  - `quick_wins.intro` added, shown above the groups.
+  - `[CONFIRM ...]` reminders stay inline as `[CONFIRM: text]` and are shown as a light highlight. The `confirm` entries, the `cnf` prefix and the callout are removed. Nothing blocks or warns on them.
+  - Another client's name or website blocks. Shared wording is a warning.
+  - Asset IDs are media IDs for now (open decision 2, for Conner).
+  - Planned, not built: draft and published plan status.

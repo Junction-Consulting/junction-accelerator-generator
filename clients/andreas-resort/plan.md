@@ -146,7 +146,7 @@ Review count and recency both affect local ranking. A property with 70 recent re
 ---
 
 ## Tactic 3: Local Search Visibility and the Pages That Earn Search Traffic All Year
-Phase: Scale
+Phase: Search Visibility
 Short Label: Local Search
 Subtitle: Be the first result when someone nearby searches for a lakeside cabin.
 
@@ -243,7 +243,7 @@ Someone searching "lakeside cabin near me" is ready to book. Local search is whe
 ---
 
 ## Tactic 4: Direct Booking and Guest Email
-Phase: Scale
+Phase: Booking and Retention
 Short Label: Booking and Email
 Subtitle: Make booking direct the easiest option, and stay in touch with guests who have already stayed.
 
@@ -462,6 +462,8 @@ Month 3 Name: Scale
 ---
 
 ## GBP Quick Wins
+
+Each of these takes less than an hour, and you can start any of them today without waiting on the rest of the plan.
 
 ### On the Google Business Profile
 - **Reply to all 20 Google reviews.** None of them has a response. Reply to each one personally and mention something the guest said.

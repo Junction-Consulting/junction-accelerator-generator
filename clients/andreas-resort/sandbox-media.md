@@ -38,7 +38,9 @@ Steps deliberately left with no media, to check the plain layout: 1 / 3, 1 / 6, 
 | A table inside a step | 3 / 6 |
 | Step with time, cost, contractor and critical notes | 1 / 1, 2 / 3, 3 / 3, 3 / 4, 4 / 1 |
 | A step with a single bullet | 2 / 1, 2 / 3, 3 / 9, 3 / 10, 4 / 1, 4 / 4, 4 / 5 |
-| `[CONFIRM]` notes shown to the client as a callout | 1 / 1, 2 / 2, 4 / 6 |
+| `[CONFIRM]` reminders shown inline as a light highlight | 1 / 1, 2 / 2, 4 / 6 |
+| Tactic phase labels that differ from the month names | Tactics 3 and 4 |
+| A Quick Wins introduction | Quick Wins |
 | "How to" links to steps, to Quick Wins, and actions with none | Roadmap |
 | Weeks with two, three and four checklist items | Roadmap |
 | A metrics row with `n/a` | Tactic 3 |

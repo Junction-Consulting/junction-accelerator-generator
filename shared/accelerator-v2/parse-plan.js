@@ -6,7 +6,6 @@
  *   - items carry `_line` (their line in plan.md) for reports;
  *   - a week action's link is `_link: { tactic, step }` or `_link: 'quick_wins'`,
  *     resolved to a step ID once IDs exist;
- *   - a confirm note names its bullet by `_bullet` (the bullet object).
  *
  * The plan is first normalised with the v1 normaliser, so every variation
  * the v1 upload tolerates is read the same way here.
@@ -47,32 +46,32 @@ function stripTrailingPunctuation(text) {
   return text.replace(/[\s.:]+$/, '').trim();
 }
 
-function sentenceCase(text) {
-  const t = text.trim();
-  if (!t) return t;
-  const shouted = t === t.toUpperCase() && /[A-Z]/.test(t);
-  const base = shouted ? t.toLowerCase() : t;
-  return base[0].toUpperCase() + base.slice(1);
+/**
+ * [CONFIRM ...] markers are reminders for the client to adapt a step to
+ * their own business. They stay inline, exactly where the coach wrote them,
+ * in one tidy form a component can style: "[CONFIRM: which rooms]".
+ *   "`[CONFIRM: page URL]`"  -> "[CONFIRM: page URL]"   (code backticks removed)
+ *   "[CONFIRM WHICH ROOMS]"  -> "[CONFIRM: which rooms]" (shouting calmed)
+ */
+export function normaliseConfirms(text) {
+  if (typeof text !== 'string' || !/\[CONFIRM\b/i.test(text)) return text;
+  return text.replace(CONFIRM, (m, inner) => {
+    let t = inner.replace(/^[:\s]+/, '').trim();
+    if (t && t === t.toUpperCase() && /[A-Z]/.test(t)) t = t.toLowerCase();
+    return `[CONFIRM: ${t || 'confirm'}]`;
+  });
 }
 
-/**
- * Pull [CONFIRM ...] markers out of a piece of text.
- * A marker at the end of the text is removed from it. A marker in the middle
- * of a sentence is a blank the client fills in, so it stays in the text (and
- * still becomes a confirm note).
- */
-export function extractConfirms(text) {
-  const notes = [];
-  let out = text;
-  for (const m of [...text.matchAll(CONFIRM)]) {
-    const noteText = sentenceCase(m[1].replace(/^[:\s]+/, ''));
-    const after = text.slice(m.index + m[0].length);
-    const atEnd = /^[\s.,;:)]*$/.test(after);
-    notes.push({ text: noteText || 'Confirm before carrying out this step', inline: !atEnd });
-    if (atEnd) out = out.replace(m[0], '');
+/** Every string in a draft or content tree, with [CONFIRM] markers tidied. */
+export function normaliseConfirmsDeep(node) {
+  if (typeof node === 'string') return normaliseConfirms(node);
+  if (Array.isArray(node)) return node.map(normaliseConfirmsDeep);
+  if (node && typeof node === 'object') {
+    for (const key of Object.keys(node)) {
+      if (!key.startsWith('_')) node[key] = normaliseConfirmsDeep(node[key]);
+    }
   }
-  out = out.replace(/\s+([.,;:])/g, '$1').replace(/\s{2,}/g, ' ').replace(/([.,;:])\1+/g, '$1').trim();
-  return { text: out, notes };
+  return node;
 }
 
 /**
@@ -188,16 +187,14 @@ function parseImplementationSteps(lines, firstLine, issue) {
       const written = Number(stepMatch[1] || stepMatch[3]);
       const boldTitle = (stepMatch[2] || stepMatch[4]).trim();
       const rest = (stepMatch[5] || '').trim();
-      const titleConfirms = extractConfirms(boldTitle);
       step = {
-        title: stripTrailingPunctuation(titleConfirms.text),
+        title: stripTrailingPunctuation(boldTitle),
         time: null,
         cost: null,
         tags: [],
         body: [],
         links: [],
         media: [],
-        confirm: titleConfirms.notes.map(n => ({ text: n.text, _inline: n.inline, _line: line })),
         _line: line,
         _number: stepNumber,
         _written: written
@@ -238,16 +235,8 @@ function parseImplementationSteps(lines, firstLine, issue) {
     const bullet = raw.match(BULLET);
     if (bullet) {
       const indent = bullet[1].length;
-      const confirms = extractConfirms(bullet[2].trim());
-      if (!confirms.text && confirms.notes.length) {
-        // A bullet that is only a [CONFIRM] note becomes the note itself.
-        confirms.notes.forEach(n => step.confirm.push({ text: n.text, _inline: false, _line: line }));
-        lastBullet = null;
-        return;
-      }
-      const item = { text: confirms.text, children: [], _line: line };
+      const item = { text: bullet[2].trim(), children: [], _line: line };
       lastBullet = { item, indent, line };
-      confirms.notes.forEach(n => step.confirm.push({ text: n.text, _inline: n.inline, _bullet: item, _line: line }));
       if (!block || block.type !== 'bullets') {
         block = { type: 'bullets', items: [] };
         step.body.push(block);
@@ -308,7 +297,7 @@ function parseTactic(section, issue) {
     title: m[2].trim(),
     short_label: header['Short Label'],
     subtitle: header['Subtitle'],
-    phase: null,
+    phase_label: header['Phase'] || null,
     what_we_heard: [],
     what_this_is: [],
     why_it_matters: [],
@@ -318,18 +307,13 @@ function parseTactic(section, issue) {
     tips: [],
     resources: [],
     _line: section.line,
-    _number: number,
-    _phaseLabel: header['Phase']
+    _number: number
   };
 
   const textSection = (title, key) => {
     const s = find(title);
     if (!s) return;
-    tactic[key] = paragraphs(s.body).map(p => {
-      const c = extractConfirms(p);
-      if (c.notes.length) issue('warning', s.line, `A [CONFIRM] note in "${title}" is not inside a step.`, 'It is left in the text as written. Move it into the step it belongs to.');
-      return p;
-    });
+    tactic[key] = paragraphs(s.body);
   };
   textSection('What We Heard From You', 'what_we_heard');
   textSection('What This Is', 'what_this_is');
@@ -421,10 +405,12 @@ function parseWeeks(section, issue) {
 }
 
 function parseQuickWins(section, issue) {
-  // "### Heading" blocks with bullets are groups. A block with paragraphs and
-  // no bullets (such as "### One Thing Worth Watching") is the closing note.
+  // Text above the first "### Heading" is the intro. "### Heading" blocks with
+  // bullets are groups. A block with paragraphs and no bullets (such as
+  // "### One Thing Worth Watching") is the closing note.
   const groups = [];
   let note = null;
+  let intro = null;
   const blocks = [];
   let block = { title: null, lines: [], line: section.line };
   section.body.forEach((l, i) => {
@@ -443,7 +429,7 @@ function parseQuickWins(section, issue) {
     const prose = b.lines.filter(l => l.text.trim() && !isRule(l.text) && !BULLET.test(l.text));
     if (b.title === null) {
       if (bullets.length) issue('error', bullets[0].line, 'This quick win is not under a group heading.', 'Add a heading such as "### On the Google Business Profile" above it.');
-      if (prose.length) issue('warning', prose[0].line, 'The introduction above the first Quick Wins group has no place in content.json.', 'It is not shown.');
+      if (prose.length) intro = paragraphs(b.lines.map(l => l.text)).join('\n\n') || null;
       if (!bullets.length) continue;
     }
     if (!bullets.length) {
@@ -464,7 +450,7 @@ function parseQuickWins(section, issue) {
     }
     groups.push(group);
   }
-  return { groups, note };
+  return { groups, note, intro };
 }
 
 // ── Whole plan ─────────────────────────────────────────────────────────────
@@ -491,6 +477,7 @@ export function parsePlan(rawContent) {
     weeks: [],
     quickWinGroups: [],
     quickWinNote: null,
+    quickWinIntro: null,
     hasQuickWins: false
   };
 
@@ -559,6 +546,7 @@ export function parsePlan(rawContent) {
       const parsed = parseQuickWins(qw, issue);
       draft.quickWinGroups = parsed.groups;
       draft.quickWinNote = parsed.note;
+      draft.quickWinIntro = parsed.intro;
     }
     else issue('warning', qw.line, 'The plan has a Quick Wins section but Meta does not say "Has GBP Quick Wins: yes".', 'The section is left out.');
   }

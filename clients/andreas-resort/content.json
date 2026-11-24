@@ -102,7 +102,7 @@
       "title": "Social Media Activation",
       "short_label": "Social Media",
       "subtitle": "Build a consistent, engaging presence that drives discovery and turns followers into guests.",
-      "phase": "phs_ambso8",
+      "phase_label": "Foundation",
       "what_we_heard": [
         "You have beautiful cabin photography and guests who love their stay, but your social accounts do not show it. With 194 followers on Instagram, 328 on Facebook and one post every ten weeks, the accounts look closed. You told us the blocker is time, not ideas."
       ],
@@ -131,7 +131,7 @@
                   "items": [
                     {
                       "id": "blt_5x78v5",
-                      "text": "On Instagram, tap **Edit profile** and rewrite the bio to say what the resort is and where it is, including the drive time from the nearest city.",
+                      "text": "On Instagram, tap **Edit profile** and rewrite the bio to say what the resort is and where it is, including the drive time from the nearest city. [CONFIRM: drive time from Kelowna]",
                       "children": []
                     },
                     {
@@ -183,13 +183,6 @@
                   "caption": "Updated bio with location and booking link",
                   "link": null
                 }
-              ],
-              "confirm": [
-                {
-                  "id": "cnf_1ubvx6",
-                  "text": "Drive time from Kelowna",
-                  "bullet": "blt_5x78v5"
-                }
               ]
             },
             {
@@ -234,8 +227,7 @@
                   "caption": null,
                   "link": null
                 }
-              ],
-              "confirm": []
+              ]
             }
           ]
         },
@@ -268,8 +260,7 @@
                 }
               ],
               "links": [],
-              "media": [],
-              "confirm": []
+              "media": []
             },
             {
               "id": "stp_k6gy5q",
@@ -321,8 +312,7 @@
                     "label": "Open site"
                   }
                 }
-              ],
-              "confirm": []
+              ]
             }
           ]
         },
@@ -387,8 +377,7 @@
                   "title": "How to shoot a 30-second Reel",
                   "caption": null
                 }
-              ],
-              "confirm": []
+              ]
             },
             {
               "id": "stp_hky03f",
@@ -414,8 +403,7 @@
                 }
               ],
               "links": [],
-              "media": [],
-              "confirm": []
+              "media": []
             }
           ]
         }
@@ -482,7 +470,7 @@
       "title": "Review Generation",
       "short_label": "Reviews",
       "subtitle": "Turn happy guests into steady, recent reviews.",
-      "phase": "phs_tpj9sx",
+      "phase_label": "Growth",
       "what_we_heard": [
         "You have a perfect 5.0 on Google, but only 20 reviews, and almost none from this year. You have never asked guests for one because it felt awkward."
       ],
@@ -518,8 +506,7 @@
                 }
               ],
               "links": [],
-              "media": [],
-              "confirm": []
+              "media": []
             },
             {
               "id": "stp_6sh853",
@@ -538,7 +525,7 @@
                     },
                     {
                       "id": "blt_ten9s6",
-                      "text": "Set it up as an automation in your booking system so it does not depend on memory.",
+                      "text": "Set it up as an automation in your booking system so it does not depend on memory. [CONFIRM: which booking system the resort uses]",
                       "children": []
                     }
                   ]
@@ -557,13 +544,6 @@
                   "fit": "crop",
                   "caption": "Review request: sent three days after checkout",
                   "link": null
-                }
-              ],
-              "confirm": [
-                {
-                  "id": "cnf_l4v72g",
-                  "text": "Which booking system the resort uses",
-                  "bullet": "blt_ten9s6"
                 }
               ]
             },
@@ -599,8 +579,7 @@
                   "caption": "QR card beside the checkout instructions",
                   "link": null
                 }
-              ],
-              "confirm": []
+              ]
             }
           ]
         },
@@ -633,8 +612,7 @@
                 }
               ],
               "links": [],
-              "media": [],
-              "confirm": []
+              "media": []
             }
           ]
         }
@@ -683,7 +661,7 @@
       "title": "Local Search Visibility and the Pages That Earn Search Traffic All Year",
       "short_label": "Local Search",
       "subtitle": "Be the first result when someone nearby searches for a lakeside cabin.",
-      "phase": "phs_zywgql",
+      "phase_label": "Search Visibility",
       "what_we_heard": [
         "Your Google Business Profile is verified but barely used. The website has no structured data, the homepage title is cut off in search results, and the resort is missing from most tourism directories. You also told us that guests ask the same five questions by email every week."
       ],
@@ -756,8 +734,7 @@
                     }
                   ]
                 }
-              ],
-              "confirm": []
+              ]
             },
             {
               "id": "stp_1t63jy",
@@ -827,8 +804,7 @@
                     }
                   ]
                 }
-              ],
-              "confirm": []
+              ]
             }
           ]
         },
@@ -874,8 +850,7 @@
                   "caption": null,
                   "link": null
                 }
-              ],
-              "confirm": []
+              ]
             },
             {
               "id": "stp_vns9eq",
@@ -903,8 +878,7 @@
                 }
               ],
               "links": [],
-              "media": [],
-              "confirm": []
+              "media": []
             }
           ]
         },
@@ -937,8 +911,7 @@
                 }
               ],
               "links": [],
-              "media": [],
-              "confirm": []
+              "media": []
             },
             {
               "id": "stp_nsxfk6",
@@ -1045,8 +1018,7 @@
                     }
                   ]
                 }
-              ],
-              "confirm": []
+              ]
             }
           ]
         },
@@ -1100,8 +1072,7 @@
                 }
               ],
               "links": [],
-              "media": [],
-              "confirm": []
+              "media": []
             },
             {
               "id": "stp_9yv5z9",
@@ -1127,8 +1098,7 @@
                 }
               ],
               "links": [],
-              "media": [],
-              "confirm": []
+              "media": []
             }
           ]
         },
@@ -1164,8 +1134,7 @@
                   "subtitle": "Performance report",
                   "url": "https://search.google.com/search-console"
                 }
-              ],
-              "confirm": []
+              ]
             },
             {
               "id": "stp_blf1ij",
@@ -1186,8 +1155,7 @@
                 }
               ],
               "links": [],
-              "media": [],
-              "confirm": []
+              "media": []
             }
           ]
         }
@@ -1265,7 +1233,7 @@
       "title": "Direct Booking and Guest Email",
       "short_label": "Booking and Email",
       "subtitle": "Make booking direct the easiest option, and stay in touch with guests who have already stayed.",
-      "phase": "phs_zywgql",
+      "phase_label": "Booking and Retention",
       "what_we_heard": [
         "Most of your bookings come through third-party sites that take a commission, even from guests who found you by name. You have email addresses for several years of past guests and have never written to them."
       ],
@@ -1317,8 +1285,7 @@
                   "caption": "Book Now in the header on every page",
                   "link": null
                 }
-              ],
-              "confirm": []
+              ]
             },
             {
               "id": "stp_zgdzxg",
@@ -1344,8 +1311,7 @@
                 }
               ],
               "links": [],
-              "media": [],
-              "confirm": []
+              "media": []
             }
           ]
         },
@@ -1378,8 +1344,7 @@
                 }
               ],
               "links": [],
-              "media": [],
-              "confirm": []
+              "media": []
             },
             {
               "id": "stp_hrs4ys",
@@ -1400,8 +1365,7 @@
                 }
               ],
               "links": [],
-              "media": [],
-              "confirm": []
+              "media": []
             }
           ]
         },
@@ -1442,8 +1406,7 @@
                   "caption": "Pre-arrival email: sent five days before check-in",
                   "link": null
                 }
-              ],
-              "confirm": []
+              ]
             },
             {
               "id": "stp_wd1l3v",
@@ -1462,21 +1425,14 @@
                     },
                     {
                       "id": "blt_hsa37u",
-                      "text": "Send it to past guests only, once, and measure bookings in the following two weeks.",
+                      "text": "Send it to past guests only, once, and measure bookings in the following two weeks. [CONFIRM: send date with the owners]",
                       "children": []
                     }
                   ]
                 }
               ],
               "links": [],
-              "media": [],
-              "confirm": [
-                {
-                  "id": "cnf_44jln2",
-                  "text": "Send date with the owners",
-                  "bullet": "blt_hsa37u"
-                }
-              ]
+              "media": []
             }
           ]
         }
@@ -1955,6 +1911,7 @@
     "closing": null
   },
   "quick_wins": {
+    "intro": "Each of these takes less than an hour, and you can start any of them today without waiting on the rest of the plan.",
     "groups": [
       {
         "title": "On the Google Business Profile",

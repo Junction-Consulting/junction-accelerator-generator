@@ -21,7 +21,7 @@
  */
 
 import { validatePlan } from '../plan-validator.js';
-import { parsePlan } from './parse-plan.js';
+import { parsePlan, normaliseConfirmsDeep } from './parse-plan.js';
 import { matchItems } from './match.js';
 import { makeIdFactory, collectIds, PREFIXES } from './ids.js';
 
@@ -59,6 +59,7 @@ export function convertPlan(planMd, options = {}) {
   v1.errors.forEach(e => add({ ...e, source: 'structure' }));
 
   const { draft, issues } = parsePlan(planMd);
+  normaliseConfirmsDeep(draft);
   issues.forEach(i => add({ ...i, source: 'converter' }));
 
   const existing = options.existing || null;
@@ -96,7 +97,7 @@ export function convertPlan(planMd, options = {}) {
   }, phaseIds[i].old));
   reportUnused('phase', phasePool);
 
-  // ── Tactics, parts, steps, bullets, confirm notes ────────────────────────
+  // ── Tactics, parts, steps, bullets ───────────────────────────────────────
   const tacticPool = exTactics.map((t, index) => ({ key: t.id, text: t.title, parent: 'root', index, node: t }));
   const tacticIds = assign('tactic', PREFIXES.tactic, tacticPool, draft.tactics.map((t, index) => ({ text: t.title, parent: 'root', index, line: t._line })));
   reportUnused('tactic', tacticPool);
@@ -168,16 +169,6 @@ export function convertPlan(planMd, options = {}) {
           };
         });
 
-        const confirmPool = (oldStep ? oldStep.confirm || [] : []).map((c, index) => ({ key: c.id, text: c.text, parent: stepId, index, node: c }));
-        const confirmIds = assign('confirm', PREFIXES.confirm, confirmPool, s.confirm.map((c, index) => ({ text: c.text, parent: stepId, index, line: c._line })));
-        reportUnused('confirm', confirmPool);
-        const confirm = s.confirm.map((c, ci) => {
-          const note = { id: confirmIds[ci].id, text: c.text };
-          if (c._bullet) note.bullet = bulletIds.get(c._bullet);
-          if (c._inline) warnings.push({ severity: 'warning', line: c._line, source: 'converter', message: `"[CONFIRM ...]" sits inside a sentence, so it is left in the text as a blank to fill in: "${c.text}".`, fix: 'Move the note to the end of the bullet if the sentence reads without it.' });
-          return withLegacy(note, confirmIds[ci].old);
-        });
-
         const step = withLegacy({
           id: stepId,
           title: s.title,
@@ -186,8 +177,7 @@ export function convertPlan(planMd, options = {}) {
           tags: s.tags,
           body,
           links: oldStep ? clone(oldStep.links || []) : [],
-          media: oldStep ? clone(oldStep.media || []) : [],
-          confirm
+          media: oldStep ? clone(oldStep.media || []) : []
         }, oldStep);
         flatSteps.push(step);
         return step;
@@ -202,26 +192,12 @@ export function convertPlan(planMd, options = {}) {
     });
     stepsByTactic.push(flatSteps);
 
-    // Phase: the month block with the same name; otherwise the block in which
-    // the tactic's objective starts.
-    let phase = phases.find(ph => ph.name && t._phaseLabel && ph.name.toLowerCase() === t._phaseLabel.toLowerCase());
-    if (!phase) {
-      const objective = draft.objectives.find(o => o.tactic === t._number);
-      const start = objective && objective.weeks ? objective.weeks[0] : null;
-      phase = start ? phases.find(ph => start >= ph.weeks[0] && start <= ph.weeks[1]) : null;
-      warnings.push({
-        severity: 'warning', line: t._line, source: 'converter',
-        message: `Tactic ${t._number} has "Phase: ${t._phaseLabel}", which is not one of the roadmap's month names (${phaseNames.filter(Boolean).join(', ')}).`,
-        fix: phase ? `It is placed in "${phase.name}", where its objective starts. The label "${t._phaseLabel}" is not kept.` : 'No phase could be worked out for it.'
-      });
-    }
-
     return withLegacy({
       id: tacticId,
       title: t.title,
       short_label: t.short_label,
       subtitle: t.subtitle,
-      phase: phase ? phase.id : null,
+      phase_label: t.phase_label,
       what_we_heard: t.what_we_heard,
       what_this_is: t.what_this_is,
       why_it_matters: t.why_it_matters,
@@ -330,7 +306,7 @@ export function convertPlan(planMd, options = {}) {
     objectives,
     tactics,
     roadmap: { weeks, closing: ex.roadmap ? ex.roadmap.closing ?? null : null },
-    quick_wins: { groups, note: draft.quickWinNote || (ex.quick_wins ? clone(ex.quick_wins.note ?? null) : null) },
+    quick_wins: { intro: draft.quickWinIntro || (ex.quick_wins ? ex.quick_wins.intro ?? null : null), groups, note: draft.quickWinNote || (ex.quick_wins ? clone(ex.quick_wins.note ?? null) : null) },
     voice: clone(ex.voice) || { progress_headlines: [], tour: [] }
   };
 
@@ -347,7 +323,6 @@ export function countContent(content) {
     steps: steps.length,
     bullets: bulletItems.reduce((n, b) => n + 1 + (b.children || []).length, 0),
     tables: steps.reduce((n, s) => n + s.body.filter(b => b.type === 'table').length, 0),
-    confirm: steps.reduce((n, s) => n + s.confirm.length, 0),
     weeks: content.roadmap.weeks.length,
     actions: content.roadmap.weeks.reduce((n, w) => n + w.actions.length, 0),
     how_to: content.roadmap.weeks.reduce((n, w) => n + w.actions.filter(a => a.how_to).length, 0),
