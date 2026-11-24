@@ -522,7 +522,7 @@ export function weekCard(week, links, { first = false } = {}) {
       </div>
       <div>
         <div class="week-col-label">Completion Checklist</div>
-        <div class="check-list">
+        <div class="check-list"${first ? ' id="w1-checklist"' : ''}>
           ${checks.join('\n          ')}
         </div>
       </div>

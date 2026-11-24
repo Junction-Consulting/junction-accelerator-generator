@@ -24,7 +24,7 @@ import { allSteps } from './checks.js';
 import { stripMarkdown } from '../plan-generator.js';
 
 // The text a label shows once the page script reads it back (Markdown and [CONFIRM: ] markers removed)
-const stripText = text => stripMarkdown(String(text || '')).replace(/\[CONFIRM: ([^\]]*)\]/g, '$1');
+const stripText = text => stripMarkdown(String(text || '')).replace(/\[CONFIRM: ([^\]]*)\]/g, (m, inner) => inner);
 
 const has = text => typeof text === 'string' && text.trim() !== '';
 const NUMBER_WORDS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten'];
@@ -56,10 +56,10 @@ export function tourSteps(days, hasQuickWins) {
   return [
     { targetId: 'sidebar', mobileTargetId: 'nav-hamburger', page: 'dashboard', title: 'Navigate Your Plan', desc: `Use the sidebar to move between sections: ${sections}. Your progress is always visible at the top.`, mobileDesc: `Tap the menu icon to move between sections: ${sections}.`, pos: 'right', pad: 0, mobilePos: 'below' },
     { targetId: 'goal-section', page: 'dashboard', title: 'Your Progress Overview', desc: `This shows your overall completion and which phase of the ${days}-day plan you are in. The ring fills as you check off tasks.`, pos: 'below', pad: 8 },
-    { targetId: 'objectives-section', mobileTargetId: 'objectives-section', page: 'dashboard', title: 'Your Next Step', desc: 'This card shows exactly what to focus on right now. It updates automatically as you complete tasks in the roadmap.', pos: 'below', pad: 8, mobileScrollBlock: 'start' },
-    { targetId: 'tactic-cards-section', page: 'dashboard', title: 'Track Each Tactic', desc: 'These pills show progress on each of your tactics. Click any to open the detailed guide and implementation steps.', pos: 'below', pad: 8, mobileScrollBlock: 'start' },
+    { targetId: 'objectives-section', mobileTargetId: 'next-step-main', page: 'dashboard', title: 'Your Next Step', desc: 'This card shows exactly what to focus on right now. It updates automatically as you complete tasks in the roadmap.', pos: 'below', pad: 8 },
+    { targetId: 'tactic-cards-section', page: 'dashboard', title: 'Track Each Tactic', desc: 'These cards show progress on each of your tactics. Click a card to open its detailed guide and implementation steps.', mobileDesc: 'These cards show progress on each of your tactics. Tap a card to open its detailed guide and implementation steps.', pos: 'below', pad: 8 },
     { targetId: 'nav-roadmap', mobileTargetId: 'roadmap-page-header', page: 'dashboard', mobilePage: 'roadmap', title: 'Your Week-by-Week Action Plan', desc: `The ${days}-Day Roadmap is your primary tracker. Each week shows exactly what to do and how to confirm it's done.`, pos: 'right', pad: 8, mobilePos: 'below' },
-    { targetId: 'wc-1', page: 'roadmap', weekToOpen: 1, title: 'Check Off Tasks as You Go', desc: 'Each week has a completion checklist on the right. Check off each item as you finish it. Your progress saves automatically.', pos: 'below', pad: 8 },
+    { targetId: 'wc-1', mobileTargetId: 'w1-checklist', page: 'roadmap', weekToOpen: 1, title: 'Check Off Tasks as You Go', desc: 'Each week has a completion checklist on the right. Check off each item as you finish it. Your progress saves automatically.', pos: 'below', pad: 8 },
     { targetId: 'w1-howto-example', page: 'roadmap', weekToOpen: 1, title: '"How To" Links', desc: 'Tap "how to" next to any action to jump straight to the step-by-step guide in the tactics section: exactly what to click, type, and verify.', pos: 'below', pad: 8 },
     { targetId: 'w1-note-example', page: 'roadmap', weekToOpen: 1, title: 'Notes on Every Task', desc: 'Tap the pencil icon on any checklist item to add a personal note: a reminder, a date, a decision. Notes save automatically and are here every time you return.', pos: 'below', pad: 8 }
   ];

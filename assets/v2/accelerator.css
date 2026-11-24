@@ -5591,16 +5591,31 @@ button,
    ═══════════════════════════════════════════════════════════════ */
 
 /* Grids sized by the content: the generator sets --columns */
-.dash-tactics-grid[style*="--columns"],
 .dash-phases-grid[style*="--columns"],
 .tactics-overview-grid[style*="--columns"]{grid-template-columns:repeat(var(--columns),1fr)}
 @media(max-width:1024px){
-  .dash-tactics-grid[style*="--columns"]{grid-template-columns:repeat(2,1fr)}
   .tactics-overview-grid[style*="--columns"]{grid-template-columns:1fr}
 }
 @media(max-width:640px){
-  .dash-tactics-grid[style*="--columns"],
   .dash-phases-grid[style*="--columns"]{grid-template-columns:1fr}
+}
+
+/* Dashboard tactic cards: one row when the dashboard is wide enough,
+   otherwise an even grid, so no card sits alone on a row. The generator
+   sets data-columns to the number of tactics. Sized by the dashboard's own
+   width (a container query), so the sidebar is taken into account. */
+.dash-v2{container-type:inline-size}
+#tactic-cards-section[data-columns]{grid-template-columns:1fr;gap:var(--tactic-cards-gap)}
+@container (min-width: 480px){
+  #tactic-cards-section[data-columns="2"],
+  #tactic-cards-section[data-columns="4"]{grid-template-columns:repeat(2,1fr)}
+}
+@container (min-width: 700px){
+  #tactic-cards-section[data-columns="3"]{grid-template-columns:repeat(3,1fr)}
+  #tactic-cards-section[data-columns]:not([data-columns="2"]):not([data-columns="3"]):not([data-columns="4"]){grid-template-columns:repeat(auto-fill,minmax(var(--tactic-card-min),1fr))}
+}
+@container (min-width: 900px){
+  #tactic-cards-section[data-columns="4"]{grid-template-columns:repeat(4,1fr)}
 }
 
 /* [CONFIRM: ...] reminder: a light highlight inside the sentence */

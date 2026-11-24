@@ -474,6 +474,8 @@
 
   /* v2 components: named roles, built from the values above */
   --frame-narrow-max: 320px;
+  --tactic-cards-gap: var(--space-20);
+  --tactic-card-min: var(--size-200);
   --tactic-color-1: var(--link-blue);
   --tactic-color-2: var(--navy-900);
   --tactic-color-3: var(--mint-500);
