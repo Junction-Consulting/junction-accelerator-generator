@@ -62,6 +62,45 @@ Items are grouped by what breaks if they are skipped.
 - **Why:** server-side accelerator PDFs are not implemented (`generateAcceleratorHTML` throws "not yet available"); the roadmap prints from the browser, as in v1. SCHEMA.md builds the dashboard and the PDFs from the same `content.json` and tokens.
 - **Change:** build the accelerator PDF HTML from `content.json` with the v2 components and `assets/v2/tokens.css`, including Edit Mode edits (item 8).
 
+## Still branded eLearningU outside v2
+
+The v2 dashboard is rebranded to Junction (see `BRAND.md`). Everything below is outside the v2 paths and still says eLearningU, or uses its navy and mint, its fonts or its domain. A client on a v2 dashboard would still meet these.
+
+### 11. The domain
+- **Where:** `accelerator.elearningu.com` appears about 70 times: `shared/accelerator-v2/plan-json.js` (`DASHBOARD_ORIGIN`, the weekly email deep links, with `tests/v2/real-plans.test.js`), `shared/plan-generator.js`, `shared/experience-generator.js`, `shared/editor-bridge.js` and `netlify/functions/generate-pdf.js` (allowed origins), `shared/user-menu.js` (password reset redirect), the Netlify functions that send email, the Supabase functions, `scripts/`, the coach docs and every client's `plan.json`. Also `experience.elearningu.com` and `www.elearningu.com/accelerator`.
+- **Change:** decide the Junction domain, set up redirects from the old one (existing emails and bookmarks link to it), then change the origin in one place per system. `DASHBOARD_ORIGIN` is the only copy in v2.
+
+### 12. Email addresses
+- **Where:** `support@`, `noreply@`, `dashboard@`, `coach@`, `brooke@` and `conner@elearningu.com` in `shared/user-menu.js` (the help link), `netlify/functions/invite-client.js`, `notify-*.js`, `generate-pdf.js`, the Supabase email functions, `CLAUDE.md`, `SCHEMA.md` (an example) and tests.
+- **Change:** move sender and support addresses to the Junction domain (sender domains need SPF and DKIM set up first).
+
+### 13. The emails
+- **Where:** `supabase/email-templates/monday.html` and `friday.html`, and `supabase/functions/send-monday-email`, `send-friday-email`, `send-milestone-email`, `send-test-emails`, `check-due-milestones`, `check-milestone-assessments`; `netlify/functions/invite-client.js`, `notify-client-assessment.js`, `notify-coach-assigned.js`, `notify-week-complete.js`.
+- **Why:** they print "eLearningU" as a text logo and in footers ("the Junction eLearningU Accelerator"), in navy `#11154b` and mint `#aadab6`.
+- **Change:** use the Junction wordmark (hosted PNG, since email clients block web fonts and SVG), Forest and Newsprint, and Junction wording.
+
+### 14. Login, account and staff pages
+- **Where:** `login/index.html`, `auth/callback/index.html`, `auth/set-password/index.html`, `account/profile/index.html`, `my-clients/index.html`, and `admin/` (`analytics`, `create-project`, `create-experience`, `manage-experience`, `generate-assessment`, `trigger-milestone`).
+- **Why:** each has the eLearningU logo or name, Raleway and Open Sans, and navy and mint. A client meets the login page before their dashboard.
+- **Change:** load `assets/v2/tokens.css` (or a shared copy of the roles) and the brand fonts, and use the Junction wordmark.
+
+### 15. Shared scripts that draw on the dashboard
+- **Where:** `shared/auth.js` (loading and access-denied screens), `shared/user-menu.js` (menu, help link), `shared/content-editor.js` (Edit Mode toolbar), `shared/share-modal.js`.
+- **Why:** they inject their own styles with navy and mint written in. `share-modal.js` reads `--navy`, `--navy-light`, `--mint`, `--cream` and `--font-d` with eLearningU fallbacks; `tokens.css` keeps those names as aliases of the Junction roles, so on v2 pages it already shows Junction colours. The others do not read tokens.
+- **Change:** read the role tokens (`--color-dark`, `--color-action`, `--color-text` and so on) with Junction fallbacks, and remove the aliases from `tokens.css` once nothing reads them.
+
+### 16. PDFs and assessment pages
+- **Where:** `netlify/functions/generate-pdf.js` (loads `https://accelerator.elearningu.com/assets/elearningu-logo-white.png`, "Powered by eLearningU"), `template/pdf/assessment-report.html`, `template/assessment-only-template.html`, `netlify/functions/generate-assessment-background.js`.
+- **Change:** with item 10, build from `tokens.css` and the Junction wordmark. Keep `assets/elearningu-logo-white.png` until no live page or old email links to it.
+
+### 17. v1 templates, other products and docs
+- **Where:** `template/accelerator-template.html`, `template/experience-template.html`, `template/elevated-learner-template.html` and the `elevated/` pages, `junction-editor/` (layout, page, `DashboardFrame.tsx`, `tailwind.config.ts`), `design/` (the eLearningU design system), and the coach and Claude docs (`CLAUDE.md`, `CLAUDE_PROJECT_INSTRUCTIONS.md`, `EXPERIENCE_DASHBOARD_GUIDE.md`, `GOOGLE_DOC_TEMPLATE*.md`, `.claude/skills/accelerator/SKILL.md`). `CLAUDE.md` also points to `brand/elearningu-brand.md`, which is not in the repository.
+- **Change:** v1 clients stay on eLearningU until they move. Docs should point v2 work at `shared/accelerator-v2/BRAND.md`.
+
+### 18. Client folders
+- **Where:** 55 files under `clients/` mention eLearningU (generated v1 pages, `plan.json` deep links, `clients/andreas-resort/README.md`'s production link).
+- **Change:** v2 pages pick up the brand when rebuilt. `plan.json` deep links follow item 11.
+
 ## Already handled inside v2
 
 For reference, these do not need changes outside v2:
