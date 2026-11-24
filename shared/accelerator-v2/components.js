@@ -84,7 +84,7 @@ export function phaseCard(phase, n) {
 export function tacticPill(tactic, n, total) {
   return `<div class="dash-tactic-pill" onclick="navigate('tactic${n}')">
         <svg class="dash-tactic-ring" width="44" height="44" viewBox="0 0 44 44">
-          <circle cx="22" cy="22" r="18" fill="none" stroke="var(--surface-sunken)" stroke-width="5"></circle>
+          <circle cx="22" cy="22" r="18" fill="none" stroke="var(--color-surface-sunken)" stroke-width="5"></circle>
           <circle id="tactic${n}-ring" class="dash-tactic-ring-bar" cx="22" cy="22" r="18" fill="none" stroke="var(--tactic-ring-${cycle(n)})" stroke-width="5" stroke-linecap="round" stroke-dasharray="113.1" stroke-dashoffset="113.1"></circle>
         </svg>
         <div class="dash-tactic-info">
