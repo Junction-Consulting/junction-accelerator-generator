@@ -154,4 +154,45 @@ function canAssignCoach(callerRows, slug) {
   );
 }
 
-export { ensureCoachAccess, revokeCoachAccess, canAssignCoach };
+/**
+ * Whether a signed-in user may upload a plan for a client.
+ *
+ * Admins and PSMs may upload for any client. A coach may upload only for a
+ * client they are assigned to (their own active row for the client, a row for
+ * every client, or their email as the coach on the client's assessment), and
+ * only with themselves as the coach on the upload.
+ *
+ * @param {Array<{role: string, client_slug: string}>} callerRows  The caller's active user_plans rows
+ * @param {object} options
+ * @param {string} options.callerEmail  The signed-in user's email
+ * @param {string} options.slug         Client slug the plan is for
+ * @param {string} options.coachEmail   Coach email entered on the upload form
+ * @param {string[]} [options.assessmentCoachEmails]  coach_email of the client's assessment records
+ * @returns {{ok: boolean, error?: string}}
+ */
+function canUploadPlan(callerRows, { callerEmail, slug, coachEmail, assessmentCoachEmails = [] } = {}) {
+  const rows = callerRows || [];
+  if (rows.some(row => row.role === 'admin' || row.role === 'psm')) return { ok: true };
+
+  const normalise = value => (value || '').trim().toLowerCase();
+  const caller = normalise(callerEmail);
+  const coachRows = rows.filter(row => row.role === 'coach');
+  if (!caller || coachRows.length === 0) {
+    return { ok: false, error: 'Only an admin, a PSM or the coach assigned to this client can upload a plan.' };
+  }
+
+  const assigned =
+    coachRows.some(row => row.client_slug === '*' || row.client_slug === slug) ||
+    assessmentCoachEmails.some(email => normalise(email) === caller);
+  if (!assigned) {
+    return { ok: false, error: 'You are not the coach assigned to this client, so the plan was not uploaded. Ask an admin or PSM to assign you in My Clients, then try again.' };
+  }
+
+  if (normalise(coachEmail) !== caller) {
+    return { ok: false, error: 'As a coach you can only upload a plan with your own email as the Coach Email. Ask an admin or PSM to assign a different coach.' };
+  }
+
+  return { ok: true };
+}
+
+export { ensureCoachAccess, revokeCoachAccess, canAssignCoach, canUploadPlan };

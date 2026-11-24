@@ -6,7 +6,7 @@ import { createClient } from '@supabase/supabase-js';
 // regeneration script and the tests can never drift apart.
 import { parsePlanMd, renderDashboard, generatePlanJson, validateDashboardHtml, hasAssessmentContent } from '../../shared/plan-generator.js';
 import { validatePlan, formatReport } from '../../shared/plan-validator.js';
-import { ensureCoachAccess } from '../../shared/coach-access.js';
+import { ensureCoachAccess, canUploadPlan } from '../../shared/coach-access.js';
 
 // The branch this function reads templates from and commits to. Production
 // uses main. A Netlify deploy preview can set GITHUB_BRANCH to its own branch
@@ -75,16 +75,28 @@ export async function handler(event, context) {
       return { statusCode: 401, body: JSON.stringify({ error: 'Invalid token' }) };
     }
 
-    // Check user role
+    // Check the user may upload a plan for this client: an admin or PSM for
+    // any client, a coach only for a client they are assigned to.
     const { data: roleRows } = await supabaseAdmin
       .from('user_plans')
-      .select('role')
+      .select('role, client_slug')
       .eq('email', user.email)
       .eq('active', true)
-      .in('role', ['admin', 'psm']);
+      .in('role', ['admin', 'psm', 'coach']);
 
-    if (!roleRows || roleRows.length === 0) {
-      return { statusCode: 403, body: JSON.stringify({ error: 'Admin or PSM role required' }) };
+    const { data: assessmentRows } = await supabaseAdmin
+      .from('client_assessments')
+      .select('coach_email')
+      .eq('client_slug', slug);
+
+    const uploadAccess = canUploadPlan(roleRows, {
+      callerEmail: user.email,
+      slug,
+      coachEmail: providedCoachEmail,
+      assessmentCoachEmails: (assessmentRows || []).map(row => row.coach_email)
+    });
+    if (!uploadAccess.ok) {
+      return { statusCode: 403, body: JSON.stringify({ error: uploadAccess.error }) };
     }
 
     // ─────────────────────────────────────────────────────────────────────────

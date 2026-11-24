@@ -4,7 +4,7 @@
  * enforces the real table's rule that cohort_start_date is required.
  */
 
-import { ensureCoachAccess, revokeCoachAccess, canAssignCoach } from '../shared/coach-access.js';
+import { ensureCoachAccess, revokeCoachAccess, canAssignCoach, canUploadPlan } from '../shared/coach-access.js';
 
 function fakeSupabase(initialRows = [], { failInsert = false } = {}) {
   const rows = initialRows.map((row, index) => ({ id: `id-${index + 1}`, active: true, ...row }));
@@ -218,5 +218,43 @@ describe('callers use the shared helper', () => {
     for (const file of ['netlify/functions/create-project.js', 'netlify/functions/create-experience-project.js', 'netlify/functions/generate-assessment-background.js']) {
       expect(read(file)).not.toMatch(/role: 'coach',/);
     }
+  });
+});
+
+describe('canUploadPlan', () => {
+  const coach = 'coach@example.com';
+  const upload = { callerEmail: coach, slug: SLUG, coachEmail: coach };
+
+  test('admins and PSMs can upload for any client and any coach', () => {
+    expect(canUploadPlan([{ role: 'admin', client_slug: '*' }], { ...upload, callerEmail: 'admin@example.com' })).toEqual({ ok: true });
+    expect(canUploadPlan([{ role: 'psm', client_slug: '*' }], { ...upload, callerEmail: 'psm@example.com' })).toEqual({ ok: true });
+  });
+
+  test('a coach can upload for a client they have a row for', () => {
+    expect(canUploadPlan([{ role: 'coach', client_slug: SLUG }], upload)).toEqual({ ok: true });
+    expect(canUploadPlan([{ role: 'coach', client_slug: '*' }], upload)).toEqual({ ok: true });
+  });
+
+  test('a coach named on the assessment can upload, whatever the letter case', () => {
+    const rows = [{ role: 'coach', client_slug: 'another-client' }];
+    expect(canUploadPlan(rows, { ...upload, assessmentCoachEmails: ['Coach@Example.com'] })).toEqual({ ok: true });
+  });
+
+  test('a coach cannot upload for a client they are not assigned to', () => {
+    const result = canUploadPlan([{ role: 'coach', client_slug: 'another-client' }], { ...upload, assessmentCoachEmails: ['other@example.com', null] });
+    expect(result.ok).toBe(false);
+    expect(result.error).toMatch(/not the coach assigned/);
+  });
+
+  test('a coach cannot upload with someone else as the coach', () => {
+    const result = canUploadPlan([{ role: 'coach', client_slug: SLUG }], { ...upload, coachEmail: 'other@example.com' });
+    expect(result.ok).toBe(false);
+    expect(result.error).toMatch(/your own email/);
+  });
+
+  test('clients and users with no rows cannot upload', () => {
+    expect(canUploadPlan([{ role: 'client', client_slug: SLUG }], upload).ok).toBe(false);
+    expect(canUploadPlan([], upload).ok).toBe(false);
+    expect(canUploadPlan(null, upload).ok).toBe(false);
   });
 });
