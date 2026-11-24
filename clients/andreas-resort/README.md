@@ -13,6 +13,7 @@ This is the first dashboard built by Accelerator v2 (see `shared/accelerator-v2/
 | `assets/` | Media files, named by media ID (`med_xxxxxx.svg`). Neutral placeholders for now | Written by the media script |
 | `index.html` | The dashboard | Built from `content.json` |
 | `plan.json` | The weekly email feed | Built from `content.json` |
+| `assessment.json` | The sandbox's assessment, in the shape of a Supabase `client_assessments` record (a renamed copy of the sales demo's). Real clients' assessments come from Supabase | Edited by hand |
 | `sandbox-media.md` | The media this sandbox carries, and the cases it is built to test | Edited by hand |
 | `add-sandbox-media.mjs` | Adds the media in `sandbox-media.md`. A stand-in for the media tool | Run by hand |
 
@@ -27,7 +28,7 @@ The page's stylesheet and scripts are shared, not copied in: `assets/v2/tokens.c
 
        node shared/accelerator-v2/cli.mjs convert andreas-resort
 
-   Items that were reworded keep their IDs, and are listed so you can check the match. Media, Next Step details and other fields that are not in `plan.md` are kept.
+   Items that were reworded keep their IDs, and are listed so you can check the match. Checklist items without a `→ tactic: N` marker get a tactic worked out from the week's "how to" links; those are listed too (weeks 4 and 12 are left without markers on purpose, to cover this). Media, Next Step details and other fields that are not in `plan.md` are kept.
 3. Save it, adding `--confirm-matches` if the report listed matches you have checked:
 
        node shared/accelerator-v2/cli.mjs convert andreas-resort --save
@@ -58,7 +59,10 @@ For now, edit `add-sandbox-media.mjs` and run it. It only adds media to steps th
 - The PDFs (the roadmap prints from the browser, as in v1).
 - Notes and Quick Wins ticks are saved in this browser only, as in v1. Checklist ticks are saved to the account, keyed by `chk_` ID.
 - Edit Mode edits are saved by the existing Edit Mode, keyed by item ID and field (for example `stp_xxxxxx.title`), but they are not yet written back into `content.json`.
-- There is no Assessment page, because `content.json` has no assessment.
+
+## Before a real client moves to v2
+
+See `shared/accelerator-v2/CUTOVER.md`: the changes needed outside v2 (emails, Add Plan, saved notes, Edit Mode, draft status, PDFs and the tactic marker).
 
 ## Do not use the v1 tools on this folder
 

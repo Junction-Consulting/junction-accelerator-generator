@@ -383,6 +383,16 @@ export function checkContent(content, options = {}) {
     });
   });
 
+  // Every checklist item counts towards exactly one existing tactic
+  const tacticIdSet = new Set((content.tactics || []).map(t => t.id));
+  const guesses = [];
+  weeks.forEach(w => (w.checklist || []).forEach(c => {
+    if (!c.tactic) err(`Week ${w.number}`, c.id, 'This checklist item counts towards no tactic.', 'Add "→ tactic: N" to it in the plan, and convert again.');
+    else if (!tacticIdSet.has(c.tactic)) err(`Week ${w.number}`, c.id, `This checklist item counts towards ${c.tactic}, which is not a tactic.`, 'Add "→ tactic: N" to it in the plan, and convert again.');
+    else if (c.tactic_source === 'guess') guesses.push(`Week ${w.number}: "${c.text}" (Tactic ${(content.tactics || []).findIndex(t => t.id === c.tactic) + 1})`);
+  }));
+  if (guesses.length) warn(guesses.join('; '), null, `${guesses.length} checklist item(s) count towards a tactic worked out from the week's "how to" links.`, 'Check each one. To set it, add "→ tactic: N" to the item in the plan.');
+
   // Phases cover every week exactly once
   const covered = new Map();
   (content.phases || []).forEach((p, i) => {

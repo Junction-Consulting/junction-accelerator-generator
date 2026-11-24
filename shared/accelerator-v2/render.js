@@ -1,12 +1,15 @@
 /**
  * The v2 generator: content.json in, dashboard HTML out.
  *
- *   renderDashboard(content, { template, assetUrl, assetBase })
+ *   renderDashboard(content, { template, assetUrl, assetBase, assessment })
  *     -> { html, data, problems }
  *
  * - template:  the text of template/v2/accelerator.html
  * - assetUrl:  (assetId) -> URL of a media file (the media library)
  * - assetBase: URL of the shared v2 stylesheet and scripts (default /assets/v2)
+ * - assessment: the client's assessment data (assessment_data of its
+ *   client_assessments record in Supabase). Without one, there is no
+ *   Assessment page.
  *
  * Everything that can be counted is computed from the content: tactics,
  * phases, totals, grid columns, which checklist items count towards which
@@ -64,19 +67,24 @@ export function tourSteps(days, hasQuickWins) {
 
 /**
  * Which tactic each step, week and checklist item belongs to.
- * SCHEMA.md: tactic progress is counted from the checklist items of weeks
- * whose actions point into that tactic. A week's main tactic (for the Next
- * Step card) is the one most of its actions point to; a week with no links
- * keeps the previous week's.
+ * Each checklist item counts towards exactly one tactic: the one stored on
+ * it (see assignChecklistTactics in convert.js). A week's main tactic (for
+ * the Next Step card) is the one most of its actions point to; a week with
+ * no links keeps the previous week's.
  */
 export function mapProgress(content) {
   const stepTactic = new Map();
   allSteps(content).forEach(({ step, tactic }) => stepTactic.set(step.id, content.tactics.indexOf(tactic) + 1));
+  const tacticNumber = new Map(content.tactics.map((t, i) => [t.id, i + 1]));
   const tacticCount = content.tactics.length;
   const byTactic = Object.fromEntries(content.tactics.map((_, i) => [i + 1, []]));
   const weekTactic = {};
   let previous = 1;
   for (const week of content.roadmap.weeks) {
+    week.checklist.forEach(c => {
+      const t = tacticNumber.get(c.tactic);
+      if (t) byTactic[t].push(c.id);
+    });
     const counts = {};
     const order = [];
     week.actions.forEach(a => {
@@ -85,7 +93,6 @@ export function mapProgress(content) {
       if (!counts[t]) order.push(t);
       counts[t] = (counts[t] || 0) + 1;
     });
-    order.forEach(t => byTactic[t].push(...week.checklist.map(c => c.id)));
     const main = order.length ? order.reduce((best, t) => (counts[t] > counts[best] ? t : best), order[0]) : previous;
     weekTactic[week.number] = main;
     previous = main;
@@ -222,6 +229,8 @@ export function renderDashboard(content, options = {}) {
     FIRST_SUBCOPY: C.attr(data.headlines[0].subcopy),
     NAV_TACTICS: tactics.map((t, i) => C.navTactic(t, i + 1)).join('\n    '),
     NAV_QUICK_WINS: navQuickWins,
+    NAV_ASSESSMENT: C.hasAssessment(options.assessment) ? C.navAssessment() : '',
+    ASSESSMENT_PAGE: C.assessmentPage(options.assessment, { date: formatDate(client.cohort_start) }),
     PHASE_COUNT: String(phases.length),
     PHASE_COUNT_WORD: NUMBER_WORDS[phases.length] || String(phases.length),
     DASHBOARD_PHASES: phases.map((p, i) => C.phaseCard(p, i + 1)).join('\n          '),

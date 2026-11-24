@@ -576,3 +576,226 @@ export function quickWinsNote(note) {
   if (!note || !has(note.text)) return '';
   return `<div class="callout">${has(note.title) ? `<strong>${plain(note.title)}.</strong> ` : ''}${md(note.text)}</div>`;
 }
+
+// ── Assessment ─────────────────────────────────────────────────────────────
+// Built from a client_assessments record's assessment_data (Supabase in
+// production). Assessment items have no IDs, so their edit keys are their
+// path in that record, for example assessment.executive_summary.key_strengths.0.
+
+export const ASSESSMENT_CATEGORIES = [
+  { key: 'website_technical', title: 'Website & Technical', iconClass: 'website', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>' },
+  { key: 'reviews_reputation', title: 'Reviews & Reputation', iconClass: 'reviews', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>' },
+  { key: 'booking_conversion', title: 'Online Booking & Conversion', iconClass: 'booking', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>' },
+  { key: 'social_media', title: 'Social Media & Content', iconClass: 'social', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>' },
+  { key: 'guest_experience', title: 'Digital Guest Experience', iconClass: 'experience', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>' },
+  { key: 'local_visibility', title: 'Local Visibility', iconClass: 'local', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>' }
+];
+
+const FINDING_ICONS = {
+  positive: '<svg class="finding-icon positive" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>',
+  negative: '<svg class="finding-icon negative" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/></svg>'
+};
+
+const text = value => attr(value == null ? '' : value);
+const score = value => (value != null && value !== '' ? String(Math.round(Number(value))) : '--');
+export function gradeClass(grade) {
+  const letter = String(grade || '').trim().charAt(0).toLowerCase();
+  return letter && 'abcdf'.includes(letter) ? `grade-${letter}` : '';
+}
+
+/** True when the record has real assessment content, not an empty object. */
+export function hasAssessment(data) {
+  return !!(data && data.overall && data.categories && Object.keys(data.categories).length > 0);
+}
+
+export function assessmentGradeCard(data) {
+  const summary = data.overall.summary || (data.executive_summary || {}).headline || '';
+  return `<div class="assessment-grade-card">
+      <div class="grade-circle" id="overallGrade">${text(data.overall.grade || '--')}</div>
+      <div class="grade-details">
+        <h3>Overall Score: <span id="overallScore">${score(data.overall.score)}</span>/100</h3>
+        ${has(summary) ? `<p id="overallSummary"${editKey(data.overall.summary ? 'assessment.overall.summary' : 'assessment.executive_summary.headline.card')}>${text(summary)}</p>` : ''}
+      </div>
+    </div>`;
+}
+
+export function categoryScore(category, cat) {
+  return `<div class="grade-breakdown-item">
+          <div class="grade-breakdown-category">
+            ${category.icon}
+            <span>${category.title}</span>
+          </div>
+          <div class="grade-breakdown-score">
+            <span class="grade-breakdown-number">${score(cat.score)}</span>
+            <span class="grade-breakdown-letter ${gradeClass(cat.grade)}">${text(cat.grade || '--')}</span>
+          </div>
+        </div>`;
+}
+
+export function executiveSummary(summary) {
+  if (!summary || !(has(summary.headline) || (summary.key_strengths || []).length || (summary.critical_gaps || []).length)) return '';
+  const list = (items, key) => (items || []).map((item, i) => `<li${editKey(`assessment.executive_summary.${key}.${i}`)}>${text(item)}</li>`).join('\n            ');
+  return `<div class="executive-summary" id="executiveSummary">
+      <h2>Executive Summary</h2>
+      ${has(summary.headline) ? `<p class="executive-headline"${editKey('assessment.executive_summary.headline')}>${text(summary.headline)}</p>` : ''}
+      <div class="executive-columns">
+        <div class="executive-column strengths">
+          <h4>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+            Key Strengths
+          </h4>
+          <ul>
+            ${list(summary.key_strengths, 'key_strengths')}
+          </ul>
+        </div>
+        <div class="executive-column gaps">
+          <h4>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            Critical Gaps
+          </h4>
+          <ul>
+            ${list(summary.critical_gaps, 'critical_gaps')}
+          </ul>
+        </div>
+      </div>
+      ${has(summary.bottom_line) ? `<div class="executive-bottom-line">
+        <strong>Bottom Line:</strong> <span${editKey('assessment.executive_summary.bottom_line')}>${text(summary.bottom_line)}</span>
+      </div>` : ''}
+    </div>`;
+}
+
+export function assessmentQuickWin(win, i) {
+  return `<div class="quick-win-item">
+          <div class="quick-win-number">${i + 1}</div>
+          <div class="quick-win-content">
+            <div class="quick-win-task"${editKey(`assessment.quick_wins.${i}.task`)}>${text(win.task)}</div>
+            ${has(win.impact) ? `<div class="quick-win-impact"${editKey(`assessment.quick_wins.${i}.impact`)}>${text(win.impact)}</div>` : ''}
+          </div>
+          ${has(win.time_estimate) ? `<div class="quick-win-time">${text(win.time_estimate)}</div>` : ''}
+        </div>`;
+}
+
+export function priorityRecommendation(rec, i) {
+  const tags = [
+    has(rec.category) ? `<span class="priority-item-tag">${text(rec.category)}</span>` : '',
+    has(rec.time_estimate) ? `<span class="priority-item-tag time">${text(rec.time_estimate)}</span>` : '',
+    has(rec.impact) ? `<span class="priority-item-tag impact-${text(String(rec.impact).toLowerCase())}">${text(rec.impact)} Impact</span>` : ''
+  ].filter(Boolean).join('\n              ');
+  return `<div class="priority-item">
+          <div class="priority-item-number">${i + 1}</div>
+          <div class="priority-item-content">
+            <h4${editKey(`assessment.priority_recommendations.${i}.text`)}>${text(rec.text || rec.title)}</h4>
+            ${tags ? `<div class="priority-item-meta">
+              ${tags}
+            </div>` : ''}
+            ${has(rec.expected_result) ? `<p class="priority-item-result"${editKey(`assessment.priority_recommendations.${i}.expected_result`)}>${text(rec.expected_result)}</p>` : ''}
+          </div>
+        </div>`;
+}
+
+export function categoryCard(category, cat) {
+  const metrics = (cat.metrics || []).slice(0, 4).map(metric => {
+    const status = ['good', 'warning', 'critical'].includes(metric.status) ? metric.status : 'good';
+    return `<div class="metric-item">
+                <div class="metric-label">${text(metric.label)}</div>
+                <div class="metric-value"><span class="metric-status ${status}"></span>${text(metric.value)}</div>
+              </div>`;
+  }).join('\n              ');
+  const findings = (cat.findings || []).slice(0, 4).map((finding, i) => `<div class="finding-item">
+                ${finding.type === 'positive' ? FINDING_ICONS.positive : FINDING_ICONS.negative}
+                <span${editKey(`assessment.categories.${category.key}.findings.${i}`)}>${text(finding.text)}</span>
+              </div>`).join('\n              ');
+  return `<div class="category-card">
+          <div class="category-header" onclick="this.parentElement.classList.toggle('open')">
+            <div class="category-icon ${category.iconClass}">
+              ${category.icon}
+            </div>
+            <div class="category-title-wrap">
+              <h3 class="category-title">${category.title}</h3>
+              <span class="category-grade ${gradeClass(cat.grade)}">${text(cat.grade || 'N/A')}</span>
+            </div>
+            <svg class="category-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="category-body">
+            ${has(cat.summary) ? `<p class="category-summary"${editKey(`assessment.categories.${category.key}.summary`)}>${text(cat.summary)}</p>` : ''}
+            ${metrics ? `<div class="category-metrics">
+              ${metrics}
+            </div>` : ''}
+            ${findings ? `<div class="category-findings">
+              <h4>Key Findings</h4>
+              ${findings}
+            </div>` : ''}
+          </div>
+        </div>`;
+}
+
+/** The whole Assessment page, or '' when there is no assessment. */
+export function assessmentPage(data, { date } = {}) {
+  if (!hasAssessment(data)) return '';
+  const categories = ASSESSMENT_CATEGORIES.filter(c => data.categories[c.key]);
+  const wins = (data.quick_wins || []).slice(0, 6);
+  const recs = (data.priority_recommendations || []).slice(0, 4);
+  return `<section id="page-assessment" class="page">
+  <div class="assessment-hero">
+    <div class="assessment-hero-top">
+      <div>
+        <h1 class="assessment-hero-title">Your Digital Marketing Assessment</h1>
+        ${has(date) ? `<p class="assessment-hero-date">Assessment Date: ${text(date)}</p>` : ''}
+      </div>
+      <div class="assessment-hero-actions">
+        <button class="download-pdf-btn" onclick="downloadPDF()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/>
+            <line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          Download PDF
+        </button>
+      </div>
+    </div>
+    ${assessmentGradeCard(data)}
+  </div>
+
+  <div class="content-area">
+    <div class="grade-breakdown">
+      <h2>Score Breakdown by Category</h2>
+      <div class="grade-breakdown-grid">
+        ${categories.map(c => categoryScore(c, data.categories[c.key])).join('\n        ')}
+      </div>
+    </div>
+
+    ${executiveSummary(data.executive_summary)}
+
+    ${wins.length ? `<div class="quick-wins" id="quickWins">
+      <h2>Quick Wins</h2>
+      <p class="quick-wins-intro">Immediate actions you can complete today:</p>
+      <div class="quick-wins-grid">
+        ${wins.map(assessmentQuickWin).join('\n        ')}
+      </div>
+    </div>` : ''}
+
+    ${recs.length ? `<div class="priority-section">
+      <h2>Priority Recommendations</h2>
+      <p class="priority-intro">The changes that will make the biggest difference, in priority order:</p>
+      <div class="priority-list" id="priorityList">
+        ${recs.map(priorityRecommendation).join('\n        ')}
+      </div>
+    </div>` : ''}
+
+    <div class="categories-section">
+      <h2>Detailed Category Analysis</h2>
+      <div class="categories-grid">
+        ${categories.map(c => categoryCard(c, data.categories[c.key])).join('\n        ')}
+      </div>
+    </div>
+  </div>
+</section>`;
+}
+
+export function navAssessment() {
+  return `<div class="nav-section-label">Your Assessment</div>
+    <div class="nav-item" data-page="assessment" onclick="navigate('assessment')">
+      <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm2 10a1 1 0 10-2 0v3a1 1 0 102 0v-3zm2-3a1 1 0 011 1v5a1 1 0 11-2 0v-5a1 1 0 011-1zm4-1a1 1 0 10-2 0v7a1 1 0 102 0V8z" clip-rule="evenodd"/></svg>
+      Assessment
+    </div>`;
+}

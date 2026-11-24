@@ -134,8 +134,10 @@ describe('blocking checks', () => {
 
   test('a changed ID', () => {
     const c = copy();
+    const oldId = c.tactics[0].id;
     c.tactics[0].id = 'tac_aaaaaa';
     c.objectives[0].tactic = 'tac_aaaaaa';
+    c.roadmap.weeks.forEach(w => w.checklist.forEach(item => { if (item.tactic === oldId) item.tactic = 'tac_aaaaaa'; }));
     expect(errorsOf(c, { previous: base })).toEqual([expect.stringMatching(/This tactic was tac_\w+ and is now tac_aaaaaa, with the same text/)]);
   });
 
@@ -145,6 +147,13 @@ describe('blocking checks', () => {
     expect(errorsOf(c)).toEqual(['Week 5 is in no phase.']);
     c.phases[1].weeks = [4, 8];
     expect(errorsOf(c)).toEqual(['Week 4 is in 2 phases.']);
+  });
+
+  test('a checklist item with no tactic, or a tactic that does not exist', () => {
+    const c = copy();
+    c.roadmap.weeks[0].checklist[0].tactic = null;
+    c.roadmap.weeks[0].checklist[1].tactic = 'tac_zzzzzz';
+    expect(errorsOf(c)).toEqual(['This checklist item counts towards no tactic.', 'This checklist item counts towards tac_zzzzzz, which is not a tactic.']);
   });
 
   test('an objective without a tactic, and a tactic without an objective', () => {
@@ -185,6 +194,13 @@ describe('warnings', () => {
     const after = checkContent(c);
     expect(after.errors).toEqual([]);
     expect(after.warnings.length).toBe(before.warnings.length);
+  });
+
+  test('guessed checklist tactics are listed for the coach', () => {
+    const w = checkContent(base).warnings.find(x => /checklist item\(s\) count towards a tactic worked out/.test(x.message));
+    expect(w.message).toMatch(/^5 checklist item/);
+    expect(w.where).toContain('Week 4: "A QR card is in every cabin" (Tactic 2)');
+    expect(w.where).toContain('Week 12:');
   });
 
   test('[INSERT] and [ADD] left in visible text', () => {

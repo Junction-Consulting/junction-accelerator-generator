@@ -18,6 +18,8 @@ import { normalisePlanMd, readFields } from '../plan-generator.js';
 const isRule = line => /^\s*-{3,}\s*$/.test(line);
 const BULLET = /^(\s*)-\s+(\S.*)$/;
 const STEP = /^\s{0,3}(?:(\d+)\.\s+\*\*(.+?)\*\*|\*\*(\d+)\.\s+(.+?)\*\*)(.*)$/;
+// "→ tactic: N" (or "-> tactic: N") at the end of a checklist item
+const TACTIC_MARKER = /\s*(?:→|->|=>)\s*tactic\s*:?\s*(\S+?)\.?\s*$/i;
 const TABLE_ROW = /^\s*\|.*\|\s*$/;
 const TABLE_SEPARATOR = /^\s*\|[\s:|-]+\|\s*$/;
 const CONFIRM = /`?\[CONFIRM\b:?\s*([^\]]*)\]`?/gi;
@@ -391,12 +393,25 @@ function parseWeeks(section, issue) {
         else if (/^(GBP )?Quick Wins\.?$/i.test(target)) link = 'quick_wins';
         else issue('error', line, `The "how to" link "${target}" is not "Tactic N / Step M" or "GBP Quick Wins".`, 'Correct the link.');
       }
+      // "→ tactic: N" at the end of a checklist item says which tactic it counts towards
+      let tacticMarker = null;
+      const marker = text.match(TACTIC_MARKER);
+      if (marker) {
+        text = text.slice(0, marker.index).trim();
+        if (mode === 'actions') {
+          issue('warning', line, 'A "→ tactic:" marker is on an action.', 'It is removed. Put it on checklist items only; actions use "→ links to:".');
+        } else if (!/^\d+$/.test(marker[1])) {
+          issue('error', line, `"→ tactic: ${marker[1]}" is not a tactic number.`, 'Write the tactic number, for example "→ tactic: 2".');
+        } else {
+          tacticMarker = Number(marker[1]);
+        }
+      }
       if (mode === 'actions') {
         week.actions.push({ text, how_to: null, _link: link, _line: line });
       } else {
         text = text.replace(/^\[.?\]\s*/, '');
         if (linkMatch) issue('warning', line, 'A "how to" link is on a checklist item.', 'It is removed. Put "how to" links on actions only.');
-        week.checklist.push({ text, _line: line });
+        week.checklist.push({ text, _tacticMarker: tacticMarker, _line: line });
       }
     });
     weeks.push(week);

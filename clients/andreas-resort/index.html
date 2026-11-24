@@ -36,6 +36,11 @@
       <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"/></svg>
       Dashboard
     </div>
+    <div class="nav-section-label">Your Assessment</div>
+    <div class="nav-item" data-page="assessment" onclick="navigate('assessment')">
+      <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm2 10a1 1 0 10-2 0v3a1 1 0 102 0v-3zm2-3a1 1 0 011 1v5a1 1 0 11-2 0v-5a1 1 0 011-1zm4-1a1 1 0 10-2 0v7a1 1 0 102 0V8z" clip-rule="evenodd"/></svg>
+      Assessment
+    </div>
     <div class="nav-section-label">Your Strategy</div>
     <div class="nav-item" data-page="strategy" onclick="navigate('strategy')">
       <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 6a3 3 0 013-3h10a1 1 0 01.8 1.6L14.25 8l2.55 3.4A1 1 0 0116 13H6a1 1 0 00-1 1v3a1 1 0 11-2 0V6z" clip-rule="evenodd"/></svg>
@@ -182,7 +187,7 @@
         </svg>
         <div class="dash-tactic-info">
           <div class="dash-tactic-name">Social Media</div>
-          <div class="dash-tactic-label" id="tc1-stat">0 of 9 done</div>
+          <div class="dash-tactic-label" id="tc1-stat">0 of 8 done</div>
         </div>
       </div>
       <div class="dash-tactic-pill" onclick="navigate('tactic2')">
@@ -192,7 +197,7 @@
         </svg>
         <div class="dash-tactic-info">
           <div class="dash-tactic-name">Reviews</div>
-          <div class="dash-tactic-label" id="tc2-stat">0 of 9 done</div>
+          <div class="dash-tactic-label" id="tc2-stat">0 of 5 done</div>
         </div>
       </div>
       <div class="dash-tactic-pill" onclick="navigate('tactic3')">
@@ -202,7 +207,7 @@
         </svg>
         <div class="dash-tactic-info">
           <div class="dash-tactic-name">Local Search</div>
-          <div class="dash-tactic-label" id="tc3-stat">0 of 19 done</div>
+          <div class="dash-tactic-label" id="tc3-stat">0 of 14 done</div>
         </div>
       </div>
       <div class="dash-tactic-pill" onclick="navigate('tactic4')">
@@ -212,7 +217,527 @@
         </svg>
         <div class="dash-tactic-info">
           <div class="dash-tactic-name">Booking and Email</div>
-          <div class="dash-tactic-label" id="tc4-stat">0 of 13 done</div>
+          <div class="dash-tactic-label" id="tc4-stat">0 of 6 done</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="page-assessment" class="page">
+  <div class="assessment-hero">
+    <div class="assessment-hero-top">
+      <div>
+        <h1 class="assessment-hero-title">Your Digital Marketing Assessment</h1>
+        <p class="assessment-hero-date">Assessment Date: October 15, 2026</p>
+      </div>
+      <div class="assessment-hero-actions">
+        <button class="download-pdf-btn" onclick="downloadPDF()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/>
+            <line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          Download PDF
+        </button>
+      </div>
+    </div>
+    <div class="assessment-grade-card">
+      <div class="grade-circle" id="overallGrade">C</div>
+      <div class="grade-details">
+        <h3>Overall Score: <span id="overallScore">74</span>/100</h3>
+        <p id="overallSummary" data-editable-key="assessment.executive_summary.headline.card">Andrea&#039;s Resort has excellent technical foundations, perfect Google ratings, and strong pre-arrival information, but is not fully using social media. Key opportunities include increasing posting frequency and adding operating hours to the website.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="content-area">
+    <div class="grade-breakdown">
+      <h2>Score Breakdown by Category</h2>
+      <div class="grade-breakdown-grid">
+        <div class="grade-breakdown-item">
+          <div class="grade-breakdown-category">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+            <span>Website & Technical</span>
+          </div>
+          <div class="grade-breakdown-score">
+            <span class="grade-breakdown-number">78</span>
+            <span class="grade-breakdown-letter grade-b">B-</span>
+          </div>
+        </div>
+        <div class="grade-breakdown-item">
+          <div class="grade-breakdown-category">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <span>Reviews & Reputation</span>
+          </div>
+          <div class="grade-breakdown-score">
+            <span class="grade-breakdown-number">71</span>
+            <span class="grade-breakdown-letter grade-c">C</span>
+          </div>
+        </div>
+        <div class="grade-breakdown-item">
+          <div class="grade-breakdown-category">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            <span>Online Booking & Conversion</span>
+          </div>
+          <div class="grade-breakdown-score">
+            <span class="grade-breakdown-number">80</span>
+            <span class="grade-breakdown-letter grade-b">B</span>
+          </div>
+        </div>
+        <div class="grade-breakdown-item">
+          <div class="grade-breakdown-category">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>
+            <span>Social Media & Content</span>
+          </div>
+          <div class="grade-breakdown-score">
+            <span class="grade-breakdown-number">62</span>
+            <span class="grade-breakdown-letter grade-d">D</span>
+          </div>
+        </div>
+        <div class="grade-breakdown-item">
+          <div class="grade-breakdown-category">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            <span>Digital Guest Experience</span>
+          </div>
+          <div class="grade-breakdown-score">
+            <span class="grade-breakdown-number">84</span>
+            <span class="grade-breakdown-letter grade-b">B</span>
+          </div>
+        </div>
+        <div class="grade-breakdown-item">
+          <div class="grade-breakdown-category">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            <span>Local Visibility</span>
+          </div>
+          <div class="grade-breakdown-score">
+            <span class="grade-breakdown-number">81</span>
+            <span class="grade-breakdown-letter grade-b">B</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="executive-summary" id="executiveSummary">
+      <h2>Executive Summary</h2>
+      <p class="executive-headline" data-editable-key="assessment.executive_summary.headline">Andrea&#039;s Resort has excellent technical foundations, perfect Google ratings, and strong pre-arrival information, but is not fully using social media. Key opportunities include increasing posting frequency and adding operating hours to the website.</p>
+      <div class="executive-columns">
+        <div class="executive-column strengths">
+          <h4>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+            Key Strengths
+          </h4>
+          <ul>
+            <li data-editable-key="assessment.executive_summary.key_strengths.0">Perfect 5.0 Google rating with 20 reviews demonstrates exceptional guest satisfaction</li>
+            <li data-editable-key="assessment.executive_summary.key_strengths.1">Strong technical website foundation with SSL and mobile optimisation</li>
+            <li data-editable-key="assessment.executive_summary.key_strengths.2">Integrated booking system through TripAdvisor and Cloudbeds makes reservations straightforward</li>
+          </ul>
+        </div>
+        <div class="executive-column gaps">
+          <h4>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            Critical Gaps
+          </h4>
+          <ul>
+            <li data-editable-key="assessment.executive_summary.critical_gaps.0">Digital Guest Experience improved to 84/100 - only remaining gap is operating hours/seasonal schedule</li>
+            <li data-editable-key="assessment.executive_summary.critical_gaps.1">Social media below recommended levels with only 522 total followers, 5.15% Instagram engagement, and posting just 0.1x per week</li>
+            <li data-editable-key="assessment.executive_summary.critical_gaps.2">Contact information available on Location page but could be more prominent on homepage</li>
+          </ul>
+        </div>
+      </div>
+      <div class="executive-bottom-line">
+        <strong>Bottom Line:</strong> <span data-editable-key="assessment.executive_summary.bottom_line">Andrea&#039;s Resort delivers an exceptional on-property experience (evident from perfect reviews) and has strong pre-arrival information (directions, parking, accessibility). The main opportunities are limited social media presence and adding operating hours. Consistent posting and contact visibility improvements could increase direct inquiries by 40-60% within 3 months.</span>
+      </div>
+    </div>
+
+    <div class="quick-wins" id="quickWins">
+      <h2>Quick Wins</h2>
+      <p class="quick-wins-intro">Immediate actions you can complete today:</p>
+      <div class="quick-wins-grid">
+        <div class="quick-win-item">
+          <div class="quick-win-number">1</div>
+          <div class="quick-win-content">
+            <div class="quick-win-task" data-editable-key="assessment.quick_wins.0.task">Make phone and email more prominent in website header/footer (currently available on Location page)</div>
+            <div class="quick-win-impact" data-editable-key="assessment.quick_wins.0.impact">Visitors to remote wilderness resorts need direct contact for questions about access, weather, activities - expect 20-30% increase in booking inquiries</div>
+          </div>
+          <div class="quick-win-time">30 minutes</div>
+        </div>
+        <div class="quick-win-item">
+          <div class="quick-win-number">2</div>
+          <div class="quick-win-content">
+            <div class="quick-win-task" data-editable-key="assessment.quick_wins.1.task">Create simple FAQ page answering &#039;How do I get here?&#039;, &#039;What&#039;s included?&#039;, &#039;Best time to visit?&#039; - currently no Q&amp;A content detected</div>
+            <div class="quick-win-impact" data-editable-key="assessment.quick_wins.1.impact">Reduces repetitive inquiry emails, improves SEO for long-tail searches, better GEO/AI visibility</div>
+          </div>
+          <div class="quick-win-time">2 hours</div>
+        </div>
+        <div class="quick-win-item">
+          <div class="quick-win-number">3</div>
+          <div class="quick-win-content">
+            <div class="quick-win-task" data-editable-key="assessment.quick_wins.2.task">Post to Instagram 3x per week using existing gorgeous wilderness/cabin photos from website (37 images detected) - currently posting 0.1x per week</div>
+            <div class="quick-win-impact" data-editable-key="assessment.quick_wins.2.impact">At 3x weekly posting, expect follower growth from 194 to 400-500 within 6 months, improving brand awareness in outdoor/adventure travel community</div>
+          </div>
+          <div class="quick-win-time">15 minutes per post</div>
+        </div>
+        <div class="quick-win-item">
+          <div class="quick-win-number">4</div>
+          <div class="quick-win-content">
+            <div class="quick-win-task" data-editable-key="assessment.quick_wins.3.task">Add Local Business Schema markup to homepage with proper NAP data - currently missing despite having Google Business Profile</div>
+            <div class="quick-win-impact" data-editable-key="assessment.quick_wins.3.impact">Improves local search visibility and rich snippet appearance in Google results for &#039;Lakeside resort&#039; searches</div>
+          </div>
+          <div class="quick-win-time">45 minutes</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="priority-section">
+      <h2>Priority Recommendations</h2>
+      <p class="priority-intro">The changes that will make the biggest difference, in priority order:</p>
+      <div class="priority-list" id="priorityList">
+        <div class="priority-item">
+          <div class="priority-item-number">1</div>
+          <div class="priority-item-content">
+            <h4 data-editable-key="assessment.priority_recommendations.0.text">Increase posting frequency to 2-3 times per week with wilderness imagery</h4>
+            <div class="priority-item-meta">
+              <span class="priority-item-tag">Social Media &amp; Content</span>
+              <span class="priority-item-tag time">1 hour setup, 30 minutes per post</span>
+              <span class="priority-item-tag impact-high">high Impact</span>
+            </div>
+            <p class="priority-item-result" data-editable-key="assessment.priority_recommendations.0.expected_result">Improved social visibility and engagement</p>
+          </div>
+        </div>
+        <div class="priority-item">
+          <div class="priority-item-number">2</div>
+          <div class="priority-item-content">
+            <h4 data-editable-key="assessment.priority_recommendations.1.text">Implement a post-stay review request process for guests</h4>
+            <div class="priority-item-meta">
+              <span class="priority-item-tag">Reviews &amp; Reputation</span>
+              <span class="priority-item-tag time">30 minutes setup</span>
+              <span class="priority-item-tag impact-high">high Impact</span>
+            </div>
+            <p class="priority-item-result" data-editable-key="assessment.priority_recommendations.1.expected_result">Gradual increase in review volume</p>
+          </div>
+        </div>
+        <div class="priority-item">
+          <div class="priority-item-number">3</div>
+          <div class="priority-item-content">
+            <h4 data-editable-key="assessment.priority_recommendations.2.text">Add phone number and email to website header/footer for easier access</h4>
+            <div class="priority-item-meta">
+              <span class="priority-item-tag">Online Booking &amp; Conversion</span>
+              <span class="priority-item-tag time">15 minutes</span>
+              <span class="priority-item-tag impact-medium">medium Impact</span>
+            </div>
+            <p class="priority-item-result" data-editable-key="assessment.priority_recommendations.2.expected_result">Improved contact accessibility</p>
+          </div>
+        </div>
+        <div class="priority-item">
+          <div class="priority-item-number">4</div>
+          <div class="priority-item-content">
+            <h4 data-editable-key="assessment.priority_recommendations.3.text">Add seasonal hours/operating dates to website</h4>
+            <div class="priority-item-meta">
+              <span class="priority-item-tag">Digital Guest Experience</span>
+              <span class="priority-item-tag time">30 minutes</span>
+              <span class="priority-item-tag impact-medium">medium Impact</span>
+            </div>
+            <p class="priority-item-result" data-editable-key="assessment.priority_recommendations.3.expected_result">Reduced booking uncertainty and pre-arrival inquiries</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="categories-section">
+      <h2>Detailed Category Analysis</h2>
+      <div class="categories-grid">
+        <div class="category-card">
+          <div class="category-header" onclick="this.parentElement.classList.toggle('open')">
+            <div class="category-icon website">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+            </div>
+            <div class="category-title-wrap">
+              <h3 class="category-title">Website & Technical</h3>
+              <span class="category-grade grade-b">B-</span>
+            </div>
+            <svg class="category-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="category-body">
+            <p class="category-summary" data-editable-key="assessment.categories.website_technical.summary">Strong technical foundation with SSL, mobile optimisation, and multi-language support, but hampered by performance issues, SEO weaknesses in meta tags and header structure, and poor link architecture</p>
+            <div class="category-metrics">
+              <div class="metric-item">
+                <div class="metric-label">Desktop Speed</div>
+                <div class="metric-value"><span class="metric-status good"></span>80/100</div>
+              </div>
+              <div class="metric-item">
+                <div class="metric-label">Mobile Speed</div>
+                <div class="metric-value"><span class="metric-status good"></span>80/100</div>
+              </div>
+              <div class="metric-item">
+                <div class="metric-label">SSL Security</div>
+                <div class="metric-value"><span class="metric-status good"></span>Secure</div>
+              </div>
+            </div>
+            <div class="category-findings">
+              <h4>Key Findings</h4>
+              <div class="finding-item">
+                <svg class="finding-icon positive" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                <span data-editable-key="assessment.categories.website_technical.findings.0">Clean website structure with proper SEO implementation supports search visibility</span>
+              </div>
+              <div class="finding-item">
+                <svg class="finding-icon positive" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                <span data-editable-key="assessment.categories.website_technical.findings.1">37 images on homepage with 100% alt text completion supports accessibility and SEO</span>
+              </div>
+              <div class="finding-item">
+                <svg class="finding-icon positive" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                <span data-editable-key="assessment.categories.website_technical.findings.2">Lightweight 45KB homepage with 2.6MB total assets shows good initial optimisation</span>
+              </div>
+              <div class="finding-item">
+                <svg class="finding-icon positive" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                <span data-editable-key="assessment.categories.website_technical.findings.3">Analytics properly configured (Google Analytics, Tag Manager, Facebook Pixel) enables conversion tracking</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="category-card">
+          <div class="category-header" onclick="this.parentElement.classList.toggle('open')">
+            <div class="category-icon reviews">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            </div>
+            <div class="category-title-wrap">
+              <h3 class="category-title">Reviews & Reputation</h3>
+              <span class="category-grade grade-c">C</span>
+            </div>
+            <svg class="category-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="category-body">
+            <p class="category-summary" data-editable-key="assessment.categories.reviews_reputation.summary">Perfect 5.0-star rating demonstrates exceptional guest satisfaction, but below average review volume (only 20 reviews) and poor review recency (only 2 reviews in past 18 months) signal declining activity and may limit local search visibility</p>
+            <div class="category-metrics">
+              <div class="metric-item">
+                <div class="metric-label">Google Rating</div>
+                <div class="metric-value"><span class="metric-status good"></span>5.0 / 5.0</div>
+              </div>
+              <div class="metric-item">
+                <div class="metric-label">Total Reviews</div>
+                <div class="metric-value"><span class="metric-status critical"></span>20</div>
+              </div>
+            </div>
+            <div class="category-findings">
+              <h4>Key Findings</h4>
+              <div class="finding-item">
+                <svg class="finding-icon positive" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                <span data-editable-key="assessment.categories.reviews_reputation.findings.0">Perfect 5.0 rating with 19 five-star reviews demonstrates exceptional guest satisfaction and service quality</span>
+              </div>
+              <div class="finding-item">
+                <svg class="finding-icon positive" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                <span data-editable-key="assessment.categories.reviews_reputation.findings.1">Reviews emphasize unique value props: &#039;stunning craftsmanship throughout entire place&#039;, &#039;modern comforts in rustic setting&#039;, &#039;surrounded by nature&#039;</span>
+              </div>
+              <div class="finding-item">
+                <svg class="finding-icon positive" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                <span data-editable-key="assessment.categories.reviews_reputation.findings.2">Guests frequently mention personal touches and warm hospitality from owners, showing authentic connection with visitors</span>
+              </div>
+              <div class="finding-item">
+                <svg class="finding-icon positive" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                <span data-editable-key="assessment.categories.reviews_reputation.findings.3">Reviews from work crews (&#039;essential service crew&#039;, &#039;guys want to make weekend trip&#039;) indicate word-of-mouth potential beyond leisure travellers</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="category-card">
+          <div class="category-header" onclick="this.parentElement.classList.toggle('open')">
+            <div class="category-icon booking">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            </div>
+            <div class="category-title-wrap">
+              <h3 class="category-title">Online Booking & Conversion</h3>
+              <span class="category-grade grade-b">B</span>
+            </div>
+            <svg class="category-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="category-body">
+            <p class="category-summary" data-editable-key="assessment.categories.booking_conversion.summary">Strong booking infrastructure with TripAdvisor and Cloudbeds integration, clear pricing visibility, and good functionality, but contact information available on Location page but could be more prominent which is essential for high-value wilderness resort bookings requiring direct inquiry</p>
+            <div class="category-metrics">
+              <div class="metric-item">
+                <div class="metric-label">Online Booking</div>
+                <div class="metric-value"><span class="metric-status good"></span>Available</div>
+              </div>
+              <div class="metric-item">
+                <div class="metric-label">Phone Visible</div>
+                <div class="metric-value"><span class="metric-status good"></span>Yes (Location page)</div>
+              </div>
+            </div>
+            <div class="category-findings">
+              <h4>Key Findings</h4>
+              <div class="finding-item">
+                <svg class="finding-icon positive" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                <span data-editable-key="assessment.categories.booking_conversion.findings.0">Dual booking platform integration (TripAdvisor, Cloudbeds) provides visitor choice and reduces platform-specific abandonment</span>
+              </div>
+              <div class="finding-item">
+                <svg class="finding-icon positive" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                <span data-editable-key="assessment.categories.booking_conversion.findings.1">Pricing information visible on website pre-qualifies visitors and reduces low-intent inquiries</span>
+              </div>
+              <div class="finding-item">
+                <svg class="finding-icon positive" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                <span data-editable-key="assessment.categories.booking_conversion.findings.2">Clean, user-friendly booking flow enables direct reservations easily</span>
+              </div>
+              <div class="finding-item">
+                <svg class="finding-icon positive" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                <span data-editable-key="assessment.categories.booking_conversion.findings.3">Physical address visible (1234 Lakeshore Drive) helps with trip planning for Scenic Highway travellers</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="category-card">
+          <div class="category-header" onclick="this.parentElement.classList.toggle('open')">
+            <div class="category-icon social">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>
+            </div>
+            <div class="category-title-wrap">
+              <h3 class="category-title">Social Media & Content</h3>
+              <span class="category-grade grade-d">D</span>
+            </div>
+            <svg class="category-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="category-body">
+            <p class="category-summary" data-editable-key="assessment.categories.social_media.summary">Below recommended levels with only 522 total followers across all platforms, minimal posting activity (0.1x per week on Instagram), and zero paid advertising - a critical gap for a visually stunning wilderness resort that should be leveraging user-generated content and outdoor adventure travel trends</p>
+            <div class="category-metrics">
+              <div class="metric-item">
+                <div class="metric-label">Total Followers</div>
+                <div class="metric-value"><span class="metric-status critical"></span>522</div>
+              </div>
+              <div class="metric-item">
+                <div class="metric-label">Engagement Rate</div>
+                <div class="metric-value"><span class="metric-status good"></span>5.15%</div>
+              </div>
+              <div class="metric-item">
+                <div class="metric-label">Platforms Active</div>
+                <div class="metric-value"><span class="metric-status good"></span>3 platforms</div>
+              </div>
+              <div class="metric-item">
+                <div class="metric-label">Posting Frequency</div>
+                <div class="metric-value"><span class="metric-status critical"></span>0.1 posts/week</div>
+              </div>
+            </div>
+            <div class="category-findings">
+              <h4>Key Findings</h4>
+              <div class="finding-item">
+                <svg class="finding-icon positive" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                <span data-editable-key="assessment.categories.social_media.findings.0">5.15% Instagram engagement rate is excellent - above tourism industry average of 1-3% - shows content quality is strong</span>
+              </div>
+              <div class="finding-item">
+                <svg class="finding-icon positive" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                <span data-editable-key="assessment.categories.social_media.findings.1">Facebook Pixel properly installed enabling retargeting and conversion tracking once campaigns launched</span>
+              </div>
+              <div class="finding-item">
+                <svg class="finding-icon positive" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                <span data-editable-key="assessment.categories.social_media.findings.2">Multi-platform presence established (Instagram, Facebook, YouTube) - foundation exists, just needs activation</span>
+              </div>
+              <div class="finding-item">
+                <svg class="finding-icon positive" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                <span data-editable-key="assessment.categories.social_media.findings.3">Bio includes relevant hashtags and clear location identifiers helping discoverability</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="category-card">
+          <div class="category-header" onclick="this.parentElement.classList.toggle('open')">
+            <div class="category-icon experience">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            </div>
+            <div class="category-title-wrap">
+              <h3 class="category-title">Digital Guest Experience</h3>
+              <span class="category-grade grade-b">B</span>
+            </div>
+            <svg class="category-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="category-body">
+            <p class="category-summary" data-editable-key="assessment.categories.guest_experience.summary">Strong pre-arrival information with comprehensive directions, GPS coordinates, parking details, accessibility transparency, and downloadable arrival sheets. Only remaining gap is no visible operating hours/seasonal schedule</p>
+            <div class="category-metrics">
+              <div class="metric-item">
+                <div class="metric-label">Operating Hours Displayed</div>
+                <div class="metric-value"><span class="metric-status critical"></span>NO - Hours not visible on website</div>
+              </div>
+              <div class="metric-item">
+                <div class="metric-label">Directions/Maps Available</div>
+                <div class="metric-value"><span class="metric-status good"></span>YES - Comprehensive Location page with GPS, maps, and arrival info</div>
+              </div>
+              <div class="metric-item">
+                <div class="metric-label">Parking Information</div>
+                <div class="metric-value"><span class="metric-status good"></span>YES - Free parking for vehicles, trailers, quads, snowmobiles</div>
+              </div>
+              <div class="metric-item">
+                <div class="metric-label">Accessibility Information</div>
+                <div class="metric-value"><span class="metric-status good"></span>YES - Dedicated page with transparent limitations and accommodations</div>
+              </div>
+            </div>
+            <div class="category-findings">
+              <h4>Key Findings</h4>
+              <div class="finding-item">
+                <svg class="finding-icon positive" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                <span data-editable-key="assessment.categories.guest_experience.findings.0">Pricing information is visible reducing one friction point in decision-making</span>
+              </div>
+              <div class="finding-item">
+                <svg class="finding-icon positive" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                <span data-editable-key="assessment.categories.guest_experience.findings.1">Physical address displayed (1234 Lakeshore Drive) provides basic location reference</span>
+              </div>
+              <div class="finding-item">
+                <svg class="finding-icon positive" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                <span data-editable-key="assessment.categories.guest_experience.findings.2">Comprehensive Location page with GPS coordinates in multiple formats (decimal, DMS, Plus Code), Scenic Highway access details, and driveway condition warnings</span>
+              </div>
+              <div class="finding-item">
+                <svg class="finding-icon positive" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                <span data-editable-key="assessment.categories.guest_experience.findings.3">Free parking clearly stated for personal vehicles, trailers, quads, and snowmobiles - addresses needs of outdoor adventure guests</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="category-card">
+          <div class="category-header" onclick="this.parentElement.classList.toggle('open')">
+            <div class="category-icon local">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            </div>
+            <div class="category-title-wrap">
+              <h3 class="category-title">Local Visibility</h3>
+              <span class="category-grade grade-b">B</span>
+            </div>
+            <svg class="category-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="category-body">
+            <p class="category-summary" data-editable-key="assessment.categories.local_visibility.summary">Strong Google Business Profile presence with verified listing and NAP consistency, but missing critical Local Business Schema markup and limited backlink profile constrains local search dominance for &#039;Lakeside resort&#039; and regional tourism queries</p>
+            <div class="category-metrics">
+              <div class="metric-item">
+                <div class="metric-label">Google Business Profile Status</div>
+                <div class="metric-value"><span class="metric-status good"></span>Verified and active with complete business details</div>
+              </div>
+              <div class="metric-item">
+                <div class="metric-label">Local Business Schema</div>
+                <div class="metric-value"><span class="metric-status warning"></span>NO - Local Business Schema missing from website</div>
+              </div>
+              <div class="metric-item">
+                <div class="metric-label">NAP Consistency</div>
+                <div class="metric-value"><span class="metric-status good"></span>Consistent across Google Business Profile and website</div>
+              </div>
+              <div class="metric-item">
+                <div class="metric-label">Local Backlinks</div>
+                <div class="metric-value"><span class="metric-status warning"></span>77 backlinks from 51 domains including TravelRegion, tourism portal, Roadtrippers</div>
+              </div>
+            </div>
+            <div class="category-findings">
+              <h4>Key Findings</h4>
+              <div class="finding-item">
+                <svg class="finding-icon positive" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                <span data-editable-key="assessment.categories.local_visibility.findings.0">Google Business Profile fully verified with complete details including address, phone, website, business category (lodging, establishment)</span>
+              </div>
+              <div class="finding-item">
+                <svg class="finding-icon positive" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                <span data-editable-key="assessment.categories.local_visibility.findings.1">Listed in premium tourism directories: TravelRegion (official tourism site), Regional Tourism Board (Mountain Valley regional marketing)</span>
+              </div>
+              <div class="finding-item">
+                <svg class="finding-icon positive" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                <span data-editable-key="assessment.categories.local_visibility.findings.2">NAP consistency between Google Business Profile and website address strengthens local SEO signals</span>
+              </div>
+              <div class="finding-item">
+                <svg class="finding-icon positive" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                <span data-editable-key="assessment.categories.local_visibility.findings.3">Proper geo-targeting implementation helps visitors find the business from regional searches</span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -2363,7 +2888,7 @@
   <img id="lightbox-img" src="" alt="">
 </div>
 
-<script type="application/json" id="accelerator-data">{"slug":"andreas-resort","totalWeeks":12,"totalDays":90,"checks":{"all":["chk_ufgw6d","chk_iwcfe9","chk_h4fm6g","chk_mtz30d","chk_0itnz2","chk_v9z5bn","chk_fon2vi","chk_9dcuqw","chk_gqpumh","chk_2awi16","chk_hift62","chk_l9oowu","chk_9k5vv8","chk_bav8kl","chk_duris1","chk_dfrglv","chk_yxj4xx","chk_cvlzr8","chk_ttpjqu","chk_onueeu","chk_78juin","chk_h9xvqb","chk_buyhyb","chk_xz8jd0","chk_gnvc5y","chk_cvu7u2","chk_4os2y5","chk_udta4i","chk_kkmhgj","chk_knq63c","chk_98rr04","chk_pa9juj","chk_ihak5d"],"byWeek":{"1":["chk_ufgw6d","chk_iwcfe9","chk_h4fm6g","chk_mtz30d"],"2":["chk_0itnz2","chk_v9z5bn"],"3":["chk_fon2vi","chk_9dcuqw","chk_gqpumh"],"4":["chk_2awi16","chk_hift62","chk_l9oowu"],"5":["chk_9k5vv8","chk_bav8kl","chk_duris1"],"6":["chk_dfrglv","chk_yxj4xx","chk_cvlzr8"],"7":["chk_ttpjqu","chk_onueeu","chk_78juin"],"8":["chk_h9xvqb","chk_buyhyb"],"9":["chk_xz8jd0","chk_gnvc5y","chk_cvu7u2"],"10":["chk_4os2y5","chk_udta4i"],"11":["chk_kkmhgj","chk_knq63c","chk_98rr04"],"12":["chk_pa9juj","chk_ihak5d"]},"byPhase":{"1":["chk_ufgw6d","chk_iwcfe9","chk_h4fm6g","chk_mtz30d","chk_0itnz2","chk_v9z5bn","chk_fon2vi","chk_9dcuqw","chk_gqpumh","chk_2awi16","chk_hift62","chk_l9oowu"],"2":["chk_9k5vv8","chk_bav8kl","chk_duris1","chk_dfrglv","chk_yxj4xx","chk_cvlzr8","chk_ttpjqu","chk_onueeu","chk_78juin","chk_h9xvqb","chk_buyhyb"],"3":["chk_xz8jd0","chk_gnvc5y","chk_cvu7u2","chk_4os2y5","chk_udta4i","chk_kkmhgj","chk_knq63c","chk_98rr04","chk_pa9juj","chk_ihak5d"]},"byTactic":{"1":["chk_ufgw6d","chk_iwcfe9","chk_h4fm6g","chk_mtz30d","chk_0itnz2","chk_v9z5bn","chk_fon2vi","chk_9dcuqw","chk_gqpumh"],"2":["chk_fon2vi","chk_9dcuqw","chk_gqpumh","chk_2awi16","chk_hift62","chk_l9oowu","chk_9k5vv8","chk_bav8kl","chk_duris1"],"3":["chk_9k5vv8","chk_bav8kl","chk_duris1","chk_dfrglv","chk_yxj4xx","chk_cvlzr8","chk_ttpjqu","chk_onueeu","chk_78juin","chk_h9xvqb","chk_buyhyb","chk_xz8jd0","chk_gnvc5y","chk_cvu7u2","chk_4os2y5","chk_udta4i","chk_kkmhgj","chk_knq63c","chk_98rr04"],"4":["chk_ttpjqu","chk_onueeu","chk_78juin","chk_h9xvqb","chk_buyhyb","chk_xz8jd0","chk_gnvc5y","chk_cvu7u2","chk_4os2y5","chk_udta4i","chk_kkmhgj","chk_knq63c","chk_98rr04"]}},"weeks":{"1":{"id":"wk_ttofa1","title":"Profiles and Pattern","tactic":1,"timeNeeded":null,"who":null},"2":{"id":"wk_wc90vw","title":"A Month of Content","tactic":1,"timeNeeded":null,"who":null},"3":{"id":"wk_2lrnhl","title":"First Reels and Review Link","tactic":1,"timeNeeded":null,"who":null},"4":{"id":"wk_dtmxj4","title":"Review Requests Go Live","tactic":2,"timeNeeded":null,"who":null},"5":{"id":"wk_zkohrc","title":"Google Profile","tactic":3,"timeNeeded":null,"who":null},"6":{"id":"wk_mfu8sf","title":"Technical Basics","tactic":3,"timeNeeded":null,"who":null},"7":{"id":"wk_3t7ry6","title":"Listings and Book Now","tactic":3,"timeNeeded":null,"who":null},"8":{"id":"wk_avsrb8","title":"Booking Page","tactic":4,"timeNeeded":null,"who":null},"9":{"id":"wk_89b2uc","title":"Guest List","tactic":4,"timeNeeded":null,"who":null},"10":{"id":"wk_pgi1vu","title":"Pre-arrival Email","tactic":4,"timeNeeded":null,"who":null},"11":{"id":"wk_9avvdn","title":"Seasonal Email","tactic":4,"timeNeeded":null,"who":null},"12":{"id":"wk_ypo1fi","title":"Review and Plan Ahead","tactic":4,"timeNeeded":null,"who":null}},"tactics":[{"num":1,"id":"tac_epjtr3","name":"Social Media"},{"num":2,"id":"tac_yvx418","name":"Reviews"},{"num":3,"id":"tac_1e8c92","name":"Local Search"},{"num":4,"id":"tac_1ar79b","name":"Booking and Email"}],"phases":[{"num":1,"name":"Foundation","weeks":[1,2,3,4]},{"num":2,"name":"Growth","weeks":[5,6,7,8]},{"num":3,"name":"Scale","weeks":[9,10,11,12]}],"steps":{"stp_vucz24":1,"stp_osaub2":1,"stp_7clf9y":1,"stp_k6gy5q":1,"stp_7v8nsi":1,"stp_hky03f":1,"stp_abuzpq":2,"stp_6sh853":2,"stp_stx85v":2,"stp_1x7cm0":2,"stp_7zsjl9":3,"stp_1t63jy":3,"stp_nirjva":3,"stp_vns9eq":3,"stp_usobs9":3,"stp_nsxfk6":3,"stp_sgvdaa":3,"stp_9yv5z9":3,"stp_t68zdj":3,"stp_blf1ij":3,"stp_pywh56":4,"stp_zgdzxg":4,"stp_h87vst":4,"stp_hrs4ys":4,"stp_77peyg":4,"stp_wd1l3v":4},"headlines":[{"max":10,"headline":"Getting started","subcopy":"You're in the first phase of your accelerator. Keep checking items off your roadmap to move forward."},{"max":25,"headline":"Building momentum","subcopy":"You've made solid progress on the early weeks. Keep the pace going."},{"max":50,"headline":"Halfway there","subcopy":"You're closing in on the halfway mark. The work you've done so far is the base for everything that follows."},{"max":75,"headline":"The home stretch","subcopy":"Impressive progress. Most of the plan is behind you. Keep working through the remaining weeks."},{"max":99,"headline":"Almost there","subcopy":"Just a few more items to check off. Finish strong."},{"max":100,"headline":"You did it","subcopy":"Every week is complete. Take a moment to look back at how much you've put in place."}],"tour":[{"targetId":"sidebar","mobileTargetId":"nav-hamburger","page":"dashboard","title":"Navigate Your Plan","desc":"Use the sidebar to move between sections: tactics, your 90-day roadmap, and quick wins. Your progress is always visible at the top.","mobileDesc":"Tap the menu icon to move between sections: tactics, your 90-day roadmap, and quick wins.","pos":"right","pad":0,"mobilePos":"below"},{"targetId":"goal-section","page":"dashboard","title":"Your Progress Overview","desc":"This shows your overall completion and which phase of the 90-day plan you are in. The ring fills as you check off tasks.","pos":"below","pad":8},{"targetId":"objectives-section","mobileTargetId":"objectives-section","page":"dashboard","title":"Your Next Step","desc":"This card shows exactly what to focus on right now. It updates automatically as you complete tasks in the roadmap.","pos":"below","pad":8,"mobileScrollBlock":"start"},{"targetId":"tactic-cards-section","page":"dashboard","title":"Track Each Tactic","desc":"These pills show progress on each of your tactics. Click any to open the detailed guide and implementation steps.","pos":"below","pad":8,"mobileScrollBlock":"start"},{"targetId":"nav-roadmap","mobileTargetId":"roadmap-page-header","page":"dashboard","mobilePage":"roadmap","title":"Your Week-by-Week Action Plan","desc":"The 90-Day Roadmap is your primary tracker. Each week shows exactly what to do and how to confirm it's done.","pos":"right","pad":8,"mobilePos":"below"},{"targetId":"wc-1","page":"roadmap","weekToOpen":1,"title":"Check Off Tasks as You Go","desc":"Each week has a completion checklist on the right. Check off each item as you finish it. Your progress saves automatically.","pos":"below","pad":8},{"targetId":"w1-howto-example","page":"roadmap","weekToOpen":1,"title":"\"How To\" Links","desc":"Tap \"how to\" next to any action to jump straight to the step-by-step guide in the tactics section: exactly what to click, type, and verify.","pos":"below","pad":8},{"targetId":"w1-note-example","page":"roadmap","weekToOpen":1,"title":"Notes on Every Task","desc":"Tap the pencil icon on any checklist item to add a personal note: a reminder, a date, a decision. Notes save automatically and are here every time you return.","pos":"below","pad":8}]}</script>
+<script type="application/json" id="accelerator-data">{"slug":"andreas-resort","totalWeeks":12,"totalDays":90,"checks":{"all":["chk_ufgw6d","chk_iwcfe9","chk_h4fm6g","chk_mtz30d","chk_0itnz2","chk_v9z5bn","chk_fon2vi","chk_9dcuqw","chk_gqpumh","chk_2awi16","chk_hift62","chk_l9oowu","chk_9k5vv8","chk_bav8kl","chk_duris1","chk_dfrglv","chk_yxj4xx","chk_cvlzr8","chk_ttpjqu","chk_onueeu","chk_78juin","chk_h9xvqb","chk_buyhyb","chk_xz8jd0","chk_gnvc5y","chk_cvu7u2","chk_4os2y5","chk_udta4i","chk_kkmhgj","chk_knq63c","chk_98rr04","chk_pa9juj","chk_ihak5d"],"byWeek":{"1":["chk_ufgw6d","chk_iwcfe9","chk_h4fm6g","chk_mtz30d"],"2":["chk_0itnz2","chk_v9z5bn"],"3":["chk_fon2vi","chk_9dcuqw","chk_gqpumh"],"4":["chk_2awi16","chk_hift62","chk_l9oowu"],"5":["chk_9k5vv8","chk_bav8kl","chk_duris1"],"6":["chk_dfrglv","chk_yxj4xx","chk_cvlzr8"],"7":["chk_ttpjqu","chk_onueeu","chk_78juin"],"8":["chk_h9xvqb","chk_buyhyb"],"9":["chk_xz8jd0","chk_gnvc5y","chk_cvu7u2"],"10":["chk_4os2y5","chk_udta4i"],"11":["chk_kkmhgj","chk_knq63c","chk_98rr04"],"12":["chk_pa9juj","chk_ihak5d"]},"byPhase":{"1":["chk_ufgw6d","chk_iwcfe9","chk_h4fm6g","chk_mtz30d","chk_0itnz2","chk_v9z5bn","chk_fon2vi","chk_9dcuqw","chk_gqpumh","chk_2awi16","chk_hift62","chk_l9oowu"],"2":["chk_9k5vv8","chk_bav8kl","chk_duris1","chk_dfrglv","chk_yxj4xx","chk_cvlzr8","chk_ttpjqu","chk_onueeu","chk_78juin","chk_h9xvqb","chk_buyhyb"],"3":["chk_xz8jd0","chk_gnvc5y","chk_cvu7u2","chk_4os2y5","chk_udta4i","chk_kkmhgj","chk_knq63c","chk_98rr04","chk_pa9juj","chk_ihak5d"]},"byTactic":{"1":["chk_ufgw6d","chk_iwcfe9","chk_h4fm6g","chk_0itnz2","chk_v9z5bn","chk_fon2vi","chk_9dcuqw","chk_98rr04"],"2":["chk_mtz30d","chk_gqpumh","chk_2awi16","chk_hift62","chk_l9oowu"],"3":["chk_9k5vv8","chk_bav8kl","chk_duris1","chk_dfrglv","chk_yxj4xx","chk_cvlzr8","chk_ttpjqu","chk_onueeu","chk_buyhyb","chk_cvu7u2","chk_udta4i","chk_knq63c","chk_pa9juj","chk_ihak5d"],"4":["chk_78juin","chk_h9xvqb","chk_xz8jd0","chk_gnvc5y","chk_4os2y5","chk_kkmhgj"]}},"weeks":{"1":{"id":"wk_ttofa1","title":"Profiles and Pattern","tactic":1,"timeNeeded":null,"who":null},"2":{"id":"wk_wc90vw","title":"A Month of Content","tactic":1,"timeNeeded":null,"who":null},"3":{"id":"wk_2lrnhl","title":"First Reels and Review Link","tactic":1,"timeNeeded":null,"who":null},"4":{"id":"wk_dtmxj4","title":"Review Requests Go Live","tactic":2,"timeNeeded":null,"who":null},"5":{"id":"wk_zkohrc","title":"Google Profile","tactic":3,"timeNeeded":null,"who":null},"6":{"id":"wk_mfu8sf","title":"Technical Basics","tactic":3,"timeNeeded":null,"who":null},"7":{"id":"wk_3t7ry6","title":"Listings and Book Now","tactic":3,"timeNeeded":null,"who":null},"8":{"id":"wk_avsrb8","title":"Booking Page","tactic":4,"timeNeeded":null,"who":null},"9":{"id":"wk_89b2uc","title":"Guest List","tactic":4,"timeNeeded":null,"who":null},"10":{"id":"wk_pgi1vu","title":"Pre-arrival Email","tactic":4,"timeNeeded":null,"who":null},"11":{"id":"wk_9avvdn","title":"Seasonal Email","tactic":4,"timeNeeded":null,"who":null},"12":{"id":"wk_ypo1fi","title":"Review and Plan Ahead","tactic":4,"timeNeeded":null,"who":null}},"tactics":[{"num":1,"id":"tac_epjtr3","name":"Social Media"},{"num":2,"id":"tac_yvx418","name":"Reviews"},{"num":3,"id":"tac_1e8c92","name":"Local Search"},{"num":4,"id":"tac_1ar79b","name":"Booking and Email"}],"phases":[{"num":1,"name":"Foundation","weeks":[1,2,3,4]},{"num":2,"name":"Growth","weeks":[5,6,7,8]},{"num":3,"name":"Scale","weeks":[9,10,11,12]}],"steps":{"stp_vucz24":1,"stp_osaub2":1,"stp_7clf9y":1,"stp_k6gy5q":1,"stp_7v8nsi":1,"stp_hky03f":1,"stp_abuzpq":2,"stp_6sh853":2,"stp_stx85v":2,"stp_1x7cm0":2,"stp_7zsjl9":3,"stp_1t63jy":3,"stp_nirjva":3,"stp_vns9eq":3,"stp_usobs9":3,"stp_nsxfk6":3,"stp_sgvdaa":3,"stp_9yv5z9":3,"stp_t68zdj":3,"stp_blf1ij":3,"stp_pywh56":4,"stp_zgdzxg":4,"stp_h87vst":4,"stp_hrs4ys":4,"stp_77peyg":4,"stp_wd1l3v":4},"headlines":[{"max":10,"headline":"Getting started","subcopy":"You're in the first phase of your accelerator. Keep checking items off your roadmap to move forward."},{"max":25,"headline":"Building momentum","subcopy":"You've made solid progress on the early weeks. Keep the pace going."},{"max":50,"headline":"Halfway there","subcopy":"You're closing in on the halfway mark. The work you've done so far is the base for everything that follows."},{"max":75,"headline":"The home stretch","subcopy":"Impressive progress. Most of the plan is behind you. Keep working through the remaining weeks."},{"max":99,"headline":"Almost there","subcopy":"Just a few more items to check off. Finish strong."},{"max":100,"headline":"You did it","subcopy":"Every week is complete. Take a moment to look back at how much you've put in place."}],"tour":[{"targetId":"sidebar","mobileTargetId":"nav-hamburger","page":"dashboard","title":"Navigate Your Plan","desc":"Use the sidebar to move between sections: tactics, your 90-day roadmap, and quick wins. Your progress is always visible at the top.","mobileDesc":"Tap the menu icon to move between sections: tactics, your 90-day roadmap, and quick wins.","pos":"right","pad":0,"mobilePos":"below"},{"targetId":"goal-section","page":"dashboard","title":"Your Progress Overview","desc":"This shows your overall completion and which phase of the 90-day plan you are in. The ring fills as you check off tasks.","pos":"below","pad":8},{"targetId":"objectives-section","mobileTargetId":"objectives-section","page":"dashboard","title":"Your Next Step","desc":"This card shows exactly what to focus on right now. It updates automatically as you complete tasks in the roadmap.","pos":"below","pad":8,"mobileScrollBlock":"start"},{"targetId":"tactic-cards-section","page":"dashboard","title":"Track Each Tactic","desc":"These pills show progress on each of your tactics. Click any to open the detailed guide and implementation steps.","pos":"below","pad":8,"mobileScrollBlock":"start"},{"targetId":"nav-roadmap","mobileTargetId":"roadmap-page-header","page":"dashboard","mobilePage":"roadmap","title":"Your Week-by-Week Action Plan","desc":"The 90-Day Roadmap is your primary tracker. Each week shows exactly what to do and how to confirm it's done.","pos":"right","pad":8,"mobilePos":"below"},{"targetId":"wc-1","page":"roadmap","weekToOpen":1,"title":"Check Off Tasks as You Go","desc":"Each week has a completion checklist on the right. Check off each item as you finish it. Your progress saves automatically.","pos":"below","pad":8},{"targetId":"w1-howto-example","page":"roadmap","weekToOpen":1,"title":"\"How To\" Links","desc":"Tap \"how to\" next to any action to jump straight to the step-by-step guide in the tactics section: exactly what to click, type, and verify.","pos":"below","pad":8},{"targetId":"w1-note-example","page":"roadmap","weekToOpen":1,"title":"Notes on Every Task","desc":"Tap the pencil icon on any checklist item to add a personal note: a reminder, a date, a decision. Notes save automatically and are here every time you return.","pos":"below","pad":8}]}</script>
 <script src="/assets/v2/accelerator.js"></script>
 
 <!-- Shared scripts: login, progress, Edit Mode, analytics, sharing (unchanged from v1) -->

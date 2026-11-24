@@ -339,10 +339,10 @@ Month 3 Name: Scale
 - Reply to all 20 existing Google reviews → links to: GBP Quick Wins
 
 **Checklist:**
-- [ ] Both bios say where the resort is and link to the booking page
-- [ ] Four story highlights are live
-- [ ] The weekly pattern is written down and shared
-- [ ] Every existing Google review has a reply
+- [ ] Both bios say where the resort is and link to the booking page → tactic: 1
+- [ ] Four story highlights are live → tactic: 1
+- [ ] The weekly pattern is written down and shared → tactic: 1
+- [ ] Every existing Google review has a reply → tactic: 2
 
 ### Week 2: A Month of Content
 **Actions:**
@@ -350,8 +350,8 @@ Month 3 Name: Scale
 - Write 12 captions and schedule them → links to: Tactic 1 / Step 4
 
 **Checklist:**
-- [ ] Three folders hold at least four photos each
-- [ ] 12 posts are scheduled in Meta Business Suite
+- [ ] Three folders hold at least four photos each → tactic: 1
+- [ ] 12 posts are scheduled in Meta Business Suite → tactic: 1
 
 ### Week 3: First Reels and Review Link
 **Actions:**
@@ -360,9 +360,9 @@ Month 3 Name: Scale
 - Create the Google review link → links to: Tactic 2 / Step 1
 
 **Checklist:**
-- [ ] Two Reels are published
-- [ ] 50 local accounts are followed
-- [ ] The review link is saved where the whole team can find it
+- [ ] Two Reels are published → tactic: 1
+- [ ] 50 local accounts are followed → tactic: 1
+- [ ] The review link is saved where the whole team can find it → tactic: 2
 
 ### Week 4: Review Requests Go Live
 **Actions:**
@@ -382,9 +382,9 @@ Month 3 Name: Scale
 - Reply to new reviews within 24 hours → links to: Tactic 2 / Step 4
 
 **Checklist:**
-- [ ] Seasonal dates and check-in hours show on the profile
-- [ ] Ten new photos are live
-- [ ] The first Google Post is published
+- [ ] Seasonal dates and check-in hours show on the profile → tactic: 3
+- [ ] Ten new photos are live → tactic: 3
+- [ ] The first Google Post is published → tactic: 3
 
 ### Week 6: Technical Basics
 **Actions:**
@@ -393,9 +393,9 @@ Month 3 Name: Scale
 - Brief the web developer on structured data → links to: Tactic 3 / Step 4
 
 **Checklist:**
-- [ ] The baseline export is saved with a date in the file name
-- [ ] The homepage title is under 60 characters
-- [ ] The developer has confirmed a delivery date
+- [ ] The baseline export is saved with a date in the file name → tactic: 3
+- [ ] The homepage title is under 60 characters → tactic: 3
+- [ ] The developer has confirmed a delivery date → tactic: 3
 
 ### Week 7: Listings and Book Now
 **Actions:**
@@ -404,9 +404,9 @@ Month 3 Name: Scale
 - Brief the Book Now button → links to: Tactic 4 / Step 1
 
 **Checklist:**
-- [ ] Every existing listing is recorded with its name, address and phone number
-- [ ] Apple Maps, Bing Places, Tripadvisor and the tourism office listings are claimed
-- [ ] The Book Now button is scheduled with the developer
+- [ ] Every existing listing is recorded with its name, address and phone number → tactic: 3
+- [ ] Apple Maps, Bing Places, Tripadvisor and the tourism office listings are claimed → tactic: 3
+- [ ] The Book Now button is scheduled with the developer → tactic: 4
 
 ### Week 8: Booking Page
 **Actions:**
@@ -415,8 +415,8 @@ Month 3 Name: Scale
 - Keep posting three times a week
 
 **Checklist:**
-- [ ] Rates and the cancellation policy show on the booking page
-- [ ] Know Before You Go is published and in the main menu
+- [ ] Rates and the cancellation policy show on the booking page → tactic: 4
+- [ ] Know Before You Go is published and in the main menu → tactic: 3
 
 ### Week 9: Guest List
 **Actions:**
@@ -425,9 +425,9 @@ Month 3 Name: Scale
 - Publish the three-day itinerary → links to: Tactic 3 / Step 8
 
 **Checklist:**
-- [ ] The permission email has been sent
-- [ ] The footer sign-up form is live
-- [ ] The first local guide is published
+- [ ] The permission email has been sent → tactic: 4
+- [ ] The footer sign-up form is live → tactic: 4
+- [ ] The first local guide is published → tactic: 3
 
 ### Week 10: Pre-arrival Email
 **Actions:**
@@ -435,8 +435,8 @@ Month 3 Name: Scale
 - Check local ranking for your three key phrases → links to: Tactic 3 / Step 10
 
 **Checklist:**
-- [ ] The pre-arrival email sends automatically five days before arrival
-- [ ] This month's ranking positions are recorded
+- [ ] The pre-arrival email sends automatically five days before arrival → tactic: 4
+- [ ] This month's ranking positions are recorded → tactic: 3
 
 ### Week 11: Seasonal Email
 **Actions:**
@@ -445,9 +445,9 @@ Month 3 Name: Scale
 - Share two recent reviews on social
 
 **Checklist:**
-- [ ] The seasonal email has been sent to confirmed subscribers
-- [ ] The second local guide is published
-- [ ] Two reviews have been shared on social
+- [ ] The seasonal email has been sent to confirmed subscribers → tactic: 4
+- [ ] The second local guide is published → tactic: 3
+- [ ] Two reviews have been shared on social → tactic: 1
 
 ### Week 12: Review and Plan Ahead
 **Actions:**

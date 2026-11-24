@@ -20,7 +20,8 @@ const ROOT = path.join(__dirname, '..', '..');
 const TEMPLATE = fs.readFileSync(path.join(ROOT, 'template', 'v2', 'accelerator.html'), 'utf8');
 const CONTENT = JSON.parse(fs.readFileSync(path.join(ROOT, 'clients', 'andreas-resort', 'content.json'), 'utf8'));
 const assetUrl = id => `/${path.relative(ROOT, findAsset(ROOT, 'andreas-resort', id)).split(path.sep).join('/')}`;
-const render = (content = CONTENT) => renderDashboard(content, { template: TEMPLATE, assetUrl });
+const ASSESSMENT = JSON.parse(fs.readFileSync(path.join(ROOT, 'clients', 'andreas-resort', 'assessment.json'), 'utf8'));
+const render = (content = CONTENT, assessment = ASSESSMENT.assessment_data) => renderDashboard(content, { template: TEMPLATE, assetUrl, assessment });
 const copy = () => JSON.parse(JSON.stringify(CONTENT));
 
 let page;
@@ -77,7 +78,7 @@ describe('what the shared scripts need', () => {
   test('edit keys are item IDs and fields, never positions, and each appears once', () => {
     const keys = [...page.html.matchAll(/data-editable-key="([^"]+)"/g)].map(m => m[1]);
     expect(new Set(keys).size).toBe(keys.length);
-    keys.forEach(k => expect(k).toMatch(/^((tac|prt|stp|blt|wk|act|chk|qw|obj)_[a-z0-9]{6}\.[a-z_.0-9]+|strategy\.(goal|positioning)|quick_wins\.intro|roadmap\.closing)$/));
+    keys.forEach(k => expect(k).toMatch(/^((tac|prt|stp|blt|wk|act|chk|qw|obj)_[a-z0-9]{6}\.[a-z_.0-9]+|strategy\.(goal|positioning)|quick_wins\.intro|roadmap\.closing|assessment\.[a-z_.0-9]+)$/));
     expect(keys.some(k => /week-\d|t\d-bullet|tactic-\d/.test(k))).toBe(false);
   });
 
@@ -138,15 +139,13 @@ describe('computed, not typed', () => {
     });
   });
 
-  test('tactic progress counts the checklist items of weeks whose actions point into the tactic', () => {
+  test('tactic progress counts each checklist item once, towards its own tactic', () => {
     const { byTactic } = mapProgress(CONTENT);
-    const stepTactic = new Map(allSteps(CONTENT).map(s => [s.step.id, CONTENT.tactics.indexOf(s.tactic) + 1]));
+    const all = Object.values(byTactic).flat();
+    expect(all.sort()).toEqual(CONTENT.roadmap.weeks.flatMap(w => w.checklist.map(c => c.id)).sort());
     CONTENT.tactics.forEach((t, i) => {
-      const expected = CONTENT.roadmap.weeks
-        .filter(w => w.actions.some(a => stepTactic.get(a.how_to) === i + 1))
-        .flatMap(w => w.checklist.map(c => c.id));
-      expect(byTactic[i + 1]).toEqual(expected);
-      expect(expected.length).toBeGreaterThan(0);
+      expect(byTactic[i + 1]).toEqual(CONTENT.roadmap.weeks.flatMap(w => w.checklist.filter(c => c.tactic === t.id).map(c => c.id)));
+      expect(page.html).toContain(`id="tc${i + 1}-stat">0 of ${byTactic[i + 1].length} done`);
     });
   });
 
@@ -220,8 +219,14 @@ describe('missing means hidden', () => {
     expect(render(c).data.tour[0].desc).not.toContain('quick wins');
   });
 
-  test('there is no Assessment page and no projections, because content.json has neither', () => {
-    expect(page.html).not.toContain('page-assessment');
+  test('no assessment record: no Assessment page and no nav item', () => {
+    const html = render(CONTENT, null).html;
+    expect(html).not.toContain('page-assessment');
+    expect(html).not.toContain('data-page="assessment"');
+    expect(render(CONTENT, {}).html).not.toContain('page-assessment');
+  });
+
+  test('there are no projections, because content.json has none', () => {
     expect(page.html).not.toContain('projections');
   });
 });
@@ -278,6 +283,44 @@ describe('components', () => {
     const linked = imgs.filter(i => !i.includes('openLightbox'));
     expect(linked).toHaveLength(1); // the Meta Business Suite frame links to the site
     imgs.forEach(i => expect(i).toMatch(/alt="[^"]+"/));
+  });
+});
+
+describe('the Assessment page', () => {
+  const data = ASSESSMENT.assessment_data;
+
+  test('the sandbox assessment is a client_assessments record for Andrea\'s Resort', () => {
+    expect(ASSESSMENT).toMatchObject({ client_slug: 'andreas-resort', business_name: "Andrea's Resort", client_type: 'accelerator' });
+    expect(JSON.stringify(data)).not.toMatch(/Conner/);
+  });
+
+  test('is in the nav and on the page, after the Dashboard and before Strategy', () => {
+    const nav = page.html.indexOf('data-page="assessment"');
+    expect(nav).toBeGreaterThan(page.html.indexOf('data-page="dashboard"'));
+    expect(nav).toBeLessThan(page.html.indexOf('data-page="strategy"'));
+    expect(page.html).toContain('<section id="page-assessment" class="page">');
+  });
+
+  test('shows the overall grade, every category score, the summary, quick wins, priorities and category cards', () => {
+    expect(page.html).toContain(`<div class="grade-circle" id="overallGrade">${data.overall.grade}</div>`);
+    expect(page.html).toContain(`<span id="overallScore">${data.overall.score}</span>/100`);
+    expect(page.html).toContain('Assessment Date: October 15, 2026');
+    Object.values(data.categories).forEach(cat => expect(page.html).toContain(`<span class="grade-breakdown-number">${Math.round(cat.score)}</span>`));
+    expect((page.html.match(/class="grade-breakdown-item"/g) || []).length).toBe(6);
+    expect((page.html.match(/class="category-card"/g) || []).length).toBe(6);
+    expect((page.html.match(/class="quick-win-item"/g) || []).length).toBe(Math.min(6, data.quick_wins.length));
+    expect((page.html.match(/class="priority-item"/g) || []).length).toBe(Math.min(4, data.priority_recommendations.length));
+    data.executive_summary.key_strengths.forEach((s, i) => expect(page.html).toContain(`data-editable-key="assessment.executive_summary.key_strengths.${i}"`));
+  });
+
+  test('missing parts are hidden, not filled', () => {
+    const slim = { overall: { score: 60, grade: 'C' }, categories: { social_media: { score: 60, grade: 'C' } } };
+    const html = render(CONTENT, slim).html;
+    expect((html.match(/class="grade-breakdown-item"/g) || []).length).toBe(1);
+    expect(html).not.toContain('executive-summary');
+    expect(html).not.toContain('quick-wins-grid');
+    expect(html).not.toContain('priority-list');
+    expect(html).not.toContain('Assessment data will be populated');
   });
 });
 

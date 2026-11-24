@@ -56,6 +56,11 @@ function printRoadmap() {
   setTimeout(function () { window.print(); }, 100);
 }
 
+function downloadPDF() {
+  navigate('assessment');
+  setTimeout(function () { window.print(); }, 100);
+}
+
 // ── Mobile navigation ──────────────────────────────────────
 function openMobileDrawer() {
   document.getElementById('sidebar').classList.add('open');

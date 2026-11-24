@@ -1157,7 +1157,9 @@ Accelerator v2 replaces hand-edited client pages with one structured content fil
 | `template/v2/accelerator.html` | The v2 page layout and fixed labels |
 | `assets/v2/tokens.css` | Every colour, font, size, spacing, radius and shadow. `accelerator.css` may only use `var(--...)` |
 | `assets/v2/accelerator.css`, `accelerator.js`, `accelerator-after.js` | Shared by every v2 page, never copied into one |
+| `shared/accelerator-v2/CUTOVER.md` | Everything outside the v2 paths that must change before a real client moves to v2 |
 | `clients/andreas-resort/content.json` | The sandbox's content, the single source of truth for its v2 page |
+| `clients/andreas-resort/assessment.json` | The sandbox's assessment, in the shape of a `client_assessments` record. Real clients' come from Supabase |
 | `tests/v2/` | v2 tests, including a conversion of every real plan in memory |
 
 Never edit IDs in a `content.json` by hand. Re-run the converter instead: it keeps every existing ID.

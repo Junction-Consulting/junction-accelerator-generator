@@ -48,6 +48,10 @@ function printConversion(result) {
     console.log(`\nMatched by similarity (${result.matches.length}). Check these kept the right ID:`);
     for (const m of result.matches) console.log(`  ${m.kind} ${m.id} (${m.how}): "${m.previous}" -> "${m.text}"`);
   }
+  if (result.guessed && result.guessed.length) {
+    console.log(`\nTactic worked out from the week's "how to" links (${result.guessed.length}). Check these, or add "→ tactic: N" in the plan:`);
+    for (const g of result.guessed) console.log(`  Week ${g.week}: "${g.text}" -> Tactic ${g.tactic}`);
+  }
   if (result.removed.length) {
     console.log(`\nNo longer in the plan (${result.removed.length}):`);
     for (const r of result.removed) console.log(`  ${r.kind} ${r.id}: "${r.text}"${r.media ? ` (had ${r.media} media)` : ''}`);
@@ -66,7 +70,11 @@ export function buildPage(slug, content) {
     const file = findAsset(ROOT, slug, id);
     return file ? `/${path.relative(ROOT, file).split(path.sep).join('/')}` : '';
   };
-  const { html, problems } = renderDashboard(content, { template, assetUrl });
+  // The sandbox keeps its assessment in a file. In production it is the
+  // client's client_assessments record in Supabase.
+  const assessmentPath = path.join(ROOT, 'clients', slug, 'assessment.json');
+  const assessment = fs.existsSync(assessmentPath) ? JSON.parse(fs.readFileSync(assessmentPath, 'utf8')).assessment_data : null;
+  const { html, problems } = renderDashboard(content, { template, assetUrl, assessment });
   return { html, problems: [...problems, ...validateDashboardV2(html, content)] };
 }
 

@@ -263,9 +263,13 @@ export function convertPlan(planMd, options = {}) {
         }
         return withLegacy({ id: actionIds[i].id, text: a.text, how_to: howTo }, actionIds[i].old);
       }),
-      checklist: w.checklist.map((c, i) => withLegacy({ id: checkIds[i].id, text: c.text }, checkIds[i].old))
+      checklist: w.checklist.map((c, i) => withLegacy({ id: checkIds[i].id, text: c.text, tactic: null, tactic_source: null }, checkIds[i].old)),
+      _draft: w,
+      _oldChecks: checkIds.map(x => x.old)
     }, oldWeek);
   });
+  const guessed = assignChecklistTactics(weeks, tactics, stepsByTactic, add);
+  weeks.forEach(w => { delete w._draft; delete w._oldChecks; });
   exWeeks.filter(w => !usedWeeks.has(w.id)).forEach(w => removed.push({ kind: 'week', id: w.id, text: `Week ${w.number}: ${w.title}` }));
   reportUnused('action', actionPool);
   reportUnused('check', checkPool);
@@ -310,7 +314,66 @@ export function convertPlan(planMd, options = {}) {
     voice: clone(ex.voice) || { progress_headlines: [], tour: [] }
   };
 
-  return { ok: errors.length === 0, content, errors, warnings, matches, removed, counts: countContent(content) };
+  return { ok: errors.length === 0, content, errors, warnings, matches, removed, guessed, counts: countContent(content) };
+}
+
+/**
+ * Every checklist item counts towards exactly one tactic.
+ *   1. "→ tactic: N" in the plan sets it (source "plan"). A tactic that does
+ *      not exist is an error.
+ *   2. Otherwise an assignment already stored in content.json is kept, so a
+ *      coach's correction is never replaced by a guess.
+ *   3. Otherwise it is guessed with v1's rule (source "guess"): the tactic of
+ *      the action in the matching position, or else the week's main tactic
+ *      (the one most of its actions link to; a week with no links keeps the
+ *      previous week's, and before any link the tactic whose share of the
+ *      weeks it falls in).
+ * Returns the items whose tactic is a guess, for the coach to check.
+ */
+export function assignChecklistTactics(weeks, tactics, stepsByTactic, add) {
+  const stepTactic = new Map();
+  stepsByTactic.forEach((steps, ti) => steps.forEach(st => stepTactic.set(st.id, ti + 1)));
+  const tacticCount = tactics.length;
+  const totalWeeks = weeks.length;
+  const blockTactic = n => Math.min(tacticCount, Math.max(1, Math.ceil(n / (totalWeeks / tacticCount))));
+  const tacticIds = new Set(tactics.map(t => t.id));
+  const guessed = [];
+  let previous = null;
+  for (const week of weeks) {
+    const links = week.actions.map(a => stepTactic.get(a.how_to) || null);
+    const counts = {};
+    links.filter(Boolean).forEach(t => { counts[t] = (counts[t] || 0) + 1; });
+    const top = Object.entries(counts).sort((a, b) => b[1] - a[1] || a[0] - b[0])[0];
+    const primary = top ? Number(top[0]) : (previous || blockTactic(week.number));
+    if (top) previous = primary;
+    week.checklist.forEach((item, i) => {
+      const draft = week._draft.checklist[i];
+      const old = week._oldChecks[i];
+      if (draft._tacticMarker) {
+        const tactic = tactics[draft._tacticMarker - 1];
+        if (!tactic) {
+          add({ severity: 'error', line: draft._line, source: 'converter', message: `"→ tactic: ${draft._tacticMarker}" points at Tactic ${draft._tacticMarker}, which does not exist.`, fix: `Use a tactic number from 1 to ${tacticCount}.` });
+          return;
+        }
+        item.tactic = tactic.id;
+        item.tactic_source = 'plan';
+        return;
+      }
+      if (old && old.tactic && tacticIds.has(old.tactic)) {
+        item.tactic = old.tactic;
+        item.tactic_source = old.tactic_source || 'plan';
+      } else {
+        const actionIndex = links.length ? Math.min(links.length - 1, Math.floor(i * links.length / week.checklist.length)) : -1;
+        const n = (actionIndex >= 0 && links[actionIndex]) || primary;
+        item.tactic = tactics[n - 1].id;
+        item.tactic_source = 'guess';
+      }
+      if (item.tactic_source === 'guess') {
+        guessed.push({ id: item.id, week: week.number, text: item.text, tactic: tactics.findIndex(t => t.id === item.tactic) + 1, line: draft._line });
+      }
+    });
+  }
+  return guessed;
 }
 
 /** Item counts, for reports and for the "nothing lost" tests. */

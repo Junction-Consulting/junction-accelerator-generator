@@ -187,14 +187,19 @@ Hand-coded HTML mockups (the booking bar, the booking page, the emails) are not 
     { "id": "act_v4w5x6", "text": "Reply to all 20 existing Google reviews", "how_to": "quick_wins" }
   ],
   "checklist": [
-    { "id": "chk_y7z8a9", "text": "Both bios say where the resort is and link to the booking page" }
+    { "id": "chk_y7z8a9", "text": "Both bios say where the resort is and link to the booking page",
+      "tactic": "tac_g7h8i9", "tactic_source": "plan" }
   ]
 }
 ```
 
 - `how_to` is a step ID, `quick_wins` or empty. It is checked at build time, and it survives steps being added, removed or reordered.
 - `next_step` is optional. If it is missing, the Next Step card shows the action and tactic only.
-- Tactic progress is counted from the checklist items of weeks whose actions point into that tactic.
+- Each checklist item counts towards exactly one tactic: `tactic` is that tactic's ID, and tactic progress counts the items that name it.
+  - `tactic_source` is `plan` when the plan says so with `→ tactic: N` at the end of the item, and `guess` when the converter worked it out.
+  - With no marker, the converter uses v1's rule: the tactic of the action in the matching position in the week, otherwise the week's main tactic (the one most of its actions link to; a week with no links keeps the previous linked week's).
+  - Once stored, an assignment is kept on re-conversion unless the plan's marker changes, so a coach's correction is never replaced by a guess.
+  - Guessed assignments are listed in the upload report (and as a warning) so the coach can check them. A marker that names a tactic that does not exist blocks publishing.
 
 ### Quick Wins
 
@@ -213,6 +218,14 @@ Hand-coded HTML mockups (the booking bar, the booking page, the emails) are not 
 ### Voice (optional)
 
 `progress_headlines` (one per progress tier) and `tour` (one description per tour stop). If missing, the neutral program wording from the template is used. This is the only place a template default is allowed, because the wording is about the program, not the client.
+
+## Assessment
+
+The Assessment page is not part of `content.json`. It is built from the client's assessment: the `assessment_data` of its row in the Supabase `client_assessments` table, which the assessment generator writes. In production the generator reads that row at build time; if there is none, the page and its nav item are left out.
+
+The Andrea's Resort sandbox has no Supabase row, so it keeps a copy in `clients/andreas-resort/assessment.json`, in the same shape as a `client_assessments` record. That file exists for the sandbox only.
+
+Assessment items have no IDs. Their edit keys are their path in `assessment_data`, for example `assessment.executive_summary.key_strengths.0`.
 
 ## Saved state
 
@@ -263,6 +276,7 @@ Coaches keep writing and uploading `plan.md` in the format in `PLAN_FORMAT.md`. 
 | A Markdown table under a step | `body` table (v1 drops these) |
 | `[CONFIRM: ...]` anywhere | kept inline, as `[CONFIRM: text]`, shown as a light highlight |
 | `→ links to: Tactic 2 / Step 5` | `how_to` with that step's ID |
+| `→ tactic: 2` at the end of a checklist item | that item's `tactic` (the tactic's ID), with `tactic_source: "plan"`. The marker is removed from the text. Not yet in `PLAN_FORMAT.md` (see `CUTOVER.md`) |
 | `## Objectives` | `objectives[]`, with the pill parsed into `tactic` and `weeks` |
 | `## GBP Quick Wins` | `quick_wins`: text above the first group is `intro`, a heading with paragraphs and no bullets ("One Thing Worth Watching") is `note` |
 
@@ -299,3 +313,4 @@ This needs changes to login and access (`shared/auth.js`, the access rules in Su
   - Another client's name or website blocks. Shared wording is a warning.
   - Asset IDs are media IDs for now (open decision 2, for Conner).
   - Planned, not built: draft and published plan status.
+- 2026-11-24 (Stage 2 follow-ups): Checklist items count towards exactly one tactic (`tactic`, `tactic_source`, the `→ tactic: N` marker). The Assessment page comes from the client's `client_assessments` record. `CUTOVER.md` lists what must change outside v2 before a real client moves.

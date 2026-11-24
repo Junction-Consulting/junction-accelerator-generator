@@ -246,6 +246,62 @@ describe('roadmap', () => {
   });
 });
 
+describe('checklist tactics', () => {
+  const tacticOf = (content, week, i) => content.tactics.findIndex(t => t.id === content.roadmap.weeks[week - 1].checklist[i].tactic) + 1;
+
+  test('"→ tactic: N" sets the tactic and is removed from the text', () => {
+    const { content } = convert();
+    const item = content.roadmap.weeks[0].checklist[3];
+    expect(item).toMatchObject({ text: 'Every existing Google review has a reply', tactic: content.tactics[1].id, tactic_source: 'plan' });
+    expect(JSON.stringify(content)).not.toMatch(/→ tactic/);
+    expect([1, 2, 3].map(n => tacticOf(content, 11, n - 1))).toEqual([4, 3, 1]);
+  });
+
+  test('every checklist item counts towards exactly one tactic', () => {
+    const { content } = convert();
+    content.roadmap.weeks.forEach(w => w.checklist.forEach(c => expect(content.tactics.some(t => t.id === c.tactic)).toBe(true)));
+  });
+
+  test('without a marker, the tactic is guessed with the v1 rule and reported', () => {
+    const result = convert();
+    // Week 4: actions link Tactic 2, Tactic 2, nothing, so all three items fall to Tactic 2
+    expect([0, 1, 2].map(i => tacticOf(result.content, 4, i))).toEqual([2, 2, 2]);
+    // Week 12 has no links: it keeps the previous linked week's main tactic (Week 11: a tie of 3 and 4, the lower wins)
+    expect([0, 1].map(i => tacticOf(result.content, 12, i))).toEqual([3, 3]);
+    expect(result.guessed.map(g => [g.week, g.tactic])).toEqual([[4, 2], [4, 2], [4, 2], [12, 3], [12, 3]]);
+    expect(result.content.roadmap.weeks[3].checklist.every(c => c.tactic_source === 'guess')).toBe(true);
+  });
+
+  test('a tactic that does not exist is a blocking error', () => {
+    const result = convert(PLAN.replace('- [ ] Two Reels are published → tactic: 1', '- [ ] Two Reels are published → tactic: 7'));
+    expect(result.ok).toBe(false);
+    expect(result.errors.map(e => e.message)).toContain('"→ tactic: 7" points at Tactic 7, which does not exist.');
+  });
+
+  test('a marker that is not a number is a blocking error', () => {
+    const result = convert(PLAN.replace('- [ ] Two Reels are published → tactic: 1', '- [ ] Two Reels are published → tactic: social'));
+    expect(result.errors.map(e => e.message)).toContain('"→ tactic: social" is not a tactic number.');
+  });
+
+  test('a stored assignment is kept on re-conversion unless the marker changes', () => {
+    const first = convert().content;
+    // A coach corrects a guessed item in content.json
+    const corrected = JSON.parse(JSON.stringify(first));
+    const qr = corrected.roadmap.weeks[3].checklist[2];
+    qr.tactic = corrected.tactics[0].id;
+    qr.tactic_source = 'plan';
+    const again = convertPlan(PLAN, { slug: 'andreas-resort', existing: corrected, random: seededRandom(99) });
+    expect(again.content.roadmap.weeks[3].checklist[2]).toMatchObject({ tactic: corrected.tactics[0].id, tactic_source: 'plan' });
+    expect(again.guessed.map(g => g.text)).not.toContain('The three best posts of the month are noted');
+    // A guess already stored stays as it is, and stays on the list to check
+    expect(again.guessed.map(g => g.text)).toContain('A QR card is in every cabin');
+    // A changed marker wins over the stored assignment
+    const remarked = PLAN.replace('- [ ] The weekly pattern is written down and shared → tactic: 1', '- [ ] The weekly pattern is written down and shared → tactic: 3');
+    const third = convertPlan(remarked, { slug: 'andreas-resort', existing: again.content, random: seededRandom(99) });
+    expect(tacticOf(third.content, 1, 2)).toBe(3);
+  });
+});
+
 describe('re-running keeps IDs', () => {
   let first;
   beforeAll(() => { first = convert(); });
@@ -343,7 +399,11 @@ describe('plan.json', () => {
     const { content } = convert(PLAN, { client: { coach_email: 'coach@example.com' } });
     const v2 = generatePlanJsonV2(content);
     const v1 = generatePlanJson("Andrea's Resort", 'andreas-resort', 'coach@example.com', parsePlanMd(PLAN));
-    v1.weeks.forEach(w => { w.actions = w.actions.map(a => a.replace(/\s*→ links to:.*$/, '')); });
+    // v1 shows both notes as text: the "how to" link on actions and the tactic marker on checklist items
+    v1.weeks.forEach(w => {
+      w.actions = w.actions.map(a => a.replace(/\s*→ links to:.*$/, ''));
+      w.checklist = w.checklist.map(c => c.replace(/\s*→ tactic:.*$/, ''));
+    });
     expect(v2).toEqual(v1);
   });
 });

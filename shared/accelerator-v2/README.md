@@ -41,6 +41,8 @@ Build the dashboard from `content.json` (add `--save` to write `index.html`):
 
     node shared/accelerator-v2/cli.mjs build andreas-resort
 
+Before a real client moves to v2, see `CUTOVER.md`.
+
 ## Interpretations of SCHEMA.md
 
 Where the schema left a choice open, the code does this:

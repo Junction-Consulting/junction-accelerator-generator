@@ -1510,19 +1510,27 @@
         "checklist": [
           {
             "id": "chk_ufgw6d",
-            "text": "Both bios say where the resort is and link to the booking page"
+            "text": "Both bios say where the resort is and link to the booking page",
+            "tactic": "tac_epjtr3",
+            "tactic_source": "plan"
           },
           {
             "id": "chk_iwcfe9",
-            "text": "Four story highlights are live"
+            "text": "Four story highlights are live",
+            "tactic": "tac_epjtr3",
+            "tactic_source": "plan"
           },
           {
             "id": "chk_h4fm6g",
-            "text": "The weekly pattern is written down and shared"
+            "text": "The weekly pattern is written down and shared",
+            "tactic": "tac_epjtr3",
+            "tactic_source": "plan"
           },
           {
             "id": "chk_mtz30d",
-            "text": "Every existing Google review has a reply"
+            "text": "Every existing Google review has a reply",
+            "tactic": "tac_yvx418",
+            "tactic_source": "plan"
           }
         ]
       },
@@ -1546,11 +1554,15 @@
         "checklist": [
           {
             "id": "chk_0itnz2",
-            "text": "Three folders hold at least four photos each"
+            "text": "Three folders hold at least four photos each",
+            "tactic": "tac_epjtr3",
+            "tactic_source": "plan"
           },
           {
             "id": "chk_v9z5bn",
-            "text": "12 posts are scheduled in Meta Business Suite"
+            "text": "12 posts are scheduled in Meta Business Suite",
+            "tactic": "tac_epjtr3",
+            "tactic_source": "plan"
           }
         ]
       },
@@ -1579,15 +1591,21 @@
         "checklist": [
           {
             "id": "chk_fon2vi",
-            "text": "Two Reels are published"
+            "text": "Two Reels are published",
+            "tactic": "tac_epjtr3",
+            "tactic_source": "plan"
           },
           {
             "id": "chk_9dcuqw",
-            "text": "50 local accounts are followed"
+            "text": "50 local accounts are followed",
+            "tactic": "tac_epjtr3",
+            "tactic_source": "plan"
           },
           {
             "id": "chk_gqpumh",
-            "text": "The review link is saved where the whole team can find it"
+            "text": "The review link is saved where the whole team can find it",
+            "tactic": "tac_yvx418",
+            "tactic_source": "plan"
           }
         ]
       },
@@ -1616,15 +1634,21 @@
         "checklist": [
           {
             "id": "chk_2awi16",
-            "text": "The review request sends automatically three days after checkout"
+            "text": "The review request sends automatically three days after checkout",
+            "tactic": "tac_yvx418",
+            "tactic_source": "guess"
           },
           {
             "id": "chk_hift62",
-            "text": "A QR card is in every cabin"
+            "text": "A QR card is in every cabin",
+            "tactic": "tac_yvx418",
+            "tactic_source": "guess"
           },
           {
             "id": "chk_l9oowu",
-            "text": "The three best posts of the month are noted"
+            "text": "The three best posts of the month are noted",
+            "tactic": "tac_yvx418",
+            "tactic_source": "guess"
           }
         ]
       },
@@ -1653,15 +1677,21 @@
         "checklist": [
           {
             "id": "chk_9k5vv8",
-            "text": "Seasonal dates and check-in hours show on the profile"
+            "text": "Seasonal dates and check-in hours show on the profile",
+            "tactic": "tac_1e8c92",
+            "tactic_source": "plan"
           },
           {
             "id": "chk_bav8kl",
-            "text": "Ten new photos are live"
+            "text": "Ten new photos are live",
+            "tactic": "tac_1e8c92",
+            "tactic_source": "plan"
           },
           {
             "id": "chk_duris1",
-            "text": "The first Google Post is published"
+            "text": "The first Google Post is published",
+            "tactic": "tac_1e8c92",
+            "tactic_source": "plan"
           }
         ]
       },
@@ -1690,15 +1720,21 @@
         "checklist": [
           {
             "id": "chk_dfrglv",
-            "text": "The baseline export is saved with a date in the file name"
+            "text": "The baseline export is saved with a date in the file name",
+            "tactic": "tac_1e8c92",
+            "tactic_source": "plan"
           },
           {
             "id": "chk_yxj4xx",
-            "text": "The homepage title is under 60 characters"
+            "text": "The homepage title is under 60 characters",
+            "tactic": "tac_1e8c92",
+            "tactic_source": "plan"
           },
           {
             "id": "chk_cvlzr8",
-            "text": "The developer has confirmed a delivery date"
+            "text": "The developer has confirmed a delivery date",
+            "tactic": "tac_1e8c92",
+            "tactic_source": "plan"
           }
         ]
       },
@@ -1727,15 +1763,21 @@
         "checklist": [
           {
             "id": "chk_ttpjqu",
-            "text": "Every existing listing is recorded with its name, address and phone number"
+            "text": "Every existing listing is recorded with its name, address and phone number",
+            "tactic": "tac_1e8c92",
+            "tactic_source": "plan"
           },
           {
             "id": "chk_onueeu",
-            "text": "Apple Maps, Bing Places, Tripadvisor and the tourism office listings are claimed"
+            "text": "Apple Maps, Bing Places, Tripadvisor and the tourism office listings are claimed",
+            "tactic": "tac_1e8c92",
+            "tactic_source": "plan"
           },
           {
             "id": "chk_78juin",
-            "text": "The Book Now button is scheduled with the developer"
+            "text": "The Book Now button is scheduled with the developer",
+            "tactic": "tac_1ar79b",
+            "tactic_source": "plan"
           }
         ]
       },
@@ -1764,11 +1806,15 @@
         "checklist": [
           {
             "id": "chk_h9xvqb",
-            "text": "Rates and the cancellation policy show on the booking page"
+            "text": "Rates and the cancellation policy show on the booking page",
+            "tactic": "tac_1ar79b",
+            "tactic_source": "plan"
           },
           {
             "id": "chk_buyhyb",
-            "text": "Know Before You Go is published and in the main menu"
+            "text": "Know Before You Go is published and in the main menu",
+            "tactic": "tac_1e8c92",
+            "tactic_source": "plan"
           }
         ]
       },
@@ -1797,15 +1843,21 @@
         "checklist": [
           {
             "id": "chk_xz8jd0",
-            "text": "The permission email has been sent"
+            "text": "The permission email has been sent",
+            "tactic": "tac_1ar79b",
+            "tactic_source": "plan"
           },
           {
             "id": "chk_gnvc5y",
-            "text": "The footer sign-up form is live"
+            "text": "The footer sign-up form is live",
+            "tactic": "tac_1ar79b",
+            "tactic_source": "plan"
           },
           {
             "id": "chk_cvu7u2",
-            "text": "The first local guide is published"
+            "text": "The first local guide is published",
+            "tactic": "tac_1e8c92",
+            "tactic_source": "plan"
           }
         ]
       },
@@ -1829,11 +1881,15 @@
         "checklist": [
           {
             "id": "chk_4os2y5",
-            "text": "The pre-arrival email sends automatically five days before arrival"
+            "text": "The pre-arrival email sends automatically five days before arrival",
+            "tactic": "tac_1ar79b",
+            "tactic_source": "plan"
           },
           {
             "id": "chk_udta4i",
-            "text": "This month's ranking positions are recorded"
+            "text": "This month's ranking positions are recorded",
+            "tactic": "tac_1e8c92",
+            "tactic_source": "plan"
           }
         ]
       },
@@ -1862,15 +1918,21 @@
         "checklist": [
           {
             "id": "chk_kkmhgj",
-            "text": "The seasonal email has been sent to confirmed subscribers"
+            "text": "The seasonal email has been sent to confirmed subscribers",
+            "tactic": "tac_1ar79b",
+            "tactic_source": "plan"
           },
           {
             "id": "chk_knq63c",
-            "text": "The second local guide is published"
+            "text": "The second local guide is published",
+            "tactic": "tac_1e8c92",
+            "tactic_source": "plan"
           },
           {
             "id": "chk_98rr04",
-            "text": "Two reviews have been shared on social"
+            "text": "Two reviews have been shared on social",
+            "tactic": "tac_epjtr3",
+            "tactic_source": "plan"
           }
         ]
       },
@@ -1899,11 +1961,15 @@
         "checklist": [
           {
             "id": "chk_pa9juj",
-            "text": "The 90-day numbers are recorded beside the baseline"
+            "text": "The 90-day numbers are recorded beside the baseline",
+            "tactic": "tac_1e8c92",
+            "tactic_source": "guess"
           },
           {
             "id": "chk_ihak5d",
-            "text": "A monthly routine is written down and on the calendar"
+            "text": "A monthly routine is written down and on the calendar",
+            "tactic": "tac_1e8c92",
+            "tactic_source": "guess"
           }
         ]
       }

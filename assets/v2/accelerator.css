@@ -5743,3 +5743,4 @@ div.tactic-reel{cursor:default}
 .wm-step-icon--roadmap{background:var(--mint-500-a20);color:var(--color-5cb87a)}
 .wm-step-icon--progress{background:var(--navy-900-a7);color:var(--navy-900)}
 .dash-next-week-bar-fill{width:0}
+.priority-intro{color:var(--color-666666);font-size:var(--text-14);margin:var(--space-n16) 0 var(--space-24) 0}
