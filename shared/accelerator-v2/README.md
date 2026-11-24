@@ -41,7 +41,7 @@ Build the dashboard from `content.json` (add `--save` to write `index.html`):
 
     node shared/accelerator-v2/cli.mjs build andreas-resort
 
-Before a real client moves to v2, see `CUTOVER.md`.
+Before a real client moves to v2, see `CUTOVER.md`. The brand rules the v2 design follows are in `BRAND.md`.
 
 ## Interpretations of SCHEMA.md
 

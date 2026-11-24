@@ -182,7 +182,7 @@ describe('a v2 dashboard built from the neutral plan', () => {
   });
 
   test('links and images point only at the plan, its own media, the program assets and shared libraries', () => {
-    const allowed = /^(#|data:|mailto:|\/shared\/|\/assets\/v2\/[\w.-]+$|\/clients\/zzq-client\/assets\/|https:\/\/example\.com\/zzq-|https:\/\/cdn\.jsdelivr\.net\/)/;
+    const allowed = /^(#|data:|mailto:|\/shared\/|\/assets\/v2\/[\w.-]+$|\/clients\/zzq-client\/assets\/|https:\/\/example\.com\/zzq-|https:\/\/cdn\.jsdelivr\.net\/|https:\/\/fonts\.(googleapis|gstatic)\.com(\/|$))/;
     const urls = [...page.html.matchAll(/\b(?:src|href)="([^"]+)"/g)].map(m => m[1]);
     expect(urls.length).toBeGreaterThan(0);
     expect([...new Set(urls.filter(url => !allowed.test(url)))]).toEqual([]);

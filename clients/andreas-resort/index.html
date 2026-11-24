@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>90-Day Accelerator: Andrea&#039;s Resort</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,400..700;1,9..40,400..700&family=Epilogue:wght@600;900&family=Fraunces:ital,opsz,wght@1,9..144,900&display=swap">
 <link rel="stylesheet" href="/assets/v2/tokens.css">
 <link rel="stylesheet" href="/assets/v2/accelerator.css">
 </head>
@@ -14,7 +17,7 @@
 <!-- ── Sidebar ──────────────────────────────────────────────── -->
 <aside id="sidebar">
   <div class="sidebar-logo">
-    <img id="sidebar-logo-img" src="/assets/v2/elearningu-logo-white.png" alt="eLearningU">
+    <img id="sidebar-logo-img" src="/assets/v2/junction-wordmark-reversed.png" alt="Junction">
   </div>
   <div class="sidebar-progress-wrap">
     <div class="sidebar-ring-wrap">
@@ -94,7 +97,7 @@
 
 <!-- ── Mobile header ────────────────────────────────────────── -->
 <header class="mobile-header">
-  <img id="mobile-logo-img" src="/assets/v2/elearningu-logo-white.png" alt="eLearningU">
+  <img id="mobile-logo-img" src="/assets/v2/junction-wordmark-reversed.png" alt="Junction">
   <div class="user-menu-container" id="mobileUserMenu"></div>
   <button class="hamburger" id="nav-hamburger" onclick="toggleMobileDrawer()" aria-label="Menu">
     <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"/></svg>
@@ -115,8 +118,8 @@
     <div class="dash-progress-hero" id="goal-section">
       <div class="dash-ring-large-wrap">
         <svg class="dash-ring-large" width="200" height="200" viewBox="0 0 200 200">
-          <circle cx="100" cy="100" r="85" fill="none" stroke="var(--surface-sunken)" stroke-width="17"></circle>
-          <circle id="dash-ring" class="dash-ring-bar" cx="100" cy="100" r="85" fill="none" stroke="var(--mint-500)" stroke-width="17" stroke-linecap="round" stroke-dasharray="534.1" stroke-dashoffset="534.1"></circle>
+          <circle cx="100" cy="100" r="85" fill="none" stroke="var(--color-surface-sunken)" stroke-width="17"></circle>
+          <circle id="dash-ring" class="dash-ring-bar" cx="100" cy="100" r="85" fill="none" stroke="var(--color-brand)" stroke-width="17" stroke-linecap="round" stroke-dasharray="534.1" stroke-dashoffset="534.1"></circle>
         </svg>
         <div class="dash-ring-large-text">
           <div class="dash-ring-pct" id="dash-pct">0%</div>
@@ -182,7 +185,7 @@
     <div class="dash-tactics-grid tactic-grid" id="tactic-cards-section" data-columns="4">
       <div class="dash-tactic-pill" onclick="navigate('tactic1')">
         <svg class="dash-tactic-ring" width="44" height="44" viewBox="0 0 44 44">
-          <circle cx="22" cy="22" r="18" fill="none" stroke="var(--surface-sunken)" stroke-width="5"></circle>
+          <circle cx="22" cy="22" r="18" fill="none" stroke="var(--color-surface-sunken)" stroke-width="5"></circle>
           <circle id="tactic1-ring" class="dash-tactic-ring-bar" cx="22" cy="22" r="18" fill="none" stroke="var(--tactic-ring-1)" stroke-width="5" stroke-linecap="round" stroke-dasharray="113.1" stroke-dashoffset="113.1"></circle>
         </svg>
         <div class="dash-tactic-info">
@@ -192,7 +195,7 @@
       </div>
       <div class="dash-tactic-pill" onclick="navigate('tactic2')">
         <svg class="dash-tactic-ring" width="44" height="44" viewBox="0 0 44 44">
-          <circle cx="22" cy="22" r="18" fill="none" stroke="var(--surface-sunken)" stroke-width="5"></circle>
+          <circle cx="22" cy="22" r="18" fill="none" stroke="var(--color-surface-sunken)" stroke-width="5"></circle>
           <circle id="tactic2-ring" class="dash-tactic-ring-bar" cx="22" cy="22" r="18" fill="none" stroke="var(--tactic-ring-2)" stroke-width="5" stroke-linecap="round" stroke-dasharray="113.1" stroke-dashoffset="113.1"></circle>
         </svg>
         <div class="dash-tactic-info">
@@ -202,7 +205,7 @@
       </div>
       <div class="dash-tactic-pill" onclick="navigate('tactic3')">
         <svg class="dash-tactic-ring" width="44" height="44" viewBox="0 0 44 44">
-          <circle cx="22" cy="22" r="18" fill="none" stroke="var(--surface-sunken)" stroke-width="5"></circle>
+          <circle cx="22" cy="22" r="18" fill="none" stroke="var(--color-surface-sunken)" stroke-width="5"></circle>
           <circle id="tactic3-ring" class="dash-tactic-ring-bar" cx="22" cy="22" r="18" fill="none" stroke="var(--tactic-ring-3)" stroke-width="5" stroke-linecap="round" stroke-dasharray="113.1" stroke-dashoffset="113.1"></circle>
         </svg>
         <div class="dash-tactic-info">
@@ -212,7 +215,7 @@
       </div>
       <div class="dash-tactic-pill" onclick="navigate('tactic4')">
         <svg class="dash-tactic-ring" width="44" height="44" viewBox="0 0 44 44">
-          <circle cx="22" cy="22" r="18" fill="none" stroke="var(--surface-sunken)" stroke-width="5"></circle>
+          <circle cx="22" cy="22" r="18" fill="none" stroke="var(--color-surface-sunken)" stroke-width="5"></circle>
           <circle id="tactic4-ring" class="dash-tactic-ring-bar" cx="22" cy="22" r="18" fill="none" stroke="var(--tactic-ring-4)" stroke-width="5" stroke-linecap="round" stroke-dasharray="113.1" stroke-dashoffset="113.1"></circle>
         </svg>
         <div class="dash-tactic-info">
@@ -1961,7 +1964,7 @@
 
     <div class="print-only">
       <div class="print-cover">
-        <div class="print-cover-logo">e<span>Learning</span>U</div>
+        <div class="print-cover-logo"><img src="/assets/v2/junction-wordmark.png" alt="Junction"></div>
         <div class="print-cover-badge">Tourism Digital Marketing Accelerator</div>
         <h1 class="print-cover-title">90-Day Roadmap</h1>
         <p class="print-cover-client">Andrea&#039;s Resort</p>
@@ -1971,14 +1974,14 @@
           <strong>Program Duration:</strong> 12 Weeks
         </p>
         <div class="print-cover-footer">
-          <p>Prepared by eLearningU Accelerator Program</p>
+          <p>Prepared by Junction Accelerator Program</p>
         </div>
       </div>
 
       <div class="print-overview">
         <div class="print-section">
           <h2>About This Document</h2>
-          <p>This roadmap was created as part of the eLearningU Tourism Digital Marketing Accelerator program. It is a customised 90-day action plan designed specifically for Andrea&#039;s Resort based on a comprehensive digital assessment and strategy session with your coach.</p>
+          <p>This roadmap was created as part of the Junction Tourism Digital Marketing Accelerator program. It is a customised 90-day action plan designed specifically for Andrea&#039;s Resort based on a comprehensive digital assessment and strategy session with your coach.</p>
           <p>The plan is structured as 12 weekly sprints across three phases: Foundation (Weeks 1-4), Growth (Weeks 5-8), and Scale (Weeks 9-12).</p>
         </div>
         <div class="print-section">
@@ -2697,7 +2700,7 @@
     
 
     <div class="print-only print-footer">
-      <div class="print-footer-brand">e<span>Learning</span>U</div>
+      <div class="print-footer-brand"><img src="/assets/v2/junction-wordmark.png" alt="Junction"></div>
       <div class="print-footer-contact">
         <strong>Questions?</strong> Contact your coach at conner@elearningu.com
       </div>
@@ -2792,8 +2795,8 @@
     <div class="wm-header">
       <div class="wm-header-glow-a"></div>
       <div class="wm-header-glow-b"></div>
-      <img class="wm-logo-img" src="/assets/v2/elearningu-logo-white.png" alt="eLearningU">
-      <div class="wm-eyebrow">eLearningU · Accelerator Program</div>
+      <img class="wm-logo-img" src="/assets/v2/junction-wordmark-reversed.png" alt="Junction">
+      <div class="wm-eyebrow">Junction · Accelerator Program</div>
       <div class="wm-headline">Welcome to your<br>Implementation Plan.</div>
       <p class="wm-subline">You already deliver a five-star stay. This plan is about making sure the people planning their next trip can see that before they book somewhere else.</p>
     </div>
