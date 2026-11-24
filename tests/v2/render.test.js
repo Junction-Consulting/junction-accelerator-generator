@@ -139,6 +139,9 @@ describe('computed, not typed', () => {
     expect(page.html).toContain(`<span id="sidebar-total">${total}</span>`);
     expect(page.html).toContain(`<div class="wm-step-lbl">${CONTENT.tactics.length} Tactics</div>`);
     expect(page.html).toContain(`id="tactic-cards-section" data-columns="${CONTENT.tactics.length}"`);
+    // Every tactic card grid uses the shared rule, sized by the number of tactics
+    expect(page.html).toContain(`<div class="dash-tactics-grid tactic-grid" id="tactic-cards-section" data-columns="${CONTENT.tactics.length}">`);
+    expect(page.html).toContain(`<div class="tactics-overview-grid tactic-grid" data-columns="${CONTENT.tactics.length}">`);
     expect(page.html).toContain(`style="--columns:${CONTENT.phases.length}"`);
     expect((page.html.match(/class="nav-item" data-page="tactic\d"/g) || []).length).toBe(CONTENT.tactics.length);
     expect((page.html.match(/<section id="page-tactic\d"/g) || []).length).toBe(CONTENT.tactics.length);
@@ -187,6 +190,7 @@ describe('computed, not typed', () => {
     expect(html).not.toContain('page-tactic4');
     expect(html).toContain('<div class="wm-step-lbl">3 Tactics</div>');
     expect(html).toContain('id="tactic-cards-section" data-columns="3"');
+    expect(html).toContain('<div class="tactics-overview-grid tactic-grid" data-columns="3">');
     expect(validateDashboardV2(html, c)).toEqual([]);
   });
 });

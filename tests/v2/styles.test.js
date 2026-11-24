@@ -65,7 +65,7 @@ test('no stylesheet or script is copied into a page', () => {
   expect(inline).toEqual([' type="application/json" id="accelerator-data"']);
 });
 
-test('the dashboard tactic cards make an even grid: one row when there is room, never one card alone on a row', () => {
+test('the dashboard and Strategy page tactic cards make an even grid: one row when there is room, never one card alone on a row', () => {
   // Four cards: 1, 2 or 4 columns. Three cards: 1 or 3 columns.
   const rules = [...CSS.matchAll(/@container \(min-width: (\d+)px\)\{([\s\S]*?)\n\}/g)].map(m => [Number(m[1]), m[2]]);
   const columnsAt = (count, width) => {
@@ -77,7 +77,7 @@ test('the dashboard tactic cards make an even grid: one row when there is room, 
     });
     return columns;
   };
-  expect(CSS).toMatch(/\.dash-v2\{container-type:inline-size\}/);
+  expect(CSS).toMatch(/\.dash-v2,\.tactics-overview\{container-type:inline-size\}/);
   for (let width = 300; width <= 1600; width += 20) {
     expect([1, 2, 4]).toContain(columnsAt(4, width));
     expect([1, 3]).toContain(columnsAt(3, width));

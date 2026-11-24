@@ -239,7 +239,6 @@ export function renderDashboard(content, options = {}) {
     GOAL: goal,
     POSITIONING: positioning,
     OBJECTIVES: objectives.map((o, i) => C.objectiveCard(o, i + 1, tacticNumber.get(o.tactic))).join('\n        '),
-    TACTIC_OVERVIEW_COLUMNS: String(Math.min(tactics.length, 3)),
     TACTIC_OVERVIEW_CARDS: tactics.map((t, i) => C.tacticOverviewCard(t, i + 1)).join('\n        '),
     TACTIC_PAGES: tactics.map((t, i) => C.tacticPage(t, i + 1, assetUrl)).join('\n\n'),
     PRINT_COHORT_START: client.cohort_start ? `<strong>Cohort Start:</strong> ${formatDate(client.cohort_start)}<br>\n          ` : '',
