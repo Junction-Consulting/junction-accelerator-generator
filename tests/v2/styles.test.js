@@ -18,6 +18,7 @@ function declarations(css) {
   return css
     .replace(/\/\*[\s\S]*?\*\//g, '')
     .replace(/@media[^{]*\{/g, '{')
+    .replace(/@container[^{]*\{/g, '{')
     .replace(/@keyframes[^{]*\{/g, '{')
     .match(/[\w-]+\s*:[^;{}]+/g)
     .map(d => d.trim())
@@ -62,4 +63,27 @@ test('no stylesheet or script is copied into a page', () => {
   expect(TEMPLATE).not.toMatch(/<style[\s>]/);
   const inline = [...TEMPLATE.matchAll(/<script(?![^>]*\bsrc=)([^>]*)>/g)].map(m => m[1]);
   expect(inline).toEqual([' type="application/json" id="accelerator-data"']);
+});
+
+test('the dashboard and Strategy page tactic cards make an even grid: one row when there is room, never one card alone on a row', () => {
+  // Four cards: 1, 2 or 4 columns. Three cards: 1 or 3 columns.
+  const rules = [...CSS.matchAll(/@container \(min-width: (\d+)px\)\{([\s\S]*?)\n\}/g)].map(m => [Number(m[1]), m[2]]);
+  const columnsAt = (count, width) => {
+    let columns = 1;
+    rules.filter(([min]) => width >= min).forEach(([, body]) => {
+      for (const m of body.matchAll(/([^{}]+)\{grid-template-columns:repeat\((\d+),1fr\)\}/g)) {
+        if (m[1].includes(`[data-columns="${count}"]`)) columns = Number(m[2]);
+      }
+    });
+    return columns;
+  };
+  expect(CSS).toMatch(/\.dash-v2,\.tactics-overview\{container-type:inline-size\}/);
+  for (let width = 300; width <= 1600; width += 20) {
+    expect([1, 2, 4]).toContain(columnsAt(4, width));
+    expect([1, 3]).toContain(columnsAt(3, width));
+  }
+  expect(columnsAt(4, 1100)).toBe(4);
+  expect(columnsAt(4, 600)).toBe(2);
+  expect(columnsAt(3, 1100)).toBe(3);
+  expect(columnsAt(4, 400)).toBe(1);
 });

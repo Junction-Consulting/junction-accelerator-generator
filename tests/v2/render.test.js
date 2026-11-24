@@ -106,6 +106,20 @@ describe('what the shared scripts need', () => {
     }
   });
 
+  test('the tour calls the tactic cards cards, not pills', () => {
+    const stop = page.data.tour.find(s => s.targetId === 'tactic-cards-section');
+    expect(stop.desc).toMatch(/^These cards show progress/);
+    expect(stop.mobileDesc).toMatch(/^These cards show progress/);
+    expect(JSON.stringify(page.data.tour)).not.toMatch(/\bpills?\b/i);
+  });
+
+  test('tall tour stops have a tighter target on small screens', () => {
+    const ids = new Set([...page.html.matchAll(/\sid="([^"]+)"/g)].map(m => m[1]));
+    expect(page.data.tour.find(s => s.targetId === 'objectives-section').mobileTargetId).toBe('next-step-main');
+    expect(page.data.tour.find(s => s.targetId === 'wc-1').mobileTargetId).toBe('w1-checklist');
+    expect(ids.has('next-step-main') && ids.has('w1-checklist')).toBe(true);
+  });
+
   test('Quick Wins ticks and notes stay in this browser for now (no data-key), keyed by quick win ID', () => {
     CONTENT.quick_wins.groups.flatMap(g => g.items).forEach(q => {
       expect(page.html).toContain(`<input type="checkbox" class="check-input" id="${q.id}" onchange="onCheck(this)">`);
@@ -124,7 +138,10 @@ describe('computed, not typed', () => {
     expect(page.data.checks.all).toHaveLength(total);
     expect(page.html).toContain(`<span id="sidebar-total">${total}</span>`);
     expect(page.html).toContain(`<div class="wm-step-lbl">${CONTENT.tactics.length} Tactics</div>`);
-    expect(page.html).toContain(`style="--columns:${CONTENT.tactics.length}"`);
+    expect(page.html).toContain(`id="tactic-cards-section" data-columns="${CONTENT.tactics.length}"`);
+    // Every tactic card grid uses the shared rule, sized by the number of tactics
+    expect(page.html).toContain(`<div class="dash-tactics-grid tactic-grid" id="tactic-cards-section" data-columns="${CONTENT.tactics.length}">`);
+    expect(page.html).toContain(`<div class="tactics-overview-grid tactic-grid" data-columns="${CONTENT.tactics.length}">`);
     expect(page.html).toContain(`style="--columns:${CONTENT.phases.length}"`);
     expect((page.html.match(/class="nav-item" data-page="tactic\d"/g) || []).length).toBe(CONTENT.tactics.length);
     expect((page.html.match(/<section id="page-tactic\d"/g) || []).length).toBe(CONTENT.tactics.length);
@@ -172,7 +189,8 @@ describe('computed, not typed', () => {
     const html = render(c).html;
     expect(html).not.toContain('page-tactic4');
     expect(html).toContain('<div class="wm-step-lbl">3 Tactics</div>');
-    expect(html).toContain('style="--columns:3"');
+    expect(html).toContain('id="tactic-cards-section" data-columns="3"');
+    expect(html).toContain('<div class="tactics-overview-grid tactic-grid" data-columns="3">');
     expect(validateDashboardV2(html, c)).toEqual([]);
   });
 });

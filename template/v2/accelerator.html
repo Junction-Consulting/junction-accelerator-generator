@@ -112,7 +112,7 @@
     </div>
 
     <div class="dash-next-step" id="objectives-section">
-      <div class="dash-next-main">
+      <div class="dash-next-main" id="next-step-main">
         <div class="dash-next-eyebrow" id="dash-next-eyebrow">{{NEXT_EYEBROW}}</div>
         <h2 class="dash-next-title" id="dash-next-title">{{NEXT_TITLE}}</h2>
         <div class="dash-next-tasks" id="dash-next-tasks">{{NEXT_TASKS}}</div>
@@ -146,7 +146,7 @@
       </div>
     </div>
 
-    <div class="dash-tactics-grid" id="tactic-cards-section" style="--columns:{{TACTIC_COUNT}}">
+    <div class="dash-tactics-grid tactic-grid" id="tactic-cards-section" data-columns="{{TACTIC_COUNT}}">
       {{TACTIC_PILLS}}
     </div>
   </div>
@@ -184,7 +184,7 @@
 
     <div class="tactics-overview">
       <div class="tactics-overview-label">Your Tactics</div>
-      <div class="tactics-overview-grid" style="--columns:{{TACTIC_OVERVIEW_COLUMNS}}">
+      <div class="tactics-overview-grid tactic-grid" data-columns="{{TACTIC_COUNT}}">
         {{TACTIC_OVERVIEW_CARDS}}
       </div>
     </div>

@@ -464,70 +464,134 @@ function nextTourStep() { goToTourStep(tourStep + 1); }
 function prevTourStep() { goToTourStep(Math.max(0, tourStep - 1)); }
 function advanceTour() { if (tourActive) nextTourStep(); }
 
+// The tour places a spotlight around each target and a tooltip beside it.
+// Measurements are taken only after any scrolling has finished, so the
+// spotlight and the tooltip match where the target really is.
+const TOUR_MARGIN = 16; // space kept between the target and the viewport edge
+const TOUR_GAP = 16;    // space between the target and the tooltip
+
+function isFixedOnScreen(el) {
+  for (let n = el; n && n !== document.body; n = n.parentElement) {
+    const position = getComputedStyle(n).position;
+    if (position === 'fixed' || position === 'sticky') return true;
+  }
+  return false;
+}
+
+function scrollParentOf(el) {
+  for (let n = el.parentElement; n && n !== document.body && n !== document.documentElement; n = n.parentElement) {
+    const overflow = getComputedStyle(n).overflowY;
+    if ((overflow === 'auto' || overflow === 'scroll') && n.scrollHeight > n.clientHeight) return n;
+  }
+  return document.scrollingElement || document.documentElement;
+}
+
+// Scroll (instantly) so the target is in view with room for the tooltip
+// below it when that is where the tooltip goes. A target and tooltip that
+// fit together are centred; a taller target is shown from its top.
+function bringIntoView(el, roomBelow) {
+  if (isFixedOnScreen(el)) return;
+  const scroller = scrollParentOf(el);
+  const isPage = scroller === document.scrollingElement || scroller === document.documentElement;
+  const viewTop = isPage ? 0 : scroller.getBoundingClientRect().top;
+  const viewHeight = isPage ? window.innerHeight : scroller.clientHeight;
+  const rect = el.getBoundingClientRect();
+  const top = rect.top - viewTop;
+  const block = rect.height + roomBelow;
+  if (top >= TOUR_MARGIN && top + block <= viewHeight - TOUR_MARGIN) return;
+  const delta = block + TOUR_MARGIN * 2 <= viewHeight ? top - (viewHeight - block) / 2 : top - TOUR_MARGIN;
+  if (isPage) window.scrollBy({ top: delta, behavior: 'auto' });
+  else scroller.scrollBy({ top: delta, behavior: 'auto' });
+}
+
+// The tooltip is hidden (display: none) between stops, so it is measured
+// while laid out but invisible.
+function tooltipSize() {
+  const tt = document.getElementById('tour-tooltip-box');
+  const shown = tt.classList.contains('active');
+  if (!shown) { tt.style.visibility = 'hidden'; tt.style.display = 'block'; }
+  const size = { width: tt.offsetWidth, height: tt.offsetHeight };
+  if (!shown) { tt.style.display = ''; tt.style.visibility = ''; }
+  return size;
+}
+
+// On small screens the tooltip is a sheet fixed along the lower edge of the screen
+// (see .tour-tooltip-box in accelerator.css), so the target must sit above it.
+// The page gets extra room at its end while the tour runs, so targets at the
+// very bottom of a page can still be scrolled clear of the sheet.
+function tooltipIsSheet() {
+  return getComputedStyle(document.getElementById('tour-tooltip-box')).bottom !== 'auto' && window.innerWidth <= 768;
+}
+
+function sheetSpace() {
+  const tt = document.getElementById('tour-tooltip-box');
+  return tooltipSize().height + parseFloat(getComputedStyle(tt).bottom || '0') + TOUR_GAP;
+}
+
+// Extra room at the end of whatever scrolls, so a target at the bottom of
+// a page can still be scrolled up far enough for the tooltip to fit below it.
+// Added on top of the element's own padding, and removed when the tour ends.
+let tourRoomHost = null;
+function reserveRoom(el, px) {
+  const scroller = scrollParentOf(el);
+  const host = (scroller === document.scrollingElement || scroller === document.documentElement) ? document.body : scroller;
+  if (tourRoomHost && tourRoomHost !== host) releaseRoom();
+  if (!tourRoomHost) {
+    host.style.paddingBottom = '';
+    host.dataset.tourPadding = getComputedStyle(host).paddingBottom;
+    tourRoomHost = host;
+  }
+  host.style.paddingBottom = (parseFloat(host.dataset.tourPadding) + px) + 'px';
+}
+function releaseRoom() {
+  if (!tourRoomHost) return;
+  tourRoomHost.style.paddingBottom = '';
+  delete tourRoomHost.dataset.tourPadding;
+  tourRoomHost = null;
+}
+
+function tourRoomBelow(el, target) {
+  const room = tooltipIsSheet() ? sheetSpace() : (target.pos === 'below' ? tooltipSize().height + TOUR_GAP : 0);
+  if (room && !isFixedOnScreen(el)) reserveRoom(el, room + TOUR_MARGIN);
+  return room;
+}
+
+const afterLayout = fn => requestAnimationFrame(() => requestAnimationFrame(fn));
+
+function tourTarget(step) {
+  const isMob = window.innerWidth <= 768;
+  return {
+    isMob,
+    id: (isMob && step.mobileTargetId) ? step.mobileTargetId : step.targetId,
+    page: (isMob && step.mobilePage) ? step.mobilePage : step.page,
+    pos: (isMob && step.mobilePos) ? step.mobilePos : step.pos,
+    desc: (isMob && step.mobileDesc) ? step.mobileDesc : step.desc
+  };
+}
+
 function goToTourStep(n) {
   if (n >= TOUR_STEPS.length) { endTour(); return; }
   tourStep = n;
   const step = TOUR_STEPS[n];
-  const isMob = window.innerWidth <= 768;
-  const targetId = (isMob && step.mobileTargetId) ? step.mobileTargetId : step.targetId;
-  const page = (isMob && step.mobilePage) ? step.mobilePage : step.page;
-  if (page) navigate(page);
+  const target = tourTarget(step);
+  if (target.page) navigate(target.page);
   if (step.weekToOpen !== undefined) {
     const wc = document.getElementById('wc-' + step.weekToOpen);
     if (wc && !wc.classList.contains('open')) wc.classList.add('open');
   }
+  // Wait for the page switch and any opening week card, then scroll and place
   setTimeout(function () {
-    const el = document.getElementById(targetId);
+    if (tourStep !== n) return;
+    const el = document.getElementById(target.id);
     if (!el) { endTour(); return; }
-    if (isMob) {
-      if (targetId !== 'nav-hamburger') {
-        const elTop = el.getBoundingClientRect().top + window.scrollY;
-        window.scrollTo({ top: Math.max(0, elTop - 80), behavior: 'auto' });
-      }
-      setTimeout(function () { positionTour(el, step, n, targetId, isMob); }, 260);
-    } else {
-      el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-      setTimeout(function () { positionTour(el, step, n, targetId, isMob); }, 80);
-    }
-  }, page === 'roadmap' ? 200 : 80);
+    document.getElementById('tour-tooltip-box').classList.remove('active');
+    fillTourTooltip(step, n, target.desc);
+    bringIntoView(el, tourRoomBelow(el, target));
+    afterLayout(function () { if (tourStep === n) positionTour(el, step, n, target.id, target.isMob); });
+  }, target.page === 'roadmap' ? 200 : 80);
 }
 
-function positionTour(el, step, n, usedId, isMob) {
-  const rect = el.getBoundingClientRect();
-  const pad = step.pad || 8;
-  const vw = window.innerWidth;
-  const vh = window.innerHeight;
-  const pos = (isMob && step.mobilePos) ? step.mobilePos : step.pos;
-  const desc = (isMob && step.mobileDesc) ? step.mobileDesc : step.desc;
-
-  const spTop = Math.max(0, rect.top - pad);
-  const spLeft = Math.max(0, rect.left - pad);
-  const sp = document.getElementById('tour-spotlight-box');
-  sp.style.top = spTop + 'px';
-  sp.style.left = spLeft + 'px';
-  sp.style.width = Math.min(rect.width + pad * 2, vw - spLeft) + 'px';
-  sp.style.height = Math.min(rect.height + pad * 2, vh - spTop) + 'px';
-  sp.classList.toggle('tour-spotlight-box--edge', usedId === 'sidebar');
-
-  const tt = document.getElementById('tour-tooltip-box');
-  tt.classList.remove('active');
-  const ttW = 290;
-  const ttH = 190;
-  const gap = 16;
-  let left;
-  let top;
-  if (pos === 'right') {
-    left = rect.right + gap;
-    top = rect.top + rect.height / 2 - ttH / 2;
-    if (left + ttW > vw - 12) left = rect.left - ttW - gap;
-  } else {
-    left = rect.left + rect.width / 2 - ttW / 2;
-    top = rect.bottom + gap;
-    if (top + ttH > vh - 12) top = rect.top - ttH - gap;
-  }
-  tt.style.left = Math.max(12, Math.min(vw - ttW - 12, left)) + 'px';
-  tt.style.top = Math.max(12, Math.min(vh - ttH - 12, top)) + 'px';
-
+function fillTourTooltip(step, n, desc) {
   document.getElementById('tt-step-label').textContent = 'Step ' + (n + 1) + ' of ' + TOUR_STEPS.length;
   document.getElementById('tt-title').textContent = step.title;
   document.getElementById('tt-desc').textContent = desc;
@@ -541,10 +605,79 @@ function positionTour(el, step, n, usedId, isMob) {
   const isLast = n === TOUR_STEPS.length - 1;
   nextBtn.textContent = isLast ? '✓  All done' : 'Next →';
   nextBtn.className = 'tour-btn ' + (isLast ? 'finish' : 'next');
+}
+
+const overlapArea = (a, b) => Math.max(0, Math.min(a.right, b.right) - Math.max(a.left, b.left)) * Math.max(0, Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top));
+
+// The tooltip goes on the first side (preferred side first) where it fits
+// on screen without covering the spotlight. If no side fits, the side that
+// covers the least is used.
+function placeTooltip(spot, pos, width, height, vw, vh) {
+  const order = pos === 'right' ? ['right', 'below', 'above', 'left'] : ['below', 'above', 'right', 'left'];
+  const clampX = x => Math.max(TOUR_MARGIN, Math.min(vw - width - TOUR_MARGIN, x));
+  const clampY = y => Math.max(TOUR_MARGIN, Math.min(vh - height - TOUR_MARGIN, y));
+  const centreX = spot.left + spot.width / 2 - width / 2;
+  const centreY = spot.top + spot.height / 2 - height / 2;
+  const raw = {
+    below: { left: centreX, top: spot.bottom + TOUR_GAP },
+    above: { left: centreX, top: spot.top - TOUR_GAP - height },
+    right: { left: spot.right + TOUR_GAP, top: centreY },
+    left: { left: spot.left - TOUR_GAP - width, top: centreY }
+  };
+  let best = null;
+  for (const side of order) {
+    const fits = raw[side].left >= TOUR_MARGIN && raw[side].top >= TOUR_MARGIN && raw[side].left + width <= vw - TOUR_MARGIN && raw[side].top + height <= vh - TOUR_MARGIN;
+    const box = { left: clampX(raw[side].left), top: clampY(raw[side].top) };
+    box.right = box.left + width;
+    box.bottom = box.top + height;
+    const covered = overlapArea(box, spot);
+    if (fits && covered === 0) return box;
+    if (!best || covered < best.covered) best = { ...box, covered };
+  }
+  return best;
+}
+
+function positionTour(el, step, n, usedId, isMob) {
+  const rect = el.getBoundingClientRect();
+  const pad = step.pad === undefined ? 8 : step.pad;
+  const vw = window.innerWidth;
+  const vh = window.innerHeight;
+  const target = tourTarget(step);
+
+  // Spotlight: the target plus padding, kept on screen
+  const spot = { left: Math.max(0, rect.left - pad), top: Math.max(0, rect.top - pad), right: Math.min(vw, rect.right + pad), bottom: Math.min(vh, rect.bottom + pad) };
+  spot.width = spot.right - spot.left;
+  spot.height = spot.bottom - spot.top;
+  const sp = document.getElementById('tour-spotlight-box');
+  sp.style.top = spot.top + 'px';
+  sp.style.left = spot.left + 'px';
+  sp.style.width = spot.width + 'px';
+  sp.style.height = spot.height + 'px';
+  sp.classList.toggle('tour-spotlight-box--edge', usedId === 'sidebar');
+
+  const tt = document.getElementById('tour-tooltip-box');
+  tt.classList.remove('active');
+  fillTourTooltip(step, n, target.desc);
+  if (!tooltipIsSheet()) {
+    const size = tooltipSize();
+    const box = placeTooltip(spot, target.pos, size.width, size.height, vw, vh);
+    tt.style.left = box.left + 'px';
+    tt.style.top = box.top + 'px';
+  }
   requestAnimationFrame(() => tt.classList.add('active'));
 }
 
+// Keep the spotlight and tooltip on their target when the window changes size
+window.addEventListener('resize', function () {
+  if (!tourActive || tourStep < 0) return;
+  const step = TOUR_STEPS[tourStep];
+  const target = tourTarget(step);
+  const el = document.getElementById(target.id);
+  if (el) afterLayout(() => positionTour(el, step, tourStep, target.id, target.isMob));
+});
+
 function endTour() {
+  releaseRoom();
   tourActive = false;
   tourStep = -1;
   document.getElementById('tour-backdrop').classList.remove('active');
