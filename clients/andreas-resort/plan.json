@@ -1,104 +1,195 @@
 {
   "client_name": "Andrea's Resort",
   "client_slug": "andreas-resort",
-  "goal": "This is Andrea's design sandbox. Use this dashboard to experiment with layout changes, colour adjustments, component improvements, and new features. Any changes made here stay isolated until Conner approves them for the main template.",
+  "goal": "Andrea's Resort is a lakeside cabin property with a perfect 5.0 Google rating, a working online booking system and 37 strong photos on its website. What it does not have is visibility. There are only 20 reviews, 522 followers across Instagram and Facebook, and one social post every ten weeks.\n\nOver the next 90 days the goal is to increase direct bookings by 50% and grow the social following past 1,000, by posting consistently, building a steady flow of new reviews, and making the resort easy to find in local search.",
   "coach_email": "conner@elearningu.com",
   "weeks": [
     {
       "week": 1,
       "month": 1,
-      "title": "Week 1: Colour Audit",
-      "actions": ["Review current colour palette", "Test contrast ratios", "Propose colour adjustments"],
-      "checklist": ["Colour audit complete", "Contrast issues documented", "New palette proposed", "Palette approved"],
-      "deep_link": "https://accelerator.elearningu.com/clients/andreas-resort/#week-1"
+      "title": "Week 1: Profiles and Pattern",
+      "actions": [
+        "Rewrite the Instagram and Facebook bios and add the booking link",
+        "Decide the weekly posting pattern",
+        "Reply to all 20 existing Google reviews"
+      ],
+      "checklist": [
+        "Both bios say where the resort is and link to the booking page",
+        "Four story highlights are live",
+        "The weekly pattern is written down and shared",
+        "Every existing Google review has a reply"
+      ],
+      "deep_link": "https://accelerator.elearningu.com/andreas-resort/#week-1"
     },
     {
       "week": 2,
       "month": 1,
-      "title": "Week 2: Typography Review",
-      "actions": ["Audit font sizes and weights", "Check line heights", "Test on mobile"],
-      "checklist": ["Typography audit complete", "Font scale documented", "Mobile typography tested", "Changes proposed"],
-      "deep_link": "https://accelerator.elearningu.com/clients/andreas-resort/#week-2"
+      "title": "Week 2: A Month of Content",
+      "actions": [
+        "Sort the website photos into three folders",
+        "Write 12 captions and schedule them"
+      ],
+      "checklist": [
+        "Three folders hold at least four photos each",
+        "12 posts are scheduled in Meta Business Suite"
+      ],
+      "deep_link": "https://accelerator.elearningu.com/andreas-resort/#week-2"
     },
     {
       "week": 3,
       "month": 1,
-      "title": "Week 3: Spacing Standards",
-      "actions": ["Document current spacing", "Create spacing scale", "Apply to components"],
-      "checklist": ["Spacing audit complete", "Spacing scale created", "Components updated", "Consistency verified"],
-      "deep_link": "https://accelerator.elearningu.com/clients/andreas-resort/#week-3"
+      "title": "Week 3: First Reels and Review Link",
+      "actions": [
+        "Publish the first two Reels",
+        "Turn on comment notifications and follow 50 local accounts",
+        "Create the Google review link"
+      ],
+      "checklist": [
+        "Two Reels are published",
+        "50 local accounts are followed",
+        "The review link is saved where the whole team can find it"
+      ],
+      "deep_link": "https://accelerator.elearningu.com/andreas-resort/#week-3"
     },
     {
       "week": 4,
       "month": 1,
-      "title": "Week 4: Component Inventory",
-      "actions": ["List all components", "Identify inconsistencies", "Prioritise improvements"],
-      "checklist": ["Component list complete", "Inconsistencies documented", "Priorities set", "Plan approved"],
-      "deep_link": "https://accelerator.elearningu.com/clients/andreas-resort/#week-4"
+      "title": "Week 4: Review Requests Go Live",
+      "actions": [
+        "Set up the review request email",
+        "Print and place QR cards in every cabin",
+        "Check Instagram insights and note the three best posts"
+      ],
+      "checklist": [
+        "The review request sends automatically three days after checkout",
+        "A QR card is in every cabin",
+        "The three best posts of the month are noted"
+      ],
+      "deep_link": "https://accelerator.elearningu.com/andreas-resort/#week-4"
     },
     {
       "week": 5,
       "month": 2,
-      "title": "Week 5: Button Improvements",
-      "actions": ["Review button styles", "Test hover states", "Improve accessibility"],
-      "checklist": ["Button audit complete", "Hover states improved", "Focus states added", "Changes tested"],
-      "deep_link": "https://accelerator.elearningu.com/clients/andreas-resort/#week-5"
+      "title": "Week 5: Google Profile",
+      "actions": [
+        "Complete every section of the Google Business Profile",
+        "Upload ten new photos and publish the first Google Post",
+        "Reply to new reviews within 24 hours"
+      ],
+      "checklist": [
+        "Seasonal dates and check-in hours show on the profile",
+        "Ten new photos are live",
+        "The first Google Post is published"
+      ],
+      "deep_link": "https://accelerator.elearningu.com/andreas-resort/#week-5"
     },
     {
       "week": 6,
       "month": 2,
-      "title": "Week 6: Card Enhancements",
-      "actions": ["Review card designs", "Improve shadows", "Test interactions"],
-      "checklist": ["Card audit complete", "Shadows updated", "Interactions tested", "Changes approved"],
-      "deep_link": "https://accelerator.elearningu.com/clients/andreas-resort/#week-6"
+      "title": "Week 6: Technical Basics",
+      "actions": [
+        "Record the Search Console baseline",
+        "Shorten the homepage title and add headings",
+        "Brief the web developer on structured data"
+      ],
+      "checklist": [
+        "The baseline export is saved with a date in the file name",
+        "The homepage title is under 60 characters",
+        "The developer has confirmed a delivery date"
+      ],
+      "deep_link": "https://accelerator.elearningu.com/andreas-resort/#week-6"
     },
     {
       "week": 7,
       "month": 2,
-      "title": "Week 7: Progress Indicators",
-      "actions": ["Review progress rings", "Test animations", "Improve feedback"],
-      "checklist": ["Progress audit complete", "Animations smooth", "Feedback clear", "Changes tested"],
-      "deep_link": "https://accelerator.elearningu.com/clients/andreas-resort/#week-7"
+      "title": "Week 7: Listings and Book Now",
+      "actions": [
+        "Audit existing listings",
+        "Claim the four priority listings",
+        "Brief the Book Now button"
+      ],
+      "checklist": [
+        "Every existing listing is recorded with its name, address and phone number",
+        "Apple Maps, Bing Places, Tripadvisor and the tourism office listings are claimed",
+        "The Book Now button is scheduled with the developer"
+      ],
+      "deep_link": "https://accelerator.elearningu.com/andreas-resort/#week-7"
     },
     {
       "week": 8,
       "month": 2,
-      "title": "Week 8: Form Elements",
-      "actions": ["Review form styling", "Test validation", "Improve error states"],
-      "checklist": ["Form audit complete", "Validation clear", "Error states improved", "Accessibility verified"],
-      "deep_link": "https://accelerator.elearningu.com/clients/andreas-resort/#week-8"
+      "title": "Week 8: Booking Page",
+      "actions": [
+        "Add rates, cabin types and the cancellation policy to the booking page",
+        "Write the Know Before You Go page",
+        "Keep posting three times a week"
+      ],
+      "checklist": [
+        "Rates and the cancellation policy show on the booking page",
+        "Know Before You Go is published and in the main menu"
+      ],
+      "deep_link": "https://accelerator.elearningu.com/andreas-resort/#week-8"
     },
     {
       "week": 9,
       "month": 3,
-      "title": "Week 9: Navigation Testing",
-      "actions": ["Test sidebar navigation", "Review mobile nav", "Improve active states"],
-      "checklist": ["Navigation tested", "Mobile nav works", "Active states clear", "Changes deployed"],
-      "deep_link": "https://accelerator.elearningu.com/clients/andreas-resort/#week-9"
+      "title": "Week 9: Guest List",
+      "actions": [
+        "Import past guests and send the permission email",
+        "Add the sign-up form to the footer",
+        "Publish the three-day itinerary"
+      ],
+      "checklist": [
+        "The permission email has been sent",
+        "The footer sign-up form is live",
+        "The first local guide is published"
+      ],
+      "deep_link": "https://accelerator.elearningu.com/andreas-resort/#week-9"
     },
     {
       "week": 10,
       "month": 3,
-      "title": "Week 10: Modal Prototypes",
-      "actions": ["Design new modal styles", "Test transitions", "Improve close behaviour"],
-      "checklist": ["Modal designs ready", "Transitions smooth", "Close behaviour intuitive", "Accessibility verified"],
-      "deep_link": "https://accelerator.elearningu.com/clients/andreas-resort/#week-10"
+      "title": "Week 10: Pre-arrival Email",
+      "actions": [
+        "Build and switch on the pre-arrival email",
+        "Check local ranking for your three key phrases"
+      ],
+      "checklist": [
+        "The pre-arrival email sends automatically five days before arrival",
+        "This month's ranking positions are recorded"
+      ],
+      "deep_link": "https://accelerator.elearningu.com/andreas-resort/#week-10"
     },
     {
       "week": 11,
       "month": 3,
-      "title": "Week 11: Animation Additions",
-      "actions": ["Identify animation opportunities", "Add subtle transitions", "Test performance"],
-      "checklist": ["Animations identified", "Transitions added", "Performance good", "Reduced motion supported"],
-      "deep_link": "https://accelerator.elearningu.com/clients/andreas-resort/#week-11"
+      "title": "Week 11: Seasonal Email",
+      "actions": [
+        "Send the seasonal availability email",
+        "Publish the second local guide",
+        "Share two recent reviews on social"
+      ],
+      "checklist": [
+        "The seasonal email has been sent to confirmed subscribers",
+        "The second local guide is published",
+        "Two reviews have been shared on social"
+      ],
+      "deep_link": "https://accelerator.elearningu.com/andreas-resort/#week-11"
     },
     {
       "week": 12,
       "month": 3,
-      "title": "Week 12: Final Polish",
-      "actions": ["Review all changes", "Test across browsers", "Document for template"],
-      "checklist": ["All changes reviewed", "Cross-browser tested", "Documentation complete"],
-      "deep_link": "https://accelerator.elearningu.com/clients/andreas-resort/#week-12"
+      "title": "Week 12: Review and Plan Ahead",
+      "actions": [
+        "Compare followers, reviews, search clicks and direct bookings against the baseline",
+        "Write down what worked, what did not and what to repeat",
+        "Set a monthly routine for posts, review replies and Google Posts"
+      ],
+      "checklist": [
+        "The 90-day numbers are recorded beside the baseline",
+        "A monthly routine is written down and on the calendar"
+      ],
+      "deep_link": "https://accelerator.elearningu.com/andreas-resort/#week-12"
     }
   ]
 }

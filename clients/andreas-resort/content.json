@@ -1,0 +1,2001 @@
+{
+  "schema_version": 2,
+  "template_version": "v2",
+  "client": {
+    "slug": "andreas-resort",
+    "name": "Andrea's Resort",
+    "coach_email": "conner@elearningu.com",
+    "cohort_start": "2026-10-15",
+    "flags": {
+      "sandbox": true,
+      "send_emails": false
+    }
+  },
+  "program": {
+    "weeks": 12
+  },
+  "strategy": {
+    "goal": [
+      "Andrea's Resort is a lakeside cabin property with a perfect 5.0 Google rating, a working online booking system and 37 strong photos on its website. What it does not have is visibility. There are only 20 reviews, 522 followers across Instagram and Facebook, and one social post every ten weeks.",
+      "Over the next 90 days the goal is to increase direct bookings by 50% and grow the social following past 1,000, by posting consistently, building a steady flow of new reviews, and making the resort easy to find in local search."
+    ],
+    "positioning": [
+      "Most cabin properties in the region compete on price or on the size of the hot tub. Andrea's Resort competes on calm: a quiet stretch of lakefront, cabins that are properly looked after, and owners who answer the phone."
+    ],
+    "positioning_statement": "Andrea's Resort is the lakeside escape for families and couples who want a peaceful, nature-first getaway with modern comforts and personal hospitality. Every post, review reply and web page should sound like the owners talking, and should show the lake.",
+    "welcome_message": "You already deliver a five-star stay. This plan is about making sure the people planning their next trip can see that before they book somewhere else."
+  },
+  "phases": [
+    {
+      "id": "phs_ambso8",
+      "name": "Foundation",
+      "description": null,
+      "weeks": [
+        1,
+        4
+      ]
+    },
+    {
+      "id": "phs_tpj9sx",
+      "name": "Growth",
+      "description": null,
+      "weeks": [
+        5,
+        8
+      ]
+    },
+    {
+      "id": "phs_zywgql",
+      "name": "Scale",
+      "description": null,
+      "weeks": [
+        9,
+        12
+      ]
+    }
+  ],
+  "objectives": [
+    {
+      "id": "obj_e8m1en",
+      "title": "Build Social Presence",
+      "description": "A consistent, engaging social presence that shows the cabin experience and reaches new audiences.",
+      "tactic": "tac_epjtr3",
+      "weeks": [
+        1,
+        3
+      ]
+    },
+    {
+      "id": "obj_3wxmit",
+      "title": "Grow Review Momentum",
+      "description": "A steady flow of recent reviews that builds trust and improves local ranking.",
+      "tactic": "tac_yvx418",
+      "weeks": [
+        3,
+        8
+      ]
+    },
+    {
+      "id": "obj_gblvnv",
+      "title": "Lead Local Search",
+      "description": "A complete Google profile, consistent listings and useful pages that capture people ready to book.",
+      "tactic": "tac_1e8c92",
+      "weeks": [
+        5,
+        12
+      ]
+    },
+    {
+      "id": "obj_jx5cmd",
+      "title": "Win Direct Bookings",
+      "description": "A booking path with no friction and an email list of guests who want to come back.",
+      "tactic": "tac_1ar79b",
+      "weeks": [
+        7,
+        12
+      ]
+    }
+  ],
+  "tactics": [
+    {
+      "id": "tac_epjtr3",
+      "title": "Social Media Activation",
+      "short_label": "Social Media",
+      "subtitle": "Build a consistent, engaging presence that drives discovery and turns followers into guests.",
+      "phase": "phs_ambso8",
+      "what_we_heard": [
+        "You have beautiful cabin photography and guests who love their stay, but your social accounts do not show it. With 194 followers on Instagram, 328 on Facebook and one post every ten weeks, the accounts look closed. You told us the blocker is time, not ideas."
+      ],
+      "what_this_is": [
+        "A four-week sprint that takes your social media from dormant to active. You will set a posting rhythm, turn the photos you already own into a month of posts in one sitting, start publishing short video, and build the small daily habits that grow an audience."
+      ],
+      "why_it_matters": [
+        "Leisure travellers find places to stay on Instagram and Facebook before they ever search Google. A quiet account suggests a quiet business. Three posts a week for twelve weeks beats ten posts in one burst followed by a month of silence."
+      ],
+      "time_commitment": null,
+      "parts": [
+        {
+          "id": "prt_mthfni",
+          "name": "Set Up Your Content System",
+          "card": null,
+          "steps": [
+            {
+              "id": "stp_vucz24",
+              "title": "Fix both profiles before you post anything",
+              "time": "about 20 minutes",
+              "cost": null,
+              "tags": [],
+              "body": [
+                {
+                  "type": "bullets",
+                  "items": [
+                    {
+                      "id": "blt_5x78v5",
+                      "text": "On Instagram, tap **Edit profile** and rewrite the bio to say what the resort is and where it is, including the drive time from the nearest city.",
+                      "children": []
+                    },
+                    {
+                      "id": "blt_n8ejmb",
+                      "text": "Add the direct booking link in the **Links** field. It is currently empty, which is why the account has produced no website clicks.",
+                      "children": []
+                    },
+                    {
+                      "id": "blt_e58o06",
+                      "text": "Add four story highlights:",
+                      "children": [
+                        {
+                          "id": "blt_456wf5",
+                          "text": "Cabins"
+                        },
+                        {
+                          "id": "blt_hpajgg",
+                          "text": "The Lake"
+                        },
+                        {
+                          "id": "blt_w2o8w6",
+                          "text": "Getting Here"
+                        },
+                        {
+                          "id": "blt_xvzvf5",
+                          "text": "Things To Do"
+                        }
+                      ]
+                    },
+                    {
+                      "id": "blt_p5es7c",
+                      "text": "Repeat the bio and booking link on the Facebook page.",
+                      "children": []
+                    }
+                  ]
+                }
+              ],
+              "links": [],
+              "media": [
+                {
+                  "id": "med_ka8cv2",
+                  "type": "image",
+                  "asset": "med_ka8cv2",
+                  "alt": "Instagram profile with the new bio, location and booking link",
+                  "frame": "phone",
+                  "bar": null,
+                  "badge": "mockup",
+                  "fit": "crop",
+                  "caption": "Updated bio with location and booking link",
+                  "link": null
+                }
+              ],
+              "confirm": [
+                {
+                  "id": "cnf_1ubvx6",
+                  "text": "Drive time from Kelowna",
+                  "bullet": "blt_5x78v5"
+                }
+              ]
+            },
+            {
+              "id": "stp_osaub2",
+              "title": "Set a fixed weekly pattern",
+              "time": null,
+              "cost": null,
+              "tags": [],
+              "body": [
+                {
+                  "type": "bullets",
+                  "items": [
+                    {
+                      "id": "blt_wyv5zi",
+                      "text": "Monday is a cabin feature, Wednesday is a local activity, Friday is a guest experience.",
+                      "children": []
+                    },
+                    {
+                      "id": "blt_98d6xl",
+                      "text": "Block 30 minutes every Sunday to check the week ahead.",
+                      "children": []
+                    },
+                    {
+                      "id": "blt_oyxj54",
+                      "text": "Write the pattern down and share it with whoever else might post. A pattern only one person knows stops when that person is busy.",
+                      "children": []
+                    }
+                  ]
+                }
+              ],
+              "links": [],
+              "media": [
+                {
+                  "id": "med_8utinm",
+                  "type": "image",
+                  "asset": "med_8utinm",
+                  "alt": "A one-page weekly posting pattern: cabin feature Monday, local activity Wednesday, guest experience Friday",
+                  "frame": "document",
+                  "bar": "Weekly posting pattern",
+                  "badge": "example",
+                  "fit": "crop",
+                  "caption": null,
+                  "link": null
+                }
+              ],
+              "confirm": []
+            }
+          ]
+        },
+        {
+          "id": "prt_0232pn",
+          "name": "Create a Month of Content in One Sitting",
+          "card": null,
+          "steps": [
+            {
+              "id": "stp_7clf9y",
+              "title": "Sort the 37 website photos into the three themes",
+              "time": null,
+              "cost": null,
+              "tags": [],
+              "body": [
+                {
+                  "type": "bullets",
+                  "items": [
+                    {
+                      "id": "blt_7zg7sq",
+                      "text": "Create three folders named `cabins`, `activities` and `guests`.",
+                      "children": []
+                    },
+                    {
+                      "id": "blt_ja2e8m",
+                      "text": "Aim for at least four photos in each folder. If the guest folder is thin, ask three recent guests for permission to share theirs.",
+                      "children": []
+                    }
+                  ]
+                }
+              ],
+              "links": [],
+              "media": [],
+              "confirm": []
+            },
+            {
+              "id": "stp_k6gy5q",
+              "title": "Write 12 captions and schedule them in Meta Business Suite",
+              "time": null,
+              "cost": null,
+              "tags": [],
+              "body": [
+                {
+                  "type": "bullets",
+                  "items": [
+                    {
+                      "id": "blt_llvttj",
+                      "text": "Open [Meta Business Suite](https://business.facebook.com/) and choose **Planner**, then **Schedule post**.",
+                      "children": []
+                    },
+                    {
+                      "id": "blt_1t01h3",
+                      "text": "Write captions that tell a short story instead of describing the photo.",
+                      "children": []
+                    },
+                    {
+                      "id": "blt_cphbd9",
+                      "text": "Say where the resort is at least once a week.",
+                      "children": []
+                    },
+                    {
+                      "id": "blt_wdh2s3",
+                      "text": "Publish each post to Instagram and Facebook together, not separately.",
+                      "children": []
+                    }
+                  ]
+                }
+              ],
+              "links": [],
+              "media": [
+                {
+                  "id": "med_y4q8yw",
+                  "type": "image",
+                  "asset": "med_y4q8yw",
+                  "alt": "The Meta Business Suite planner with scheduled posts",
+                  "frame": "website",
+                  "bar": "business.facebook.com",
+                  "badge": null,
+                  "fit": "crop",
+                  "caption": null,
+                  "link": {
+                    "url": "https://business.facebook.com/",
+                    "label": "Open site"
+                  }
+                }
+              ],
+              "confirm": []
+            }
+          ]
+        },
+        {
+          "id": "prt_b1zsdm",
+          "name": "Launch Video and Build Engagement",
+          "card": null,
+          "steps": [
+            {
+              "id": "stp_7v8nsi",
+              "title": "Publish two Reels a week",
+              "time": null,
+              "cost": null,
+              "tags": [],
+              "body": [
+                {
+                  "type": "bullets",
+                  "items": [
+                    {
+                      "id": "blt_evpt6h",
+                      "text": "Keep each one under 30 seconds and shoot it vertically on a phone.",
+                      "children": []
+                    },
+                    {
+                      "id": "blt_ujwc4i",
+                      "text": "Start with formats that need no editing: a walk through a cabin, the dock at sunrise, the fire pit at night.",
+                      "children": []
+                    },
+                    {
+                      "id": "blt_70u175",
+                      "text": "Quiet footage with natural sound works well for this kind of property.",
+                      "children": []
+                    }
+                  ]
+                }
+              ],
+              "links": [],
+              "media": [
+                {
+                  "id": "med_52syn8",
+                  "type": "social_post",
+                  "asset": "med_52syn8",
+                  "alt": "Vertical Reel walking through a cabin interior",
+                  "post_type": "Cabin walkthrough",
+                  "handle": "@andreasresort",
+                  "url": null
+                },
+                {
+                  "id": "med_3hzexo",
+                  "type": "social_post",
+                  "asset": "med_3hzexo",
+                  "alt": "Vertical Reel of the dock and the lake at sunrise",
+                  "post_type": "Dock at sunrise",
+                  "handle": "@andreasresort",
+                  "url": null
+                },
+                {
+                  "id": "med_4rmxly",
+                  "type": "video",
+                  "provider": "youtube",
+                  "video_id": "aqz-KE-bpKQ",
+                  "title": "How to shoot a 30-second Reel",
+                  "caption": null
+                }
+              ],
+              "confirm": []
+            },
+            {
+              "id": "stp_hky03f",
+              "title": "Reply to every comment within two hours during the day",
+              "time": null,
+              "cost": null,
+              "tags": [],
+              "body": [
+                {
+                  "type": "bullets",
+                  "items": [
+                    {
+                      "id": "blt_qbzg29",
+                      "text": "Turn on notifications for comments and messages on both accounts.",
+                      "children": []
+                    },
+                    {
+                      "id": "blt_eih7ep",
+                      "text": "Follow 50 local accounts: the regional tourism office, nearby restaurants and activity operators.",
+                      "children": []
+                    }
+                  ]
+                }
+              ],
+              "links": [],
+              "media": [],
+              "confirm": []
+            }
+          ]
+        }
+      ],
+      "metrics": {
+        "columns": [
+          "Metric",
+          "30 Days",
+          "60 Days",
+          "90 Days"
+        ],
+        "rows": [
+          [
+            "Instagram followers",
+            "350",
+            "600",
+            "1,000"
+          ],
+          [
+            "Posts per week",
+            "3",
+            "4",
+            "5"
+          ],
+          [
+            "Engagement rate",
+            "5%",
+            "6%",
+            "7%"
+          ],
+          [
+            "Website clicks from social",
+            "20 per week",
+            "50 per week",
+            "100 per week"
+          ]
+        ]
+      },
+      "tips": [
+        "Post when your audience is online: 7 to 9 in the morning and 7 to 9 in the evening.",
+        "Follower count matters less than engagement rate and website clicks. A small audience that responds books more often than a large one that scrolls past.",
+        "If a week gets away from you, post one photo of the lake with one honest sentence. Keeping the rhythm matters more than the quality of any single post."
+      ],
+      "resources": [
+        {
+          "title": "Meta Business Suite",
+          "url": "https://business.facebook.com/",
+          "description": "free scheduling for both accounts"
+        },
+        {
+          "title": "Instagram for Business",
+          "url": "https://business.instagram.com/",
+          "description": null
+        },
+        {
+          "title": "About Instagram story highlights",
+          "url": "https://help.instagram.com/813938898787367",
+          "description": null
+        }
+      ]
+    },
+    {
+      "id": "tac_yvx418",
+      "title": "Review Generation",
+      "short_label": "Reviews",
+      "subtitle": "Turn happy guests into steady, recent reviews.",
+      "phase": "phs_tpj9sx",
+      "what_we_heard": [
+        "You have a perfect 5.0 on Google, but only 20 reviews, and almost none from this year. You have never asked guests for one because it felt awkward."
+      ],
+      "what_this_is": [
+        "A simple system that asks every guest once, at the right moment, and makes it take under a minute."
+      ],
+      "why_it_matters": [
+        "Review count and recency both affect local ranking. A property with 70 recent reviews at 4.8 outranks one with 20 older reviews at 5.0."
+      ],
+      "time_commitment": null,
+      "parts": [
+        {
+          "id": "prt_w47ebz",
+          "name": "Ask Every Guest",
+          "card": null,
+          "steps": [
+            {
+              "id": "stp_abuzpq",
+              "title": "Create your Google review link",
+              "time": null,
+              "cost": null,
+              "tags": [],
+              "body": [
+                {
+                  "type": "bullets",
+                  "items": [
+                    {
+                      "id": "blt_2ovxnv",
+                      "text": "In your Google Business Profile, choose **Ask for reviews** and copy the short link.",
+                      "children": []
+                    }
+                  ]
+                }
+              ],
+              "links": [],
+              "media": [],
+              "confirm": []
+            },
+            {
+              "id": "stp_6sh853",
+              "title": "Send a review request three days after checkout",
+              "time": null,
+              "cost": null,
+              "tags": [],
+              "body": [
+                {
+                  "type": "bullets",
+                  "items": [
+                    {
+                      "id": "blt_0e46at",
+                      "text": "Keep the email to three sentences: thank them, ask, give the link.",
+                      "children": []
+                    },
+                    {
+                      "id": "blt_ten9s6",
+                      "text": "Set it up as an automation in your booking system so it does not depend on memory.",
+                      "children": []
+                    }
+                  ]
+                }
+              ],
+              "links": [],
+              "media": [
+                {
+                  "id": "med_af5dfl",
+                  "type": "image",
+                  "asset": "med_af5dfl",
+                  "alt": "A three-sentence review request email with a Google review link",
+                  "frame": "email",
+                  "bar": null,
+                  "badge": "mockup",
+                  "fit": "crop",
+                  "caption": "Review request: sent three days after checkout",
+                  "link": null
+                }
+              ],
+              "confirm": [
+                {
+                  "id": "cnf_l4v72g",
+                  "text": "Which booking system the resort uses",
+                  "bullet": "blt_ten9s6"
+                }
+              ]
+            },
+            {
+              "id": "stp_stx85v",
+              "title": "Put a QR card in every cabin",
+              "time": null,
+              "cost": "print cost $40 to $60",
+              "tags": [],
+              "body": [
+                {
+                  "type": "bullets",
+                  "items": [
+                    {
+                      "id": "blt_lme9dy",
+                      "text": "Place it beside the checkout instructions.",
+                      "children": []
+                    }
+                  ]
+                }
+              ],
+              "links": [],
+              "media": [
+                {
+                  "id": "med_bk5ulk",
+                  "type": "image",
+                  "asset": "med_bk5ulk",
+                  "alt": "A printed QR code card on a table beside the checkout instructions",
+                  "frame": "none",
+                  "bar": null,
+                  "badge": null,
+                  "fit": "crop",
+                  "caption": "QR card beside the checkout instructions",
+                  "link": null
+                }
+              ],
+              "confirm": []
+            }
+          ]
+        },
+        {
+          "id": "prt_p0wb3i",
+          "name": "Reply to Every Review",
+          "card": null,
+          "steps": [
+            {
+              "id": "stp_1x7cm0",
+              "title": "Reply within 24 hours and mention something specific",
+              "time": null,
+              "cost": null,
+              "tags": [],
+              "body": [
+                {
+                  "type": "bullets",
+                  "items": [
+                    {
+                      "id": "blt_s27hin",
+                      "text": "Thank the guest by name, mention one detail from their stay and invite them back.",
+                      "children": []
+                    },
+                    {
+                      "id": "blt_52j3dq",
+                      "text": "Reply to the 20 existing reviews first. None of them has a response.",
+                      "children": []
+                    }
+                  ]
+                }
+              ],
+              "links": [],
+              "media": [],
+              "confirm": []
+            }
+          ]
+        }
+      ],
+      "metrics": {
+        "columns": [
+          "Metric",
+          "30 Days",
+          "60 Days",
+          "90 Days"
+        ],
+        "rows": [
+          [
+            "Google reviews",
+            "30",
+            "50",
+            "70"
+          ],
+          [
+            "Reviews with a reply",
+            "100%",
+            "100%",
+            "100%"
+          ],
+          [
+            "Average rating",
+            "5.0",
+            "5.0",
+            "4.9 or higher"
+          ]
+        ]
+      },
+      "tips": [
+        "Never offer a discount or gift for a review. It breaks Google's rules and guests can tell."
+      ],
+      "resources": [
+        {
+          "title": "Get reviews on Google",
+          "url": "https://support.google.com/business/answer/7035772",
+          "description": null
+        }
+      ]
+    },
+    {
+      "id": "tac_1e8c92",
+      "title": "Local Search Visibility and the Pages That Earn Search Traffic All Year",
+      "short_label": "Local Search",
+      "subtitle": "Be the first result when someone nearby searches for a lakeside cabin.",
+      "phase": "phs_zywgql",
+      "what_we_heard": [
+        "Your Google Business Profile is verified but barely used. The website has no structured data, the homepage title is cut off in search results, and the resort is missing from most tourism directories. You also told us that guests ask the same five questions by email every week."
+      ],
+      "what_this_is": [
+        "Twelve weeks of small, specific jobs: complete the Google profile, fix the technical basics on the website, list the resort consistently across directories, and publish the pages that answer what guests already ask."
+      ],
+      "why_it_matters": [
+        "Someone searching \"lakeside cabin near me\" is ready to book. Local search is where the resort's perfect rating can do the most work, and right now very few people see it."
+      ],
+      "time_commitment": null,
+      "parts": [
+        {
+          "id": "prt_sial0v",
+          "name": "Complete the Google Business Profile",
+          "card": null,
+          "steps": [
+            {
+              "id": "stp_7zsjl9",
+              "title": "Fill in every section of the profile",
+              "time": null,
+              "cost": null,
+              "tags": [],
+              "body": [
+                {
+                  "type": "bullets",
+                  "items": [
+                    {
+                      "id": "blt_9vk7ao",
+                      "text": "Add seasonal opening dates, check-in hours, amenities and the booking link.",
+                      "children": []
+                    },
+                    {
+                      "id": "blt_brs3rv",
+                      "text": "Choose **Cabin rental agency** as the primary category and **Resort hotel** as a secondary one.",
+                      "children": []
+                    }
+                  ]
+                }
+              ],
+              "links": [],
+              "media": [
+                {
+                  "id": "med_i5pgbd",
+                  "type": "group",
+                  "layout": "pair",
+                  "items": [
+                    {
+                      "id": "med_dakp24",
+                      "type": "image",
+                      "asset": "med_dakp24",
+                      "alt": "The Google Business Profile before: no hours, no booking link",
+                      "frame": "website",
+                      "bar": "google.com/maps",
+                      "badge": null,
+                      "fit": "crop",
+                      "caption": "Before",
+                      "link": null
+                    },
+                    {
+                      "id": "med_hk6epx",
+                      "type": "image",
+                      "asset": "med_hk6epx",
+                      "alt": "The Google Business Profile after: hours, amenities and booking link filled in",
+                      "frame": "website",
+                      "bar": "google.com/maps",
+                      "badge": null,
+                      "fit": "crop",
+                      "caption": "After",
+                      "link": null
+                    }
+                  ]
+                }
+              ],
+              "confirm": []
+            },
+            {
+              "id": "stp_1t63jy",
+              "title": "Upload ten new photos and post once a week",
+              "time": null,
+              "cost": null,
+              "tags": [],
+              "body": [
+                {
+                  "type": "bullets",
+                  "items": [
+                    {
+                      "id": "blt_h2pwyy",
+                      "text": "Add exterior, interior, lake and winter photos. Profiles with recent photos get more direction requests.",
+                      "children": []
+                    },
+                    {
+                      "id": "blt_u71add",
+                      "text": "Publish one Google Post a week tied to whatever is live on the website.",
+                      "children": []
+                    }
+                  ]
+                }
+              ],
+              "links": [],
+              "media": [
+                {
+                  "id": "med_r4nmf8",
+                  "type": "gallery",
+                  "title": "Photos to upload",
+                  "items": [
+                    {
+                      "id": "med_bez23g",
+                      "asset": "med_bez23g",
+                      "alt": "Cabin exterior from the lakeside path",
+                      "caption": "Exterior"
+                    },
+                    {
+                      "id": "med_e3skai",
+                      "asset": "med_e3skai",
+                      "alt": "Cabin living room with the fireplace lit",
+                      "caption": "Interior"
+                    },
+                    {
+                      "id": "med_1e9sdg",
+                      "asset": "med_1e9sdg",
+                      "alt": "The dock reaching out over calm water",
+                      "caption": "Dock"
+                    },
+                    {
+                      "id": "med_koadzd",
+                      "asset": "med_koadzd",
+                      "alt": "The fire pit at dusk with chairs around it",
+                      "caption": "Fire pit"
+                    },
+                    {
+                      "id": "med_i44zg3",
+                      "asset": "med_i44zg3",
+                      "alt": "Cabins under snow in winter",
+                      "caption": "Winter"
+                    },
+                    {
+                      "id": "med_xpamnt",
+                      "asset": "med_xpamnt",
+                      "alt": "The driveway and sign guests see on arrival",
+                      "caption": "Arrival"
+                    }
+                  ]
+                }
+              ],
+              "confirm": []
+            }
+          ]
+        },
+        {
+          "id": "prt_whgbs8",
+          "name": "Fix the Technical Basics",
+          "card": null,
+          "steps": [
+            {
+              "id": "stp_nirjva",
+              "title": "Shorten the homepage title and add headings",
+              "time": "about 30 minutes",
+              "cost": null,
+              "tags": [],
+              "body": [
+                {
+                  "type": "bullets",
+                  "items": [
+                    {
+                      "id": "blt_a6uaj4",
+                      "text": "Keep the title under 60 characters, for example `Andrea's Resort | Lakeside Cabins for Families and Couples`.",
+                      "children": []
+                    },
+                    {
+                      "id": "blt_7s56hy",
+                      "text": "Break the homepage into sections with headings: Cabins, The Lake, Getting Here, Things To Do.",
+                      "children": []
+                    }
+                  ]
+                }
+              ],
+              "links": [],
+              "media": [
+                {
+                  "id": "med_7trwhr",
+                  "type": "image",
+                  "asset": "med_7trwhr",
+                  "alt": "The homepage with the shorter title and section headings",
+                  "frame": "website",
+                  "bar": "andreasresort.example",
+                  "badge": "mockup",
+                  "fit": "full",
+                  "caption": null,
+                  "link": null
+                }
+              ],
+              "confirm": []
+            },
+            {
+              "id": "stp_vns9eq",
+              "title": "Add structured data",
+              "time": null,
+              "cost": "$300 to $500",
+              "tags": [
+                "contractor"
+              ],
+              "body": [
+                {
+                  "type": "bullets",
+                  "items": [
+                    {
+                      "id": "blt_p7ws77",
+                      "text": "Ask your web developer to add `LocalBusiness` and `LodgingBusiness` schema with the name, address, phone number and hours.",
+                      "children": []
+                    },
+                    {
+                      "id": "blt_mc4n26",
+                      "text": "Check the result in the [Rich Results Test](https://search.google.com/test/rich-results).",
+                      "children": []
+                    }
+                  ]
+                }
+              ],
+              "links": [],
+              "media": [],
+              "confirm": []
+            }
+          ]
+        },
+        {
+          "id": "prt_2pldip",
+          "name": "List the Resort Everywhere, Consistently",
+          "card": null,
+          "steps": [
+            {
+              "id": "stp_usobs9",
+              "title": "Audit your existing listings",
+              "time": null,
+              "cost": null,
+              "tags": [],
+              "body": [
+                {
+                  "type": "bullets",
+                  "items": [
+                    {
+                      "id": "blt_tj7tqp",
+                      "text": "Search the resort name and note every listing on the first three pages.",
+                      "children": []
+                    },
+                    {
+                      "id": "blt_almkfk",
+                      "text": "Record the name, address and phone number each one shows. They must match exactly, character for character.",
+                      "children": []
+                    }
+                  ]
+                }
+              ],
+              "links": [],
+              "media": [],
+              "confirm": []
+            },
+            {
+              "id": "stp_nsxfk6",
+              "title": "Claim the listings that matter most",
+              "time": null,
+              "cost": null,
+              "tags": [],
+              "body": [
+                {
+                  "type": "bullets",
+                  "items": [
+                    {
+                      "id": "blt_o0rmth",
+                      "text": "Work through these in order:",
+                      "children": []
+                    }
+                  ]
+                },
+                {
+                  "type": "table",
+                  "columns": [
+                    "Directory",
+                    "Why it matters",
+                    "Time"
+                  ],
+                  "rows": [
+                    [
+                      "Apple Maps",
+                      "Default on every iPhone",
+                      "15 minutes"
+                    ],
+                    [
+                      "Bing Places",
+                      "Powers several AI assistants",
+                      "15 minutes"
+                    ],
+                    [
+                      "Tripadvisor",
+                      "Second review source",
+                      "30 minutes"
+                    ],
+                    [
+                      "Regional tourism office",
+                      "Trusted local link",
+                      "20 minutes"
+                    ]
+                  ]
+                }
+              ],
+              "links": [],
+              "media": [
+                {
+                  "id": "med_gowbzq",
+                  "type": "group",
+                  "layout": "four",
+                  "items": [
+                    {
+                      "id": "med_ruaicx",
+                      "type": "image",
+                      "asset": "med_ruaicx",
+                      "alt": "The resort listing in Apple Maps",
+                      "frame": "none",
+                      "bar": null,
+                      "badge": null,
+                      "fit": "crop",
+                      "caption": "Apple Maps",
+                      "link": null
+                    },
+                    {
+                      "id": "med_jk9abo",
+                      "type": "image",
+                      "asset": "med_jk9abo",
+                      "alt": "The resort listing in Bing Places",
+                      "frame": "none",
+                      "bar": null,
+                      "badge": null,
+                      "fit": "crop",
+                      "caption": "Bing Places",
+                      "link": null
+                    },
+                    {
+                      "id": "med_ay4w7o",
+                      "type": "image",
+                      "asset": "med_ay4w7o",
+                      "alt": "The resort listing on Tripadvisor",
+                      "frame": "none",
+                      "bar": null,
+                      "badge": null,
+                      "fit": "crop",
+                      "caption": "Tripadvisor",
+                      "link": null
+                    },
+                    {
+                      "id": "med_zmq9sw",
+                      "type": "image",
+                      "asset": "med_zmq9sw",
+                      "alt": "The resort listing on the regional tourism office website",
+                      "frame": "none",
+                      "bar": null,
+                      "badge": null,
+                      "fit": "crop",
+                      "caption": "Regional tourism office",
+                      "link": null
+                    }
+                  ]
+                }
+              ],
+              "confirm": []
+            }
+          ]
+        },
+        {
+          "id": "prt_hpw24p",
+          "name": "Publish the Pages Guests Already Ask For",
+          "card": null,
+          "steps": [
+            {
+              "id": "stp_sgvdaa",
+              "title": "Write a Know Before You Go page",
+              "time": null,
+              "cost": null,
+              "tags": [],
+              "body": [
+                {
+                  "type": "bullets",
+                  "items": [
+                    {
+                      "id": "blt_7c7vbp",
+                      "text": "Answer the five questions you get every week:",
+                      "children": [
+                        {
+                          "id": "blt_owi5kz",
+                          "text": "How far is it from the highway?"
+                        },
+                        {
+                          "id": "blt_l90yfx",
+                          "text": "Is there cell service?"
+                        },
+                        {
+                          "id": "blt_u63efj",
+                          "text": "What should we bring?"
+                        },
+                        {
+                          "id": "blt_ddeyit",
+                          "text": "Can we bring a dog?"
+                        },
+                        {
+                          "id": "blt_kozugw",
+                          "text": "Where is the nearest grocery store?"
+                        }
+                      ]
+                    },
+                    {
+                      "id": "blt_at1yyw",
+                      "text": "Add the page to the main menu the same day you publish it.",
+                      "children": []
+                    }
+                  ]
+                }
+              ],
+              "links": [],
+              "media": [],
+              "confirm": []
+            },
+            {
+              "id": "stp_9yv5z9",
+              "title": "Publish one local guide a month",
+              "time": null,
+              "cost": null,
+              "tags": [],
+              "body": [
+                {
+                  "type": "bullets",
+                  "items": [
+                    {
+                      "id": "blt_w30a3v",
+                      "text": "Start with a three-day itinerary, then a rainy-day guide, then a winter guide.",
+                      "children": []
+                    },
+                    {
+                      "id": "blt_bx7l1r",
+                      "text": "End every guide with a link to the booking page.",
+                      "children": []
+                    }
+                  ]
+                }
+              ],
+              "links": [],
+              "media": [],
+              "confirm": []
+            }
+          ]
+        },
+        {
+          "id": "prt_f8bkmi",
+          "name": "Measure What Changed",
+          "card": null,
+          "steps": [
+            {
+              "id": "stp_t68zdj",
+              "title": "Record a baseline in Google Search Console",
+              "time": null,
+              "cost": null,
+              "tags": [],
+              "body": [
+                {
+                  "type": "bullets",
+                  "items": [
+                    {
+                      "id": "blt_blzhym",
+                      "text": "Export the last three months of clicks and impressions before you change anything.",
+                      "children": []
+                    }
+                  ]
+                }
+              ],
+              "links": [],
+              "media": [
+                {
+                  "id": "med_rw9qus",
+                  "type": "link_card",
+                  "title": "Google Search Console",
+                  "subtitle": "Performance report",
+                  "url": "https://search.google.com/search-console"
+                }
+              ],
+              "confirm": []
+            },
+            {
+              "id": "stp_blf1ij",
+              "title": "Review local ranking every month",
+              "time": null,
+              "cost": null,
+              "tags": [],
+              "body": [
+                {
+                  "type": "bullets",
+                  "items": [
+                    {
+                      "id": "blt_vhopgt",
+                      "text": "Search your three most important phrases from a private browser window and note where the resort appears.",
+                      "children": []
+                    }
+                  ]
+                }
+              ],
+              "links": [],
+              "media": [],
+              "confirm": []
+            }
+          ]
+        }
+      ],
+      "metrics": {
+        "columns": [
+          "Metric",
+          "30 Days",
+          "60 Days",
+          "90 Days"
+        ],
+        "rows": [
+          [
+            "Profile views per month",
+            "500",
+            "1,000",
+            "2,000"
+          ],
+          [
+            "Local pack position",
+            "Top 5",
+            "Top 3",
+            "First"
+          ],
+          [
+            "Directory listings",
+            "10",
+            "20",
+            "30"
+          ],
+          [
+            "Organic search traffic",
+            "Up 25%",
+            "Up 75%",
+            "Up 150%"
+          ],
+          [
+            "Guides published",
+            "n/a",
+            "1",
+            "3"
+          ]
+        ]
+      },
+      "tips": [
+        "Name, address and phone number must match everywhere. \"Rd\" in one listing and \"Road\" in another counts as a mismatch.",
+        "Answer every question on the Google profile within a day. Unanswered questions stay visible to everyone.",
+        "Every question a guest asks twice is a page worth writing."
+      ],
+      "resources": [
+        {
+          "title": "Google Business Profile Help",
+          "url": "https://support.google.com/business/",
+          "description": null
+        },
+        {
+          "title": "Rich Results Test",
+          "url": "https://search.google.com/test/rich-results",
+          "description": "checks that your structured data is detected"
+        },
+        {
+          "title": "Google Search Console",
+          "url": "https://search.google.com/search-console/about",
+          "description": null
+        },
+        {
+          "title": "Bing Places for Business",
+          "url": "https://www.bingplaces.com/",
+          "description": null
+        }
+      ]
+    },
+    {
+      "id": "tac_1ar79b",
+      "title": "Direct Booking and Guest Email",
+      "short_label": "Booking and Email",
+      "subtitle": "Make booking direct the easiest option, and stay in touch with guests who have already stayed.",
+      "phase": "phs_zywgql",
+      "what_we_heard": [
+        "Most of your bookings come through third-party sites that take a commission, even from guests who found you by name. You have email addresses for several years of past guests and have never written to them."
+      ],
+      "what_this_is": [
+        "Two connected pieces of work: remove the friction from booking on your own website, and start a small, respectful email program for past guests."
+      ],
+      "why_it_matters": [
+        "Every booking that moves from a third-party site to your own website keeps the commission in the business. Past guests are the cheapest bookings you will ever get, because they already know the place."
+      ],
+      "time_commitment": null,
+      "parts": [
+        {
+          "id": "prt_8qr44t",
+          "name": "Make Booking Direct Easy",
+          "card": null,
+          "steps": [
+            {
+              "id": "stp_pywh56",
+              "title": "Put a Book Now button in the site header",
+              "time": null,
+              "cost": "$200 to $400",
+              "tags": [
+                "contractor",
+                "critical"
+              ],
+              "body": [
+                {
+                  "type": "bullets",
+                  "items": [
+                    {
+                      "id": "blt_sbcrdi",
+                      "text": "It should appear on every page and open the booking page directly, not a contact form.",
+                      "children": []
+                    }
+                  ]
+                }
+              ],
+              "links": [],
+              "media": [
+                {
+                  "id": "med_85yyjj",
+                  "type": "image",
+                  "asset": "med_85yyjj",
+                  "alt": "The site header with a Book Now button",
+                  "frame": "website",
+                  "bar": "andreasresort.example",
+                  "badge": "mockup",
+                  "fit": "crop",
+                  "caption": "Book Now in the header on every page",
+                  "link": null
+                }
+              ],
+              "confirm": []
+            },
+            {
+              "id": "stp_zgdzxg",
+              "title": "Show rates, cabin types and the cancellation policy on the booking page",
+              "time": null,
+              "cost": null,
+              "tags": [],
+              "body": [
+                {
+                  "type": "bullets",
+                  "items": [
+                    {
+                      "id": "blt_as368g",
+                      "text": "Guests leave when they have to email to ask a price.",
+                      "children": []
+                    },
+                    {
+                      "id": "blt_ig7f65",
+                      "text": "Put the full cancellation policy on the page itself.",
+                      "children": []
+                    }
+                  ]
+                }
+              ],
+              "links": [],
+              "media": [],
+              "confirm": []
+            }
+          ]
+        },
+        {
+          "id": "prt_w2az7b",
+          "name": "Start the Guest Email List",
+          "card": null,
+          "steps": [
+            {
+              "id": "stp_h87vst",
+              "title": "Import past guests and ask permission",
+              "time": null,
+              "cost": null,
+              "tags": [],
+              "body": [
+                {
+                  "type": "bullets",
+                  "items": [
+                    {
+                      "id": "blt_9fy2hw",
+                      "text": "Export guest emails from your booking system and send one short message asking them to confirm they want to hear from you.",
+                      "children": []
+                    },
+                    {
+                      "id": "blt_nygcqu",
+                      "text": "Keep only the people who confirm. A small confirmed list is worth more than a large unconfirmed one.",
+                      "children": []
+                    }
+                  ]
+                }
+              ],
+              "links": [],
+              "media": [],
+              "confirm": []
+            },
+            {
+              "id": "stp_hrs4ys",
+              "title": "Add a sign-up form to the website footer",
+              "time": null,
+              "cost": null,
+              "tags": [],
+              "body": [
+                {
+                  "type": "bullets",
+                  "items": [
+                    {
+                      "id": "blt_yvk7xv",
+                      "text": "Give a specific reason to subscribe, such as first notice of summer dates.",
+                      "children": []
+                    }
+                  ]
+                }
+              ],
+              "links": [],
+              "media": [],
+              "confirm": []
+            }
+          ]
+        },
+        {
+          "id": "prt_0rv40d",
+          "name": "Send the First Two Emails",
+          "card": null,
+          "steps": [
+            {
+              "id": "stp_77peyg",
+              "title": "Build the pre-arrival email",
+              "time": null,
+              "cost": null,
+              "tags": [],
+              "body": [
+                {
+                  "type": "bullets",
+                  "items": [
+                    {
+                      "id": "blt_uplmq4",
+                      "text": "Send it five days before arrival with directions, check-in details and what to bring.",
+                      "children": []
+                    }
+                  ]
+                }
+              ],
+              "links": [],
+              "media": [
+                {
+                  "id": "med_4zfatj",
+                  "type": "image",
+                  "asset": "med_4zfatj",
+                  "alt": "A pre-arrival email with directions, check-in details and what to bring",
+                  "frame": "email",
+                  "bar": null,
+                  "badge": "mockup",
+                  "fit": "crop",
+                  "caption": "Pre-arrival email: sent five days before check-in",
+                  "link": null
+                }
+              ],
+              "confirm": []
+            },
+            {
+              "id": "stp_wd1l3v",
+              "title": "Send one seasonal availability email",
+              "time": null,
+              "cost": null,
+              "tags": [],
+              "body": [
+                {
+                  "type": "bullets",
+                  "items": [
+                    {
+                      "id": "blt_najthd",
+                      "text": "Share which dates are still open and link straight to the booking page.",
+                      "children": []
+                    },
+                    {
+                      "id": "blt_hsa37u",
+                      "text": "Send it to past guests only, once, and measure bookings in the following two weeks.",
+                      "children": []
+                    }
+                  ]
+                }
+              ],
+              "links": [],
+              "media": [],
+              "confirm": [
+                {
+                  "id": "cnf_44jln2",
+                  "text": "Send date with the owners",
+                  "bullet": "blt_hsa37u"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "metrics": {
+        "columns": [
+          "Metric",
+          "30 Days",
+          "60 Days",
+          "90 Days"
+        ],
+        "rows": [
+          [
+            "Direct share of bookings",
+            "Baseline recorded",
+            "Up 15%",
+            "Up 50%"
+          ],
+          [
+            "Confirmed email subscribers",
+            "0",
+            "60",
+            "150"
+          ],
+          [
+            "Pre-arrival email",
+            "Drafted",
+            "Sending automatically",
+            "Sent to every arrival"
+          ]
+        ]
+      },
+      "tips": [
+        "Describe the emails to guests as service, not marketing: one before they arrive and one when dates open.",
+        "Offer something small for booking direct, such as a late checkout, and say so beside the Book Now button."
+      ],
+      "resources": [
+        {
+          "title": "Canada's anti-spam legislation",
+          "url": "https://fightspam.gc.ca/",
+          "description": "consent rules for commercial email"
+        },
+        {
+          "title": "Mailchimp: about double opt-in",
+          "url": "https://mailchimp.com/help/about-double-opt-in/",
+          "description": null
+        }
+      ]
+    }
+  ],
+  "roadmap": {
+    "weeks": [
+      {
+        "id": "wk_ttofa1",
+        "number": 1,
+        "title": "Profiles and Pattern",
+        "next_step": null,
+        "actions": [
+          {
+            "id": "act_yfl9u1",
+            "text": "Rewrite the Instagram and Facebook bios and add the booking link",
+            "how_to": "stp_vucz24"
+          },
+          {
+            "id": "act_fho0jx",
+            "text": "Decide the weekly posting pattern",
+            "how_to": "stp_osaub2"
+          },
+          {
+            "id": "act_1exn37",
+            "text": "Reply to all 20 existing Google reviews",
+            "how_to": "quick_wins"
+          }
+        ],
+        "checklist": [
+          {
+            "id": "chk_ufgw6d",
+            "text": "Both bios say where the resort is and link to the booking page"
+          },
+          {
+            "id": "chk_iwcfe9",
+            "text": "Four story highlights are live"
+          },
+          {
+            "id": "chk_h4fm6g",
+            "text": "The weekly pattern is written down and shared"
+          },
+          {
+            "id": "chk_mtz30d",
+            "text": "Every existing Google review has a reply"
+          }
+        ]
+      },
+      {
+        "id": "wk_wc90vw",
+        "number": 2,
+        "title": "A Month of Content",
+        "next_step": null,
+        "actions": [
+          {
+            "id": "act_weo3f8",
+            "text": "Sort the website photos into three folders",
+            "how_to": "stp_7clf9y"
+          },
+          {
+            "id": "act_fh1dkz",
+            "text": "Write 12 captions and schedule them",
+            "how_to": "stp_k6gy5q"
+          }
+        ],
+        "checklist": [
+          {
+            "id": "chk_0itnz2",
+            "text": "Three folders hold at least four photos each"
+          },
+          {
+            "id": "chk_v9z5bn",
+            "text": "12 posts are scheduled in Meta Business Suite"
+          }
+        ]
+      },
+      {
+        "id": "wk_2lrnhl",
+        "number": 3,
+        "title": "First Reels and Review Link",
+        "next_step": null,
+        "actions": [
+          {
+            "id": "act_g7efyz",
+            "text": "Publish the first two Reels",
+            "how_to": "stp_7v8nsi"
+          },
+          {
+            "id": "act_4dz0vq",
+            "text": "Turn on comment notifications and follow 50 local accounts",
+            "how_to": "stp_hky03f"
+          },
+          {
+            "id": "act_f5jtpu",
+            "text": "Create the Google review link",
+            "how_to": "stp_abuzpq"
+          }
+        ],
+        "checklist": [
+          {
+            "id": "chk_fon2vi",
+            "text": "Two Reels are published"
+          },
+          {
+            "id": "chk_9dcuqw",
+            "text": "50 local accounts are followed"
+          },
+          {
+            "id": "chk_gqpumh",
+            "text": "The review link is saved where the whole team can find it"
+          }
+        ]
+      },
+      {
+        "id": "wk_dtmxj4",
+        "number": 4,
+        "title": "Review Requests Go Live",
+        "next_step": null,
+        "actions": [
+          {
+            "id": "act_rul48f",
+            "text": "Set up the review request email",
+            "how_to": "stp_6sh853"
+          },
+          {
+            "id": "act_eseeyf",
+            "text": "Print and place QR cards in every cabin",
+            "how_to": "stp_stx85v"
+          },
+          {
+            "id": "act_i2aaub",
+            "text": "Check Instagram insights and note the three best posts",
+            "how_to": null
+          }
+        ],
+        "checklist": [
+          {
+            "id": "chk_2awi16",
+            "text": "The review request sends automatically three days after checkout"
+          },
+          {
+            "id": "chk_hift62",
+            "text": "A QR card is in every cabin"
+          },
+          {
+            "id": "chk_l9oowu",
+            "text": "The three best posts of the month are noted"
+          }
+        ]
+      },
+      {
+        "id": "wk_zkohrc",
+        "number": 5,
+        "title": "Google Profile",
+        "next_step": null,
+        "actions": [
+          {
+            "id": "act_gwejdx",
+            "text": "Complete every section of the Google Business Profile",
+            "how_to": "stp_7zsjl9"
+          },
+          {
+            "id": "act_7zt8eb",
+            "text": "Upload ten new photos and publish the first Google Post",
+            "how_to": "stp_1t63jy"
+          },
+          {
+            "id": "act_5wb77i",
+            "text": "Reply to new reviews within 24 hours",
+            "how_to": "stp_1x7cm0"
+          }
+        ],
+        "checklist": [
+          {
+            "id": "chk_9k5vv8",
+            "text": "Seasonal dates and check-in hours show on the profile"
+          },
+          {
+            "id": "chk_bav8kl",
+            "text": "Ten new photos are live"
+          },
+          {
+            "id": "chk_duris1",
+            "text": "The first Google Post is published"
+          }
+        ]
+      },
+      {
+        "id": "wk_mfu8sf",
+        "number": 6,
+        "title": "Technical Basics",
+        "next_step": null,
+        "actions": [
+          {
+            "id": "act_qd4zxs",
+            "text": "Record the Search Console baseline",
+            "how_to": "stp_t68zdj"
+          },
+          {
+            "id": "act_ntmmfe",
+            "text": "Shorten the homepage title and add headings",
+            "how_to": "stp_nirjva"
+          },
+          {
+            "id": "act_2yxyv4",
+            "text": "Brief the web developer on structured data",
+            "how_to": "stp_vns9eq"
+          }
+        ],
+        "checklist": [
+          {
+            "id": "chk_dfrglv",
+            "text": "The baseline export is saved with a date in the file name"
+          },
+          {
+            "id": "chk_yxj4xx",
+            "text": "The homepage title is under 60 characters"
+          },
+          {
+            "id": "chk_cvlzr8",
+            "text": "The developer has confirmed a delivery date"
+          }
+        ]
+      },
+      {
+        "id": "wk_3t7ry6",
+        "number": 7,
+        "title": "Listings and Book Now",
+        "next_step": null,
+        "actions": [
+          {
+            "id": "act_f4jh7b",
+            "text": "Audit existing listings",
+            "how_to": "stp_usobs9"
+          },
+          {
+            "id": "act_ig8pyy",
+            "text": "Claim the four priority listings",
+            "how_to": "stp_nsxfk6"
+          },
+          {
+            "id": "act_yhg9py",
+            "text": "Brief the Book Now button",
+            "how_to": "stp_pywh56"
+          }
+        ],
+        "checklist": [
+          {
+            "id": "chk_ttpjqu",
+            "text": "Every existing listing is recorded with its name, address and phone number"
+          },
+          {
+            "id": "chk_onueeu",
+            "text": "Apple Maps, Bing Places, Tripadvisor and the tourism office listings are claimed"
+          },
+          {
+            "id": "chk_78juin",
+            "text": "The Book Now button is scheduled with the developer"
+          }
+        ]
+      },
+      {
+        "id": "wk_avsrb8",
+        "number": 8,
+        "title": "Booking Page",
+        "next_step": null,
+        "actions": [
+          {
+            "id": "act_nr9j25",
+            "text": "Add rates, cabin types and the cancellation policy to the booking page",
+            "how_to": "stp_zgdzxg"
+          },
+          {
+            "id": "act_jffb6m",
+            "text": "Write the Know Before You Go page",
+            "how_to": "stp_sgvdaa"
+          },
+          {
+            "id": "act_0f8hky",
+            "text": "Keep posting three times a week",
+            "how_to": null
+          }
+        ],
+        "checklist": [
+          {
+            "id": "chk_h9xvqb",
+            "text": "Rates and the cancellation policy show on the booking page"
+          },
+          {
+            "id": "chk_buyhyb",
+            "text": "Know Before You Go is published and in the main menu"
+          }
+        ]
+      },
+      {
+        "id": "wk_89b2uc",
+        "number": 9,
+        "title": "Guest List",
+        "next_step": null,
+        "actions": [
+          {
+            "id": "act_zy07dh",
+            "text": "Import past guests and send the permission email",
+            "how_to": "stp_h87vst"
+          },
+          {
+            "id": "act_y6zj6i",
+            "text": "Add the sign-up form to the footer",
+            "how_to": "stp_hrs4ys"
+          },
+          {
+            "id": "act_cwkd8p",
+            "text": "Publish the three-day itinerary",
+            "how_to": "stp_9yv5z9"
+          }
+        ],
+        "checklist": [
+          {
+            "id": "chk_xz8jd0",
+            "text": "The permission email has been sent"
+          },
+          {
+            "id": "chk_gnvc5y",
+            "text": "The footer sign-up form is live"
+          },
+          {
+            "id": "chk_cvu7u2",
+            "text": "The first local guide is published"
+          }
+        ]
+      },
+      {
+        "id": "wk_pgi1vu",
+        "number": 10,
+        "title": "Pre-arrival Email",
+        "next_step": null,
+        "actions": [
+          {
+            "id": "act_sk3yjr",
+            "text": "Build and switch on the pre-arrival email",
+            "how_to": "stp_77peyg"
+          },
+          {
+            "id": "act_i007aq",
+            "text": "Check local ranking for your three key phrases",
+            "how_to": "stp_blf1ij"
+          }
+        ],
+        "checklist": [
+          {
+            "id": "chk_4os2y5",
+            "text": "The pre-arrival email sends automatically five days before arrival"
+          },
+          {
+            "id": "chk_udta4i",
+            "text": "This month's ranking positions are recorded"
+          }
+        ]
+      },
+      {
+        "id": "wk_9avvdn",
+        "number": 11,
+        "title": "Seasonal Email",
+        "next_step": null,
+        "actions": [
+          {
+            "id": "act_lmq8w7",
+            "text": "Send the seasonal availability email",
+            "how_to": "stp_wd1l3v"
+          },
+          {
+            "id": "act_ihvgx4",
+            "text": "Publish the second local guide",
+            "how_to": "stp_9yv5z9"
+          },
+          {
+            "id": "act_2ty5lb",
+            "text": "Share two recent reviews on social",
+            "how_to": null
+          }
+        ],
+        "checklist": [
+          {
+            "id": "chk_kkmhgj",
+            "text": "The seasonal email has been sent to confirmed subscribers"
+          },
+          {
+            "id": "chk_knq63c",
+            "text": "The second local guide is published"
+          },
+          {
+            "id": "chk_98rr04",
+            "text": "Two reviews have been shared on social"
+          }
+        ]
+      },
+      {
+        "id": "wk_ypo1fi",
+        "number": 12,
+        "title": "Review and Plan Ahead",
+        "next_step": null,
+        "actions": [
+          {
+            "id": "act_sul75e",
+            "text": "Compare followers, reviews, search clicks and direct bookings against the baseline",
+            "how_to": null
+          },
+          {
+            "id": "act_l7igws",
+            "text": "Write down what worked, what did not and what to repeat",
+            "how_to": null
+          },
+          {
+            "id": "act_mizw23",
+            "text": "Set a monthly routine for posts, review replies and Google Posts",
+            "how_to": null
+          }
+        ],
+        "checklist": [
+          {
+            "id": "chk_pa9juj",
+            "text": "The 90-day numbers are recorded beside the baseline"
+          },
+          {
+            "id": "chk_ihak5d",
+            "text": "A monthly routine is written down and on the calendar"
+          }
+        ]
+      }
+    ],
+    "closing": null
+  },
+  "quick_wins": {
+    "groups": [
+      {
+        "title": "On the Google Business Profile",
+        "items": [
+          {
+            "id": "qw_pqg9g1",
+            "title": "Reply to all 20 Google reviews",
+            "text": "None of them has a response. Reply to each one personally and mention something the guest said."
+          },
+          {
+            "id": "qw_rz3xqu",
+            "title": "Add seasonal opening dates and check-in hours",
+            "text": "A traveller planning a February trip has no way to know whether you are open."
+          },
+          {
+            "id": "qw_52zboj",
+            "title": "Start Google Posts",
+            "text": "One post every two weeks keeps the listing active in local results."
+          }
+        ]
+      },
+      {
+        "title": "On the Website",
+        "items": [
+          {
+            "id": "qw_cdb0px",
+            "title": "Shorten the homepage title",
+            "text": "It is cut off in search results. Keep it under 60 characters."
+          },
+          {
+            "id": "qw_g8ttau",
+            "title": "Add the phone number to the header",
+            "text": "Make it a tappable link on mobile."
+          }
+        ]
+      }
+    ],
+    "note": null
+  },
+  "voice": {
+    "progress_headlines": [],
+    "tour": []
+  }
+}
