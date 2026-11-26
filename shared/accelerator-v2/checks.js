@@ -476,11 +476,10 @@ export function checkContent(content, options = {}) {
 export function hiddenContent(content) {
   const groups = [];
   const group = (field, label, where) => { if (where.length) groups.push({ field, label, where }); };
-  // Phase descriptions and the Next Step time and who are kept in content.json,
+  // Phase descriptions, the Next Step time and who, and part cards ("What this
+  // breaks into") are kept in content.json,
   // but the redesigned dashboard (DESIGN-BRIEF.md) does not show them, so an
   // empty one hides nothing.
-  const parts = (content.tactics || []).flatMap((t, ti) => (t.parts || []).map((p, pi) => ({ p, where: `Tactic ${ti + 1} / Part ${String.fromCharCode(65 + pi)}` })));
-  group('tactics[].parts[].card', 'Part card description', parts.filter(({ p }) => !p.card || isEmpty(p.card.description)).map(x => x.where));
   group('roadmap.closing', 'Roadmap closing note', isEmpty((content.roadmap || {}).closing) ? ['Roadmap'] : []);
   group('tactics[].time_commitment', 'Time commitment', (content.tactics || []).map((t, i) => ({ t, where: `Tactic ${i + 1}` })).filter(({ t }) => !t.time_commitment || isEmpty(t.time_commitment.amount)).map(x => x.where));
   const s = content.strategy || {};

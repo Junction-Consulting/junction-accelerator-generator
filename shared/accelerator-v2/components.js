@@ -52,8 +52,8 @@ export const ICONS = {
   note: '<svg viewBox="0 0 20 20" fill="currentColor"><path d="M13 2.5H3a.5.5 0 00-.5.5v14a.5.5 0 00.5.5h10a.5.5 0 00.5-.5V3a.5.5 0 00-.5-.5zM3 0h10a3 3 0 013 3v14a3 3 0 01-3 3H3a3 3 0 01-3-3V3a3 3 0 013-3zm2 5h6v2H5V5zm0 4h6v2H5V9z"/></svg>',
   noteOutline: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M13 2.5H3C2.17157 2.5 1.5 3.17157 1.5 4V12C1.5 12.8284 2.17157 13.5 3 13.5H13C13.8284 13.5 14.5 12.8284 14.5 12V4C14.5 3.17157 13.8284 2.5 13 2.5Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/><path d="M4.5 5.5H11.5M4.5 8H9.5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg>',
   arrowRight: '<svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 10a.75.75 0 01.75-.75h10.638L10.23 5.29a.75.75 0 111.04-1.08l5.5 5.25a.75.75 0 010 1.08l-5.5 5.25a.75.75 0 11-1.04-1.08l4.158-3.96H3.75A.75.75 0 013 10z" clip-rule="evenodd"/></svg>',
-  document: '<svg class="tactic-mockup-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" clip-rule="evenodd"/></svg>',
-  email: '<svg class="tactic-mockup-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/><path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/></svg>',
+  document: '<svg class="media-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" clip-rule="evenodd"/></svg>',
+  email: '<svg class="media-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/><path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/></svg>',
   // Sidebar icons, one per tactic position (they cycle)
   tactics: [
     '<path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zm6-4a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zm6-3a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"/>',
@@ -133,7 +133,7 @@ export function thisWeekPanel(week, links) {
   const rows = week.actions.map((a, i) => {
     const link = links[i];
     let howTo = '';
-    if (link === 'quick_wins') howTo = `<button type="button" class="link-btn" onclick="navigate('gbp')">How to</button>`;
+    if (link === 'quick_wins') howTo = `<button type="button" class="link-btn" onclick="openGbpWins()">How to</button>`;
     else if (link) howTo = `<button type="button" class="link-btn" onclick="howToLink('tactic${link.tactic}','${attr(link.stepId)}')">How to</button>`;
     const id = `dw-${attr(a.id)}`;
     return `<div class="task-row"><input type="checkbox" class="tick" id="${id}" data-mirror="${attr(a.id)}" onchange="onMirrorTick(this)"><label class="task-label" for="${id}">${md(a.text)}</label>${howTo}</div>`;
@@ -400,93 +400,111 @@ export function tacticOverviewCard(tactic, n) {
         </div>`;
 }
 
-// ── Tactic page ────────────────────────────────────────────────────────────
+// ── Tactic page (DESIGN-BRIEF.md section 6, "Tactic") ─────────────────────
+//
+// Two tabs: Overview, and Implementation steps as one continuous scroll.
+// ctx: { total (the tactic's task count), stepWeeks (step ID -> [week numbers]),
+//        next ({ n, title } or null), assetUrl }
 
-export function tacticHeader(tactic, n) {
+export function tacticHeader(tactic, n, total) {
   const label = has(tactic.phase_label) ? `Tactic ${n} · ${plain(tactic.phase_label)}` : `Tactic ${n}`;
-  const tabs = [['overview', 'Overview'], ['steps', 'Implementation Steps'], ['metrics', 'Success Metrics'], ['tips', 'Tips &amp; Resources']];
-  return `<div class="tactic-hero" data-tactic="${n}">
-      <div class="tactic-hero-top">
-        <div class="tactic-hero-meta">
-          <span class="tactic-hero-label">${label}</span>
-          <span class="tactic-hero-status" id="t${n}-status">Not Started</span>
-        </div>
-        <div class="tactic-hero-progress">
-          <svg class="tactic-hero-ring" viewBox="0 0 80 80">
-            <circle class="tactic-hero-ring-bg" cx="40" cy="40" r="31"></circle>
-            <circle class="tactic-hero-ring-bar" id="t${n}-ring" cx="40" cy="40" r="31" transform="rotate(-90 40 40)"></circle>
-          </svg>
-          <div>
-            <div class="tactic-hero-pct" id="t${n}-pct">0%</div>
-            <div class="tactic-hero-pct-label">of this tactic</div>
-          </div>
-        </div>
+  const tabs = [['overview', 'Overview'], ['steps', 'Implementation steps']];
+  return `<header class="tp-head" data-tactic="${n}">
+      <div class="tp-head-text">
+        <h1 class="tp-h1"${editKey(`${tactic.id}.title`)}>${plain(tactic.title)}</h1>
+        ${has(tactic.subtitle) ? `<p class="tp-sub"${editKey(`${tactic.id}.subtitle`)}>${md(tactic.subtitle)}</p>` : ''}
+        <div class="meta-label">${label}</div>
       </div>
-      <h1${editKey(`${tactic.id}.title`)}>${plain(tactic.title)}</h1>
-      <p${editKey(`${tactic.id}.subtitle`)}>${md(tactic.subtitle)}</p>
-      <div class="tactic-tabs" role="tablist" aria-label="Tactic ${n} sections">
-        ${tabs.map(([tab, name], i) => `<button class="tactic-tab${i === 0 ? ' active' : ''}" id="tab-t${n}-${tab}" role="tab" aria-selected="${i === 0}" aria-controls="panel-t${n}-${tab}" data-tactic-tab="${n}" data-tab="${tab}" onclick="switchTacticTab(${n}, '${tab}')">${name}</button>`).join('\n        ')}
+      <div class="tp-progress">
+        ${donut({ tone: 'ground', size: 'sm', number: '0%', live: `tactic-${n}`, label: 'Share of this tactic done' })}
+        <p class="tp-progress-text"><span data-live="tactic-${n}-done">0</span> of ${total} tasks done</p>
       </div>
+    </header>
+    <div class="tp-tabs" role="tablist" aria-label="${attr(tactic.short_label || tactic.title)}">
+      ${tabs.map(([tab, name], i) => `<button type="button" class="tp-tab${i === 0 ? ' active' : ''}" id="tab-t${n}-${tab}" role="tab" aria-selected="${i === 0}" aria-controls="panel-t${n}-${tab}" data-tactic-tab="${n}" data-tab="${tab}" onclick="switchTacticTab(${n}, '${tab}')">${name}</button>`).join('\n      ')}
     </div>`;
 }
 
-function cardBlock(label, inner, extraClass = '') {
-  return `<div class="tactic-card-block${extraClass}">
-          <div class="tactic-card-label">${label}</div>
-          ${inner}
-        </div>`;
+const proseBlock = (tactic, key, title) => ((tactic[key] || []).length
+  ? `<div class="tp-prose"><h2 class="tp-h3">${title}</h2><div class="tp-text"${editKey(`${tactic.id}.${key}`)}>${paragraphs(tactic[key])}</div></div>` : '');
+
+/** A plain table: header row, rows separated by alternating tints, no lines. */
+export function plainTable(columns, rows, extraClass = '') {
+  return `<div class="table-scroll">
+            <table class="plain-table${extraClass}">
+              <thead><tr>${columns.map(c => `<th scope="col">${md(c)}</th>`).join('')}</tr></thead>
+              <tbody>
+                ${rows.map(r => `<tr>${r.map((c, i) => (i === 0 ? `<th scope="row">${md(c)}</th>` : `<td>${md(c)}</td>`)).join('')}</tr>`).join('\n                ')}
+              </tbody>
+            </table>
+          </div>`;
 }
 
-export function partCard(part, isLastOdd) {
-  const title = part.card && has(part.card.title) ? part.card.title : part.name;
-  const titleKey = part.card && has(part.card.title) ? `${part.id}.card.title` : null; // the name is edited in the part header
-  const desc = part.card && has(part.card.description)
-    ? `\n              <div class="tactic-breakdown-desc"${editKey(`${part.id}.card.description`)}>${plain(part.card.description)}</div>` : '';
-  return `<div class="tactic-breakdown-item${isLastOdd ? ' full-width' : ''}">
-              <div class="tactic-breakdown-title"${editKey(titleKey)}>${plain(title)}</div>${desc}
-            </div>`;
+export function metricsTable(metrics) {
+  if (!metrics || !(metrics.rows || []).length) return '';
+  return `<section class="tp-card">
+        <h2 class="tp-h2">Success metrics</h2>
+        ${plainTable(metrics.columns, metrics.rows, ' tp-metrics')}
+      </section>`;
 }
 
-export function tacticOverview(tactic) {
-  const parts = tactic.parts || [];
-  const breakdown = parts.length
-    ? cardBlock('What This Breaks Into', `<div class="tactic-breakdown-grid">
-            ${parts.map((p, i) => partCard(p, parts.length % 2 === 1 && i === parts.length - 1)).join('\n            ')}
-          </div>`)
-    : '';
+export function tips(tactic) {
+  if (!(tactic.tips || []).length) return '';
+  return `<section class="tp-card tp-card--sage25">
+          <h2 class="tp-h3">Tips</h2>
+          <ul class="tp-list">
+            ${tactic.tips.map((tip, i) => `<li${editKey(`${tactic.id}.tips.${i}`)}>${md(tip)}</li>`).join('\n            ')}
+          </ul>
+        </section>`;
+}
+
+export function resources(tactic) {
+  if (!(tactic.resources || []).length) return '';
+  return `<section class="tp-card">
+          <h2 class="tp-h3">Resources</h2>
+          <ul class="tp-links">
+            ${tactic.resources.map((r, i) => `<li><a href="${attr(r.url)}" data-editable-link="${attr(`${tactic.id}.resources.${i}`)}" target="_blank" rel="noopener">${plain(r.title)}</a>${has(r.description) ? `<span class="tp-link-note">${md(r.description)}</span>` : ''}</li>`).join('\n            ')}
+          </ul>
+        </section>`;
+}
+
+export function tacticOverview(tactic, n) {
   const tc = tactic.time_commitment;
   const time = tc && has(tc.amount)
-    ? cardBlock('Time Commitment', `<div>
-            <span class="tactic-time-value">${plain(tc.amount)}</span>${has(tc.detail) ? `\n            <span class="tactic-time-context">${plain(tc.detail)}</span>` : ''}
-          </div>`)
-    : '';
-  const prose = (key, label, extra = '') => ((tactic[key] || []).length
-    ? cardBlock(label, `<p${editKey(`${tactic.id}.${key}`)}>${paragraphs(tactic[key])}</p>`, extra) : '');
-  return `<div class="tactic-overview-grid">
-      <div class="tactic-overview-col">
-        ${prose('what_this_is', 'What This Is')}
-        ${breakdown}
-      </div>
-      <div class="tactic-overview-col">
-        ${prose('what_we_heard', 'What We Heard From You', ' navy')}
-        ${prose('why_it_matters', 'Why It Matters')}
-        ${time}
-      </div>
-    </div>`;
+    ? `<p class="tp-time"><strong>Time commitment:</strong> <span class="tactic-time-value">${plain(tc.amount)}</span>${has(tc.detail) ? ` <span class="tactic-time-context">${plain(tc.detail)}</span>` : ''}</p>` : '';
+  const main = proseBlock(tactic, 'what_this_is', 'What this is') + proseBlock(tactic, 'why_it_matters', 'Why it matters') + time;
+  const heard = (tactic.what_we_heard || []).length
+    ? `<section class="tp-card tp-card--sage tp-heard">
+          <h2 class="tp-h3">What we heard from you</h2>
+          <div class="tp-text"${editKey(`${tactic.id}.what_we_heard`)}>${paragraphs(tactic.what_we_heard)}</div>
+        </section>` : '';
+  const tipsHtml = tips(tactic);
+  const resHtml = resources(tactic);
+  return `${main || heard ? `<div class="tp-row">
+        ${main ? `<section class="tp-card">${main}</section>` : ''}
+        ${heard}
+      </div>` : ''}
+      ${metricsTable(tactic.metrics)}
+      ${tipsHtml || resHtml ? `<div class="tp-row">
+        ${tipsHtml}
+        ${resHtml}
+      </div>` : ''}
+      <div class="tp-foot tp-foot--end"><button type="button" class="btn" onclick="switchTacticTab(${n}, 'steps')">Next: implementation steps</button></div>`;
 }
 
-// Step labels: time, cost, Contractor, Critical (the v1 .tactic-step-tag pills)
-const TAG_LABELS = { contractor: ['Contractor', 'warning'], critical: ['Critical', 'danger'] };
+// Step labels: time, cost, Contractor, Critical
+const TAG_LABELS = { contractor: 'Contractor', critical: 'Critical' };
 
-export function stepLabels(step) {
+export function stepLabels(step, weeks) {
   const labels = [];
-  if (has(step.time)) labels.push(`<span class="tactic-step-tag muted">${plain(step.time)}</span>`);
-  if (has(step.cost)) labels.push(`<span class="tactic-step-tag info">${plain(step.cost)}</span>`);
-  (step.tags || []).forEach(tag => {
-    const [label, tone] = TAG_LABELS[tag] || [tag, 'muted'];
-    labels.push(`<span class="tactic-step-tag ${tone}">${label}</span>`);
-  });
-  return labels.length ? `<div class="tactic-step-tags">${labels.join('')}</div>` : '';
+  if (has(step.time)) labels.push(`<span class="step-label">${plain(step.time)}</span>`);
+  if (has(step.cost)) labels.push(`<span class="step-label">${plain(step.cost)}</span>`);
+  (step.tags || []).forEach(tag => labels.push(`<span class="step-chip step-chip--${attr(tag)}">${TAG_LABELS[tag] || plain(tag)}</span>`));
+  if (weeks && weeks.length) {
+    const words = weeks.length === 1 ? `week ${weeks[0]}` : `weeks ${weeks.slice(0, -1).join(', ')} and ${weeks[weeks.length - 1]}`;
+    labels.push(`<button type="button" class="link-btn step-week-link" onclick="openRoadmapWeek(${weeks[0]})">On your roadmap in ${words}</button>`);
+  }
+  return labels.length ? `<div class="step-labels">${labels.join('')}</div>` : '';
 }
 
 /** A bullets block: one flat list, sub-bullets marked, as Edit Mode expects. */
@@ -501,107 +519,67 @@ export function bullets(block) {
             </ul>`;
 }
 
-/** A table, in the Success Metrics table style. */
-export function table(columns, rows, extraClass = '') {
-  return `<div class="tactic-metrics-table${extraClass}">
-            <table>
-              <thead>
-                <tr>${columns.map(c => `<th>${md(c)}</th>`).join('')}</tr>
-              </thead>
-              <tbody>
-                ${rows.map(r => `<tr>${r.map(c => `<td>${md(c)}</td>`).join('')}</tr>`).join('\n                ')}
-              </tbody>
-            </table>
-          </div>`;
+/** A table inside a step. */
+export function table(columns, rows) {
+  return plainTable(columns, rows, ' step-table');
 }
 
 export function stepLinks(step) {
-  return (step.links || []).map(l => `<a href="${attr(l.url)}" class="tactic-step-resource" target="_blank" rel="noopener">${plain(l.title)}</a>`).join('\n');
+  const links = (step.links || []).map(l => `<a href="${attr(l.url)}" class="step-resource" target="_blank" rel="noopener">${plain(l.title)}</a>`);
+  return links.length ? `<div class="step-resources">${links.join('')}</div>` : '';
 }
 
-export function step(stepData, number, tacticNumber, assetUrl) {
-  const body = (stepData.body || []).map(block => (block.type === 'table' ? table(block.columns, block.rows, ' tactic-step-table') : bullets(block))).join('\n            ');
+/** One collapsible step. Collapsed until opened, or linked to. */
+export function step(stepData, number, tacticNumber, assetUrl, weeks) {
+  const id = attr(stepData.id);
+  const body = (stepData.body || []).map(block => (block.type === 'table' ? table(block.columns, block.rows) : bullets(block))).join('\n            ');
   const media = (stepData.media || []).length
     ? `\n            <div class="tactic-step-media-list">\n              ${mediaList(stepData.media, assetUrl)}\n            </div>` : '';
-  const links = stepLinks(stepData);
-  return `<li class="tactic-step-item" id="${attr(stepData.id)}" data-step-number="${number}">
-          <span class="tactic-step-num">${number}</span>
-          <div class="tactic-step-content">
-            <div class="tactic-step-title"${editKey(`${stepData.id}.title`)}>${plain(stepData.title)}</div>
-            ${stepLabels(stepData)}
-            ${body}${links ? `\n            ${links}` : ''}${media}
+  return `<section class="step-card" id="${id}" data-step-number="${number}">
+          <button type="button" class="step-head" aria-expanded="false" aria-controls="${id}-body" onclick="toggleStep(this)">
+            <span class="step-numeral" aria-hidden="true">${number}</span>
+            <span class="step-title"${editKey(`${stepData.id}.title`)}>${plain(stepData.title)}</span>
+            <span class="chev" aria-hidden="true"></span>
+          </button>
+          <div class="step-body" id="${id}-body" hidden>
+            ${stepLabels(stepData, weeks)}
+            ${body}
+            ${stepLinks(stepData)}${media}
           </div>
-        </li>`;
+        </section>`;
 }
 
-export function part(partData, index, firstNumber, tacticNumber, assetUrl) {
-  const count = partData.steps.length;
+export function part(partData, index, firstNumber, tacticNumber, assetUrl, stepWeeks) {
   const letter = String.fromCharCode(65 + index);
-  return `<div class="tactic-part${index === 0 ? ' open' : ''}">
-    <button class="tactic-part-header" onclick="toggleTacticPart(this)">
-      <span class="tactic-part-tag">Part ${letter}</span>
-      <span class="tactic-part-title"${editKey(`${partData.id}.name`)}>${plain(partData.name)}</span>
-      <span class="tactic-part-meta">${count} ${count === 1 ? 'step' : 'steps'}</span>
-      ${ICONS.chevronPart}
-    </button>
-    <div class="tactic-part-body">
-      <ol class="tactic-steps-list">
-        ${partData.steps.map((s, i) => step(s, firstNumber + i, tacticNumber, assetUrl)).join('\n        ')}
-      </ol>
-    </div>
-  </div>`;
+  return `<h2 class="tp-h2 part-heading">Part ${letter}: <span${editKey(`${partData.id}.name`)}>${plain(partData.name)}</span></h2>
+      ${partData.steps.map((s, i) => step(s, firstNumber + i, tacticNumber, assetUrl, stepWeeks.get(s.id))).join('\n      ')}`;
 }
 
-export function implementationSteps(tactic, tacticNumber, assetUrl) {
+export function implementationSteps(tactic, tacticNumber, assetUrl, stepWeeks = new Map()) {
   let number = 1;
   const parts = (tactic.parts || []).map((p, i) => {
-    const html = part(p, i, number, tacticNumber, assetUrl);
+    const html = part(p, i, number, tacticNumber, assetUrl, stepWeeks);
     number += p.steps.length;
     return html;
   });
-  return `<div class="tactic-parts-list">\n  ${parts.join('\n  ')}\n</div>`;
+  return `<div class="steps-scroll">\n      ${parts.join('\n      ')}\n    </div>`;
 }
 
-export function metricsTable(metrics) {
-  if (!metrics || !(metrics.rows || []).length) return '';
-  return cardBlock('Success Metrics', table(metrics.columns, metrics.rows));
-}
-
-export function tips(tactic) {
-  if (!(tactic.tips || []).length) return '';
-  return cardBlock('Tips', `<ul class="tactic-tips-list">
-                ${tactic.tips.map((tip, i) => `<li${editKey(`${tactic.id}.tips.${i}`)}>${md(tip)}</li>`).join('\n                ')}
-              </ul>`);
-}
-
-export function resources(tactic) {
-  if (!(tactic.resources || []).length) return '';
-  return cardBlock('Resources', `<ul class="tactic-resources-list">
-                ${tactic.resources.map((r, i) => `<li><a href="${attr(r.url)}" data-editable-link="${attr(`${tactic.id}.resources.${i}`)}" target="_blank">${plain(r.title)}</a>${has(r.description) ? `: ${md(r.description)}` : ''}</li>`).join('\n                ')}
-              </ul>`);
-}
-
-export function tacticPage(tactic, n, assetUrl) {
-  const panel = (tab, inner, active = false) => `<div class="tactic-tab-content${active ? ' active' : ''}" id="panel-t${n}-${tab}" role="tabpanel" aria-labelledby="tab-t${n}-${tab}" data-tactic-content="${n}" data-content="${tab}">
-        ${inner}
-      </div>`;
-  const tipsAndResources = `<div class="tactic-overview-grid">
-          <div class="tactic-overview-col">
-            ${tips(tactic)}
-          </div>
-          <div class="tactic-overview-col">
-            ${resources(tactic)}
-          </div>
-        </div>`;
+export function tacticPage(tactic, n, ctx) {
+  const { assetUrl, total = 0, stepWeeks = new Map(), next = null } = ctx || {};
+  const panel = (tab, inner, active = false) => `<div class="tp-panel${active ? ' active' : ''}" id="panel-t${n}-${tab}" role="tabpanel" aria-labelledby="tab-t${n}-${tab}" data-tactic-content="${n}" data-content="${tab}"${active ? '' : ' hidden'}>
+      ${inner}
+    </div>`;
+  const nextButton = next
+    ? `<button type="button" class="btn" onclick="navigate('tactic${next.n}')">Next tactic: ${plain(next.title)}</button>`
+    : `<button type="button" class="btn" onclick="navigate('roadmap')">Open the roadmap</button>`;
+  const steps = `${implementationSteps(tactic, n, assetUrl, stepWeeks)}
+      <div class="tp-foot"><button type="button" class="link-btn" onclick="switchTacticTab(${n}, 'overview')">Back to overview</button>${nextButton}</div>`;
   return `<section id="page-tactic${n}" class="page" data-tactic-id="${attr(tactic.id)}">
-  <div class="tactic-page-content">
-    ${tacticHeader(tactic, n)}
-    <div class="tactic-body">
-      ${panel('overview', tacticOverview(tactic), true)}
-      ${panel('steps', implementationSteps(tactic, n, assetUrl))}
-      ${panel('metrics', metricsTable(tactic.metrics))}
-      ${panel('tips', tipsAndResources)}
-    </div>
+  <div class="tp">
+    ${tacticHeader(tactic, n, total)}
+    ${panel('overview', tacticOverview(tactic, n), true)}
+    ${panel('steps', steps)}
   </div>
 </section>`;
 }
@@ -610,25 +588,19 @@ export function tacticPage(tactic, n, assetUrl) {
 
 const lightbox = 'class="lightbox-trigger" onclick="openLightbox(this.src, this.alt)"';
 const BADGES = { mockup: 'Mockup', example: 'Example' };
-const badge = b => (BADGES[b] ? `<span class="tactic-step-media-badge tactic-mockup-badge">${BADGES[b]}</span>` : '');
-const caption = c => (has(c) ? `<div class="tactic-mockup-label">${plain(c)}</div>` : '');
-const dots = '<span class="tactic-mockup-dot red"></span>\n            <span class="tactic-mockup-dot yellow"></span>\n            <span class="tactic-mockup-dot green"></span>';
+const badge = b => (BADGES[b] ? `<span class="media-badge">${BADGES[b]}</span>` : '');
+const caption = c => (has(c) ? `<figcaption class="media-caption">${plain(c)}</figcaption>` : '');
 
 function img(entry, assetUrl, zoom = true) {
   return `<img src="${attr(assetUrl(entry.asset))}" alt="${attr(entry.alt)}"${zoom ? ` ${lightbox}` : ''} loading="lazy">`;
 }
 
-function chrome(frame, bar, open) {
-  if (frame === 'document' || frame === 'email') {
-    const label = has(bar) ? bar : (frame === 'email' ? 'Email' : '');
-    return `<div class="tactic-mockup-chrome tactic-mockup-chrome--titled">
-            ${ICONS[frame]}
-            <div class="tactic-mockup-title">${plain(label)}</div>
-          </div>`;
-  }
-  return `<div class="tactic-mockup-chrome">
-            ${dots}
-            <div class="tactic-mockup-url">${plain(bar)}</div>${open ? '\n            <span class="tactic-mockup-open" aria-hidden="true"><span class="tactic-mockup-open-text">Open site </span>↗</span>' : ''}
+/** The dark bar on top of a website, document or email frame: what it is, and its badge. */
+function chrome(frame, bar, open, badgeKey) {
+  const label = has(bar) ? bar : (frame === 'email' ? 'Email' : '');
+  const icon = frame === 'document' || frame === 'email' ? ICONS[frame] : '';
+  return `<div class="media-bar">
+            ${icon}<span class="media-bar-text">${plain(label)}</span>${open ? '<span class="media-open" aria-hidden="true">Open site ↗</span>' : ''}${badge(badgeKey)}
           </div>`;
 }
 
@@ -636,31 +608,27 @@ export function imageMedia(entry, assetUrl) {
   const frame = entry.frame || 'none';
   const linked = entry.link && entry.link.url;
   if (frame === 'none') {
-    return `<figure class="tactic-media-plain" data-media-id="${attr(entry.id)}">
-            <div class="tactic-media-plain-body">${badge(entry.badge)}${img(entry, assetUrl)}</div>
+    return `<figure class="media media--none" data-media-id="${attr(entry.id)}">
+            <div class="media-plain">${badge(entry.badge)}${img(entry, assetUrl)}</div>
             ${caption(entry.caption)}
           </figure>`;
   }
   if (frame === 'phone') {
-    return `<figure class="tactic-phone" data-media-id="${attr(entry.id)}">
-            <div class="tactic-reel-phone">${badge(entry.badge)}${img(entry, assetUrl)}</div>
-            ${has(entry.caption) ? `<figcaption class="tactic-reel-label">${plain(entry.caption)}</figcaption>` : ''}
+    return `<figure class="media media--phone" data-media-id="${attr(entry.id)}">
+            <div class="media-phone">${badge(entry.badge)}${img(entry, assetUrl)}</div>
+            ${caption(entry.caption)}
           </figure>`;
   }
-  const classes = ['tactic-mockup'];
-  if (frame === 'document') classes.push('tactic-mockup--document');
-  if (frame === 'email') classes.push('tactic-mockup--email');
-  if (entry.fit === 'full') classes.push('tactic-mockup--page');
-  const frameHtml = `<div class="${classes.join(' ')}" data-media-id="${attr(entry.id)}">
-          ${chrome(frame, entry.bar, linked)}
-          <div class="tactic-mockup-body">
-            ${badge(entry.badge)}${img(entry, assetUrl, !linked)}
+  const frameHtml = `<figure class="media media--${frame}${entry.fit === 'full' ? ' media--page' : ''}" data-media-id="${attr(entry.id)}">
+          <div class="media-frame">
+            ${chrome(frame, entry.bar, linked, entry.badge)}
+            <div class="media-body">${img(entry, assetUrl, !linked)}</div>
           </div>
           ${caption(entry.caption)}
-        </div>`;
+        </figure>`;
   if (!linked) return frameHtml;
   const label = has(entry.link.label) ? entry.link.label : 'Open site';
-  return `<a href="${attr(entry.link.url)}" class="tactic-mockup-link" target="_blank" rel="noopener" aria-label="${attr(`${label}: ${entry.alt} (opens in a new tab)`)}">
+  return `<a href="${attr(entry.link.url)}" class="media-link" target="_blank" rel="noopener" aria-label="${attr(`${label}: ${entry.alt} (opens in a new tab)`)}">
         ${frameHtml}
       </a>`;
 }
@@ -670,39 +638,41 @@ export function videoMedia(entry) {
     ? `https://player.vimeo.com/video/${encodeURIComponent(entry.video_id)}`
     : `https://www.youtube.com/embed/${encodeURIComponent(entry.video_id)}`;
   const host = entry.provider === 'vimeo' ? 'vimeo.com' : 'youtube.com';
-  return `<div class="tactic-mockup tactic-embed" data-media-id="${attr(entry.id)}">
-          ${chrome('website', host, false)}
-          <div class="tactic-mockup-body">
-            <iframe src="${src}" title="${attr(entry.title)}" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+  return `<figure class="media media--video" data-media-id="${attr(entry.id)}">
+          <div class="media-frame">
+            ${chrome('website', host, false)}
+            <div class="media-body media-body--video">
+              <iframe src="${src}" title="${attr(entry.title)}" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+            </div>
           </div>
           ${caption(entry.caption)}
-        </div>`;
+        </figure>`;
 }
 
 function socialPost(entry, assetUrl) {
-  const label = `${has(entry.handle) ? `<strong>${plain(entry.handle)}</strong>` : ''}${plain(entry.post_type)}${entry.url ? ' · <span class="tactic-reel-open">Open post ↗</span>' : ''}`;
-  const inner = `<div class="tactic-reel-phone">${img(entry, assetUrl, !entry.url)}</div>
-          <div class="tactic-reel-label">${label}</div>`;
+  const label = `${has(entry.handle) ? `<strong>${plain(entry.handle)}</strong>` : ''}${plain(entry.post_type)}${entry.url ? ' · <span class="media-open">Open post ↗</span>' : ''}`;
+  const inner = `<div class="media-phone">${img(entry, assetUrl, !entry.url)}</div>
+          <div class="media-caption">${label}</div>`;
   return entry.url
-    ? `<a href="${attr(entry.url)}" class="tactic-reel" target="_blank" rel="noopener" aria-label="${attr(`Open post: ${entry.alt} (opens in a new tab)`)}" data-media-id="${attr(entry.id)}">
+    ? `<a href="${attr(entry.url)}" class="media-post" target="_blank" rel="noopener" aria-label="${attr(`Open post: ${entry.alt} (opens in a new tab)`)}" data-media-id="${attr(entry.id)}">
           ${inner}
         </a>`
-    : `<div class="tactic-reel" data-media-id="${attr(entry.id)}">
+    : `<div class="media-post" data-media-id="${attr(entry.id)}">
           ${inner}
         </div>`;
 }
 
 export function galleryMedia(entry, assetUrl) {
-  return `<div class="tactic-gallery" data-media-id="${attr(entry.id)}">
-          ${has(entry.title) ? `<div class="tactic-gallery-title">${plain(entry.title)}</div>` : ''}
-          <div class="tactic-gallery-grid">
-            ${(entry.items || []).map(item => `<figure class="tactic-gallery-item">${img(item, assetUrl)}${has(item.caption) ? `<figcaption class="tactic-gallery-caption">${plain(item.caption)}</figcaption>` : ''}</figure>`).join('\n            ')}
+  return `<div class="media-gallery" data-media-id="${attr(entry.id)}">
+          ${has(entry.title) ? `<div class="media-gallery-title">${plain(entry.title)}</div>` : ''}
+          <div class="media-gallery-grid">
+            ${(entry.items || []).map(item => `<figure class="media-gallery-item">${img(item, assetUrl)}${has(item.caption) ? `<figcaption class="media-caption">${plain(item.caption)}</figcaption>` : ''}</figure>`).join('\n            ')}
           </div>
         </div>`;
 }
 
 export function groupMedia(entry, assetUrl) {
-  return `<div class="tactic-mockup-pair${entry.layout === 'four' ? ' tactic-mockup-four' : ''}" data-media-id="${attr(entry.id)}">
+  return `<div class="media-group${entry.layout === 'four' ? ' media-group--four' : ''}" data-media-id="${attr(entry.id)}">
           ${(entry.items || []).map(item => imageMedia(item, assetUrl)).join('\n          ')}
         </div>`;
 }
@@ -710,8 +680,8 @@ export function groupMedia(entry, assetUrl) {
 export function linkCardMedia(entry) {
   let host = '';
   try { host = new URL(entry.url).hostname.replace(/^www\./, ''); } catch (e) { host = entry.url; }
-  return `<a href="${attr(entry.url)}" class="tactic-mockup-link" target="_blank" rel="noopener" aria-label="${attr(`Open ${entry.title} (opens in a new tab)`)}" data-media-id="${attr(entry.id)}">
-        <div class="tactic-mockup">
+  return `<a href="${attr(entry.url)}" class="media-link media media--link" target="_blank" rel="noopener" aria-label="${attr(`Open ${entry.title} (opens in a new tab)`)}" data-media-id="${attr(entry.id)}">
+        <div class="media-frame">
           ${chrome('website', host, true)}
           <div class="tactic-link-card-body">
             <div class="tactic-link-card-title">${plain(entry.title)}</div>
@@ -726,7 +696,7 @@ export function mediaEntry(entry, assetUrl) {
   switch (entry.type) {
     case 'image': return imageMedia(entry, assetUrl);
     case 'video': return videoMedia(entry);
-    case 'social_post': return `<div class="tactic-reel-row">${socialPost(entry, assetUrl)}</div>`;
+    case 'social_post': return `<div class="media-row">${socialPost(entry, assetUrl)}</div>`;
     case 'gallery': return galleryMedia(entry, assetUrl);
     case 'group': return groupMedia(entry, assetUrl);
     case 'link_card': return linkCardMedia(entry);
@@ -747,42 +717,50 @@ export function mediaList(list, assetUrl) {
       out.push(mediaEntry(entry, assetUrl));
     }
   }
-  return out.map(x => (Array.isArray(x) ? `<div class="tactic-reel-row">\n          ${x.join('\n          ')}\n        </div>` : x)).join('\n              ');
+  return out.map(x => (Array.isArray(x) ? `<div class="media-row">\n          ${x.join('\n          ')}\n        </div>` : x)).join('\n              ');
 }
 
-// ── Roadmap ────────────────────────────────────────────────────────────────
+// ── Roadmap (DESIGN-BRIEF.md section 6, "90-day roadmap") ─────────────────
+
+const NOTE_BUTTON = (id, extraId) => `<button type="button" class="link-btn link-btn--quiet note-btn"${extraId ? ` id="${extraId}"` : ''} onclick="toggleNote('${id}')" aria-controls="note-area-${id}">Note</button>`;
+const NOTE_AREA = id => `<div class="note-area" id="note-area-${id}">
+      <textarea class="note-textarea" id="note-${id}" placeholder="Add a note" aria-label="Note" oninput="saveNote('${id}',this.value)"></textarea>
+    </div>`;
 
 /**
- * One action as a tick box (DESIGN-BRIEF.md section 7: tasks are the
- * actions). This is the saved tick: its data-key is the action ID, which
- * shared/progress.js loads and saves. The dashboard's tick boxes mirror it.
- * link: { tactic, stepId } | 'quick_wins' | null
+ * One action: the saved tick (data-key is the action ID, which
+ * shared/progress.js loads and saves; the dashboard mirrors it), "How to"
+ * and "Note".
+ * link: { tactic, stepId, tacticName, preview: [bullet text] } | 'quick_wins' | null
  */
 export function actionItem(action, link, { howtoId, noteButtonId } = {}) {
   const id = attr(action.id);
   const idAttr = howtoId ? ` id="${howtoId}"` : '';
-  let button = '';
-  if (link === 'quick_wins') button = `<button class="howto-link"${idAttr} onclick="navigate('gbp')">how to</button>`;
-  else if (link) button = `<button class="howto-link"${idAttr} onclick="howToLink('tactic${link.tactic}','${attr(link.stepId)}')">how to</button>`;
-  return `<div class="check-item">
-  <div class="check-row">
-    <input type="checkbox" class="check-input" id="${id}" data-key="${id}" onchange="onCheck(this)">
-    <label class="check-box" for="${id}">${ICONS.check}</label>
-    <label class="check-label" for="${id}"${editKey(`${action.id}.text`)}>${md(action.text)}</label>
-    ${button}
-    <button class="note-toggle-btn"${noteButtonId ? ` id="${noteButtonId}"` : ''} onclick="toggleNote('${id}')" title="Add note">${ICONS.note}</button>
-  </div>
-  <div class="note-area" id="note-area-${id}">
-    <textarea class="note-textarea" id="note-${id}" placeholder="Add a note…" oninput="saveNote('${id}',this.value)"></textarea>
-  </div>
-</div>`;
+  let howTo = '';
+  let preview = '';
+  if (link === 'quick_wins') {
+    howTo = `<button type="button" class="link-btn"${idAttr} onclick="openGbpWins()">How to</button>`;
+  } else if (link) {
+    howTo = `<button type="button" class="link-btn"${idAttr} aria-expanded="false" aria-controls="howto-${id}" onclick="toggleHowTo('${id}', this)">How to</button>`;
+    const items = (link.preview || []).map(t => `<li>${md(t)}</li>`).join('');
+    preview = `
+    <div class="rm-howto" id="howto-${id}" hidden>
+      ${items ? `<ul class="rm-howto-list">${items}</ul>` : ''}
+      <button type="button" class="link-btn" onclick="howToLink('tactic${link.tactic}','${attr(link.stepId)}')">Open the full step in ${plain(link.tacticName)}</button>
+    </div>`;
+  }
+  return `<div class="rm-action task-row-wrap">
+    <div class="task-row rm-action-row">
+      <input type="checkbox" class="tick check-input" id="${id}" data-key="${id}" onchange="onCheck(this)">
+      <label class="task-label rm-action-label check-label" for="${id}"${editKey(`${action.id}.text`)}>${md(action.text)}</label>
+      ${howTo}
+      ${NOTE_BUTTON(id, noteButtonId)}
+    </div>${preview}
+    ${NOTE_AREA(id)}
+  </div>`;
 }
 
-/**
- * A roadmap week. Interim layout until the roadmap is rebuilt (brief phase 3):
- * the actions are the tick boxes, and the plan's checklist lines are kept in
- * content.json but not shown.
- */
+/** A week: a plain row with a small pie; open, it sits on a white panel. */
 export function weekCard(week, links, { first = false } = {}) {
   let howtoMarked = false;
   const actions = week.actions.map((a, i) => {
@@ -790,66 +768,79 @@ export function weekCard(week, links, { first = false } = {}) {
     if (mark) howtoMarked = true;
     return actionItem(a, links[i], { howtoId: mark ? 'w1-howto-example' : null, noteButtonId: first && i === 0 ? 'w1-note-example' : null });
   });
-  return `<div class="week-card" id="wc-${week.number}" data-week="${week.number}" data-week-id="${attr(week.id)}">
-  <div class="week-card-header" onclick="toggleWeek(${week.number})">
-    <div class="week-num">W${week.number}</div>
-    <div class="week-title"${editKey(`${week.id}.title`)}>${plain(week.title)}</div>
-    <div class="week-progress-pill" id="wp-${week.number}">0 / ${week.actions.length}</div>
-    ${ICONS.chevronWeek}
+  const n = week.number;
+  return `<div class="rm-week" id="wc-${n}" data-week="${n}" data-week-id="${attr(week.id)}">
+  <div class="rm-week-head" role="button" tabindex="0" aria-expanded="false" aria-controls="wb-${n}" onclick="toggleWeek(${n})">
+    <span class="rm-week-num">${n}</span>
+    <span class="rm-week-title"${editKey(`${week.id}.title`)}>${plain(week.title)}</span>
+    <span class="rm-week-count"><span data-live="week-${n}-done">0</span> of ${week.actions.length}</span>
+    <span class="pie" data-live-pie="week-${n}" aria-hidden="true"></span>
   </div>
-  <div class="week-card-body">
-    <div class="week-col-label">This week's actions</div>
-    <div class="check-list week-actions"${first ? ' id="w1-checklist"' : ''}>
+  <div class="rm-week-body" id="wb-${n}" hidden>
+    <div class="rm-actions"${first ? ' id="w1-checklist"' : ''}>
       ${actions.join('\n      ')}
     </div>
-    <div class="week-note-section"><div class="week-note-label">Week notes</div><textarea class="note-textarea week-note-textarea" id="note-${attr(week.id)}" placeholder="Add general notes for this week…" oninput="saveNote('${attr(week.id)}',this.value)"></textarea></div>
+    <div class="rm-notes">
+      <label class="rm-notes-label" for="note-${attr(week.id)}">Week notes</label>
+      <textarea class="note-textarea rm-notes-text" id="note-${attr(week.id)}" rows="2" placeholder="Add general notes for this week" oninput="saveNote('${attr(week.id)}',this.value)"></textarea>
+    </div>
   </div>
 </div>`;
 }
 
 export function phaseBlock(phase, n, weeksHtml, total) {
-  return `<div class="month-block">
-      <div class="month-header">
-        <span class="month-badge">Month ${n}</span>
-        <span class="month-title">${plain(phase.name)}</span>
-        <span class="month-progress" id="m${n}-prog"><span>0</span> of ${total} done</span>
+  return `<section class="rm-month">
+      <div class="rm-divider">
+        <h2 class="rm-h2">Month ${n} · ${plain(phase.name)}</h2>
+        <span class="rm-divider-count"><span data-live="phase-${n}-done">0</span> of ${total} done</span>
       </div>
       ${weeksHtml}
-    </div>`;
+    </section>`;
 }
 
-// ── Quick Wins ─────────────────────────────────────────────────────────────
+// ── Google Business Profile wins (the plan's quick wins) ──────────────────
 
 export function quickWin(item) {
   const id = attr(item.id);
   const label = has(item.title) ? `<strong>${plain(item.title)}.</strong> ${md(item.text)}` : md(item.text);
-  return `<div class="check-item">
-        <div class="check-row">
-          <input type="checkbox" class="check-input" id="${id}" onchange="onCheck(this)">
-          <label class="check-box" for="${id}">${ICONS.checkSmall}</label>
-          <label class="check-label" for="${id}"${editKey(`${item.id}.label`)}>${label}</label>
-          <button class="note-toggle-btn" onclick="toggleNote('${id}')">${ICONS.noteOutline}</button>
-        </div>
-        <div class="note-area" id="note-area-${id}">
-          <textarea class="note-textarea" id="note-${id}" placeholder="Add a note…" oninput="saveNote('${id}',this.value)"></textarea>
-        </div>
-      </div>`;
+  return `<div class="rm-action task-row-wrap">
+    <div class="task-row rm-action-row">
+      <input type="checkbox" class="tick check-input" id="${id}" onchange="onCheck(this)">
+      <label class="task-label rm-action-label check-label" for="${id}"${editKey(`${item.id}.label`)}>${label}</label>
+      ${NOTE_BUTTON(id)}
+    </div>
+    ${NOTE_AREA(id)}
+  </div>`;
 }
 
 export function quickWinGroup(group) {
-  return `<div class="section-label">${plain(group.title)}</div>
-<div class="card qw-card">
-  <div class="card-body">
-    <div class="check-list qw-check-list">
+  return `<div class="rm-gbp-group">
+      <h3 class="tp-h3">${plain(group.title)}</h3>
       ${group.items.map(quickWin).join('\n      ')}
-    </div>
-  </div>
-</div>`;
+    </div>`;
 }
 
 export function quickWinsNote(note) {
   if (!note || !has(note.text)) return '';
-  return `<div class="callout">${has(note.title) ? `<strong>${plain(note.title)}.</strong> ` : ''}${md(note.text)}</div>`;
+  return `<div class="rm-watch">${has(note.title) ? `<strong>${plain(note.title)}.</strong> ` : ''}${md(note.text)}</div>`;
+}
+
+/** After the last month: the plan's quick-win groups and its note. Tickable; not plan progress. */
+export function gbpWins(qw) {
+  const groups = (qw && qw.groups) || [];
+  if (!groups.length) return '';
+  const total = groups.reduce((n, g) => n + g.items.length, 0);
+  return `<section class="rm-gbp" id="gbp-wins">
+      <div class="rm-divider">
+        <h2 class="rm-h2">Google Business Profile wins</h2>
+        <span class="rm-divider-count"><span data-live="gbp-done">0</span> of ${total} done</span>
+      </div>
+      ${has(qw.intro) ? `<p class="rm-gbp-intro" data-editable-key="quick_wins.intro">${md(qw.intro)}</p>` : ''}
+      <div class="rm-gbp-panel">
+      ${groups.map(quickWinGroup).join('\n      ')}
+      </div>
+      ${quickWinsNote(qw.note)}
+    </section>`;
 }
 
 // ── Assessment ─────────────────────────────────────────────────────────────

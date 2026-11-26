@@ -145,6 +145,34 @@
   --switcher-room: 120px;
   --switcher-room-phone: 200px;
 
+  /* Tactic pages and roadmap (DESIGN-BRIEF.md section 6) */
+  --type-donut-sm: 28px;
+  --donut-sm: 92px;
+  --donut-sm-hole: 66px;
+  --type-step-num: 44px;
+  --type-step-title: 22px;
+  --type-week-num: 30px;
+  --type-week-num-open: 56px;
+  --type-week-title-open: 26px;
+  --type-label-meta: 13px;
+  --step-num-width: 30px;
+  --step-indent: 50px;
+  --step-pad-y: 24px;
+  --step-pad-x: 28px;
+  --chev: 10px;
+  --chev-line: 2.5px;
+  --pie-size: 20px;
+  --text-measure: 700px;
+  --media-max: 540px;
+  --media-phone: 150px;
+  --media-phone-border: 5px;
+  --media-phone-radius: 22px;
+  --media-badge-radius: 4px;
+  --roadmap-max: 960px;
+  --tab-mark: 4px;
+  --confirm-radius-v2: 4px;
+  --confirm-pad-v2: 6px;
+
   /* ── v1 names, re-pointed to the Junction roles ─────────────────────
      The pages not yet rebuilt (phases 2 to 4) still use these. Each one
      goes when the last component using it is rebuilt. */

@@ -67,10 +67,10 @@ describe('what the shared scripts need', () => {
   test('progress keys are action IDs, inside their week, one saved tick box each (tasks are the actions)', () => {
     for (const week of CONTENT.roadmap.weeks) {
       const start = page.html.indexOf(`data-week="${week.number}"`);
-      const end = page.html.indexOf('class="week-note-section"', start);
+      const end = page.html.indexOf('class="rm-notes"', start);
       const card = page.html.slice(start, end);
       expect([...card.matchAll(/data-key="([^"]+)"/g)].map(m => m[1])).toEqual(week.actions.map(a => a.id));
-      week.actions.forEach(a => expect(card).toContain(`<label class="check-label" for="${a.id}" data-editable-key="${a.id}.text">`));
+      week.actions.forEach(a => expect(card).toContain(`<label class="task-label rm-action-label check-label" for="${a.id}" data-editable-key="${a.id}.text">`));
       // The plan's checklist lines stay in content.json but are not shown
       week.checklist.forEach(c => expect(page.html).not.toContain(c.id));
     }
@@ -103,8 +103,10 @@ describe('what the shared scripts need', () => {
     const w1 = CONTENT.roadmap.weeks[0];
     expect(page.html).toContain(`onclick="howToLink('tactic1','${w1.actions[0].how_to}')"`);
     expect(page.html).toContain(`id="${w1.actions[0].how_to}"`);
-    expect(page.html).toMatch(/<button class="howto-link" onclick="navigate\('gbp'\)">how to<\/button>/);
-    // Once on the roadmap and once on the dashboard's "This week" card
+    // Quick-win links go to the Google Business Profile wins section on the roadmap
+    expect(page.html).toContain('<button type="button" class="link-btn" onclick="openGbpWins()">How to</button>');
+    expect(page.html).not.toContain("navigate('gbp')");
+    // Once in the roadmap's "How to" preview and once on the dashboard's "This week" card
     const links = [...page.html.matchAll(/howToLink\('tactic\d+','(stp_[a-z0-9]{6})'\)/g)];
     expect(links.length).toBe(2 * CONTENT.roadmap.weeks.flatMap(w => w.actions).filter(a => a.how_to && a.how_to !== 'quick_wins').length);
   });
@@ -133,7 +135,7 @@ describe('what the shared scripts need', () => {
 
   test('Quick Wins ticks and notes stay in this browser for now (no data-key), keyed by quick win ID', () => {
     CONTENT.quick_wins.groups.flatMap(g => g.items).forEach(q => {
-      expect(page.html).toContain(`<input type="checkbox" class="check-input" id="${q.id}" onchange="onCheck(this)">`);
+      expect(page.html).toContain(`<input type="checkbox" class="tick check-input" id="${q.id}" onchange="onCheck(this)">`);
       expect(page.html).toContain(`oninput="saveNote('${q.id}',this.value)"`);
     });
   });
@@ -289,6 +291,116 @@ describe('dashboard stages (DESIGN-BRIEF.md section 5)', () => {
   });
 });
 
+describe('tactic pages (DESIGN-BRIEF.md section 6)', () => {
+  const pageOf = n => page.html.slice(page.html.indexOf(`<section id="page-tactic${n}"`), page.html.indexOf('\n</section>', page.html.indexOf(`<section id="page-tactic${n}"`)));
+
+  test('two tabs: Overview and Implementation steps', () => {
+    CONTENT.tactics.forEach((t, i) => {
+      const tabs = [...pageOf(i + 1).matchAll(/role="tab"[^>]*data-tab="(\w+)"[^>]*>([^<]+)</g)].map(m => m[2]);
+      expect(tabs).toEqual(['Overview', 'Implementation steps']);
+    });
+  });
+
+  test('header: title, subtitle, "Tactic N · theme label" and a live donut', () => {
+    const t = CONTENT.tactics[0];
+    const html = pageOf(1);
+    expect(html).toContain(`<div class="meta-label">Tactic 1 · ${t.phase_label}</div>`);
+    expect(html).toContain('data-live-donut="tactic-1"');
+    expect(html).toContain(`<span data-live="tactic-1-done">0</span> of ${page.data.tasks.byTactic[1].length} tasks done`);
+  });
+
+  test('overview: no "What this breaks into"; metrics as a plain table; tips and resources as boxes', () => {
+    expect(page.html).not.toMatch(/What This Breaks Into|What this breaks into|tactic-breakdown/);
+    const html = pageOf(1);
+    expect(html).toContain('<h2 class="tp-h2">Success metrics</h2>');
+    expect(html).toContain('<table class="plain-table tp-metrics">');
+    expect(html).toContain('<section class="tp-card tp-card--sage25">\n          <h2 class="tp-h3">Tips</h2>');
+    expect(html).toContain('<h2 class="tp-h3">Resources</h2>');
+    expect(html).toContain('<section class="tp-card tp-card--sage tp-heard">');
+  });
+
+  test('steps: one scroll, parts as headings in order, every step collapsed with a chevron', () => {
+    CONTENT.tactics.forEach((t, i) => {
+      const html = pageOf(i + 1);
+      const headings = [...html.matchAll(/<h2 class="tp-h2 part-heading">Part ([A-Z]): <span[^>]*>([^<]+)<\/span><\/h2>/g)].map(m => m[1]);
+      expect(headings).toEqual(t.parts.map((_, k) => String.fromCharCode(65 + k)));
+      const steps = t.parts.flatMap(p => p.steps);
+      steps.forEach((st, k) => {
+        expect(html).toContain(`<section class="step-card" id="${st.id}" data-step-number="${k + 1}">`);
+        expect(html).toContain(`<button type="button" class="step-head" aria-expanded="false" aria-controls="${st.id}-body" onclick="toggleStep(this)">`);
+        expect(html).toContain(`<div class="step-body" id="${st.id}-body" hidden>`);
+      });
+      expect((html.match(/<span class="chev" aria-hidden="true"><\/span>/g) || []).length).toBe(steps.length);
+      expect(html).not.toContain('tactic-part-header');
+    });
+  });
+
+  test('each linked step links to its week on the roadmap', () => {
+    const action = CONTENT.roadmap.weeks[2].actions.find(a => /^stp_/.test(a.how_to));
+    const start = page.html.indexOf(`id="${action.how_to}"`);
+    const card = page.html.slice(start, page.html.indexOf('</section>', start));
+    expect(card).toContain('onclick="openRoadmapWeek(3)">On your roadmap in week 3</button>');
+  });
+
+  test('[CONFIRM ...] notes render inline as a highlight', () => {
+    expect(page.html).toContain('<mark class="confirm-note">drive time from Kelowna</mark>');
+  });
+
+  test('footer: back to overview, and the next tactic (the last goes to the roadmap)', () => {
+    expect(pageOf(1)).toContain(`Next tactic: ${CONTENT.tactics[1].title}</button>`);
+    expect(pageOf(1)).toContain(`onclick="switchTacticTab(1, 'overview')">Back to overview</button>`);
+    expect(pageOf(CONTENT.tactics.length)).toContain(`onclick="navigate('roadmap')">Open the roadmap</button>`);
+  });
+});
+
+describe('the roadmap (DESIGN-BRIEF.md section 6)', () => {
+  const rm = () => page.html.slice(page.html.indexOf('<section id="page-roadmap"'), page.html.indexOf('\n</section>', page.html.indexOf('<section id="page-roadmap"')));
+
+  test('month dividers with "N of M done", weeks as rows with a pie, all closed until the page opens one', () => {
+    const html = rm();
+    expect((html.match(/<div class="rm-divider">/g) || []).length).toBe(CONTENT.phases.length + 1); // + Google Business Profile wins
+    CONTENT.roadmap.weeks.forEach(w => {
+      expect(html).toContain(`<span class="pie" data-live-pie="week-${w.number}" aria-hidden="true"></span>`);
+      expect(html).toContain(`<div class="rm-week-body" id="wb-${w.number}" hidden>`);
+    });
+  });
+
+  test('each action has a tick, "How to" with a preview of its step\'s first two bullets, and "Note"', () => {
+    const html = rm();
+    const w1 = CONTENT.roadmap.weeks[0];
+    const a = w1.actions[0];
+    const st = allSteps(CONTENT).find(x => x.step.id === a.how_to).step;
+    const start = html.indexOf(`<div class="rm-howto" id="howto-${a.id}" hidden>`);
+    expect(start).toBeGreaterThan(-1);
+    const box = html.slice(start, html.indexOf('</div>', start));
+    expect(box).toContain(C.md(st.body[0].items[0].text));
+    expect(box).toContain(C.md(st.body[0].items[1].text));
+    expect(box).not.toContain(C.md(st.body[0].items[2].text));
+    expect(box).toContain(`onclick="howToLink('tactic1','${st.id}')">Open the full step in ${CONTENT.tactics[0].short_label}</button>`);
+    CONTENT.roadmap.weeks.flatMap(w => w.actions).forEach(x => {
+      expect(html).toContain(`onclick="toggleNote('${x.id}')"`);
+      expect(html).toContain(`<div class="note-area" id="note-area-${x.id}">`);
+    });
+    CONTENT.roadmap.weeks.forEach(w => expect(html).toContain(`<label class="rm-notes-label" for="note-${w.id}">Week notes</label>`));
+  });
+
+  test('"Google Business Profile wins" comes after the last month, with the plan\'s quick-win groups and its note', () => {
+    const html = rm();
+    const gbp = html.indexOf('<section class="rm-gbp" id="gbp-wins">');
+    expect(gbp).toBeGreaterThan(html.lastIndexOf('<section class="rm-month">'));
+    expect(html).toContain('<h2 class="rm-h2">Google Business Profile wins</h2>');
+    CONTENT.quick_wins.groups.forEach(g => expect(html.slice(gbp)).toContain(`<h3 class="tp-h3">${g.title}</h3>`));
+    const c = copy();
+    c.quick_wins.note = { title: 'One thing worth watching', text: 'Zqx watch.' };
+    expect(render(c).html).toContain('<div class="rm-watch"><strong>One thing worth watching.</strong> Zqx watch.</div>');
+  });
+
+  test('the separate Quick wins page is retired', () => {
+    expect(page.html).not.toContain('id="page-gbp"');
+    expect(page.html).not.toContain("navigate('gbp')");
+  });
+});
+
 describe('computed, not typed', () => {
   test('totals and counts come from the content', () => {
     const total = CONTENT.roadmap.weeks.reduce((n, w) => n + w.actions.length, 0);
@@ -309,8 +421,8 @@ describe('computed, not typed', () => {
     CONTENT.phases.forEach((p, i) => {
       const ids = page.data.tasks.byPhase[i + 1];
       expect(ids).toEqual(CONTENT.roadmap.weeks.filter(w => w.number >= p.weeks[0] && w.number <= p.weeks[1]).flatMap(w => w.actions.map(a => a.id)));
-      expect(page.html).toContain(`<span class="month-title">${p.name}</span>`);
-      expect(page.html).toContain(`<span>0</span> of ${ids.length} done`);
+      expect(page.html).toContain(`<h2 class="rm-h2">Month ${i + 1} · ${p.name}</h2>`);
+      expect(page.html).toContain(`<span data-live="phase-${i + 1}-done">0</span> of ${ids.length} done`);
       expect(page.html).toContain(`<span class="bar-fill" data-live-bar="phase-${i + 1}"></span></span><span class="phase-bar-name">${p.name}</span><span class="phase-bar-weeks">Weeks ${p.weeks[0]} to ${p.weeks[1]}</span>`);
     });
   });
@@ -369,18 +481,18 @@ describe('missing means hidden', () => {
     const c = copy();
     c.phases[0].description = 'Profiles and first content';
     c.tactics[0].time_commitment = { amount: '2 hrs', detail: 'per week' };
-    c.tactics[0].parts[0].card = { title: 'Content System', description: 'Fix both profiles and set a weekly pattern' };
+    c.tactics[0].parts[0].card = { title: 'Zqx Part Card', description: 'Zqx part card description' };
     c.roadmap.weeks[0].next_step = { time_needed: '1 to 2 hours', who: 'You' };
     c.roadmap.closing = 'Keep going.';
     c.quick_wins.note = { title: 'One Thing Worth Watching', text: 'Watch this.' };
     const r = render(c);
     expect(r.html).toContain('<span class="tactic-time-value">2 hrs</span>');
-    expect(r.html).toContain('Content System</div>');
-    expect(r.html).toContain('Fix both profiles and set a weekly pattern</div>');
+    // Part cards were "What this breaks into", which the redesign removes
+    expect(r.html).not.toContain('Zqx');
     // Kept in content.json, but the redesigned dashboard does not show them
     expect(r.html).not.toContain('Profiles and first content');
     expect(r.html).not.toContain('1 to 2 hours');
-    expect(r.html).toContain('data-editable-key="roadmap.closing">Keep going.</div>');
+    expect(r.html).toContain('<div class="rm-closing" data-editable-key="roadmap.closing">Keep going.</div>');
     expect(r.html).toContain('<strong>One Thing Worth Watching.</strong> Watch this.');
   });
 
@@ -422,40 +534,46 @@ describe('components', () => {
   });
 
   test('step labels show time, cost, Contractor and Critical', () => {
-    expect(C.stepLabels({ time: 'about 20 minutes', cost: '$200 to $400', tags: ['contractor', 'critical'] })).toBe('<div class="tactic-step-tags"><span class="tactic-step-tag muted">about 20 minutes</span><span class="tactic-step-tag info">$200 to $400</span><span class="tactic-step-tag warning">Contractor</span><span class="tactic-step-tag danger">Critical</span></div>');
+    expect(C.stepLabels({ time: 'about 20 minutes', cost: '$200 to $400', tags: ['contractor', 'critical'] })).toBe('<div class="step-labels"><span class="step-label">about 20 minutes</span><span class="step-label">$200 to $400</span><span class="step-chip step-chip--contractor">Contractor</span><span class="step-chip step-chip--critical">Critical</span></div>');
     expect(C.stepLabels({ time: null, cost: null, tags: [] })).toBe('');
+    // ...and the link to the step's week on the roadmap
+    expect(C.stepLabels({ tags: [] }, [3])).toBe('<div class="step-labels"><button type="button" class="link-btn step-week-link" onclick="openRoadmapWeek(3)">On your roadmap in week 3</button></div>');
+    expect(C.stepLabels({ tags: [] }, [3, 5, 7])).toContain('On your roadmap in weeks 3, 5 and 7</button>');
   });
 
-  test('a table in a step uses the metrics table look', () => {
-    expect(page.html).toContain('<div class="tactic-metrics-table tactic-step-table">');
-    expect(page.html).toContain('<td>Apple Maps</td><td>Default on every iPhone</td><td>15 minutes</td>');
+  test('a table in a step is a plain table, like Success metrics', () => {
+    expect(page.html).toContain('<table class="plain-table step-table">');
+    expect(page.html).toContain('<th scope="row">Apple Maps</th><td>Default on every iPhone</td><td>15 minutes</td>');
   });
 
-  test('every media type and frame has its component', () => {
+  test('every media type and frame has its component: one frame per type, a badge, an optional caption', () => {
     const html = page.html;
-    expect(html).toContain('class="tactic-phone"');
-    expect(html).toContain('class="tactic-mockup tactic-mockup--document"');
-    expect(html).toContain('<div class="tactic-mockup-title">Weekly posting pattern</div>');
-    expect(html).toContain('class="tactic-mockup tactic-mockup--email"');
-    expect(html).toContain('class="tactic-mockup tactic-mockup--page"');
-    expect(html).toContain('class="tactic-media-plain"');
-    expect(html).toMatch(/<a href="https:\/\/business\.facebook\.com\/" class="tactic-mockup-link"/);
-    expect(html).toContain('<span class="tactic-mockup-open-text">Open site </span>');
-    expect(html).toMatch(/<div class="tactic-reel-row">\s*<div class="tactic-reel" data-media-id="med_[a-z0-9]{6}">[\s\S]*?<div class="tactic-reel" data-media-id/);
+    expect(html).toMatch(/<figure class="media media--phone" data-media-id="med_[a-z0-9]{6}">\s*<div class="media-phone">/);
+    expect(html).toMatch(/<figure class="media media--document"/);
+    expect(html).toContain('<span class="media-bar-text">Weekly posting pattern</span>');
+    expect(html).toMatch(/<figure class="media media--email"/);
+    expect(html).toMatch(/<figure class="media media--website media--page"/);
+    expect(html).toMatch(/<figure class="media media--none"/);
+    expect(html).toMatch(/<a href="https:\/\/business\.facebook\.com\/" class="media-link"/);
+    expect(html).toContain('<span class="media-open" aria-hidden="true">Open site ↗</span>');
+    expect(html).toMatch(/<div class="media-row">\s*<div class="media-post" data-media-id="med_[a-z0-9]{6}">[\s\S]*?<div class="media-post" data-media-id/);
     expect(html).toContain('<iframe src="https://www.youtube.com/embed/aqz-KE-bpKQ" title="How to shoot a 30-second Reel"');
-    expect(html).toContain('<div class="tactic-gallery-title">Photos to upload</div>');
-    expect(html).toContain('class="tactic-mockup-pair"');
-    expect(html).toContain('class="tactic-mockup-pair tactic-mockup-four"');
+    expect(html).toContain('<div class="media-gallery-title">Photos to upload</div>');
+    expect(html).toContain('class="media-group"');
+    expect(html).toContain('class="media-group media-group--four"');
     expect(html).toContain('<div class="tactic-link-card-title">Google Search Console</div>');
-    expect((html.match(/tactic-step-media-badge tactic-mockup-badge">Mockup</g) || []).length).toBe(5);
-    expect((html.match(/tactic-mockup-badge">Example</g) || []).length).toBe(1);
+    expect((html.match(/<span class="media-badge">Mockup<\/span>/g) || []).length).toBe(5);
+    expect((html.match(/<span class="media-badge">Example<\/span>/g) || []).length).toBe(1);
+    // No browser-window dots
+    expect(html).not.toContain('tactic-mockup-dot');
   });
 
   test('media sits below the step text', () => {
-    const step = allSteps(CONTENT).find(s => s.step.media.length).step;
-    const start = page.html.indexOf(`id="${step.id}"`);
-    const item = page.html.slice(start, page.html.indexOf('</li>\n        <li class="tactic-step-item"', start));
-    expect(item.indexOf('tactic-step-bullets')).toBeLessThan(item.indexOf('tactic-step-media-list'));
+    allSteps(CONTENT).filter(s => s.step.media.length).forEach(({ step }) => {
+      const start = page.html.indexOf(`<section class="step-card" id="${step.id}"`);
+      const item = page.html.slice(start, page.html.indexOf('</section>', start));
+      expect(item.indexOf('tactic-step-bullets')).toBeLessThan(item.indexOf('tactic-step-media-list'));
+    });
   });
 
   test('every content image opens in the lightbox, except images that are links', () => {

@@ -108,8 +108,8 @@ The dashboard changes with where the client is. A six-step strip sits under the 
 | Stage | When | Dashboard leads with |
 |---|---|---|
 | 1. Before the plan | Assessment exists, no plan | Assessment score and summary, "What happens next", the assessment's quick wins (tickable, on Sage), and "Coming with your plan" |
-| 2a. Plan delivered | Plan exists, nothing read or ticked | "Start here: read your plan" listing Strategy and each tactic with read state, then week 1 |
-| 2b. During the plan | Anything read or ticked | This week's actions, progress donut, tactic progress, coming up, 30-day check-in note, materials |
+| 2a. Plan delivered | Plan exists and nothing is ticked yet. Reading does not end this stage until every section (Strategy and each tactic) has been read | "Start here: read your plan" listing Strategy and each tactic with read state, then week 1 |
+| 2b. During the plan | Anything ticked, or every section read | This week's actions, progress donut, tactic progress, coming up, 30-day check-in note, materials |
 | 3. Plan done | Every action ticked | Results, then "What to keep doing", then the next step with Junction |
 
 Notes:

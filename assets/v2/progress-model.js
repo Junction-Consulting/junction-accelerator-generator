@@ -64,15 +64,12 @@
   /**
    * Brief section 5:
    *   before    : no plan yet
-   *   delivered : a plan, and nothing ticked yet
-   *   during    : something ticked
+   *   delivered : a plan, nothing ticked, not every section read
+   *   during    : something ticked, or every section read
    *   done      : every action ticked
    *
-   * Reading: the brief's table moves to "during" once anything is read, but
-   * its "Start here" card counts sections as they are read ("1 of 5 read").
-   * So reading keeps the client on "delivered" until every section is read
-   * (readCount >= readTotal), and any tick moves them on. Open question in
-   * the phase 2 report.
+   * Reading keeps the client on "delivered" until every section is read
+   * (readCount >= readTotal); any tick moves them on (brief section 5).
    */
   function selectStage(input) {
     if (!input.hasPlan) return 'before';

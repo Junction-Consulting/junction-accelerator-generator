@@ -89,6 +89,11 @@ Items are grouped by what breaks if they are skipped.
 ### 13. Web fonts from Google
 - **Why:** v2 loads Epilogue, DM Sans, Bebas Neue and Fraunces from Google Fonts. The Content Security Policy in `netlify.toml` already allows `fonts.googleapis.com` and `fonts.gstatic.com`, so nothing is blocked today. Keep them allowed if the policy changes, or self-host the four fonts in `assets/v2/`.
 
+### 17. Edit Mode and collapsed content
+- **Files:** `shared/content-editor.js`
+- **Why:** implementation steps now open collapsed, and a roadmap week's actions are only visible when the week is open. Edit Mode still finds every editable item by its key, but an editor has to open a step or week to see its text. "What we heard" has no pull-quote field to edit.
+- **Change:** consider an "open everything" switch while Edit Mode is on.
+
 ## Already handled inside v2
 
 For reference, these do not need changes outside v2:

@@ -116,7 +116,7 @@ Phases are time periods: the three month blocks of the roadmap. They are not lin
 }
 ```
 
-`card` feeds "What This Breaks Into". If it is missing, the card shows the part name only.
+`card` fed "What This Breaks Into", which the redesign removes (DESIGN-BRIEF.md section 6). It is kept in `content.json` but not shown.
 
 ### Step
 
@@ -204,6 +204,8 @@ Hand-coded HTML mockups (the booking bar, the booking page, the emails) are not 
 
 ### Quick Wins
 
+Shown on the roadmap, after the last month, as "Google Business Profile wins" (DESIGN-BRIEF.md section 6). There is no separate Quick Wins page. Roadmap actions whose `how_to` is `quick_wins` link there. Ticks do not count toward plan progress.
+
 ```json
 {
   "intro": "One or two sentences shown above the groups.",
@@ -257,7 +259,7 @@ All saved state moves to Supabase and is keyed by item ID:
 
 Warnings (do not block). The coach sees these in the upload report and in Edit Mode:
 
-- Optional content that is empty and will therefore be hidden: part card descriptions, the roadmap closing note, time commitment, tactic phase labels, the Quick Wins intro and closing note
+- Optional content that is empty and will therefore be hidden: the roadmap closing note, time commitment, tactic phase labels, the Quick Wins intro and closing note
 - `[INSERT ...]` or `[ADD ...]` left in visible text, which usually means an unfinished draft
 - House copy rules: no em dashes, no "--", "then" in place of arrows, Canadian spelling
 - A short label over 28 characters
@@ -318,3 +320,4 @@ This needs changes to login and access (`shared/auth.js`, the access rules in Su
   - Planned, not built: draft and published plan status.
 - 2026-11-24 (Stage 2 follow-ups): Checklist items count towards exactly one tactic (`tactic`, `tactic_source`, the `→ tactic: N` marker). The Assessment page comes from the client's `client_assessments` record. `CUTOVER.md` lists what must change outside v2 before a real client moves.
 - 2026-11-26 (design brief phase 2): Tasks are the actions: progress, tactic progress and the saved ticks use `act_` IDs, and the checklist is kept but not shown. Phase descriptions, `next_step` and `progress_headlines` are not shown by the redesigned dashboard. Stage selection, the current week and score levels (by letter grade) live in `assets/v2/progress-model.js`.
+- 2026-11-26 (design brief phase 3): The roadmap shows the quick wins as "Google Business Profile wins" after the last month; the Quick Wins page is gone. Part cards are no longer shown. Tactic pages have two tabs (Overview, Implementation steps) and every step is collapsible. `what_we_heard` is shown as paragraphs: there is no separate pull-quote field yet (see the phase 3 report).
