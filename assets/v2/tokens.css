@@ -245,6 +245,13 @@
   --pdf-share-col: .55in;
   --pdf-screen-gap: 24px;
 
+  /* Welcome window and tour (DESIGN-BRIEF.md section 10, phase 7) */
+  --wm-width: 520px;
+  --tour-width: 320px;
+  --tour-dot: 6px;
+  --overlay-dark: rgba(28,28,26,.6);
+  --spotlight-shade: 0 0 0 9999px rgba(28,28,26,.6);
+
   /* ── v1 names, re-pointed to the Junction roles ─────────────────────
      The pages not yet rebuilt (phases 2 to 4) still use these. Each one
      goes when the last component using it is rebuilt. */

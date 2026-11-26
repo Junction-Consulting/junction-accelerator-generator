@@ -17,7 +17,7 @@
 <!-- ── Navigation (DESIGN-BRIEF.md section 4) ─────────────────── -->
 <aside id="sidebar" aria-label="Navigation">
   <a class="nav-wordmark" href="#main" onclick="navigate('dashboard');return false;"><img src="{{ASSET_BASE}}/junction-wordmark-solid.png" alt="Junction" width="140" height="20"></a>
-  <nav class="nav-panel" aria-label="Main">
+  <nav class="nav-panel" id="nav-panel" aria-label="Main">
     <div class="nav-group">
       <button type="button" class="nav-item active" data-page="dashboard" onclick="navigate('dashboard')" aria-current="page">Dashboard</button>
       {{NAV_ASSESSMENT}}
@@ -129,11 +129,7 @@
         </div>
         <div class="print-section">
           <h2>How to Use This Roadmap</h2>
-          <p>Each week contains two sections:</p>
-          <ul>
-            <li><strong>This Week's Actions:</strong> The tasks to complete, with guidance on how to do each one</li>
-            <li><strong>Completion Checklist:</strong> Specific outcomes to verify before moving to the next week</li>
-          </ul>
+          <p>Each week lists its actions. Tick each one as you finish it. "How to" points to the step in your plan that explains it.</p>
           <p>Work through one week at a time. The tasks build on each other, so completing them in order matters. If you get stuck, contact your coach.</p>
         </div>
         <div class="print-goal-box">
@@ -156,64 +152,25 @@
 {{MATERIALS_PAGE}}
 
 
-<!-- WELCOME MODAL -->
-<div id="wm-overlay" class="wm-overlay" hidden onclick="handleOverlayClick(event)">
-  <div class="wm-card" id="wm-card" onclick="event.stopPropagation()">
-    <div class="wm-header">
-      <div class="wm-header-glow-a"></div>
-      <div class="wm-header-glow-b"></div>
-      <img class="wm-logo-img" src="{{ASSET_BASE}}/junction-wordmark-reverse.png" alt="Junction" width="140" height="20">
-      <div class="wm-eyebrow">Accelerator</div>
-      <div class="wm-headline">Welcome to your<br>Implementation Plan.</div>
-      {{WELCOME_MESSAGE}}
-    </div>
-    <div class="wm-body">
-      <div class="wm-goal-block">
-        <div class="wm-goal-eyebrow">Your Goal</div>
-        <p class="wm-goal-text">{{GOAL}}</p>
-      </div>
-      <div class="wm-how-label">What's inside</div>
-      <div class="wm-steps">
-        <div class="wm-step">
-          <div class="wm-step-icon wm-step-icon--tactics">
-            <svg width="18" height="18" viewBox="0 0 20 20" fill="currentColor"><path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z"/></svg>
-          </div>
-          <div class="wm-step-lbl">{{TACTIC_COUNT}} Tactics</div>
-          <div class="wm-step-sub">Deep-dive guides for each strategy</div>
-        </div>
-        <div class="wm-step">
-          <div class="wm-step-icon wm-step-icon--roadmap">
-            <svg width="18" height="18" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"/></svg>
-          </div>
-          <div class="wm-step-lbl">{{PROGRAM_DAYS}}-Day Roadmap</div>
-          <div class="wm-step-sub">Week-by-week action plan</div>
-        </div>
-        <div class="wm-step">
-          <div class="wm-step-icon wm-step-icon--progress">
-            <svg width="18" height="18" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
-          </div>
-          <div class="wm-step-lbl">Progress Tracking</div>
-          <div class="wm-step-sub">Checkboxes + notes, auto-saved</div>
-        </div>
-      </div>
-      <div class="wm-actions">
-        <button class="wm-btn-primary" onclick="closeWelcomeStartTour()">
-          <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"/></svg>
-          Take a quick tour
-        </button>
-        <button class="wm-btn-secondary" onclick="closeWelcome()">Explore on my own</button>
-      </div>
+<!-- WELCOME WINDOW (once per stage) -->
+<div id="wm-overlay" class="wm" hidden onclick="handleOverlayClick(event)">
+  <div class="wm-card" id="wm-card" role="dialog" aria-modal="true" onclick="event.stopPropagation()">
+    <img class="wm-wordmark" src="{{ASSET_BASE}}/junction-wordmark-solid.png" alt="Junction" width="140" height="20">
+    {{WELCOME_WINDOWS}}
+    <div class="wm-actions">
+      <button type="button" class="btn wm-tour-btn" onclick="closeWelcomeStartTour()">Take a quick tour</button>
+      <button type="button" class="btn btn--outline" onclick="closeWelcome()">Explore on my own</button>
     </div>
   </div>
 </div>
 
-<!-- TOUR -->
+<!-- TOUR (desktop only) -->
 <div id="tour-backdrop" class="tour-backdrop" onclick="advanceTour()"></div>
 <div id="tour-spotlight-box" class="tour-spotlight-box"></div>
-<div id="tour-tooltip-box" class="tour-tooltip-box">
+<div id="tour-tooltip-box" class="tour-tooltip-box" role="dialog" aria-labelledby="tt-title">
   <div class="tour-tt-eyebrow">
-    <span id="tt-step-label">Step 1</span>
-    <button class="tour-tt-close" onclick="endTour()" title="Close tour">
+    <span id="tt-step-label"></span>
+    <button type="button" class="tour-tt-close" onclick="endTour()" aria-label="Close the tour">
       <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="1" y1="1" x2="11" y2="11"/><line x1="11" y1="1" x2="1" y2="11"/></svg>
     </button>
   </div>
@@ -222,8 +179,8 @@
   <div class="tour-tt-footer">
     <div class="tour-dots" id="tt-dots"></div>
     <div class="tour-nav">
-      <button class="tour-btn" id="tt-prev" onclick="prevTourStep()">← Back</button>
-      <button class="tour-btn next" id="tt-next" onclick="nextTourStep()">Next →</button>
+      <button type="button" class="link-btn" id="tt-prev" onclick="prevTourStep()">Back</button>
+      <button type="button" class="btn" id="tt-next" onclick="nextTourStep()">Next</button>
     </div>
   </div>
 </div>

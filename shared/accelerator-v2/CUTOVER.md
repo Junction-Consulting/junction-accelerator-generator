@@ -70,7 +70,7 @@ Items are grouped by what breaks if they are skipped.
 - **Change:** decide the dashboard domain and coach addresses, then rebrand the shared pages and emails. Give `user-menu.js` and the Edit Mode switch a light variant so v2 no longer needs to override them.
 
 ### 12. Browser-only state added by the redesign
-- **Why:** the brief keeps the plan's read state (stage 2a), the last step opened and the ticks on the assessment's quick wins (dashboard, stage 1) in the browser for now. Like item 7, they are lost on a new device and invisible to the coach. The assessment's quick wins have no IDs, so their ticks are keyed by position (`aqw-N`).
+- **Why:** the brief keeps the plan's read state (stage 2a), the last step opened, the ticks on the assessment's quick wins (dashboard, stage 1) and which welcome window has been seen (one before the plan, one once it is delivered) in the browser for now. Like item 7, they are lost on a new device and invisible to the coach. The assessment's quick wins have no IDs, so their ticks are keyed by position (`aqw-N`).
 - **Change:** move them to the account with notes and Quick Wins ticks (item 7). Give the assessment's quick wins IDs in `client_assessments` first.
 
 ### 14. Tasks are the actions: everything that counts checklist items

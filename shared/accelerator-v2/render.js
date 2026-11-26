@@ -41,17 +41,19 @@ export function formatDate(iso) {
   return `${MONTHS[Number(m[2]) - 1]} ${Number(m[3])}, ${m[1]}`;
 }
 
-export function tourSteps(days, hasQuickWins) {
-  const sections = `your tactics, your ${days}-day roadmap and your materials`;
+/**
+ * The tour (desktop only): at most six stops. Each finds its target by
+ * selector; a stop whose target the current stage does not show is left
+ * out when the tour starts. page: the page to open first.
+ */
+export function tourSteps(days) {
   return [
-    { targetId: 'sidebar', mobileTargetId: 'nav-hamburger', page: 'dashboard', title: 'Find your way around', desc: `Use the menu on the left to move between sections: ${sections}. The small ring beside each tactic fills as you tick off its tasks.`, mobileDesc: `Tap the menu icon to move between sections: ${sections}.`, pos: 'right', pad: 0, mobilePos: 'below' },
-    { targetId: 'goal-section', page: 'dashboard', title: 'Your Progress Overview', desc: `This shows your overall completion and which phase of the ${days}-day plan you are in. The ring fills as you check off tasks.`, pos: 'below', pad: 8 },
-    { targetId: 'objectives-section', mobileTargetId: 'next-step-main', page: 'dashboard', title: 'Your Next Step', desc: 'This card shows exactly what to focus on right now. It updates automatically as you complete tasks in the roadmap.', pos: 'below', pad: 8 },
-    { targetId: 'tactic-cards-section', page: 'dashboard', title: 'Track Each Tactic', desc: 'These cards show progress on each of your tactics. Click a card to open its detailed guide and implementation steps.', mobileDesc: 'These cards show progress on each of your tactics. Tap a card to open its detailed guide and implementation steps.', pos: 'below', pad: 8 },
-    { targetId: 'nav-roadmap', mobileTargetId: 'roadmap-page-header', page: 'dashboard', mobilePage: 'roadmap', title: 'Your Week-by-Week Action Plan', desc: `The ${days}-Day Roadmap is your primary tracker. Each week shows exactly what to do and how to confirm it's done.`, pos: 'right', pad: 8, mobilePos: 'below' },
-    { targetId: 'wc-1', mobileTargetId: 'w1-checklist', page: 'roadmap', weekToOpen: 1, title: 'Check Off Tasks as You Go', desc: 'Each week has a completion checklist on the right. Check off each item as you finish it. Your progress saves automatically.', pos: 'below', pad: 8 },
-    { targetId: 'w1-howto-example', page: 'roadmap', weekToOpen: 1, title: '"How To" Links', desc: 'Tap "how to" next to any action to jump straight to the step-by-step guide in the tactics section: exactly what to click, type, and verify.', pos: 'below', pad: 8 },
-    { targetId: 'w1-note-example', page: 'roadmap', weekToOpen: 1, title: 'Notes on Every Task', desc: 'Tap the pencil icon on any checklist item to add a personal note: a reminder, a date, a decision. Notes save automatically and are here every time you return.', pos: 'below', pad: 8 }
+    { target: '#nav-panel', page: 'dashboard', pos: 'right', title: 'Find your way around', desc: 'Everything in your plan is here. The small ring beside each tactic fills as you tick off its tasks.', descBefore: 'Your assessment and your materials are here. Strategy, tactics and the roadmap open when your plan arrives.' },
+    { target: '#objectives-section', page: 'dashboard', pos: 'below', title: 'This week', desc: "These are this week's actions. Tick each one as you finish it. Your progress saves automatically." },
+    { target: '[data-week-panel]:not([hidden]) .link-btn', page: 'dashboard', pos: 'below', title: 'How to', desc: '"How to" opens the step that explains the action, so you know exactly what to do.' },
+    { target: '[data-tour="progress"]', page: 'dashboard', pos: 'right', title: 'Your progress', desc: 'The ring shows how much of your plan is done. The bars below it show each phase.' },
+    { target: '.rm-week.open', page: 'roadmap', pos: 'below', title: `Your ${days}-day roadmap`, desc: 'Every week of your plan, with its actions. Open a week to tick its actions, see how to do each one and add notes.' },
+    { target: '[data-areas]', page: 'assessment', pos: 'below', title: 'Your assessment', desc: 'Your scores in six areas. Open an area to see what we found and what we recommend.' }
   ];
 }
 
@@ -116,9 +118,8 @@ export function pageData(content, assessment) {
   const { client, program, roadmap, phases, tactics } = content;
   const { stepTactic, byTactic, weekTactic } = mapProgress(content);
   const days = programDays(program.weeks);
-  const hasQuickWins = ((content.quick_wins || {}).groups || []).length > 0;
   const voice = content.voice || {};
-  const tour = tourSteps(days, hasQuickWins).map((s, i) => (has(voice.tour && voice.tour[i]) ? { ...s, desc: voice.tour[i], mobileDesc: voice.tour[i] } : s));
+  const tour = tourSteps(days).map((s, i) => (has(voice.tour && voice.tour[i]) ? { ...s, desc: voice.tour[i] } : s));
   const actionsIn = weeks => weeks.flatMap(w => w.actions.map(a => a.id));
   return {
     slug: client.slug,
@@ -252,7 +253,7 @@ export function renderDashboard(content, options = {}) {
         <strong>Questions?</strong> Contact your coach at ${C.attr(client.coach_email)}
       </div>
     </div>` : '',
-    WELCOME_MESSAGE: has(strategy.welcome_message) ? `<p class="wm-subline">${C.md(strategy.welcome_message)}</p>` : '',
+    WELCOME_WINDOWS: C.welcomeWindows({ name: client.name, days, tactics: tactics.length, weeks: content.program.weeks, tasks: data.tasks.all.length, quickWins: C.hasAssessment(options.assessment) ? (options.assessment.quick_wins || []).length : 0, hasAssessmentPage: C.hasAssessment(options.assessment), welcomeMessage: strategy.welcome_message }),
     PAGE_DATA: pageDataJson
   };
   const { html, problems } = fill(template, values);
