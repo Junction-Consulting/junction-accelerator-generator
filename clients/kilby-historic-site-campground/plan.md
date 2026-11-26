@@ -284,15 +284,11 @@ AI tools do not rank pages, they assemble answers, and they favour sources that 
 
 5. **Choose your five clusters and the questions behind each.**
    - A topic cluster is a pillar page supported by question posts on the same subject. Pick five that match your audiences and your heritage knowledge. A starting set:
-
-   | Cluster | Who It Serves | Example Questions |
-   |---------|---------------|-------------------|
-   | The 1906 General Store and Kilby History | History enthusiasts, seniors, school groups | "How old is the Kilby general store?" "Why is Kilby one of BC's 11 provincial heritage properties?" |
-   | Farm Animals and Visiting with Kids | Young families, grandparents | "Can you touch the animals at Kilby?" "Who is Maud the calf?" "Is Kilby good for toddlers?" |
-   | The Cafe: Breakfast, Lunch, and Dinner Nights | Locals, day-trippers | "Where can I eat breakfast in Harrison Mills?" "What is schnitzel night at Kilby?" |
-   | Workshops, Events, and School Programs | Locals, families, teachers | "What workshops does Kilby offer?" "How do I book a school field trip at Kilby?" "What is Old Fashioned Christmas at Kilby?" |
-   | Planning Your Visit: Day Trips and Camping | Visitors from Harrison and the Lower Mainland | "What are the best things to do in Harrison Mills?" "Can I camp at Kilby?" "What are the best photo spots at Kilby?" |
-
+     - **The 1906 General Store and Kilby History.** Serves history enthusiasts, seniors, and school groups.
+     - **Farm Animals and Visiting with Kids.** Serves young families and grandparents.
+     - **The Cafe: Breakfast, Lunch, and Dinner Nights.** Serves locals and day-trippers.
+     - **Planning Your Visit: Day Trips and Camping.** Serves visitors from Harrison and the Lower Mainland.
+     - **Workshops, Events, and School Programs.** Serves locals, families, and teachers.
    - For each cluster, write down 8 to 10 candidate questions from your reviews, the questions you hear at the desk, and AnswerThePublic. Choose the two most specific for the pillar page and the first post.
    - Save the questions in a Google Sheet with columns for cluster, question, status, and the date published.
 
