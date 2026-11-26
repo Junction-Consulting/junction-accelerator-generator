@@ -1,0 +1,246 @@
+/*
+ * Accelerator v2 PDFs: the assessment report and the 90-day plan
+ * (DESIGN-BRIEF.md section 8). Letter size, a Carbon cover, white inside
+ * pages with a running header and page numbers.
+ *
+ * Only var(--...) values from tokens.css, as in accelerator.css. The page
+ * box itself (@page) cannot read custom properties in every renderer, so
+ * its size and margins repeat the tokens' values; tests/v2/styles.test.js
+ * checks they match.
+ *
+ * Page rules:
+ *   - a step never separates from its title
+ *   - media stays with its step
+ *   - tables repeat their header on a new page
+ *   - a part, week or section heading is never the last line on a page
+ *   - body text is never below 11pt
+ */
+
+@page {
+  size: letter;
+  margin: .9in .75in .8in;
+  @top-left { content: ""; width: 1.1in; background: url("junction-wordmark-solid.png") no-repeat left center / 1.1in auto; }
+  @top-right { content: var(--pdf-header); font-family: var(--font-text); font-size: var(--pdf-meta); color: var(--flint); }
+  @bottom-left { content: "Junction Accelerator"; font-family: var(--font-text); font-size: var(--pdf-meta); color: var(--flint); }
+  @bottom-right { content: counter(page); font-family: var(--font-text); font-size: var(--pdf-meta); color: var(--flint); }
+}
+@page cover {
+  margin: 0;
+  @top-left { content: none; }
+  @top-right { content: none; }
+  @bottom-left { content: none; }
+  @bottom-right { content: none; }
+}
+
+html, body { margin: 0; padding: 0; }
+.pdf {
+  font-family: var(--font-text);
+  font-size: var(--pdf-body);
+  line-height: var(--leading-body);
+  color: var(--carbon);
+  background: var(--white);
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+.pdf *, .pdf *::before, .pdf *::after { box-sizing: border-box; }
+.pdf p, .pdf figure, .pdf ul, .pdf ol, .pdf h1, .pdf h2, .pdf h3 { margin: 0; }
+.pdf a { color: var(--canopy-text); text-decoration: none; }
+
+/* ── Cover ───────────────────────────────────── */
+.pdf-cover {
+  page: cover;
+  break-after: page;
+  height: var(--pdf-page-height);
+  overflow: hidden;
+  background: var(--carbon);
+  color: var(--newsprint);
+  padding: var(--pdf-cover-pad);
+  display: flex;
+  flex-direction: column;
+}
+.pdf-cover-wordmark { width: var(--pdf-wordmark-cover); height: auto; display: block; }
+.pdf-cover-main { margin-top: auto; margin-bottom: auto; display: flex; flex-direction: column; gap: var(--pdf-gap-md); }
+.pdf-cover-label {
+  font-size: var(--pdf-cover-label);
+  font-weight: var(--text-weight-strong);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--gold);
+}
+.pdf-cover-title { font-family: var(--font-heading); font-weight: var(--heading-weight); font-size: var(--pdf-cover-title); line-height: var(--leading-heading); }
+.pdf-cover-client { font-size: var(--pdf-cover-client); }
+.pdf-cover-meta { color: var(--flint-on-dark); }
+.pdf-cover-foot { display: flex; flex-direction: column; gap: var(--pdf-gap-sm); font-size: var(--pdf-cover-goal); }
+.pdf-cover-score { display: flex; align-items: flex-end; gap: var(--pdf-gap-lg); }
+.pdf-cover-score b { font-family: var(--font-numeral); font-weight: var(--text-weight); font-size: var(--pdf-cover-score); line-height: var(--leading-1); color: var(--gold); }
+
+/* ── Inside pages ────────────────────────────── */
+.pdf-section { display: flex; flex-direction: column; gap: var(--pdf-gap-lg); }
+.pdf-section + .pdf-section, .pdf-break { break-before: page; }
+.pdf-h1 { font-family: var(--font-heading); font-weight: var(--heading-weight); font-size: var(--pdf-h1); line-height: var(--leading-heading-2); }
+.pdf-h2 { font-family: var(--font-heading); font-weight: var(--heading-weight); font-size: var(--pdf-h2); line-height: var(--leading-1_2); }
+.pdf-h3 { font-family: var(--font-heading); font-weight: var(--heading-weight-small); font-size: var(--pdf-h3); line-height: var(--leading-1_3); }
+.pdf-h1, .pdf-h2, .pdf-h3, .pdf-keep-next { break-after: avoid; page-break-after: avoid; }
+.pdf-rule { border-bottom: var(--divider-width) solid var(--divider); padding-bottom: var(--pdf-gap-sm); }
+.pdf-label {
+  font-size: var(--pdf-meta);
+  font-weight: var(--text-weight-strong);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--copper);
+}
+.pdf-muted { color: var(--flint); }
+.pdf-meta { font-size: var(--pdf-meta); color: var(--flint); }
+.pdf-list { padding-left: var(--pdf-gap-xl); display: flex; flex-direction: column; gap: var(--pdf-gap-xs); }
+.pdf-list li { break-inside: avoid; }
+.pdf-list .tactic-step-sub { margin-left: var(--pdf-gap-lg); list-style: circle; }
+.pdf-columns { display: flex; gap: var(--pdf-gap-xl); }
+.pdf-columns > div { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; gap: var(--pdf-gap-sm); }
+.pdf-box { border-radius: var(--pdf-radius); padding: var(--pdf-gap-md) var(--pdf-gap-lg); break-inside: avoid; }
+.pdf-box--dark { background: var(--carbon); color: var(--newsprint); }
+.pdf-box--sage { background: var(--sage); color: var(--forest); }
+.pdf-box--sage25 { background: var(--sage-25); }
+.pdf-box--sunken { background: var(--newsprint); }
+.pdf-gold { color: var(--gold); font-weight: var(--text-weight-strong); }
+.pdf-quote { font-family: var(--font-quote); font-style: italic; font-weight: var(--heading-weight); font-size: var(--pdf-quote); line-height: var(--leading-quote); color: var(--forest); }
+.pdf-block { display: flex; flex-direction: column; gap: var(--pdf-gap-sm); }
+.pdf-keep-together { break-inside: avoid; }
+.confirm-note { background: var(--sage); color: var(--forest); border-radius: var(--confirm-radius-v2); padding: 0 var(--pdf-gap-xs); }
+
+/* Tables: plain, alternating tints, header repeated on each page */
+.pdf .table-scroll { overflow: visible; }
+.pdf .plain-table { width: 100%; border-collapse: collapse; font-size: var(--pdf-small); }
+.pdf .plain-table thead { display: table-header-group; }
+.pdf .plain-table tr { break-inside: avoid; }
+.pdf .plain-table th, .pdf .plain-table td { text-align: left; padding: var(--pdf-gap-sm) var(--pdf-gap-md); vertical-align: top; }
+.pdf .plain-table thead th { font-size: var(--pdf-meta); font-weight: var(--text-weight-strong); color: var(--flint); }
+.pdf .plain-table tbody th { font-weight: var(--text-weight-strong); }
+.pdf .plain-table tbody tr:nth-child(odd) { background: var(--newsprint); }
+
+/* Tick boxes, empty for a pen */
+.pdf-tick { display: flex; gap: var(--pdf-gap-md); align-items: flex-start; break-inside: avoid; }
+.pdf-tick i {
+  flex: none;
+  width: var(--pdf-tick);
+  height: var(--pdf-tick);
+  margin-top: var(--pdf-gap-xs);
+  border: var(--pdf-tick-line) solid var(--carbon);
+  border-radius: var(--radius-2);
+}
+
+/* ── Plan: steps ─────────────────────────────── */
+.pdf-tactic-head { display: flex; flex-direction: column; gap: var(--pdf-gap-xs); }
+.pdf-part { margin-top: var(--pdf-gap-md); }
+.pdf-step { padding-left: calc(var(--pdf-numeral-col) + var(--pdf-gap-md)); margin-top: var(--pdf-gap-md); }
+.pdf-step-num { position: absolute; left: calc((var(--pdf-numeral-col) + var(--pdf-gap-md)) * -1); top: calc(var(--pdf-gap-xs) * -1); width: var(--pdf-numeral-col); font-family: var(--font-numeral); font-size: var(--pdf-numeral); line-height: var(--leading-1); color: var(--gold-on-light); }
+.pdf-step-main { min-width: 0; }
+.pdf-step-main > * + * { margin-top: var(--pdf-gap-sm); }
+/* Media keeps the end of its step's text with it */
+.pdf-step-main > .pdf-media { break-before: avoid; page-break-before: avoid; }
+.pdf-step-main > .pdf-list:has(+ .pdf-media) > li:last-child, .pdf-step-start:has(+ .pdf-media) { break-after: avoid; page-break-after: avoid; }
+/* The title travels with the start of the step */
+.pdf-step-title { break-after: avoid; page-break-after: avoid; }
+.pdf-step-start { position: relative; break-inside: avoid; display: flex; flex-direction: column; gap: var(--pdf-gap-sm); }
+.pdf-chip { font-size: var(--pdf-meta); font-weight: var(--text-weight-strong); letter-spacing: var(--tracking-label); text-transform: uppercase; }
+.pdf-chip--critical { color: var(--copper); }
+
+/* Media: below the step text, kept whole and with its step */
+.pdf-media { display: flex; flex-direction: column; gap: var(--pdf-gap-md); }
+.pdf-media > * { break-inside: avoid; }
+.pdf .media { max-width: var(--pdf-media-max); display: flex; flex-direction: column; gap: var(--pdf-gap-xs); break-inside: avoid; }
+.pdf .media-frame { border-radius: var(--pdf-radius); overflow: hidden; background: var(--newsprint-hover); }
+.pdf .media-bar { display: flex; align-items: center; gap: var(--pdf-gap-sm); background: var(--carbon); color: var(--newsprint); font-size: var(--pdf-meta); padding: var(--pdf-gap-xs) var(--pdf-gap-sm); }
+.pdf .media-bar-text { flex: 1; min-width: 0; }
+.pdf .media-icon { width: var(--pdf-meta); height: var(--pdf-meta); }
+.pdf .media-badge { background: var(--gold); color: var(--carbon); border-radius: var(--radius-2); padding: 0 var(--pdf-gap-xs); font-weight: var(--text-weight-strong); }
+.pdf .media-open { display: none; }
+.pdf .media-body img, .pdf .media-plain img { display: block; width: 100%; height: auto; max-height: var(--pdf-media-height); object-fit: cover; object-position: top; }
+.pdf .media-phone img, .pdf .media-gallery-item img { max-height: var(--pdf-media-height); object-fit: cover; object-position: top; }
+.pdf .media-plain { position: relative; }
+.pdf .media-plain .media-badge, .pdf .media-phone .media-badge { position: absolute; top: var(--pdf-gap-xs); left: var(--pdf-gap-xs); }
+.pdf .media-caption { font-size: var(--pdf-meta); color: var(--flint); }
+.pdf .media--phone, .pdf .media-post { width: var(--pdf-phone); }
+.pdf .media-phone { position: relative; border: var(--pdf-phone-border) solid var(--carbon); border-radius: var(--pdf-phone-radius); overflow: hidden; }
+.pdf .media-phone img { display: block; width: 100%; height: auto; }
+.pdf .media-row, .pdf .media-group { display: flex; flex-wrap: wrap; gap: var(--pdf-gap-md); }
+.pdf .media-group .media { width: calc((100% - var(--pdf-gap-md)) / 2); max-width: none; }
+.pdf .media-group--four .media { width: calc((100% - var(--pdf-gap-md) * 3) / 4); }
+.pdf .media-gallery { display: flex; flex-direction: column; gap: var(--pdf-gap-xs); max-width: var(--pdf-media-max); }
+.pdf .media-gallery-title { font-weight: var(--text-weight-strong); }
+.pdf .media-gallery-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--pdf-gap-sm); }
+.pdf .media-gallery-item { margin: 0; }
+.pdf .media-gallery-item img { display: block; width: 100%; height: auto; border-radius: var(--radius-2); }
+.pdf .media-link { color: inherit; display: block; max-width: var(--pdf-media-max); }
+.pdf .media-link::after { content: attr(href); display: block; font-size: var(--pdf-meta); color: var(--flint); overflow-wrap: anywhere; }
+.pdf .tactic-link-card-body { background: var(--white); padding: var(--pdf-gap-sm) var(--pdf-gap-md); }
+.pdf .tactic-link-card-title { font-weight: var(--text-weight-strong); }
+.pdf .tactic-link-card-subtitle { font-size: var(--pdf-meta); color: var(--flint); }
+.pdf-video { padding: var(--pdf-gap-md); display: flex; flex-direction: column; gap: var(--pdf-gap-xs); }
+.pdf-url { font-size: var(--pdf-meta); color: var(--flint); overflow-wrap: anywhere; }
+
+/* ── Plan: roadmap ───────────────────────────── */
+.pdf-week { display: flex; align-items: baseline; gap: var(--pdf-gap-md); margin-top: var(--pdf-gap-sm); padding-bottom: var(--pdf-gap-xs); border-bottom: var(--divider-width) solid var(--divider); break-after: avoid; page-break-after: avoid; }
+.pdf-week b { font-family: var(--font-numeral); font-weight: var(--text-weight); font-size: var(--pdf-h2); line-height: var(--leading-1); color: var(--gold-on-light); }
+.pdf-week-block { display: flex; flex-direction: column; gap: var(--pdf-gap-sm); }
+.pdf-week-block .pdf-tick:first-of-type { break-before: avoid; }
+.pdf-notes { min-height: var(--pdf-notes-height); background: var(--newsprint); border-radius: var(--pdf-radius); padding: var(--pdf-gap-sm) var(--pdf-gap-md); font-weight: var(--text-weight-strong); break-inside: avoid; }
+
+/* ── Assessment ──────────────────────────────── */
+.pdf-donut {
+  flex: none;
+  width: var(--pdf-donut);
+  height: var(--pdf-donut);
+  border-radius: 50%;
+  background: conic-gradient(var(--fill) calc(var(--pct, 0) * 1%), var(--newsprint-hover) 0);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.pdf-donut span { width: var(--pdf-donut-hole); height: var(--pdf-donut-hole); border-radius: 50%; background: var(--white); display: flex; align-items: center; justify-content: center; font-family: var(--font-numeral); font-size: var(--pdf-donut-num); color: var(--fill); }
+.pdf-level--strong { --fill: var(--score-strong); }
+.pdf-level--good { --fill: var(--score-good); }
+.pdf-level--fair { --fill: var(--score-fair); }
+.pdf-level--needs-work { --fill: var(--score-needs-work); }
+.pdf-level--none { --fill: var(--canopy); }
+.pdf-score { color: var(--fill); font-weight: var(--text-weight-strong); }
+.pdf-summary-top { display: flex; gap: var(--pdf-gap-xl); align-items: center; break-inside: avoid; }
+.pdf-areas { display: block; }
+.pdf-area-row { break-inside: avoid; }
+.pdf-area-row--head { break-after: avoid; }
+.pdf-area-row { display: grid; grid-template-columns: var(--pdf-area-col) var(--pdf-score-col) var(--pdf-score-col) 1fr var(--pdf-share-col); gap: var(--pdf-gap-md); align-items: center; padding: var(--pdf-gap-sm) var(--pdf-gap-md); border-radius: var(--pdf-radius); }
+.pdf-area-row:nth-child(even) { background: var(--newsprint); }
+.pdf-area-row--head { font-size: var(--pdf-meta); font-weight: var(--text-weight-strong); color: var(--flint); }
+.pdf-bar { height: var(--pdf-bar); border-radius: var(--radius-5); background: var(--track); overflow: hidden; }
+.pdf-bar i { display: block; height: 100%; width: calc(var(--pct, 0) * 1%); background: var(--fill); }
+.pdf-area-head { display: flex; justify-content: space-between; align-items: flex-end; gap: var(--pdf-gap-lg); break-after: avoid; }
+.pdf-area-score { display: flex; align-items: baseline; gap: var(--pdf-gap-sm); white-space: nowrap; }
+.pdf-area-score b { font-family: var(--font-numeral); font-weight: var(--text-weight); font-size: var(--pdf-area-score); line-height: var(--leading-1); color: var(--fill); }
+.pdf-nums { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--pdf-gap-sm); break-inside: avoid; }
+.pdf-num { background: var(--newsprint); border-radius: var(--pdf-radius); padding: var(--pdf-gap-sm) var(--pdf-gap-md); display: flex; flex-direction: column; }
+.pdf-num b { font-weight: var(--text-weight-strong); font-size: var(--pdf-h3); }
+.pdf-num small { font-size: var(--pdf-meta); color: var(--flint); }
+.pdf-market { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--pdf-gap-md); }
+.pdf-market > div { break-inside: avoid; }
+
+/* ── On screen, before printing: the pages as sheets ── */
+@media screen {
+  .pdf { background: var(--newsprint); padding: var(--pdf-screen-gap) 0; }
+  .pdf-cover, .pdf-sheet { width: var(--pdf-page-width); margin: 0 auto var(--pdf-screen-gap); }
+  .pdf-sheet { background: var(--white); padding: var(--pdf-margin-top) var(--pdf-margin-side) var(--pdf-margin-bottom); display: flex; flex-direction: column; gap: var(--pdf-gap-xl); }
+}
+@media print {
+  .pdf-sheet { display: flex; flex-direction: column; gap: var(--pdf-gap-xl); }
+}
+
+/* Page breaks are only reliable in block layout: the blocks that hold
+   headings, steps and weeks are laid out as plain blocks, with spacing
+   between their children. */
+.pdf-sheet, .pdf-section, .pdf-block, .pdf-step-start, .pdf-week-block, .pdf-tactic-head { display: block; }
+.pdf-section > * + *, .pdf-block > * + * { margin-top: var(--pdf-gap-md); }
+.pdf-step-start > * + *, .pdf-week-block > * + *, .pdf-tactic-head > * + * { margin-top: var(--pdf-gap-sm); }
+.pdf-section > .pdf-h1 + *, .pdf-block > .pdf-h2 + *, .pdf-block > .pdf-h3 + * { break-before: avoid; page-break-before: avoid; }
+.pdf-week + .pdf-tick { break-before: avoid; page-break-before: avoid; }
+@media screen { .pdf-sheet { display: block; } .pdf-sheet > * + * { margin-top: var(--pdf-gap-xl); } }
+/* A heading is never split across two pages */
+.pdf-h1, .pdf-h2, .pdf-h3, .pdf-step-title, .pdf-week { break-inside: avoid; page-break-inside: avoid; orphans: 3; widows: 3; }
+.pdf p, .pdf li { orphans: 2; widows: 2; }

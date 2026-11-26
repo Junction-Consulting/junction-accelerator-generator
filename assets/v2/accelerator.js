@@ -26,7 +26,6 @@ const TOUR_STEPS = PAGE.tour;
 
 // ── State (this browser only: notes and Quick Wins ticks) ──
 const STATE_KEY = PAGE.slug + '_accelerator_v2';
-const OB_KEY = PAGE.slug + '_onboarded_v1';
 let state = { checks: {}, notes: {} };
 
 // Read state (stage 2a) and the last step opened: this browser only for now
@@ -92,15 +91,13 @@ function navigate(pageId) {
 }
 
 // ── PDF ────────────────────────────────────────────────────
-function printRoadmap() {
-  navigate('roadmap');
-  setTimeout(function () { window.print(); }, 100);
+// "Download as PDF" opens the PDF template, which opens the print dialog
+// (DESIGN-BRIEF.md section 8). A PDF service can render the same page later.
+function openPdf(file) {
+  window.open(PAGE.pdfBase + '/' + file + '?print=1', '_blank', 'noopener');
 }
-
-function downloadPDF() {
-  navigate('assessment');
-  setTimeout(function () { window.print(); }, 100);
-}
+function printRoadmap() { openPdf('plan.html'); }
+function downloadPDF() { openPdf('assessment.html'); }
 
 // ── Mobile navigation ──────────────────────────────────────
 function openMobileDrawer() {
@@ -484,6 +481,8 @@ function renderDashboard() {
   if (!root) return;
   const stage = currentStage();
   if (stage !== lastStage) setStageAttributes(stage);
+  const wm = document.getElementById('wm-overlay');
+  if (wm && !wm.hidden && wm.dataset.auto && wm.dataset.kind !== welcomeKind(stage)) hideWelcome();
   root.querySelectorAll('[data-stage-panel]').forEach(p => { p.hidden = p.getAttribute('data-stage-panel') !== stage; });
 
   const name = PAGE.name;
@@ -706,33 +705,69 @@ function restoreState() {
 let tourStep = -1;
 let tourActive = false;
 
-function startWelcome() {
+// The welcome window has a version before the plan and one once it exists,
+// each shown once (remembered in this browser). "Replay welcome tour" shows
+// the current one again.
+const welcomeKind = stage => (stage === 'before' ? 'before' : 'plan');
+const welcomeKey = kind => PAGE.slug + '_welcome_' + kind;
+const isPhone = () => window.innerWidth <= 768;
+
+function startWelcome(auto) {
   const overlay = document.getElementById('wm-overlay');
+  const kind = welcomeKind(currentStage());
+  overlay.querySelectorAll('[data-welcome]').forEach(v => { v.hidden = v.getAttribute('data-welcome') !== kind; });
+  document.getElementById('wm-card').setAttribute('aria-labelledby', 'wm-title-' + kind);
+  overlay.dataset.kind = kind;
+  overlay.dataset.auto = auto ? '1' : '';
   overlay.hidden = false;
-  overlay.style.display = 'flex';
-  overlay.classList.remove('wm-hiding');
   navigate('dashboard');
+  const first = overlay.querySelector('.wm-actions .btn:not([hidden])');
+  if (first && !isPhone()) first.focus();
+}
+function hideWelcome() {
+  const overlay = document.getElementById('wm-overlay');
+  overlay.hidden = true;
+  return overlay.dataset.kind;
 }
 function handleOverlayClick(e) {
   if (e.target === document.getElementById('wm-overlay')) closeWelcome();
 }
 function closeWelcome() {
-  const overlay = document.getElementById('wm-overlay');
-  overlay.classList.add('wm-hiding');
-  setTimeout(() => { overlay.style.display = 'none'; overlay.hidden = true; }, 300);
-  try { localStorage.setItem(OB_KEY, '1'); } catch (e) {}
+  const kind = hideWelcome();
+  if (kind) writeStore(welcomeKey(kind), true);
 }
 function closeWelcomeStartTour() {
   closeWelcome();
-  setTimeout(() => startTour(), 350);
+  setTimeout(() => startTour(), 150);
+}
+document.addEventListener('keydown', e => {
+  if (e.key !== 'Escape') return;
+  if (!document.getElementById('wm-overlay').hidden) closeWelcome();
+  else if (tourActive) endTour();
+});
+
+// ── The tour: desktop only, at most six stops ─────────────
+// The stops this stage shows are worked out when the tour starts, so the
+// count ("Step 2 of 4") is right.
+let activeTour = [];
+function visible(el) { return !!(el && el.getClientRects().length); }
+function findTarget(selector) { return [...document.querySelectorAll(selector)].find(visible) || null; }
+function stopIsShown(step) {
+  if (step.page === 'dashboard') return !!findTarget(step.target);
+  return visible(document.querySelector(`.nav-item[data-page="${step.page}"]`));
 }
 
 function startTour() {
+  if (isPhone()) return;
+  navigate('dashboard');
+  const stage = currentStage();
+  activeTour = TOUR_STEPS.filter(stopIsShown).map(st => (stage === 'before' && st.descBefore ? { ...st, desc: st.descBefore } : st));
+  if (!activeTour.length) return;
   tourActive = true;
   tourStep = -1;
   const dotsEl = document.getElementById('tt-dots');
   dotsEl.innerHTML = '';
-  TOUR_STEPS.forEach((_, i) => {
+  activeTour.forEach((_, i) => {
     const d = document.createElement('div');
     d.className = 'tour-dot';
     d.id = 'tt-dot-' + i;
@@ -842,33 +877,20 @@ function tourRoomBelow(el, target) {
 const afterLayout = fn => requestAnimationFrame(() => requestAnimationFrame(fn));
 
 function tourTarget(step) {
-  const isMob = window.innerWidth <= 768;
-  return {
-    isMob,
-    id: (isMob && step.mobileTargetId) ? step.mobileTargetId : step.targetId,
-    page: (isMob && step.mobilePage) ? step.mobilePage : step.page,
-    pos: (isMob && step.mobilePos) ? step.mobilePos : step.pos,
-    desc: (isMob && step.mobileDesc) ? step.mobileDesc : step.desc
-  };
+  return { isMob: false, selector: step.target, page: step.page, pos: step.pos, desc: step.desc };
 }
 
 function goToTourStep(n) {
-  if (n >= TOUR_STEPS.length) { endTour(); return; }
+  if (n >= activeTour.length) { endTour(); return; }
   tourStep = n;
-  const step = TOUR_STEPS[n];
+  const step = activeTour[n];
   const target = tourTarget(step);
   if (target.page) navigate(target.page);
-  if (step.weekToOpen !== undefined) {
-    const wc = document.getElementById('wc-' + step.weekToOpen);
-    if (wc && !wc.classList.contains('open')) toggleWeek(step.weekToOpen);
-  }
-  // Wait for the page switch and any opening week card, then scroll and place
+  // Wait for the page switch, then scroll and place
   setTimeout(function () {
     if (tourStep !== n) return;
-    const el = document.getElementById(target.id);
-    if (!el) { endTour(); return; }
-    // A target this stage of the dashboard does not show is skipped
-    if (!el.getClientRects().length) {
+    const el = findTarget(target.selector);
+    if (!el) {
       if (tourDirection < 0 && n > 0) goToTourStep(n - 1);
       else { tourDirection = 1; goToTourStep(n + 1); }
       return;
@@ -876,24 +898,20 @@ function goToTourStep(n) {
     document.getElementById('tour-tooltip-box').classList.remove('active');
     fillTourTooltip(step, n, target.desc);
     bringIntoView(el, tourRoomBelow(el, target));
-    afterLayout(function () { if (tourStep === n) positionTour(el, step, n, target.id, target.isMob); });
-  }, target.page === 'roadmap' ? 200 : 80);
+    afterLayout(function () { if (tourStep === n) positionTour(el, step, n, target.selector, false); });
+  }, target.page === 'dashboard' ? 80 : 200);
 }
 
 function fillTourTooltip(step, n, desc) {
-  document.getElementById('tt-step-label').textContent = 'Step ' + (n + 1) + ' of ' + TOUR_STEPS.length;
+  document.getElementById('tt-step-label').textContent = 'Step ' + (n + 1) + ' of ' + activeTour.length;
   document.getElementById('tt-title').textContent = step.title;
   document.getElementById('tt-desc').textContent = desc;
-  TOUR_STEPS.forEach((_, i) => {
+  activeTour.forEach((_, i) => {
     const d = document.getElementById('tt-dot-' + i);
     if (d) d.classList.toggle('active', i === n);
   });
-  const prevBtn = document.getElementById('tt-prev');
-  const nextBtn = document.getElementById('tt-next');
-  prevBtn.hidden = n === 0;
-  const isLast = n === TOUR_STEPS.length - 1;
-  nextBtn.textContent = isLast ? '✓  All done' : 'Next →';
-  nextBtn.className = 'tour-btn ' + (isLast ? 'finish' : 'next');
+  document.getElementById('tt-prev').hidden = n === 0;
+  document.getElementById('tt-next').textContent = n === activeTour.length - 1 ? 'Done' : 'Next';
 }
 
 const overlapArea = (a, b) => Math.max(0, Math.min(a.right, b.right) - Math.max(a.left, b.left)) * Math.max(0, Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top));
@@ -942,7 +960,7 @@ function positionTour(el, step, n, usedId, isMob) {
   sp.style.left = spot.left + 'px';
   sp.style.width = spot.width + 'px';
   sp.style.height = spot.height + 'px';
-  sp.classList.toggle('tour-spotlight-box--edge', usedId === 'sidebar');
+
 
   const tt = document.getElementById('tour-tooltip-box');
   tt.classList.remove('active');
@@ -959,10 +977,10 @@ function positionTour(el, step, n, usedId, isMob) {
 // Keep the spotlight and tooltip on their target when the window changes size
 window.addEventListener('resize', function () {
   if (!tourActive || tourStep < 0) return;
-  const step = TOUR_STEPS[tourStep];
-  const target = tourTarget(step);
-  const el = document.getElementById(target.id);
-  if (el) afterLayout(() => positionTour(el, step, tourStep, target.id, target.isMob));
+  if (isPhone()) { endTour(); return; }
+  const step = activeTour[tourStep];
+  const el = findTarget(step.target);
+  if (el) afterLayout(() => positionTour(el, step, tourStep, step.target, false));
 });
 
 function endTour() {
@@ -973,13 +991,19 @@ function endTour() {
   document.getElementById('tour-spotlight-box').classList.remove('active');
   document.getElementById('tour-tooltip-box').classList.remove('active');
   navigate('dashboard');
-  try { localStorage.setItem(OB_KEY, '1'); } catch (e) {}
 }
 
+// Shown once per stage, before the plan and when it is delivered. Saved
+// ticks can arrive after the page loads and move the stage on, so the check
+// waits for login, and renderDashboard closes a window that no longer fits.
 function checkOnboarding() {
-  let seen = false;
-  try { seen = !!localStorage.getItem(OB_KEY); } catch (e) {}
-  if (!seen) setTimeout(startWelcome, 600);
+  const show = () => {
+    const stage = currentStage();
+    if (stage !== 'before' && stage !== 'delivered') return;
+    if (!readStore(welcomeKey(welcomeKind(stage)), false)) startWelcome(true);
+  };
+  const ready = window.__authReady ? window.__authReady.catch(function () {}) : Promise.resolve();
+  ready.then(() => setTimeout(show, 600));
 }
 
 // ── "How to" deep link (the step ID is the element id) ─────

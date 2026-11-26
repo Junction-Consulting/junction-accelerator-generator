@@ -111,26 +111,18 @@ describe('what the shared scripts need', () => {
     expect(links.length).toBe(2 * CONTENT.roadmap.weeks.flatMap(w => w.actions).filter(a => a.how_to && a.how_to !== 'quick_wins').length);
   });
 
-  test('the tour targets exist on the page', () => {
-    const ids = new Set([...page.html.matchAll(/\sid="([^"]+)"/g)].map(m => m[1]));
-    for (const step of page.data.tour) {
-      expect(ids.has(step.targetId)).toBe(true);
-      if (step.mobileTargetId) expect(ids.has(step.mobileTargetId)).toBe(true);
-    }
+  test('the tour: six stops at most, in order, each with a target on the page', () => {
+    const tour = page.data.tour;
+    expect(tour.length).toBeLessThanOrEqual(6);
+    expect(tour.map(t => t.title)).toEqual(['Find your way around', 'This week', 'How to', 'Your progress', 'Your 90-day roadmap', 'Your assessment']);
+    const targets = { '#nav-panel': 'id="nav-panel"', '#objectives-section': 'id="objectives-section"', '[data-week-panel]:not([hidden]) .link-btn': 'data-week-panel=', '[data-tour="progress"]': 'data-tour="progress"', '.rm-week.open': 'class="rm-week"', '[data-areas]': 'data-areas' };
+    tour.forEach(t => expect(page.html).toContain(targets[t.target]));
   });
 
-  test('the tour calls the tactic cards cards, not pills', () => {
-    const stop = page.data.tour.find(s => s.targetId === 'tactic-cards-section');
-    expect(stop.desc).toMatch(/^These cards show progress/);
-    expect(stop.mobileDesc).toMatch(/^These cards show progress/);
-    expect(JSON.stringify(page.data.tour)).not.toMatch(/\bpills?\b/i);
-  });
-
-  test('tall tour stops have a tighter target on small screens', () => {
-    const ids = new Set([...page.html.matchAll(/\sid="([^"]+)"/g)].map(m => m[1]));
-    expect(page.data.tour.find(s => s.targetId === 'objectives-section').mobileTargetId).toBe('next-step-main');
-    expect(page.data.tour.find(s => s.targetId === 'wc-1').mobileTargetId).toBe('w1-checklist');
-    expect(ids.has('next-step-main') && ids.has('w1-checklist')).toBe(true);
+  test('the tour says nothing about what the new design no longer has', () => {
+    const words = JSON.stringify(page.data.tour);
+    expect(words).not.toMatch(/checklist|pencil|pills?\b|sidebar|quick wins page|Next Step/i);
+    expect(page.html).not.toMatch(/completion checklist/i);
   });
 
   test('Quick Wins ticks and notes stay in this browser for now (no data-key), keyed by quick win ID', () => {
@@ -217,7 +209,7 @@ describe('dashboard stages (DESIGN-BRIEF.md section 5)', () => {
     CONTENT.roadmap.weeks.filter(w => w.actions.length).forEach(w => expect(during).toContain(`data-week-panel="${w.number}" hidden`));
     const howTos = (during.match(/>How to<\/button>/g) || []).length;
     expect(howTos).toBe(CONTENT.roadmap.weeks.flatMap(w => w.actions).filter(a => a.how_to).length);
-    expect(during).toContain('class="dash-card dash-progress dash-progress--dark" id="goal-section"');
+    expect(during).toContain('class="dash-card dash-progress dash-progress--dark" data-tour="progress" id="goal-section"');
     expect(during).toContain('Coming up');
     expect(during).toContain('30-day check-in');
   });
@@ -401,12 +393,37 @@ describe('the roadmap (DESIGN-BRIEF.md section 6)', () => {
   });
 });
 
+describe('the welcome window (phase 7)', () => {
+  test('a version before the plan and one for the plan, both hidden until the page script shows one', () => {
+    expect(page.html).toContain('<div class="wm-variant" data-welcome="before" hidden>');
+    expect(page.html).toContain('<div class="wm-variant" data-welcome="plan" hidden>');
+    expect(page.html).toContain('<h2 class="wm-title" id="wm-title-before">Welcome, Andrea&#039;s Resort</h2>');
+    expect(page.html).toContain('<h2 class="wm-title" id="wm-title-plan">Your 90-day plan is ready</h2>');
+    expect(page.html).toContain('Start on the four quick wins today.');
+    expect(page.html).toContain('Take a quick tour</button>');
+    expect(page.html).toContain('Explore on my own</button>');
+  });
+
+  test("keeps the plan's welcome message, and leaves it out when there is none", () => {
+    expect(page.html).toContain(`<p class="wm-message">${CONTENT.strategy.welcome_message}</p>`);
+    const c = copy();
+    c.strategy.welcome_message = null;
+    expect(render(c).html).not.toContain('wm-message');
+  });
+
+  test('without an assessment, the window says nothing about the assessment or quick wins', () => {
+    const html = render(CONTENT, null).html;
+    const before = html.slice(html.indexOf('data-welcome="before"'), html.indexOf('data-welcome="plan"'));
+    expect(before).not.toMatch(/Read your assessment|quick win/);
+  });
+});
+
 describe('computed, not typed', () => {
   test('totals and counts come from the content', () => {
     const total = CONTENT.roadmap.weeks.reduce((n, w) => n + w.actions.length, 0);
     expect(page.data.tasks.all).toHaveLength(total);
     expect(page.html).toContain(`<strong><span data-live="plan-done">0</span> of ${total}</strong> tasks checked off`);
-    expect(page.html).toContain(`<div class="wm-step-lbl">${CONTENT.tactics.length} Tactics</div>`);
+    expect(page.html).toContain(`<p class="wm-count">Four tactics · twelve weeks · ${total} tasks</p>`);
     expect(page.html).toContain(`id="tactic-cards-section" data-columns="${CONTENT.tactics.length}"`);
     // Every tactic card grid uses the shared rule, sized by the number of tactics
     expect(page.html).toContain(`<div class="dash-tactics tactic-grid" id="tactic-cards-section" data-columns="${CONTENT.tactics.length}">`);
@@ -464,7 +481,7 @@ describe('computed, not typed', () => {
     c.roadmap.weeks.forEach(w => w.actions.forEach(a => { if (a.how_to && a.how_to !== 'quick_wins' && !tacticIds.has(a.how_to)) a.how_to = null; }));
     const html = render(c).html;
     expect(html).not.toContain('page-tactic4');
-    expect(html).toContain('<div class="wm-step-lbl">3 Tactics</div>');
+    expect(html).toContain('<p class="wm-count">Three tactics ·');
     expect(html).toContain('id="tactic-cards-section" data-columns="3"');
     expect(validateDashboardV2(html, c)).toEqual([]);
   });
@@ -485,11 +502,14 @@ describe('missing means hidden', () => {
     c.roadmap.weeks[0].next_step = { time_needed: '1 to 2 hours', who: 'You' };
     c.roadmap.closing = 'Keep going.';
     c.quick_wins.note = { title: 'One Thing Worth Watching', text: 'Watch this.' };
-    c.quick_wins.intro = 'Zqx intro.';
-    c.tactics[0].resources[0].description = 'Zqx resource note';
+    c.quick_wins.intro = 'Qyv intro.';
+    c.tactics[0].resources[0].description = 'Qyv resource note';
     const r = render(c);
     // Not in the brief or mockups, so never shown (kept in content.json)
-    ['2 hrs', 'Keep going.', 'Zqx intro.', 'Zqx resource note'].forEach(t => expect(r.html).not.toContain(t));
+    ['2 hrs', 'Keep going.'].forEach(t => expect(r.html).not.toContain(t));
+    // Written by the coach and shown to clients before, so kept
+    expect(r.html).toContain('<p class="rm-gbp-intro" data-editable-key="quick_wins.intro">Qyv intro.</p>');
+    expect(r.html).toContain('<span class="tp-link-note">Qyv resource note</span>');
     // Part cards were "What this breaks into", which the redesign removes
     expect(r.html).not.toContain('Zqx');
     // Kept in content.json, but the redesigned dashboard does not show them

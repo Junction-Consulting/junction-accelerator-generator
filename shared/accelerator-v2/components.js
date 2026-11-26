@@ -115,7 +115,7 @@ function phaseBars(phases, tone) {
 /** "Your progress": a donut, "N of M tasks checked off" and one bar per phase. */
 export function progressCard(phases, total, { dark = true, id = '' } = {}) {
   const tone = dark ? 'dark' : 'light';
-  return `<section class="dash-card dash-progress dash-progress--${tone}"${id ? ` id="${id}"` : ''}>
+  return `<section class="dash-card dash-progress dash-progress--${tone}" data-tour="progress"${id ? ` id="${id}"` : ''}>
         <h2 class="dash-h3 desktop-only">Your progress</h2>
         ${donut({ tone, number: '0%', sub: 'of your plan', live: 'plan', label: 'Plan progress' })}
         <div class="dash-progress-text">
@@ -380,6 +380,38 @@ export function scoreCell(score, grade) {
   return `<span class="score score--${level ? level.key : 'none'}">${attr(score)} <span class="score-letter">${text(grade || '')}</span></span>`;
 }
 
+// ── Welcome window (DESIGN-BRIEF.md section 10, phase 7) ──────────────────
+// One version before the plan and one once it exists. Shown once per stage.
+
+export function welcomeWindows({ name, days, tactics, weeks, tasks, quickWins, hasAssessmentPage, welcomeMessage }) {
+  const words = ['no', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve'];
+  const count = (n, one) => `${words[n] || n} ${one}${n === 1 ? '' : 's'}`;
+  const before = [
+    hasAssessmentPage ? 'Read your assessment to see how you score in six areas.' : '',
+    quickWins ? `Start on the ${count(quickWins, 'quick win')} today. They are small fixes, and they do not need to wait for the plan.` : '',
+    `Your ${days}-day plan arrives after your coaching call.`
+  ].filter(Boolean);
+  const plan = [
+    'Read it once first: your strategy, then each tactic.',
+    'Then work through it week by week, and tick each action as you finish it.',
+    'Each action has a "How to" link to the step that explains it.'
+  ];
+  const sentence = text => text.charAt(0).toUpperCase() + text.slice(1);
+  return `<div class="wm-variant" data-welcome="before" hidden>
+      <div class="meta-label">Accelerator</div>
+      <h2 class="wm-title" id="wm-title-before">Welcome, ${attr(name)}</h2>
+      <p>Your digital marketing assessment is ready.</p>
+      <ul class="wm-list">${before.map(t => `<li>${t}</li>`).join('')}</ul>
+    </div>
+    <div class="wm-variant" data-welcome="plan" hidden>
+      <div class="meta-label">Accelerator</div>
+      <h2 class="wm-title" id="wm-title-plan">Your ${days}-day plan is ready</h2>
+      ${has(welcomeMessage) ? `<p class="wm-message">${md(welcomeMessage)}</p>` : ''}
+      <p class="wm-count">${sentence(count(tactics, 'tactic'))} · ${count(weeks, 'week')} · ${tasks} tasks</p>
+      <ul class="wm-list">${plan.map(t => `<li>${t}</li>`).join('')}</ul>
+    </div>`;
+}
+
 // ── Strategy ───────────────────────────────────────────────────────────────
 
 // Strategy (DESIGN-BRIEF.md section 6): goal on Carbon, positioning with the
@@ -502,7 +534,7 @@ export function resources(tactic) {
   return `<section class="tp-card">
           <h2 class="tp-h3">Resources</h2>
           <ul class="tp-links">
-            ${tactic.resources.map((r, i) => `<li><a href="${attr(r.url)}" data-editable-link="${attr(`${tactic.id}.resources.${i}`)}" target="_blank" rel="noopener">${plain(r.title)}</a></li>`).join('\n            ')}
+            ${tactic.resources.map((r, i) => `<li><a href="${attr(r.url)}" data-editable-link="${attr(`${tactic.id}.resources.${i}`)}" target="_blank" rel="noopener">${plain(r.title)}</a>${has(r.description) ? `<span class="tp-link-note">${md(r.description)}</span>` : ''}</li>`).join('\n            ')}
           </ul>
         </section>`;
 }
@@ -872,6 +904,7 @@ export function gbpWins(qw) {
         <h2 class="rm-h2">Google profile and website wins</h2>
         <span class="rm-divider-count"><span data-live="gbp-done">0</span> of ${total} done</span>
       </div>
+      ${has(qw.intro) ? `<p class="rm-gbp-intro" data-editable-key="quick_wins.intro">${md(qw.intro)}</p>` : ''}
       <div class="rm-gbp-panel">
       ${groups.map(quickWinGroup).join('\n      ')}
       </div>

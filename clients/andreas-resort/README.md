@@ -56,7 +56,7 @@ For now, edit `add-sandbox-media.mjs` and run it. It only adds media to steps th
 
 ## Not yet in v2
 
-- The PDFs (the roadmap prints from the browser, as in v1).
+- A PDF service. "Download as PDF" opens `pdf/plan.html` or `pdf/assessment.html` (built with the page) and the browser's print dialog.
 - Notes, Quick Wins ticks, read state and the last step opened are saved in this browser only. Task ticks (the roadmap's actions) are saved to the account, keyed by `act_` ID.
 - **Stage preview.** Because `flags.sandbox` is true, a "Sandbox preview" bar at the bottom switches between the four dashboard stages. Each has its own link: `?stage=before`, `?stage=delivered`, `?stage=during`, `?stage=done`. The choice is remembered in the browser. Every stage except "During the plan" shows sample state and cannot change saved ticks.
 - Edit Mode edits are saved by the existing Edit Mode, keyed by item ID and field (for example `stp_xxxxxx.title`), but they are not yet written back into `content.json`.

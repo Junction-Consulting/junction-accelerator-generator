@@ -186,10 +186,10 @@ describe('warnings', () => {
     expect(checkContent(c).hidden.map(h => h.field)).not.toEqual(expect.arrayContaining(['phases[].description', 'roadmap.closing']));
   });
 
-  test('the quick wins introduction is not shown, so a missing one is not listed as hidden', () => {
+  test('a missing quick wins introduction is listed as hidden', () => {
     const c = copy();
     c.quick_wins.intro = null;
-    expect(checkContent(c).hidden.map(h => h.field)).not.toContain('quick_wins.intro');
+    expect(checkContent(c).hidden.map(h => h.field)).toContain('quick_wins.intro');
   });
 
   test('[CONFIRM] reminders neither block nor warn', () => {

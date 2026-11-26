@@ -28,6 +28,15 @@ function declarations(css) {
 const RAW_COLOUR = /#[0-9a-f]{3,8}\b|rgba?\(|hsla?\(|(?<![\w-])(white|black)(?![\w-])/i;
 const RAW_LENGTH = /(^|[\s,(/:])-?\d*\.?\d+(px|rem|em)\b/;
 
+test('print.css has no raw colours, fonts, sizes, spacing, radii or shadows outside the page box', () => {
+  const PRINT = fs.readFileSync(path.join(ROOT, 'assets', 'v2', 'print.css'), 'utf8');
+  // @page rules cannot read custom properties in every renderer; pdf.test.js checks they match the tokens
+  const body = PRINT.replace(/@page[^{]*\{(?:[^{}]|\{[^{}]*\})*\}/g, '');
+  const offenders = declarations(body).filter(d => (/^font-family/.test(d) ? !/var\(/.test(d) : RAW_COLOUR.test(d) || RAW_LENGTH.test(d)));
+  expect(offenders).toEqual([]);
+  expect(body).not.toMatch(/\d(in|pt|cm|mm)\b/);
+});
+
 test('accelerator.css has no raw colours, fonts, sizes, spacing, radii or shadows', () => {
   const offenders = declarations(CSS).filter(d => {
     if (d.startsWith('--')) return RAW_COLOUR.test(d) || RAW_LENGTH.test(d);

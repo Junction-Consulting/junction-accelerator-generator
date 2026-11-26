@@ -226,7 +226,7 @@ Shown on the roadmap, after the last month, as "Google profile and website wins"
 
 ### Voice (optional)
 
-`progress_headlines` (one per progress tier; not shown by the redesigned dashboard, kept for now) and `tour` (one description per tour stop). If missing, the neutral program wording from the template is used. This is the only place a template default is allowed, because the wording is about the program, not the client.
+`progress_headlines` (one per progress tier; not shown by the redesigned dashboard, kept for now) and `tour` (one description per tour stop, in the order of the six stops: navigation, this week, how to, progress, roadmap, assessment). If missing, the neutral program wording from the template is used. This is the only place a template default is allowed, because the wording is about the program, not the client.
 
 ## Assessment
 
@@ -331,3 +331,5 @@ This needs changes to login and access (`shared/auth.js`, the access rules in Su
 - 2026-11-26 (design brief phase 3): The roadmap shows the quick wins as "Google Business Profile wins" after the last month; the Quick Wins page is gone. Part cards are no longer shown. Tactic pages have two tabs (Overview, Implementation steps) and every step is collapsible. `what_we_heard` is shown as paragraphs: there is no separate pull-quote field yet (see the phase 3 report).
 - 2026-11-26 (design brief phase 4): Tactics gain two optional plan lines: `Quote:` (`heard_quote`) and `Assessment Areas:` (`assessment_areas`). The roadmap section is renamed "Google profile and website wins". The Assessment page shows every field of the record; Strategy no longer lists the tactics; Materials lists what exists and greys what is to come.
 - 2026-11-26 (design brief phases 4 and 5): Only what the brief and mockups show is shown. Not shown, though kept in `content.json` or the assessment record: confidence levels, the per-measure score breakdowns, metric sources and statuses, `time_commitment`, `roadmap.closing`, `quick_wins.intro`, resource descriptions. The phone shows the to-do list and the scorecard as designed pieces; check-in scores stack under each area there.
+- 2026-11-27 (design brief phase 6): The two PDFs are built from `content.json` and the assessment record by `pdf.js` into `clients/<slug>/pdf/`. The quick wins intro and resource descriptions are shown again (coach-written, shown to clients before).
+- 2026-11-27 (design brief phase 7): The welcome window has two versions (before the plan, and once it is delivered), each shown once per stage, with the plan's `welcome_message` when there is one. The tour has six stops, desktop only, and leaves out any stop the current stage does not show. `voice.tour` follows the new stop order.

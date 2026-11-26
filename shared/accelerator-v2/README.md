@@ -17,6 +17,7 @@ Code for v2 of the accelerator dashboard, as defined in `SCHEMA.md`. Nothing in 
 | `media.js` | Builds media entries with IDs, and neutral placeholder images | yes |
 | `render.js` | `renderDashboard(content, { template, assetUrl })`: the dashboard HTML, with every count, total and grid computed from the content. `validateDashboardV2()` checks the result | yes |
 | `components.js` | One function per recurring piece: the dashboard and its four stage panels, donut, stage strip, tactic header, overview, part heading, collapsible step, step labels, bullets, plain table, each media type and frame, metrics, tips, resources, roadmap week, action item with its "How to" preview and note, Google profile and website wins, objective, phase, the sandbox stage switcher | yes |
+| `pdf.js` | `renderPlanPdf(content, ...)` and `renderAssessmentPdf(content, { assessment })`: the two PDF templates (DESIGN-BRIEF.md section 8), as complete pages in `template/v2/pdf.html` styled by `assets/v2/print.css`. `build --save` writes them to `clients/<slug>/pdf/` | yes |
 | `../../assets/v2/progress-model.js` | Stage selection, the current week, counting and score levels (by letter grade). Loaded by the page as a classic script and required by the generator and the tests, so both run the same rules | yes |
 | `tools/tokenise-css.mjs` | Used once to move the v1 stylesheet's values into `assets/v2/tokens.css` | no |
 | `repo.js` | Reads other clients and the media library from the repository (Node only) | no |
