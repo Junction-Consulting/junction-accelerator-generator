@@ -66,13 +66,13 @@
       "title": "Week 4: Homepage Calls to Action and the AI Baseline",
       "actions": [
         "Build the homepage call-to-action carousel for the museum, cafe, and campground → links to: Tactic 1 / Step 4",
-        "Make the phone number tap-to-call and add Book and Reserve buttons on the event, cafe, and contact pages → links to: Tactic 1 / Step 5",
+        "Add Book and Reserve buttons on the event, cafe, and contact pages → links to: Tactic 1 / Step 5",
         "Run the 12-prompt AI baseline across ChatGPT, Perplexity, Gemini, and Google AI Overviews → links to: Tactic 3 / Step 1",
         "Schedule the holiday-week posts in Plannable → links to: Tactic 2 / Step 3"
       ],
       "checklist": [
         "The homepage carousel is live with Museum, Cafe, and Campground buttons",
-        "The phone number is tappable on every page and Book buttons are visible",
+        "Book and Reserve buttons are visible on the event, cafe, and contact pages",
         "AI baseline results are recorded in a sheet",
         "Holiday-week posts are scheduled"
       ],
@@ -174,7 +174,7 @@
         "Publish the planning and camping question post and pillar page → links to: Tactic 3 / Step 7",
         "Update the campground page, confirm the booking link and dates, and draft the February announcement with a UTM tag → links to: Tactic 2 / Step 6",
         "Run the second AI visibility test and compare it with the baseline → links to: Tactic 3 / Step 8",
-        "Check that GA4 is recording clicks on Book buttons, phone taps, and booking page visits → links to: Tactic 1 / Step 6"
+        "Check that GA4 is recording clicks on Book buttons and booking page visits → links to: Tactic 1 / Step 6"
       ],
       "checklist": [
         "The planning and camping posts are published",
