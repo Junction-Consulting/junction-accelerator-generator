@@ -178,31 +178,85 @@ document.addEventListener('touchmove', handleTouchMove, { passive: true });
 document.addEventListener('touchend', handleTouchEnd, { passive: true });
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMobileDrawer(); });
 
-// ── Accordions and tabs ────────────────────────────────────
-function toggleTacticPart(btn) {
-  const part = btn.closest('.tactic-part');
-  part.classList.toggle('open');
-  btn.setAttribute('aria-expanded', part.classList.contains('open') ? 'true' : 'false');
-  if (part.classList.contains('open')) {
-    const first = part.querySelector('.tactic-step-item[id]');
-    if (first) rememberStep(first.id);
-  }
-}
+// ── Tactic tabs and steps ──────────────────────────────────
 function switchTacticTab(tacticNum, tabName) {
   document.querySelectorAll(`[data-tactic-tab="${tacticNum}"]`).forEach(t => {
     const isActive = t.dataset.tab === tabName;
     t.classList.toggle('active', isActive);
     t.setAttribute('aria-selected', isActive ? 'true' : 'false');
   });
-  document.querySelectorAll(`[data-tactic-content="${tacticNum}"]`).forEach(content => {
-    content.classList.toggle('active', content.dataset.content === tabName);
+  document.querySelectorAll(`[data-tactic-content="${tacticNum}"]`).forEach(panel => {
+    const isActive = panel.dataset.content === tabName;
+    panel.classList.toggle('active', isActive);
+    panel.hidden = !isActive;
   });
+  const main = document.getElementById('main');
+  if (main) main.scrollTop = 0;
+  window.scrollTo(0, 0);
+}
+
+// Steps open collapsed and remember nothing (brief section 7)
+function setStepOpen(card, open) {
+  if (!card) return;
+  card.classList.toggle('open', open);
+  const head = card.querySelector('.step-head');
+  const body = card.querySelector('.step-body');
+  if (head) head.setAttribute('aria-expanded', open ? 'true' : 'false');
+  if (body) body.hidden = !open;
+  if (open) rememberStep(card.id);
+}
+function toggleStep(btn) {
+  const card = btn.closest('.step-card');
+  setStepOpen(card, !card.classList.contains('open'));
+}
+
+// ── Roadmap weeks: one open at a time, on a white panel ────
+function setWeekOpen(n, open) {
+  const card = document.getElementById('wc-' + n);
+  if (!card) return;
+  card.classList.toggle('open', open);
+  const head = card.querySelector('.rm-week-head');
+  const body = card.querySelector('.rm-week-body');
+  if (head) head.setAttribute('aria-expanded', open ? 'true' : 'false');
+  if (body) body.hidden = !open;
 }
 function toggleWeek(n) {
-  const weekCard = document.getElementById('wc-' + n);
-  weekCard.classList.toggle('open');
-  const header = weekCard.querySelector('.week-card-header');
-  if (header) header.setAttribute('aria-expanded', weekCard.classList.contains('open') ? 'true' : 'false');
+  const card = document.getElementById('wc-' + n);
+  if (!card) return;
+  const opening = !card.classList.contains('open');
+  document.querySelectorAll('.rm-week.open').forEach(w => setWeekOpen(w.getAttribute('data-week'), false));
+  if (opening) setWeekOpen(n, true);
+}
+function toggleHowTo(id, btn) {
+  const box = document.getElementById('howto-' + id);
+  if (!box) return;
+  box.hidden = !box.hidden;
+  btn.setAttribute('aria-expanded', box.hidden ? 'false' : 'true');
+  btn.textContent = box.hidden ? 'How to' : 'Hide how to';
+}
+// ── Assessment: areas open in place, long lists, jump links ─
+function toggleArea(btn) {
+  const area = btn.closest('.as-area');
+  const open = !area.classList.contains('open');
+  area.classList.toggle('open', open);
+  btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  area.querySelector('.as-area-body').hidden = !open;
+}
+function showAll(btn) {
+  const list = btn.previousElementSibling;
+  if (list) list.querySelectorAll('[data-more]').forEach(li => { li.hidden = false; });
+  btn.remove();
+}
+function jumpTo(id) {
+  const el = document.getElementById(id);
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  return false;
+}
+
+function openGbpWins() {
+  navigate('roadmap');
+  const section = document.getElementById('gbp-wins');
+  if (section) setTimeout(function () { section.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 120);
 }
 
 // ── Checkboxes and notes ───────────────────────────────────
@@ -216,6 +270,7 @@ function toggleNote(id) {
   const area = document.getElementById('note-area-' + id);
   if (!area) return;
   area.classList.toggle('open');
+  document.querySelectorAll(`[onclick="toggleNote('${id}')"]`).forEach(b => b.setAttribute('aria-expanded', area.classList.contains('open') ? 'true' : 'false'));
   if (area.classList.contains('open')) {
     const ta = document.getElementById('note-' + id);
     if (ta) ta.focus();
@@ -256,8 +311,12 @@ function onMirrorTick(el) {
   real.dispatchEvent(new Event('change', { bubbles: true }));
 }
 
+// The assessment's quick wins show on the dashboard and the Assessment page:
+// both boxes share one key (data-qw), kept in this browser.
 function onQuickWinTick(el) {
-  state.checks[el.id] = el.checked;
+  const key = el.getAttribute('data-qw') || el.id;
+  state.checks[key] = el.checked;
+  document.querySelectorAll(`input[data-qw="${key}"]`).forEach(b => { b.checked = el.checked; });
   saveState();
   updateProgress();
 }
@@ -276,12 +335,6 @@ function setLive(name, value) {
 function setPct(selector, pct) {
   document.querySelectorAll(selector).forEach(el => el.style.setProperty('--pct', pct));
 }
-function setRing(el, radius, pct) {
-  if (!el) return;
-  const circ = 2 * Math.PI * radius;
-  el.style.strokeDasharray = circ;
-  el.style.strokeDashoffset = circ - (circ * pct / 100);
-}
 
 // ── Progress ───────────────────────────────────────────────
 // Called by progress.js after it loads or saves a tick, so it must stay global.
@@ -292,6 +345,10 @@ function updateProgress() {
   const pct = MODEL.percent(done, total);
 
   setLive('plan-done', done);
+  // The phase of the current week, for the phone's progress card
+  const nowWeek = MODEL.currentWeek(PAGE.weekList, isTicked);
+  const phase = PAGE.phases.find(p => p.weeks.indexOf(nowWeek) !== -1);
+  setLive('current-phase', phase ? phase.name + ' · weeks ' + phase.weeks[0] + ' to ' + phase.weeks[phase.weeks.length - 1] : '');
   setLive('plan-pct', pct + '%');
   setPct('[data-live-donut="plan"]', pct);
 
@@ -308,31 +365,24 @@ function updateProgress() {
     if (navRing) navRing.style.setProperty('--pct', p + '%');
     const navText = document.getElementById('nav-ring-' + t + '-text');
     if (navText) navText.textContent = ', ' + d + ' of ' + tot + ' done';
-    setRing(document.getElementById('t' + t + '-ring'), 31, p);
-    const heroPct = document.getElementById('t' + t + '-pct');
-    if (heroPct) heroPct.textContent = p + '%';
-    const heroStatus = document.getElementById('t' + t + '-status');
-    if (heroStatus) {
-      if (p === 0) { heroStatus.textContent = 'Not Started'; heroStatus.className = 'tactic-hero-status'; }
-      else if (p === 100) { heroStatus.textContent = 'Complete'; heroStatus.className = 'tactic-hero-status complete'; }
-      else { heroStatus.textContent = 'In Progress'; heroStatus.className = 'tactic-hero-status in-progress'; }
-    }
+    // The tactic page's donut
+    setPct(`[data-live-donut="tactic-${t}"]`, p);
+    setPct(`[data-live-pie="tactic-${t}"]`, p);
+    setLive(`tactic-${t}-pct`, p + '%');
   }
 
+  // Roadmap: each week's count and pie, and each month's count
   Object.keys(WEEK_TASKS).forEach(w => {
     const ids = WEEK_TASKS[w];
     const d = countChecked(ids);
-    const pill = document.getElementById('wp-' + w);
-    if (pill) {
-      pill.textContent = d + ' / ' + ids.length;
-      pill.classList.toggle('done', ids.length > 0 && d === ids.length);
-    }
+    setLive(`week-${w}-done`, d);
+    setPct(`[data-live-pie="week-${w}"]`, MODEL.percent(d, ids.length));
+    const card = document.getElementById('wc-' + w);
+    if (card) card.classList.toggle('is-done', ids.length > 0 && d === ids.length);
   });
-  Object.keys(PHASE_TASKS).forEach(m => {
-    const ids = PHASE_TASKS[m];
-    const el = document.getElementById('m' + m + '-prog');
-    if (el) el.innerHTML = '<span>' + countChecked(ids) + '</span> of ' + ids.length + ' done';
-  });
+  Object.keys(PHASE_TASKS).forEach(m => setLive(`phase-${m}-done`, countChecked(PHASE_TASKS[m])));
+  const gbp = [...document.querySelectorAll('#gbp-wins input[type="checkbox"]')];
+  setLive('gbp-done', gbp.filter(b => b.checked).length);
 
   // Dashboard tick boxes follow the saved ones; a ticked sentence fades
   document.querySelectorAll('input[data-mirror]').forEach(m => {
@@ -347,9 +397,9 @@ function updateProgress() {
   });
 
   // The assessment's quick wins (this browser; not plan progress)
-  const wins = [...document.querySelectorAll('input[id^="aqw-"]')];
+  const wins = [...document.querySelectorAll('input[data-qw]')];
   const winsTotal = PAGE.assessment ? PAGE.assessment.quickWins : 0;
-  const winsDone = [...new Set(wins.filter(w => w.checked).map(w => w.id))].length;
+  const winsDone = [...new Set(wins.filter(w => w.checked).map(w => w.getAttribute('data-qw')))].length;
   setLive('wins-done', winsDone);
   setPct('[data-live-ring="wins"]', MODEL.percent(winsDone, winsTotal));
 
@@ -450,7 +500,13 @@ function renderDashboard() {
   sub.hidden = !heads[1];
 
   const scores = checkinScores();
-  MODEL.stageSteps(stage, { checkin: !!(scores && scores.checkin), review: !!(scores && scores.review) }).forEach(step => {
+  const steps = MODEL.stageSteps(stage, { checkin: !!(scores && scores.checkin), review: !!(scores && scores.review) });
+  // On the phone one line stands in for the strip: "90-day plan · next up is your 30-day check-in"
+  const labelOf = key => { const li = root.querySelector(`[data-step="${key}"] .stage-step-label`); return li ? li.textContent : ''; };
+  const cur = steps.find(st => st.state === 'current');
+  const nxt = steps.find(st => st.state === 'later');
+  setLive('phone-status', cur ? labelOf(cur.key) + (nxt ? ' · next up is your ' + labelOf(nxt.key) : '') : '');
+  steps.forEach(step => {
     const li = root.querySelector(`[data-step="${step.key}"]`);
     if (!li) return;
     li.setAttribute('data-state', step.state);
@@ -458,10 +514,30 @@ function renderDashboard() {
     li.querySelector('[data-step-note]').textContent = step.note;
   });
 
+  renderAssessmentSlots(scores);
   if (stage === 'delivered') renderReadList();
   if (stage === 'during') renderThisWeek();
   if (stage === 'done') renderResults(scores);
   lastStage = stage;
+}
+
+// Later scores become extra columns in the six-areas list
+function renderAssessmentSlots(scores) {
+  const list = document.querySelector('[data-areas]');
+  if (!list) return;
+  ['checkin', 'review'].forEach(slot => {
+    const entry = scores && scores[slot];
+    list.classList.toggle('has-' + slot, !!entry);
+    list.querySelectorAll(`[data-slot="${slot}"]`).forEach(cell => {
+      cell.hidden = !entry;
+      const area = cell.closest('[data-area]');
+      if (entry && area) cell.innerHTML = cellHtml(entry.areas[area.getAttribute('data-area')]);
+    });
+    const note = document.querySelector(`[data-slot-note="${slot}"]`);
+    if (note) note.hidden = !!entry;
+  });
+  const sample = !!(scores && ((scores.checkin && scores.checkin.sample) || (scores.review && scores.review.sample)));
+  document.querySelectorAll('#page-assessment [data-sample-only]').forEach(b => { b.hidden = !sample; });
 }
 
 function renderReadList() {
@@ -561,7 +637,7 @@ function changeText(from, to) {
 
 function renderResults(scores) {
   const a = PAGE.assessment;
-  const sampleBadge = document.querySelector('[data-sample-only]');
+  const sampleBadge = document.querySelector('[data-dashboard] [data-sample-only]');
   if (sampleBadge) sampleBadge.hidden = !(scores && ((scores.review && scores.review.sample) || (scores.checkin && scores.checkin.sample)));
   if (a) {
     const review = scores && scores.review;
@@ -615,6 +691,7 @@ function restoreState() {
   Object.keys(state.checks).forEach(id => {
     const el = document.getElementById(id);
     if (el && state.checks[id]) el.checked = true;
+    document.querySelectorAll(`input[data-qw="${id}"]`).forEach(b => { b.checked = !!state.checks[id]; });
   });
   Object.keys(state.notes).forEach(id => {
     const ta = document.getElementById('note-' + id);
@@ -783,7 +860,7 @@ function goToTourStep(n) {
   if (target.page) navigate(target.page);
   if (step.weekToOpen !== undefined) {
     const wc = document.getElementById('wc-' + step.weekToOpen);
-    if (wc && !wc.classList.contains('open')) wc.classList.add('open');
+    if (wc && !wc.classList.contains('open')) toggleWeek(step.weekToOpen);
   }
   // Wait for the page switch and any opening week card, then scroll and place
   setTimeout(function () {
@@ -909,24 +986,16 @@ function checkOnboarding() {
 function howToLink(page, stepId) {
   rememberStep(stepId);
   navigate(page);
+  switchTacticTab(parseInt(page.replace('tactic', ''), 10), 'steps');
+  const stepEl = document.getElementById(stepId);
+  if (!stepEl) return;
+  setStepOpen(stepEl, true);
   setTimeout(function () {
-    switchTacticTab(parseInt(page.replace('tactic', ''), 10), 'steps');
-    setTimeout(function () {
-      const stepEl = document.getElementById(stepId);
-      if (!stepEl) return;
-      const part = stepEl.closest('.tactic-part');
-      if (part && !part.classList.contains('open')) {
-        const hdr = part.querySelector('.tactic-part-header');
-        if (hdr) hdr.click();
-      }
-      setTimeout(function () {
-        stepEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        stepEl.classList.remove('step-highlight');
-        void stepEl.offsetWidth;
-        stepEl.classList.add('step-highlight');
-      }, 150);
-    }, 100);
-  }, 300);
+    stepEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    stepEl.classList.remove('step-highlight');
+    void stepEl.offsetWidth;
+    stepEl.classList.add('step-highlight');
+  }, 80);
 }
 
 // ── Lightbox ───────────────────────────────────────────────
@@ -1037,22 +1106,13 @@ document.addEventListener('DOMContentLoaded', function () {
   document.querySelectorAll('[data-preview-stage]').forEach(b => b.setAttribute('aria-pressed', b.getAttribute('data-preview-stage') === (PREVIEW || 'during') ? 'true' : 'false'));
   checkOnboarding();
 
-  const firstWeek = document.querySelector('.week-card');
-  if (firstWeek) firstWeek.classList.add('open');
-
-  document.querySelectorAll('.tactic-part').forEach(part => {
-    const header = part.querySelector('.tactic-part-header');
-    if (header) header.setAttribute('aria-expanded', part.classList.contains('open') ? 'true' : 'false');
-  });
-  document.querySelectorAll('.week-card').forEach(card => {
-    const header = card.querySelector('.week-card-header');
-    if (header) {
-      header.setAttribute('aria-expanded', card.classList.contains('open') ? 'true' : 'false');
-      header.setAttribute('role', 'button');
-      header.setAttribute('tabindex', '0');
-      header.addEventListener('keydown', e => {
-        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); header.click(); }
-      });
-    }
+  // The roadmap opens on the current week
+  const current = MODEL.currentWeek(PAGE.weekList, isTicked);
+  if (current) setWeekOpen(current, true);
+  document.querySelectorAll('.rm-week-head').forEach(header => {
+    header.addEventListener('keydown', e => {
+      if (e.target !== header) return; // typing in Edit Mode
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); header.click(); }
+    });
   });
 });

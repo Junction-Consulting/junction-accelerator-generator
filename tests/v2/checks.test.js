@@ -167,13 +167,16 @@ describe('warnings', () => {
   test('empty optional content is listed as hidden', () => {
     const result = checkContent(base);
     expect(result.hidden.map(h => h.field)).toEqual([
-      'tactics[].parts[].card', 'roadmap.closing', 'tactics[].time_commitment', 'quick_wins.note'
+      'quick_wins.note'
     ]);
     expect(result.hidden.map(h => h.field)).not.toContain('quick_wins.intro');
     // Kept in content.json but not shown by the redesigned dashboard, so nothing is hidden
     expect(result.hidden.map(h => h.field)).not.toEqual(expect.arrayContaining(['phases[].description']));
     expect(result.hidden.map(h => h.field)).not.toContain('roadmap.weeks[].next_step');
-    expect(result.warnings.filter(w => /is empty, so it is hidden/.test(w.message))).toHaveLength(4);
+    expect(result.hidden.map(h => h.field)).not.toContain('tactics[].parts[].card');
+    // Not shown by the redesign either: the brief and mockups have no place for them
+    ['roadmap.closing', 'tactics[].time_commitment'].forEach(f => expect(result.hidden.map(h => h.field)).not.toContain(f));
+    expect(result.warnings.filter(w => /is empty, so it is hidden/.test(w.message))).toHaveLength(1);
   });
 
   test('filled optional content is not listed', () => {
@@ -183,10 +186,10 @@ describe('warnings', () => {
     expect(checkContent(c).hidden.map(h => h.field)).not.toEqual(expect.arrayContaining(['phases[].description', 'roadmap.closing']));
   });
 
-  test('a Quick Wins page with no introduction is listed as hidden', () => {
+  test('the quick wins introduction is not shown, so a missing one is not listed as hidden', () => {
     const c = copy();
     c.quick_wins.intro = null;
-    expect(checkContent(c).hidden.map(h => h.field)).toContain('quick_wins.intro');
+    expect(checkContent(c).hidden.map(h => h.field)).not.toContain('quick_wins.intro');
   });
 
   test('[CONFIRM] reminders neither block nor warn', () => {

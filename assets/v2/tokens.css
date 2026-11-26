@@ -145,6 +145,58 @@
   --switcher-room: 120px;
   --switcher-room-phone: 200px;
 
+  /* Tactic pages and roadmap (DESIGN-BRIEF.md section 6) */
+  --type-donut-sm: 28px;
+  --donut-sm: 92px;
+  --donut-sm-hole: 66px;
+  --type-step-num: 44px;
+  --type-step-title: 22px;
+  --type-week-num: 30px;
+  --type-week-num-open: 56px;
+  --type-week-title-open: 26px;
+  --type-label-meta: 13px;
+  --step-num-width: 30px;
+  --step-indent: 50px;
+  --step-pad-y: 24px;
+  --step-pad-x: 28px;
+  --chev: 10px;
+  --chev-line: 2.5px;
+  --pie-size: 20px;
+  --text-measure: 700px;
+  --media-max: 540px;
+  --media-phone: 150px;
+  --media-phone-border: 5px;
+  --media-phone-radius: 22px;
+  --media-badge-radius: 4px;
+  --roadmap-max: 960px;
+  --tab-mark: 4px;
+  --confirm-radius-v2: 4px;
+  --confirm-pad-v2: 6px;
+
+  /* Assessment, Strategy and Materials (DESIGN-BRIEF.md section 6) */
+  --type-quote: 22px;
+  --type-quote-lg: 24px;
+  --type-goal: 20px;
+  --leading-quote: 1.25;
+  --area-score-col: 56px;
+  --area-share-col: 90px;
+  --area-slot-col: 72px;
+  --area-chev-col: 24px;
+  --area-bar: 10px;
+  --area-name-min: 220px;
+  --num-min: 140px;
+  --type-num: 22px;
+  --market-min: 280px;
+  --finding-dot-top: .55em;
+  --materials-max: 900px;
+
+  /* Phone (DESIGN-BRIEF.md section 9) */
+  --donut-phone: 116px;
+  --donut-phone-hole: 84px;
+  --type-donut-phone: 36px;
+  --tick-size-phone: 26px;
+  --slot-label-col: 72px;
+
   /* ── v1 names, re-pointed to the Junction roles ─────────────────────
      The pages not yet rebuilt (phases 2 to 4) still use these. Each one
      goes when the last component using it is rebuilt. */

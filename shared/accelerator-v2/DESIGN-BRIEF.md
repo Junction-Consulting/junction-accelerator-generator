@@ -10,6 +10,7 @@ This brief turns the approved mockups into a build spec for the v2 template, com
 - Everything is generated from `content.json` (and the assessment record). No client copy in templates, no layout in content.
 - Every colour, size, radius and spacing value comes from `assets/v2/tokens.css`. No raw values in components.
 - Empty optional content is hidden, never replaced with default text.
+- Show no content, field or feature that is not in this brief or the mockups. If the data holds something the mockups do not show, list it and ask. Do not add it.
 - If something here needs a change outside the v2 paths, stop and list it. Do not make it.
 
 ## 2. The reference mockups
@@ -108,8 +109,8 @@ The dashboard changes with where the client is. A six-step strip sits under the 
 | Stage | When | Dashboard leads with |
 |---|---|---|
 | 1. Before the plan | Assessment exists, no plan | Assessment score and summary, "What happens next", the assessment's quick wins (tickable, on Sage), and "Coming with your plan" |
-| 2a. Plan delivered | Plan exists, nothing read or ticked | "Start here: read your plan" listing Strategy and each tactic with read state, then week 1 |
-| 2b. During the plan | Anything read or ticked | This week's actions, progress donut, tactic progress, coming up, 30-day check-in note, materials |
+| 2a. Plan delivered | Plan exists and nothing is ticked yet. Reading does not end this stage until every section (Strategy and each tactic) has been read | "Start here: read your plan" listing Strategy and each tactic with read state, then week 1 |
+| 2b. During the plan | Anything ticked, or every section read | This week's actions, progress donut, tactic progress, coming up, 30-day check-in note, materials |
 | 3. Plan done | Every action ticked | Results, then "What to keep doing", then the next step with Junction |
 
 Notes:
@@ -129,11 +130,11 @@ Notes:
 - Bottom row: Coming up (Sage), 30-day check-in (Sage-25), Materials.
 - A "Pick up where you left off" link to the last step the client opened.
 
-**Assessment.** Nothing from the report is removed.
+**Assessment.** Everything the approved mockups show is kept. Fields in the assessment record that the mockups do not show (confidence levels, the per-measure score breakdowns, metric sources and statuses, internal scoring fields) are not shown.
 
 - Jump links: Summary, Your six areas, Quick wins, Priority recommendations, Your visitors and market.
 - Summary: overall score donut, grade, headline, key strengths, critical gaps, bottom line.
-- Your six areas: one list. Each row shows area, score, grade, bar and share of total, with a chevron, and opens in place to show the summary, the numbers, findings, recommendations, sources and confidence, plus a link to the tactic that covers it when there is one. Long lists show the first few with "Show all N".
+- Your six areas: one list. Each row shows area, score, grade, bar and share of total, with a chevron, and opens in place to show the summary, the numbers, findings, recommendations and sources, plus a link to the tactic that covers it when there is one. Which tactic covers which area is stated in the plan, never guessed: an optional `Assessment Areas:` line on each tactic. Long lists show the first few with "Show all N".
 - Slots for the 30-day check-in and 90-day review: later scores become extra columns in the same list.
 - Quick wins on Sage, tickable, with time and impact.
 - Priority recommendations as a plain table: recommendation, area, time, impact, expected result.
@@ -143,7 +144,7 @@ Notes:
 
 **Tactic.** Header with title, subtitle, "Tactic N · theme label" and a donut. Two tabs.
 
-- Overview: What this is, Why it matters, What we heard from you (Sage, pull quote), Success metrics as a plain table, Tips (Sage-25), Resources. No "What this breaks into".
+- Overview: What this is, Why it matters, What we heard from you (Sage, with a pull quote in Fraunces when the plan gives one: an optional `Quote:` line on each tactic. Nothing shown when absent, and never a sentence picked automatically), Success metrics as a plain table, Tips (Sage-25), Resources. No "What this breaks into".
 - Implementation steps: one continuous scroll. Parts are headings, not tabs. Every step is collapsible with a chevron. An open step shows its labels (time, cost, Contractor, Critical), a link to its week on the roadmap, bullets and sub-bullets, tables, media and step resources.
 - `[CONFIRM ...]` notes render inline as a Sage highlight.
 - Media uses one frame per type (website, document, phone, email, none) with a Mockup or Example badge and an optional caption, always below the step text.
@@ -155,7 +156,7 @@ Notes:
 - Weeks are plain rows with a small ring. Only the open week sits on a white panel.
 - Inside a week: one list of actions, each with a tick box, "How to" and "Note". "How to" expands a short preview from the linked step (its first two bullets) with a link to the full step.
 - Week notes field.
-- After Month 3: a section named "Google Business Profile wins" holding the plan's own quick-win groups and its "One thing worth watching" note. Tickable. Roadmap actions that point to quick wins link here.
+- After Month 3: a section named "Google profile and website wins" holding the plan's own quick-win groups and its "One thing worth watching" note. Tickable. Roadmap actions that point to quick wins link here.
 - Download as PDF.
 
 **Materials.** One row per item: assessment report, onboarding call notes, coaching call summary, 90-day plan PDF. Items that do not exist yet (30-day check-in report, 90-day review) show greyed with when they arrive. Only the two PDFs can be wired now. List the rest under section 11.
@@ -166,7 +167,7 @@ Notes:
 - **Tactic progress** counts the actions whose "how to" points into that tactic. Actions with no link count toward the overall total only.
 - **Everything updates at once.** Ticking an action updates the week count, the donut, the phase bars, the tactic rings in the navigation and the tactic cards without a reload, on every page that shows them.
 - **Keys.** Ticks are saved by action ID through the existing `shared/progress.js`. Do not edit that file.
-- **Quick wins and Google Business Profile wins** are tickable and do not count toward plan progress.
+- **Quick wins and Google profile and website wins** are tickable and do not count toward plan progress.
 - **Read state** (stage 2a) and **last step opened** can be kept in the browser for now. Note this in `CUTOVER.md` as something to move to the account later.
 - **Steps and areas** remember nothing: they open collapsed except the one linked to.
 
@@ -185,8 +186,8 @@ Two documents, generated per client from the same content and tokens as the dash
 
 The phone view is deliberately limited. Design two things well:
 
-1. **The to-do list**: this week's actions with ticks. "How to" opens that one step.
-2. **The scorecard**: overall score and the six areas, each opening in place.
+1. **The to-do list**: this week's actions with ticks, then the progress card. "How to" opens that one step.
+2. **The scorecard**: overall score and the six areas, each opening in place. When check-in scores exist, they stack under each area rather than adding columns.
 
 Everything else stays reachable from a menu in a plain single-column layout, with no extra design work. Wide tables scroll inside their own box. Touch targets are at least 44px.
 

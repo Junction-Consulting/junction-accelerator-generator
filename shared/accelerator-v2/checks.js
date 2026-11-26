@@ -87,6 +87,7 @@ export function textFields(content) {
     push(T, t.id, 'subtitle', t.subtitle);
     if (t.phase_label != null) push(T, t.id, 'phase label', t.phase_label, false);
     for (const key of ['what_we_heard', 'what_this_is', 'why_it_matters']) (t[key] || []).forEach((p, i) => push(T, t.id, `${key}[${i}]`, p));
+    if (t.heard_quote) push(T, t.id, 'heard_quote', t.heard_quote);
     if (t.time_commitment) {
       push(T, t.id, 'time_commitment.amount', t.time_commitment.amount, false);
       push(T, t.id, 'time_commitment.detail', t.time_commitment.detail, false);
@@ -476,19 +477,16 @@ export function checkContent(content, options = {}) {
 export function hiddenContent(content) {
   const groups = [];
   const group = (field, label, where) => { if (where.length) groups.push({ field, label, where }); };
-  // Phase descriptions and the Next Step time and who are kept in content.json,
-  // but the redesigned dashboard (DESIGN-BRIEF.md) does not show them, so an
-  // empty one hides nothing.
-  const parts = (content.tactics || []).flatMap((t, ti) => (t.parts || []).map((p, pi) => ({ p, where: `Tactic ${ti + 1} / Part ${String.fromCharCode(65 + pi)}` })));
-  group('tactics[].parts[].card', 'Part card description', parts.filter(({ p }) => !p.card || isEmpty(p.card.description)).map(x => x.where));
-  group('roadmap.closing', 'Roadmap closing note', isEmpty((content.roadmap || {}).closing) ? ['Roadmap'] : []);
-  group('tactics[].time_commitment', 'Time commitment', (content.tactics || []).map((t, i) => ({ t, where: `Tactic ${i + 1}` })).filter(({ t }) => !t.time_commitment || isEmpty(t.time_commitment.amount)).map(x => x.where));
+  // Phase descriptions, the Next Step time and who, part cards, time
+  // commitment, the roadmap closing note and the quick wins introduction are
+  // kept in content.json, but the redesign (DESIGN-BRIEF.md) does not show
+  // them, so an empty one hides nothing.
+  group('tactics[].heard_quote', 'Pull quote', (content.tactics || []).map((t, i) => ({ t, where: `Tactic ${i + 1}` })).filter(({ t }) => isEmpty(t.heard_quote)).map(x => x.where));
   const s = content.strategy || {};
   group('strategy.welcome_message', 'Welcome message', isEmpty(s.welcome_message) ? ['Welcome screen'] : []);
   group('strategy.positioning_statement', 'Positioning statement', isEmpty(s.positioning_statement) ? ['Strategy page'] : []);
-  if (((content.quick_wins || {}).groups || []).length) group('quick_wins.intro', 'Quick Wins introduction', (content.quick_wins || {}).intro ? [] : ['Quick Wins page']);
   group('tactics[].phase_label', 'Tactic phase label', (content.tactics || []).map((t, i) => ({ t, where: `Tactic ${i + 1}` })).filter(({ t }) => isEmpty(t.phase_label)).map(x => x.where));
-  group('quick_wins.note', 'Quick Wins closing note', (content.quick_wins || {}).note ? [] : ['Quick Wins page']);
+  group('quick_wins.note', 'Quick Wins closing note', (content.quick_wins || {}).note ? [] : ['Google profile and website wins (roadmap)']);
   return groups;
 }
 

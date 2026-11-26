@@ -287,12 +287,35 @@ function parseImplementationSteps(lines, firstLine, issue) {
   return parts;
 }
 
+// The six assessment areas, by key, and the words a coach may use for each
+export const ASSESSMENT_AREAS = {
+  website_technical: ['website and technical', 'website & technical', 'website', 'technical'],
+  reviews_reputation: ['reviews and reputation', 'reviews & reputation', 'reviews', 'reputation'],
+  booking_conversion: ['online booking and conversion', 'online booking & conversion', 'booking and conversion', 'booking'],
+  social_media: ['social media and content', 'social media & content', 'social media', 'social'],
+  guest_experience: ['digital guest experience', 'guest experience'],
+  local_visibility: ['local visibility', 'local search']
+};
+
+/** "Assessment Areas: Social media, Local visibility" -> ['social_media', 'local_visibility'] */
+function parseAreas(value, issue, line) {
+  const out = [];
+  String(value || '').split(/[,;]/).map(v => v.trim().toLowerCase().replace(/\.$/, '')).filter(Boolean).forEach(word => {
+    const key = Object.keys(ASSESSMENT_AREAS).find(k => k === word.replace(/ /g, '_') || ASSESSMENT_AREAS[k].includes(word));
+    if (!key) issue('warning', line, `"${word}" is not one of the six assessment areas, so it is ignored.`, 'Use: website and technical, reviews and reputation, online booking and conversion, social media and content, digital guest experience, local visibility.');
+    else if (!out.includes(key)) out.push(key);
+  });
+  return out;
+}
+
 function parseTactic(section, issue) {
   const m = section.title.match(/^Tactic (\d+):\s*(.*)$/);
   const number = Number(m[1]);
   const subs = splitByHeading(section.body, 3, section.bodyStart);
   const headerEnd = section.body.findIndex(l => l.startsWith('### '));
-  const header = readFields(section.body.slice(0, headerEnd === -1 ? undefined : headerEnd).join('\n'), ['Phase', 'Short Label', 'Subtitle']);
+  const header = readFields(section.body.slice(0, headerEnd === -1 ? undefined : headerEnd).join('\n'), ['Quote', 'Assessment Areas', 'Phase', 'Short Label', 'Subtitle']);
+  // Optional pull quote for "What we heard from you", written by the coach. Quote marks around it are dropped.
+  const quote = (header['Quote'] || '').trim().replace(/^["“”']+|["“”']+$/g, '').trim();
   const find = title => subs.find(s => s.title.toLowerCase() === title.toLowerCase());
 
   const tactic = {
@@ -300,6 +323,8 @@ function parseTactic(section, issue) {
     short_label: header['Short Label'],
     subtitle: header['Subtitle'],
     phase_label: header['Phase'] || null,
+    heard_quote: quote || null,
+    assessment_areas: parseAreas(header['Assessment Areas'], issue, section.line),
     what_we_heard: [],
     what_this_is: [],
     why_it_matters: [],

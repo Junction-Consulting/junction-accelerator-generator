@@ -407,3 +407,37 @@ describe('plan.json', () => {
     expect(v2).toEqual(v1);
   });
 });
+
+describe('optional tactic lines: Quote and Assessment Areas', () => {
+  test('the quote is read as written, without its quote marks, and is optional', () => {
+    const { content } = convert();
+    expect(content.tactics[0].heard_quote).toBe('The blocker is time, not ideas.');
+    const quoted = PLAN.replace('Quote: The blocker is time, not ideas.', 'Quote: "The blocker is time, not ideas."');
+    expect(convert(quoted).content.tactics[0].heard_quote).toBe('The blocker is time, not ideas.');
+    const none = PLAN.replace(/^Quote: .*\n/gm, '');
+    expect(convert(none).content.tactics.every(t => t.heard_quote === null)).toBe(true);
+  });
+
+  test('the quote is never picked from the text when the line is missing', () => {
+    const none = PLAN.replace(/^Quote: .*\n/gm, '');
+    const { content } = convert(none);
+    expect(JSON.stringify(content.tactics.map(t => t.heard_quote))).toBe('[null,null,null,null]');
+  });
+
+  test('assessment areas are read by name, and an unknown name is a warning', () => {
+    const { content } = convert();
+    expect(content.tactics.map(t => t.assessment_areas)).toEqual([['social_media'], ['reviews_reputation'], ['local_visibility', 'website_technical'], ['booking_conversion', 'guest_experience']]);
+    const odd = PLAN.replace('Assessment Areas: Reviews and reputation', 'Assessment Areas: Reviews, Weather');
+    const r = convert(odd);
+    expect(r.content.tactics[1].assessment_areas).toEqual(['reviews_reputation']);
+    expect(r.warnings.some(w => /"weather" is not one of the six assessment areas/.test(w.message))).toBe(true);
+  });
+
+  test('both lines sit first in the tactic header, where the v1 reader ignores them', () => {
+    const v1 = parsePlanMd(PLAN);
+    const t1 = v1.tactics[0];
+    expect(t1.subtitle).toBe('Build a consistent, engaging presence that drives discovery and turns followers into guests.');
+    expect(t1.phase).toBe('Foundation');
+    expect(JSON.stringify(t1)).not.toMatch(/The blocker is time|Assessment Areas/);
+  });
+});

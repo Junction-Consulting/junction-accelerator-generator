@@ -181,14 +181,30 @@ export function renderDashboard(content, options = {}) {
   const days = data.totalDays;
   const tacticNumber = new Map(tactics.map((t, i) => [t.id, i + 1]));
   const stepNumber = new Map();
-  tactics.forEach((t, ti) => { let n = 0; t.parts.forEach(p => p.steps.forEach(s => { n += 1; stepNumber.set(s.id, { tactic: ti + 1, number: n }); })); });
+  const stepById = new Map();
+  tactics.forEach((t, ti) => { let n = 0; t.parts.forEach(p => p.steps.forEach(s => { n += 1; stepNumber.set(s.id, { tactic: ti + 1, number: n }); stepById.set(s.id, s); })); });
 
-  // Roadmap: weeks grouped by phase
+  // Roadmap: weeks grouped by phase. "How to" previews show the linked
+  // step's first two bullets.
+  const previewOf = st => {
+    const block = (st.body || []).find(b => b.type === 'bullets' && (b.items || []).length);
+    return block ? block.items.slice(0, 2).map(i => i.text) : [];
+  };
   const linkFor = action => {
     if (action.how_to === 'quick_wins') return hasQuickWins ? 'quick_wins' : null;
     const s = stepNumber.get(action.how_to);
-    return s ? { tactic: s.tactic, stepId: action.how_to } : null;
+    if (!s) return null;
+    const t = tactics[s.tactic - 1];
+    return { tactic: s.tactic, stepId: action.how_to, tacticName: t.short_label || t.title, preview: previewOf(stepById.get(action.how_to)) };
   };
+  // Each step's weeks on the roadmap, for "On your roadmap in week N"
+  const stepWeeks = new Map();
+  roadmap.weeks.forEach(w => w.actions.forEach(a => {
+    if (!stepNumber.has(a.how_to)) return;
+    const list = stepWeeks.get(a.how_to) || [];
+    if (!list.includes(w.number)) list.push(w.number);
+    stepWeeks.set(a.how_to, list);
+  }));
   const links = Object.fromEntries(roadmap.weeks.map(w => [w.number, w.actions.map(linkFor)]));
   const roadmapPhases = phases.map((p, i) => {
     const weeks = roadmap.weeks.filter(w => w.number >= p.weeks[0] && w.number <= p.weeks[1]);
@@ -196,22 +212,6 @@ export function renderDashboard(content, options = {}) {
     return C.phaseBlock(p, i + 1, html, data.tasks.byPhase[i + 1].length);
   }).join('\n\n    ');
 
-  // Positioning: paragraphs, then the statement under its label (as v1 shows a blockquote)
-  let positioning = C.paragraphs(strategy.positioning);
-  if (has(strategy.positioning_statement)) positioning += `${positioning ? '<br><br>' : ''}<strong>Your Strategic Positioning</strong><br>${C.md(strategy.positioning_statement)}`;
-
-  const quickWinsPage = hasQuickWins ? `<section id="page-gbp" class="page">
-  <div class="page-header">
-    <div class="page-header-eyebrow">Quick-Hit Recommendations</div>
-    <h1>Quick Wins</h1>
-    <p>Short, self-contained improvements. Each one stands alone, so they can be done in any order.</p>
-  </div>
-  <div class="content-area">
-    ${has(qw.intro) ? `<p class="qw-intro" data-editable-key="quick_wins.intro">${C.md(qw.intro)}</p>` : ''}
-    ${qw.groups.map(C.quickWinGroup).join('\n')}
-    ${C.quickWinsNote(qw.note)}
-  </div>
-</section>` : '';
 
   const printPhases = phases.map(p => `${C.plain(p.name)} (Weeks ${p.weeks[0]}-${p.weeks[1]})`);
   const printPhaseText = printPhases.length > 1 ? `${printPhases.slice(0, -1).join(', ')}, and ${printPhases[printPhases.length - 1]}` : printPhases.join('');
@@ -231,29 +231,26 @@ export function renderDashboard(content, options = {}) {
     NAV_TACTICS: tactics.map((t, i) => C.navTactic(t, i + 1, data.tasks.byTactic[i + 1].length)).join('\n      '),
     NAV_COACH: C.navCoach(client.coach_email),
     NAV_ASSESSMENT: C.hasAssessment(options.assessment) ? C.navAssessment() : '',
-    MATERIALS_ASSESSMENT: C.hasAssessment(options.assessment) ? `<div class="materials-item">
-      <div><h2>Assessment report</h2><p>Your digital marketing assessment as a document to print or save as a PDF.</p></div>
-      <button type="button" class="materials-btn" onclick="downloadPDF()">Download PDF</button>
-    </div>` : '',
-    ASSESSMENT_PAGE: C.assessmentPage(options.assessment, { date: formatDate(client.cohort_start) }),
+    MATERIALS_PAGE: C.materialsPage({ hasAssessmentPdf: C.hasAssessment(options.assessment), date: formatDate(client.cohort_start), days, checkinWeek: phases.length ? phases[0].weeks[1] : null }),
+    ASSESSMENT_PAGE: C.assessmentPage(options.assessment, { days, date: formatDate(client.cohort_start), areaTactics: Object.fromEntries(tactics.flatMap((t, i) => (t.assessment_areas || []).map(k => [k, { n: i + 1, title: t.title }])).reverse()) }),
     PHASE_COUNT_WORD: NUMBER_WORDS[phases.length] || String(phases.length),
     TACTIC_COUNT: String(tactics.length),
     GOAL: goal,
-    POSITIONING: positioning,
-    OBJECTIVES: objectives.map((o, i) => C.objectiveCard(o, i + 1, tacticNumber.get(o.tactic))).join('\n        '),
-    TACTIC_OVERVIEW_CARDS: tactics.map((t, i) => C.tacticOverviewCard(t, i + 1)).join('\n        '),
-    TACTIC_PAGES: tactics.map((t, i) => C.tacticPage(t, i + 1, assetUrl)).join('\n\n'),
+    POSITIONING: C.positioningBlock(strategy),
+    OBJECTIVES_HEADING: `Your ${NUMBER_WORDS[objectives.length] || objectives.length} objective${objectives.length === 1 ? '' : 's'}`,
+    STRATEGY_NEXT: tactics.length ? `<div class="tp-foot tp-foot--end"><button type="button" class="btn" onclick="navigate('tactic1')">Next: ${C.plain(tactics[0].title)}</button></div>` : '',
+    OBJECTIVES: objectives.map((o, i) => { const n = tacticNumber.get(o.tactic); return C.objectiveRow(o, i + 1, n ? { n, name: tactics[n - 1].short_label || tactics[n - 1].title } : null); }).join('\n      '),
+    TACTIC_PAGES: tactics.map((t, i) => C.tacticPage(t, i + 1, { assetUrl, total: data.tasks.byTactic[i + 1].length, stepWeeks, next: tactics[i + 1] ? { n: i + 2, title: tactics[i + 1].title } : null })).join('\n\n'),
     PRINT_COHORT_START: client.cohort_start ? `<strong>Cohort Start:</strong> ${formatDate(client.cohort_start)}<br>\n          ` : '',
     PRINT_PHASES: printPhaseText,
     ROADMAP_PHASES: roadmapPhases,
-    ROADMAP_CLOSING: has(roadmap.closing) ? `<div class="callout callout-roadmap" data-editable-key="roadmap.closing">${C.md(roadmap.closing)}</div>` : '',
+    GBP_WINS: C.gbpWins(qw),
     PRINT_FOOTER: has(client.coach_email) ? `<div class="print-only print-footer">
       <div class="print-footer-brand">Junction</div>
       <div class="print-footer-contact">
         <strong>Questions?</strong> Contact your coach at ${C.attr(client.coach_email)}
       </div>
     </div>` : '',
-    QUICK_WINS_PAGE: quickWinsPage,
     WELCOME_MESSAGE: has(strategy.welcome_message) ? `<p class="wm-subline">${C.md(strategy.welcome_message)}</p>` : '',
     PAGE_DATA: pageDataJson
   };

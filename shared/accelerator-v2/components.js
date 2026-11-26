@@ -52,8 +52,8 @@ export const ICONS = {
   note: '<svg viewBox="0 0 20 20" fill="currentColor"><path d="M13 2.5H3a.5.5 0 00-.5.5v14a.5.5 0 00.5.5h10a.5.5 0 00.5-.5V3a.5.5 0 00-.5-.5zM3 0h10a3 3 0 013 3v14a3 3 0 01-3 3H3a3 3 0 01-3-3V3a3 3 0 013-3zm2 5h6v2H5V5zm0 4h6v2H5V9z"/></svg>',
   noteOutline: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M13 2.5H3C2.17157 2.5 1.5 3.17157 1.5 4V12C1.5 12.8284 2.17157 13.5 3 13.5H13C13.8284 13.5 14.5 12.8284 14.5 12V4C14.5 3.17157 13.8284 2.5 13 2.5Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/><path d="M4.5 5.5H11.5M4.5 8H9.5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg>',
   arrowRight: '<svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 10a.75.75 0 01.75-.75h10.638L10.23 5.29a.75.75 0 111.04-1.08l5.5 5.25a.75.75 0 010 1.08l-5.5 5.25a.75.75 0 11-1.04-1.08l4.158-3.96H3.75A.75.75 0 013 10z" clip-rule="evenodd"/></svg>',
-  document: '<svg class="tactic-mockup-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" clip-rule="evenodd"/></svg>',
-  email: '<svg class="tactic-mockup-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/><path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/></svg>',
+  document: '<svg class="media-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" clip-rule="evenodd"/></svg>',
+  email: '<svg class="media-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/><path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/></svg>',
   // Sidebar icons, one per tactic position (they cycle)
   tactics: [
     '<path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zm6-4a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zm6-3a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"/>',
@@ -116,9 +116,13 @@ function phaseBars(phases, tone) {
 export function progressCard(phases, total, { dark = true, id = '' } = {}) {
   const tone = dark ? 'dark' : 'light';
   return `<section class="dash-card dash-progress dash-progress--${tone}"${id ? ` id="${id}"` : ''}>
-        <h2 class="dash-h3">Your progress</h2>
+        <h2 class="dash-h3 desktop-only">Your progress</h2>
         ${donut({ tone, number: '0%', sub: 'of your plan', live: 'plan', label: 'Plan progress' })}
-        <p><strong><span data-live="plan-done">0</span> of ${total}</strong> tasks checked off</p>
+        <div class="dash-progress-text">
+          <h2 class="dash-h3 phone-only">Your progress</h2>
+          <p><strong><span data-live="plan-done">0</span> of ${total}</strong> tasks checked off</p>
+          <p class="phone-only dash-progress-phase" data-live="current-phase"></p>
+        </div>
         ${phaseBars(phases, tone)}
       </section>`;
 }
@@ -133,7 +137,7 @@ export function thisWeekPanel(week, links) {
   const rows = week.actions.map((a, i) => {
     const link = links[i];
     let howTo = '';
-    if (link === 'quick_wins') howTo = `<button type="button" class="link-btn" onclick="navigate('gbp')">How to</button>`;
+    if (link === 'quick_wins') howTo = `<button type="button" class="link-btn" onclick="openGbpWins()">How to</button>`;
     else if (link) howTo = `<button type="button" class="link-btn" onclick="howToLink('tactic${link.tactic}','${attr(link.stepId)}')">How to</button>`;
     const id = `dw-${attr(a.id)}`;
     return `<div class="task-row"><input type="checkbox" class="tick" id="${id}" data-mirror="${attr(a.id)}" onchange="onMirrorTick(this)"><label class="task-label" for="${id}">${md(a.text)}</label>${howTo}</div>`;
@@ -160,7 +164,7 @@ export function assessmentQuickWins(data) {
   if (!wins.length) return '';
   const rows = wins.map((w, i) => {
     const id = `aqw-${i + 1}`;
-    return `<div class="task-row task-row--win"><input type="checkbox" class="tick" id="${id}" onchange="onQuickWinTick(this)"><div class="task-body"><label class="task-label task-label--strong" for="${id}">${text(w.task)}</label>${has(w.impact) ? `<div class="task-sub">${text(w.impact)}</div>` : ''}</div>${has(w.time_estimate) ? `<span class="task-time">${text(w.time_estimate)}</span>` : ''}</div>`;
+    return `<div class="task-row task-row--win"><input type="checkbox" class="tick" id="${id}" data-qw="${id}" onchange="onQuickWinTick(this)"><div class="task-body"><label class="task-label task-label--strong" for="${id}">${text(w.task)}</label>${has(w.impact) ? `<div class="task-sub">${text(w.impact)}</div>` : ''}</div>${has(w.time_estimate) ? `<span class="task-time">${text(w.time_estimate)}</span>` : ''}</div>`;
   });
   return `<section class="dash-card dash-card--sage dash-wins">
         <div class="dash-card-head">
@@ -176,7 +180,6 @@ function materialsCard(hasAssessmentPdf, days) {
           <h3 class="dash-h3">Materials</h3>
           ${hasAssessmentPdf ? '<button type="button" class="link-btn" onclick="downloadPDF()">Assessment report (PDF)</button>' : ''}
           <button type="button" class="link-btn plan-ready-only" onclick="printRoadmap()">Your ${days}-day plan (PDF)</button>
-          <button type="button" class="link-btn" onclick="navigate('materials')">All materials</button>
         </section>`;
 }
 
@@ -349,6 +352,7 @@ export function dashboard(ctx) {
     <header class="dash-head">
       <h1 class="dash-h1" id="dash-greeting"></h1>
       <p class="dash-sub" id="dash-sub" hidden></p>
+      <p class="dash-sub phone-only" data-live="phone-status"></p>
     </header>
     ${stageStrip(days)}
     ${before}
@@ -378,115 +382,166 @@ export function scoreCell(score, grade) {
 
 // ── Strategy ───────────────────────────────────────────────────────────────
 
-export function objectiveCard(objective, n, tacticNumber) {
-  const pill = tacticNumber ? `Tactic ${tacticNumber} · Weeks ${objective.weeks[0]}-${objective.weeks[1]}` : '';
-  return `<div class="strategy-objective-card" style="--obj-color:var(--objective-color-${cycle(n)})">
-          <div class="strategy-objective-num">${String(n).padStart(2, '0')}</div>
-          <div class="strategy-objective-content">
-            <h3 class="strategy-objective-title"${editKey(`${objective.id}.title`)}>${plain(objective.title)}</h3>
-            <p class="strategy-objective-desc"${editKey(`${objective.id}.description`)}>${md(objective.description)}</p>
-            ${pill ? `<span class="strategy-objective-pill">${pill}</span>` : ''}
-          </div>
-        </div>`;
+// Strategy (DESIGN-BRIEF.md section 6): goal on Carbon, positioning with the
+// statement as a Sage pull quote, then one row per objective linking to its
+// tactic, with that tactic's ring and weeks. Tactics are not listed again.
+
+export function positioningBlock(strategy) {
+  const text = paragraphs(strategy.positioning);
+  const statement = has(strategy.positioning_statement)
+    ? `<section class="tp-card tp-card--sage st-statement"><blockquote class="pull-quote pull-quote--lg">“${md(strategy.positioning_statement)}”</blockquote></section>` : '';
+  if (!text && !statement) return '';
+  return `<div class="tp-row">
+      ${text ? `<section class="tp-card"><h2 class="tp-h2">Your positioning</h2><div class="tp-text" data-editable-key="strategy.positioning">${text}</div></section>` : ''}
+      ${statement}
+    </div>`;
 }
 
-export function tacticOverviewCard(tactic, n) {
-  const label = has(tactic.phase_label) ? `<div class="tactic-overview-phase">${plain(tactic.phase_label)}</div>` : '';
-  return `<div class="tactic-overview-card" style="--color:var(--tactic-color-${cycle(n)})">
-          ${label}
-          <h3 class="tactic-overview-title">${plain(tactic.title)}</h3>
-          <p class="tactic-overview-desc">${md(tactic.subtitle)}</p>
-          <button class="tactic-overview-link" onclick="navigate('tactic${n}')">View full guide ${ICONS.arrowRight}</button>
-        </div>`;
+/** tactic: { n, name } or null */
+export function objectiveRow(objective, n, tactic) {
+  const weeks = objective.weeks && objective.weeks.length === 2 ? (objective.weeks[0] === objective.weeks[1] ? `week ${objective.weeks[0]}` : `weeks ${objective.weeks[0]} to ${objective.weeks[1]}`) : '';
+  const inner = `<span class="st-obj-text"><span class="tp-h3 st-obj-title"${editKey(`${objective.id}.title`)}>${plain(objective.title)}</span><span class="st-obj-desc"${editKey(`${objective.id}.description`)}>${md(objective.description)}</span></span>
+        ${tactic ? `<span class="st-obj-tactic"><span class="pie" data-live-pie="tactic-${tactic.n}" aria-hidden="true"></span><span><span class="st-obj-name">${plain(tactic.name)}</span>${weeks ? ` · ${weeks}` : ''}</span></span>` : ''}`;
+  return tactic
+    ? `<div class="st-obj st-obj--link" role="link" tabindex="0" onclick="navigate('tactic${tactic.n}')" onkeydown="if(event.key==='Enter'){navigate('tactic${tactic.n}')}">
+        ${inner}
+      </div>`
+    : `<div class="st-obj">
+        ${inner}
+      </div>`;
 }
 
-// ── Tactic page ────────────────────────────────────────────────────────────
+// ── Materials (DESIGN-BRIEF.md section 6) ─────────────────────────────────
+// Only the two PDFs can be wired now. Items that do not exist yet are greyed
+// with when they arrive. Onboarding call notes and the coaching call summary
+// wait for approval (brief section 11).
 
-export function tacticHeader(tactic, n) {
+export function materialsPage({ hasAssessmentPdf, date, days, checkinWeek }) {
+  const row = (title, desc, action, extra = '') => `<div class="mat-item${action ? '' : ' mat-item--later'}${extra}">
+      <div><h2 class="tp-h3">${title}</h2><p>${desc}</p></div>
+      ${action || ''}
+    </div>`;
+  const pdf = fn => `<button type="button" class="btn" onclick="${fn}()">Download PDF</button>`;
+  return `<section id="page-materials" class="page">
+  <div class="tp mat">
+    <header class="tp-head-text">
+      <h1 class="tp-h1">Materials</h1>
+      <p class="tp-sub">Everything from your program, in one place.</p>
+    </header>
+    <div class="mat-list">
+    ${hasAssessmentPdf ? row('Assessment report', `Your full digital marketing assessment as a PDF.${has(date) ? ` ${attr(date)}.` : ''}`, pdf('downloadPDF')) : ''}
+    ${row(`Your ${days}-day plan`, 'Your roadmap as a document to print or share with your team.', pdf('printRoadmap'), ' plan-ready-only')}
+    ${row(`Your ${days}-day plan`, 'Arrives after your coaching call.', '', ' plan-coming-only')}
+    ${row('30-day check-in report', `Arrives after your check-in${checkinWeek ? `, once week ${checkinWeek} is done` : ''}.`, '')}
+    ${row(`${days}-day review`, 'Arrives when your plan is done.', '')}
+    </div>
+  </div>
+</section>`;
+}
+
+// ── Tactic page (DESIGN-BRIEF.md section 6, "Tactic") ─────────────────────
+//
+// Two tabs: Overview, and Implementation steps as one continuous scroll.
+// ctx: { total (the tactic's task count), stepWeeks (step ID -> [week numbers]),
+//        next ({ n, title } or null), assetUrl }
+
+export function tacticHeader(tactic, n, total) {
   const label = has(tactic.phase_label) ? `Tactic ${n} · ${plain(tactic.phase_label)}` : `Tactic ${n}`;
-  const tabs = [['overview', 'Overview'], ['steps', 'Implementation Steps'], ['metrics', 'Success Metrics'], ['tips', 'Tips &amp; Resources']];
-  return `<div class="tactic-hero" data-tactic="${n}">
-      <div class="tactic-hero-top">
-        <div class="tactic-hero-meta">
-          <span class="tactic-hero-label">${label}</span>
-          <span class="tactic-hero-status" id="t${n}-status">Not Started</span>
-        </div>
-        <div class="tactic-hero-progress">
-          <svg class="tactic-hero-ring" viewBox="0 0 80 80">
-            <circle class="tactic-hero-ring-bg" cx="40" cy="40" r="31"></circle>
-            <circle class="tactic-hero-ring-bar" id="t${n}-ring" cx="40" cy="40" r="31" transform="rotate(-90 40 40)"></circle>
-          </svg>
-          <div>
-            <div class="tactic-hero-pct" id="t${n}-pct">0%</div>
-            <div class="tactic-hero-pct-label">of this tactic</div>
-          </div>
-        </div>
+  const tabs = [['overview', 'Overview'], ['steps', 'Implementation steps']];
+  return `<header class="tp-head" data-tactic="${n}">
+      <div class="tp-head-text">
+        <h1 class="tp-h1"${editKey(`${tactic.id}.title`)}>${plain(tactic.title)}</h1>
+        ${has(tactic.subtitle) ? `<p class="tp-sub"${editKey(`${tactic.id}.subtitle`)}>${md(tactic.subtitle)}</p>` : ''}
+        <div class="meta-label">${label}</div>
       </div>
-      <h1${editKey(`${tactic.id}.title`)}>${plain(tactic.title)}</h1>
-      <p${editKey(`${tactic.id}.subtitle`)}>${md(tactic.subtitle)}</p>
-      <div class="tactic-tabs" role="tablist" aria-label="Tactic ${n} sections">
-        ${tabs.map(([tab, name], i) => `<button class="tactic-tab${i === 0 ? ' active' : ''}" id="tab-t${n}-${tab}" role="tab" aria-selected="${i === 0}" aria-controls="panel-t${n}-${tab}" data-tactic-tab="${n}" data-tab="${tab}" onclick="switchTacticTab(${n}, '${tab}')">${name}</button>`).join('\n        ')}
+      <div class="tp-progress">
+        ${donut({ tone: 'ground', size: 'sm', number: '0%', live: `tactic-${n}`, label: 'Share of this tactic done' })}
+        <p class="tp-progress-text"><span data-live="tactic-${n}-done">0</span> of ${total} tasks done</p>
       </div>
+    </header>
+    <div class="tp-tabs" role="tablist" aria-label="${attr(tactic.short_label || tactic.title)}">
+      ${tabs.map(([tab, name], i) => `<button type="button" class="tp-tab${i === 0 ? ' active' : ''}" id="tab-t${n}-${tab}" role="tab" aria-selected="${i === 0}" aria-controls="panel-t${n}-${tab}" data-tactic-tab="${n}" data-tab="${tab}" onclick="switchTacticTab(${n}, '${tab}')">${name}</button>`).join('\n      ')}
     </div>`;
 }
 
-function cardBlock(label, inner, extraClass = '') {
-  return `<div class="tactic-card-block${extraClass}">
-          <div class="tactic-card-label">${label}</div>
-          ${inner}
-        </div>`;
+const proseBlock = (tactic, key, title) => ((tactic[key] || []).length
+  ? `<div class="tp-prose"><h2 class="tp-h3">${title}</h2><div class="tp-text"${editKey(`${tactic.id}.${key}`)}>${paragraphs(tactic[key])}</div></div>` : '');
+
+/** A plain table: header row, rows separated by alternating tints, no lines. */
+export function plainTable(columns, rows, extraClass = '', cell = md) {
+  return `<div class="table-scroll">
+            <table class="plain-table${extraClass}">
+              <thead><tr>${columns.map(c => `<th scope="col">${cell(c)}</th>`).join('')}</tr></thead>
+              <tbody>
+                ${rows.map(r => `<tr>${r.map((c, i) => (i === 0 ? `<th scope="row">${cell(c)}</th>` : `<td>${cell(c)}</td>`)).join('')}</tr>`).join('\n                ')}
+              </tbody>
+            </table>
+          </div>`;
 }
 
-export function partCard(part, isLastOdd) {
-  const title = part.card && has(part.card.title) ? part.card.title : part.name;
-  const titleKey = part.card && has(part.card.title) ? `${part.id}.card.title` : null; // the name is edited in the part header
-  const desc = part.card && has(part.card.description)
-    ? `\n              <div class="tactic-breakdown-desc"${editKey(`${part.id}.card.description`)}>${plain(part.card.description)}</div>` : '';
-  return `<div class="tactic-breakdown-item${isLastOdd ? ' full-width' : ''}">
-              <div class="tactic-breakdown-title"${editKey(titleKey)}>${plain(title)}</div>${desc}
-            </div>`;
+export function metricsTable(metrics) {
+  if (!metrics || !(metrics.rows || []).length) return '';
+  return `<section class="tp-card">
+        <h2 class="tp-h2">Success metrics</h2>
+        ${plainTable(metrics.columns, metrics.rows, ' tp-metrics')}
+      </section>`;
 }
 
-export function tacticOverview(tactic) {
-  const parts = tactic.parts || [];
-  const breakdown = parts.length
-    ? cardBlock('What This Breaks Into', `<div class="tactic-breakdown-grid">
-            ${parts.map((p, i) => partCard(p, parts.length % 2 === 1 && i === parts.length - 1)).join('\n            ')}
-          </div>`)
-    : '';
-  const tc = tactic.time_commitment;
-  const time = tc && has(tc.amount)
-    ? cardBlock('Time Commitment', `<div>
-            <span class="tactic-time-value">${plain(tc.amount)}</span>${has(tc.detail) ? `\n            <span class="tactic-time-context">${plain(tc.detail)}</span>` : ''}
-          </div>`)
-    : '';
-  const prose = (key, label, extra = '') => ((tactic[key] || []).length
-    ? cardBlock(label, `<p${editKey(`${tactic.id}.${key}`)}>${paragraphs(tactic[key])}</p>`, extra) : '');
-  return `<div class="tactic-overview-grid">
-      <div class="tactic-overview-col">
-        ${prose('what_this_is', 'What This Is')}
-        ${breakdown}
-      </div>
-      <div class="tactic-overview-col">
-        ${prose('what_we_heard', 'What We Heard From You', ' navy')}
-        ${prose('why_it_matters', 'Why It Matters')}
-        ${time}
-      </div>
-    </div>`;
+export function tips(tactic) {
+  if (!(tactic.tips || []).length) return '';
+  return `<section class="tp-card tp-card--sage25">
+          <h2 class="tp-h3">Tips</h2>
+          <ul class="tp-list">
+            ${tactic.tips.map((tip, i) => `<li${editKey(`${tactic.id}.tips.${i}`)}>${md(tip)}</li>`).join('\n            ')}
+          </ul>
+        </section>`;
 }
 
-// Step labels: time, cost, Contractor, Critical (the v1 .tactic-step-tag pills)
-const TAG_LABELS = { contractor: ['Contractor', 'warning'], critical: ['Critical', 'danger'] };
+export function resources(tactic) {
+  if (!(tactic.resources || []).length) return '';
+  return `<section class="tp-card">
+          <h2 class="tp-h3">Resources</h2>
+          <ul class="tp-links">
+            ${tactic.resources.map((r, i) => `<li><a href="${attr(r.url)}" data-editable-link="${attr(`${tactic.id}.resources.${i}`)}" target="_blank" rel="noopener">${plain(r.title)}</a></li>`).join('\n            ')}
+          </ul>
+        </section>`;
+}
 
-export function stepLabels(step) {
+export function tacticOverview(tactic, n) {
+  const main = proseBlock(tactic, 'what_this_is', 'What this is') + proseBlock(tactic, 'why_it_matters', 'Why it matters');
+  const heard = (tactic.what_we_heard || []).length
+    ? `<section class="tp-card tp-card--sage tp-heard">
+          <h2 class="tp-h3">What we heard from you</h2>
+          <div class="tp-text"${editKey(`${tactic.id}.what_we_heard`)}>${paragraphs(tactic.what_we_heard)}</div>
+          ${has(tactic.heard_quote) ? `<blockquote class="pull-quote"${editKey(`${tactic.id}.heard_quote`)}>“${plain(tactic.heard_quote)}”</blockquote>` : ''}
+        </section>` : '';
+  const tipsHtml = tips(tactic);
+  const resHtml = resources(tactic);
+  return `${main || heard ? `<div class="tp-row">
+        ${main ? `<section class="tp-card">${main}</section>` : ''}
+        ${heard}
+      </div>` : ''}
+      ${metricsTable(tactic.metrics)}
+      ${tipsHtml || resHtml ? `<div class="tp-row">
+        ${tipsHtml}
+        ${resHtml}
+      </div>` : ''}
+      <div class="tp-foot tp-foot--end"><button type="button" class="btn" onclick="switchTacticTab(${n}, 'steps')">Next: implementation steps</button></div>`;
+}
+
+// Step labels: time, cost, Contractor, Critical
+const TAG_LABELS = { contractor: 'Contractor', critical: 'Critical' };
+
+export function stepLabels(step, weeks) {
   const labels = [];
-  if (has(step.time)) labels.push(`<span class="tactic-step-tag muted">${plain(step.time)}</span>`);
-  if (has(step.cost)) labels.push(`<span class="tactic-step-tag info">${plain(step.cost)}</span>`);
-  (step.tags || []).forEach(tag => {
-    const [label, tone] = TAG_LABELS[tag] || [tag, 'muted'];
-    labels.push(`<span class="tactic-step-tag ${tone}">${label}</span>`);
-  });
-  return labels.length ? `<div class="tactic-step-tags">${labels.join('')}</div>` : '';
+  if (has(step.time)) labels.push(`<span class="step-label">${plain(step.time)}</span>`);
+  if (has(step.cost)) labels.push(`<span class="step-label">${plain(step.cost)}</span>`);
+  (step.tags || []).forEach(tag => labels.push(`<span class="step-chip step-chip--${attr(tag)}">${TAG_LABELS[tag] || plain(tag)}</span>`));
+  if (weeks && weeks.length) {
+    const words = weeks.length === 1 ? `week ${weeks[0]}` : `weeks ${weeks.slice(0, -1).join(', ')} and ${weeks[weeks.length - 1]}`;
+    labels.push(`<button type="button" class="link-btn step-week-link" onclick="openRoadmapWeek(${weeks[0]})">On your roadmap in ${words}</button>`);
+  }
+  return labels.length ? `<div class="step-labels">${labels.join('')}</div>` : '';
 }
 
 /** A bullets block: one flat list, sub-bullets marked, as Edit Mode expects. */
@@ -501,107 +556,67 @@ export function bullets(block) {
             </ul>`;
 }
 
-/** A table, in the Success Metrics table style. */
-export function table(columns, rows, extraClass = '') {
-  return `<div class="tactic-metrics-table${extraClass}">
-            <table>
-              <thead>
-                <tr>${columns.map(c => `<th>${md(c)}</th>`).join('')}</tr>
-              </thead>
-              <tbody>
-                ${rows.map(r => `<tr>${r.map(c => `<td>${md(c)}</td>`).join('')}</tr>`).join('\n                ')}
-              </tbody>
-            </table>
-          </div>`;
+/** A table inside a step. */
+export function table(columns, rows) {
+  return plainTable(columns, rows, ' step-table');
 }
 
 export function stepLinks(step) {
-  return (step.links || []).map(l => `<a href="${attr(l.url)}" class="tactic-step-resource" target="_blank" rel="noopener">${plain(l.title)}</a>`).join('\n');
+  const links = (step.links || []).map(l => `<a href="${attr(l.url)}" class="step-resource" target="_blank" rel="noopener">${plain(l.title)}</a>`);
+  return links.length ? `<div class="step-resources">${links.join('')}</div>` : '';
 }
 
-export function step(stepData, number, tacticNumber, assetUrl) {
-  const body = (stepData.body || []).map(block => (block.type === 'table' ? table(block.columns, block.rows, ' tactic-step-table') : bullets(block))).join('\n            ');
+/** One collapsible step. Collapsed until opened, or linked to. */
+export function step(stepData, number, tacticNumber, assetUrl, weeks) {
+  const id = attr(stepData.id);
+  const body = (stepData.body || []).map(block => (block.type === 'table' ? table(block.columns, block.rows) : bullets(block))).join('\n            ');
   const media = (stepData.media || []).length
     ? `\n            <div class="tactic-step-media-list">\n              ${mediaList(stepData.media, assetUrl)}\n            </div>` : '';
-  const links = stepLinks(stepData);
-  return `<li class="tactic-step-item" id="${attr(stepData.id)}" data-step-number="${number}">
-          <span class="tactic-step-num">${number}</span>
-          <div class="tactic-step-content">
-            <div class="tactic-step-title"${editKey(`${stepData.id}.title`)}>${plain(stepData.title)}</div>
-            ${stepLabels(stepData)}
-            ${body}${links ? `\n            ${links}` : ''}${media}
+  return `<section class="step-card" id="${id}" data-step-number="${number}">
+          <button type="button" class="step-head" aria-expanded="false" aria-controls="${id}-body" onclick="toggleStep(this)">
+            <span class="step-numeral" aria-hidden="true">${number}</span>
+            <span class="step-title"${editKey(`${stepData.id}.title`)}>${plain(stepData.title)}</span>
+            <span class="chev" aria-hidden="true"></span>
+          </button>
+          <div class="step-body" id="${id}-body" hidden>
+            ${stepLabels(stepData, weeks)}
+            ${body}
+            ${stepLinks(stepData)}${media}
           </div>
-        </li>`;
+        </section>`;
 }
 
-export function part(partData, index, firstNumber, tacticNumber, assetUrl) {
-  const count = partData.steps.length;
+export function part(partData, index, firstNumber, tacticNumber, assetUrl, stepWeeks) {
   const letter = String.fromCharCode(65 + index);
-  return `<div class="tactic-part${index === 0 ? ' open' : ''}">
-    <button class="tactic-part-header" onclick="toggleTacticPart(this)">
-      <span class="tactic-part-tag">Part ${letter}</span>
-      <span class="tactic-part-title"${editKey(`${partData.id}.name`)}>${plain(partData.name)}</span>
-      <span class="tactic-part-meta">${count} ${count === 1 ? 'step' : 'steps'}</span>
-      ${ICONS.chevronPart}
-    </button>
-    <div class="tactic-part-body">
-      <ol class="tactic-steps-list">
-        ${partData.steps.map((s, i) => step(s, firstNumber + i, tacticNumber, assetUrl)).join('\n        ')}
-      </ol>
-    </div>
-  </div>`;
+  return `<h2 class="tp-h2 part-heading">Part ${letter}: <span${editKey(`${partData.id}.name`)}>${plain(partData.name)}</span></h2>
+      ${partData.steps.map((s, i) => step(s, firstNumber + i, tacticNumber, assetUrl, stepWeeks.get(s.id))).join('\n      ')}`;
 }
 
-export function implementationSteps(tactic, tacticNumber, assetUrl) {
+export function implementationSteps(tactic, tacticNumber, assetUrl, stepWeeks = new Map()) {
   let number = 1;
   const parts = (tactic.parts || []).map((p, i) => {
-    const html = part(p, i, number, tacticNumber, assetUrl);
+    const html = part(p, i, number, tacticNumber, assetUrl, stepWeeks);
     number += p.steps.length;
     return html;
   });
-  return `<div class="tactic-parts-list">\n  ${parts.join('\n  ')}\n</div>`;
+  return `<div class="steps-scroll">\n      ${parts.join('\n      ')}\n    </div>`;
 }
 
-export function metricsTable(metrics) {
-  if (!metrics || !(metrics.rows || []).length) return '';
-  return cardBlock('Success Metrics', table(metrics.columns, metrics.rows));
-}
-
-export function tips(tactic) {
-  if (!(tactic.tips || []).length) return '';
-  return cardBlock('Tips', `<ul class="tactic-tips-list">
-                ${tactic.tips.map((tip, i) => `<li${editKey(`${tactic.id}.tips.${i}`)}>${md(tip)}</li>`).join('\n                ')}
-              </ul>`);
-}
-
-export function resources(tactic) {
-  if (!(tactic.resources || []).length) return '';
-  return cardBlock('Resources', `<ul class="tactic-resources-list">
-                ${tactic.resources.map((r, i) => `<li><a href="${attr(r.url)}" data-editable-link="${attr(`${tactic.id}.resources.${i}`)}" target="_blank">${plain(r.title)}</a>${has(r.description) ? `: ${md(r.description)}` : ''}</li>`).join('\n                ')}
-              </ul>`);
-}
-
-export function tacticPage(tactic, n, assetUrl) {
-  const panel = (tab, inner, active = false) => `<div class="tactic-tab-content${active ? ' active' : ''}" id="panel-t${n}-${tab}" role="tabpanel" aria-labelledby="tab-t${n}-${tab}" data-tactic-content="${n}" data-content="${tab}">
-        ${inner}
-      </div>`;
-  const tipsAndResources = `<div class="tactic-overview-grid">
-          <div class="tactic-overview-col">
-            ${tips(tactic)}
-          </div>
-          <div class="tactic-overview-col">
-            ${resources(tactic)}
-          </div>
-        </div>`;
+export function tacticPage(tactic, n, ctx) {
+  const { assetUrl, total = 0, stepWeeks = new Map(), next = null } = ctx || {};
+  const panel = (tab, inner, active = false) => `<div class="tp-panel${active ? ' active' : ''}" id="panel-t${n}-${tab}" role="tabpanel" aria-labelledby="tab-t${n}-${tab}" data-tactic-content="${n}" data-content="${tab}"${active ? '' : ' hidden'}>
+      ${inner}
+    </div>`;
+  const nextButton = next
+    ? `<button type="button" class="btn" onclick="navigate('tactic${next.n}')">Next tactic: ${plain(next.title)}</button>`
+    : `<button type="button" class="btn" onclick="navigate('roadmap')">Open the roadmap</button>`;
+  const steps = `${implementationSteps(tactic, n, assetUrl, stepWeeks)}
+      <div class="tp-foot"><button type="button" class="link-btn" onclick="switchTacticTab(${n}, 'overview')">Back to overview</button>${nextButton}</div>`;
   return `<section id="page-tactic${n}" class="page" data-tactic-id="${attr(tactic.id)}">
-  <div class="tactic-page-content">
-    ${tacticHeader(tactic, n)}
-    <div class="tactic-body">
-      ${panel('overview', tacticOverview(tactic), true)}
-      ${panel('steps', implementationSteps(tactic, n, assetUrl))}
-      ${panel('metrics', metricsTable(tactic.metrics))}
-      ${panel('tips', tipsAndResources)}
-    </div>
+  <div class="tp">
+    ${tacticHeader(tactic, n, total)}
+    ${panel('overview', tacticOverview(tactic, n), true)}
+    ${panel('steps', steps)}
   </div>
 </section>`;
 }
@@ -610,25 +625,19 @@ export function tacticPage(tactic, n, assetUrl) {
 
 const lightbox = 'class="lightbox-trigger" onclick="openLightbox(this.src, this.alt)"';
 const BADGES = { mockup: 'Mockup', example: 'Example' };
-const badge = b => (BADGES[b] ? `<span class="tactic-step-media-badge tactic-mockup-badge">${BADGES[b]}</span>` : '');
-const caption = c => (has(c) ? `<div class="tactic-mockup-label">${plain(c)}</div>` : '');
-const dots = '<span class="tactic-mockup-dot red"></span>\n            <span class="tactic-mockup-dot yellow"></span>\n            <span class="tactic-mockup-dot green"></span>';
+const badge = b => (BADGES[b] ? `<span class="media-badge">${BADGES[b]}</span>` : '');
+const caption = c => (has(c) ? `<figcaption class="media-caption">${plain(c)}</figcaption>` : '');
 
 function img(entry, assetUrl, zoom = true) {
   return `<img src="${attr(assetUrl(entry.asset))}" alt="${attr(entry.alt)}"${zoom ? ` ${lightbox}` : ''} loading="lazy">`;
 }
 
-function chrome(frame, bar, open) {
-  if (frame === 'document' || frame === 'email') {
-    const label = has(bar) ? bar : (frame === 'email' ? 'Email' : '');
-    return `<div class="tactic-mockup-chrome tactic-mockup-chrome--titled">
-            ${ICONS[frame]}
-            <div class="tactic-mockup-title">${plain(label)}</div>
-          </div>`;
-  }
-  return `<div class="tactic-mockup-chrome">
-            ${dots}
-            <div class="tactic-mockup-url">${plain(bar)}</div>${open ? '\n            <span class="tactic-mockup-open" aria-hidden="true"><span class="tactic-mockup-open-text">Open site </span>↗</span>' : ''}
+/** The dark bar on top of a website, document or email frame: what it is, and its badge. */
+function chrome(frame, bar, open, badgeKey) {
+  const label = has(bar) ? bar : (frame === 'email' ? 'Email' : '');
+  const icon = frame === 'document' || frame === 'email' ? ICONS[frame] : '';
+  return `<div class="media-bar">
+            ${icon}<span class="media-bar-text">${plain(label)}</span>${open ? '<span class="media-open" aria-hidden="true">Open site ↗</span>' : ''}${badge(badgeKey)}
           </div>`;
 }
 
@@ -636,31 +645,27 @@ export function imageMedia(entry, assetUrl) {
   const frame = entry.frame || 'none';
   const linked = entry.link && entry.link.url;
   if (frame === 'none') {
-    return `<figure class="tactic-media-plain" data-media-id="${attr(entry.id)}">
-            <div class="tactic-media-plain-body">${badge(entry.badge)}${img(entry, assetUrl)}</div>
+    return `<figure class="media media--none" data-media-id="${attr(entry.id)}">
+            <div class="media-plain">${badge(entry.badge)}${img(entry, assetUrl)}</div>
             ${caption(entry.caption)}
           </figure>`;
   }
   if (frame === 'phone') {
-    return `<figure class="tactic-phone" data-media-id="${attr(entry.id)}">
-            <div class="tactic-reel-phone">${badge(entry.badge)}${img(entry, assetUrl)}</div>
-            ${has(entry.caption) ? `<figcaption class="tactic-reel-label">${plain(entry.caption)}</figcaption>` : ''}
+    return `<figure class="media media--phone" data-media-id="${attr(entry.id)}">
+            <div class="media-phone">${badge(entry.badge)}${img(entry, assetUrl)}</div>
+            ${caption(entry.caption)}
           </figure>`;
   }
-  const classes = ['tactic-mockup'];
-  if (frame === 'document') classes.push('tactic-mockup--document');
-  if (frame === 'email') classes.push('tactic-mockup--email');
-  if (entry.fit === 'full') classes.push('tactic-mockup--page');
-  const frameHtml = `<div class="${classes.join(' ')}" data-media-id="${attr(entry.id)}">
-          ${chrome(frame, entry.bar, linked)}
-          <div class="tactic-mockup-body">
-            ${badge(entry.badge)}${img(entry, assetUrl, !linked)}
+  const frameHtml = `<figure class="media media--${frame}${entry.fit === 'full' ? ' media--page' : ''}" data-media-id="${attr(entry.id)}">
+          <div class="media-frame">
+            ${chrome(frame, entry.bar, linked, entry.badge)}
+            <div class="media-body">${img(entry, assetUrl, !linked)}</div>
           </div>
           ${caption(entry.caption)}
-        </div>`;
+        </figure>`;
   if (!linked) return frameHtml;
   const label = has(entry.link.label) ? entry.link.label : 'Open site';
-  return `<a href="${attr(entry.link.url)}" class="tactic-mockup-link" target="_blank" rel="noopener" aria-label="${attr(`${label}: ${entry.alt} (opens in a new tab)`)}">
+  return `<a href="${attr(entry.link.url)}" class="media-link" target="_blank" rel="noopener" aria-label="${attr(`${label}: ${entry.alt} (opens in a new tab)`)}">
         ${frameHtml}
       </a>`;
 }
@@ -670,39 +675,41 @@ export function videoMedia(entry) {
     ? `https://player.vimeo.com/video/${encodeURIComponent(entry.video_id)}`
     : `https://www.youtube.com/embed/${encodeURIComponent(entry.video_id)}`;
   const host = entry.provider === 'vimeo' ? 'vimeo.com' : 'youtube.com';
-  return `<div class="tactic-mockup tactic-embed" data-media-id="${attr(entry.id)}">
-          ${chrome('website', host, false)}
-          <div class="tactic-mockup-body">
-            <iframe src="${src}" title="${attr(entry.title)}" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+  return `<figure class="media media--video" data-media-id="${attr(entry.id)}">
+          <div class="media-frame">
+            ${chrome('website', host, false)}
+            <div class="media-body media-body--video">
+              <iframe src="${src}" title="${attr(entry.title)}" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+            </div>
           </div>
           ${caption(entry.caption)}
-        </div>`;
+        </figure>`;
 }
 
 function socialPost(entry, assetUrl) {
-  const label = `${has(entry.handle) ? `<strong>${plain(entry.handle)}</strong>` : ''}${plain(entry.post_type)}${entry.url ? ' · <span class="tactic-reel-open">Open post ↗</span>' : ''}`;
-  const inner = `<div class="tactic-reel-phone">${img(entry, assetUrl, !entry.url)}</div>
-          <div class="tactic-reel-label">${label}</div>`;
+  const label = `${has(entry.handle) ? `<strong>${plain(entry.handle)}</strong>` : ''}${plain(entry.post_type)}${entry.url ? ' · <span class="media-open">Open post ↗</span>' : ''}`;
+  const inner = `<div class="media-phone">${img(entry, assetUrl, !entry.url)}</div>
+          <div class="media-caption">${label}</div>`;
   return entry.url
-    ? `<a href="${attr(entry.url)}" class="tactic-reel" target="_blank" rel="noopener" aria-label="${attr(`Open post: ${entry.alt} (opens in a new tab)`)}" data-media-id="${attr(entry.id)}">
+    ? `<a href="${attr(entry.url)}" class="media-post" target="_blank" rel="noopener" aria-label="${attr(`Open post: ${entry.alt} (opens in a new tab)`)}" data-media-id="${attr(entry.id)}">
           ${inner}
         </a>`
-    : `<div class="tactic-reel" data-media-id="${attr(entry.id)}">
+    : `<div class="media-post" data-media-id="${attr(entry.id)}">
           ${inner}
         </div>`;
 }
 
 export function galleryMedia(entry, assetUrl) {
-  return `<div class="tactic-gallery" data-media-id="${attr(entry.id)}">
-          ${has(entry.title) ? `<div class="tactic-gallery-title">${plain(entry.title)}</div>` : ''}
-          <div class="tactic-gallery-grid">
-            ${(entry.items || []).map(item => `<figure class="tactic-gallery-item">${img(item, assetUrl)}${has(item.caption) ? `<figcaption class="tactic-gallery-caption">${plain(item.caption)}</figcaption>` : ''}</figure>`).join('\n            ')}
+  return `<div class="media-gallery" data-media-id="${attr(entry.id)}">
+          ${has(entry.title) ? `<div class="media-gallery-title">${plain(entry.title)}</div>` : ''}
+          <div class="media-gallery-grid">
+            ${(entry.items || []).map(item => `<figure class="media-gallery-item">${img(item, assetUrl)}${has(item.caption) ? `<figcaption class="media-caption">${plain(item.caption)}</figcaption>` : ''}</figure>`).join('\n            ')}
           </div>
         </div>`;
 }
 
 export function groupMedia(entry, assetUrl) {
-  return `<div class="tactic-mockup-pair${entry.layout === 'four' ? ' tactic-mockup-four' : ''}" data-media-id="${attr(entry.id)}">
+  return `<div class="media-group${entry.layout === 'four' ? ' media-group--four' : ''}" data-media-id="${attr(entry.id)}">
           ${(entry.items || []).map(item => imageMedia(item, assetUrl)).join('\n          ')}
         </div>`;
 }
@@ -710,8 +717,8 @@ export function groupMedia(entry, assetUrl) {
 export function linkCardMedia(entry) {
   let host = '';
   try { host = new URL(entry.url).hostname.replace(/^www\./, ''); } catch (e) { host = entry.url; }
-  return `<a href="${attr(entry.url)}" class="tactic-mockup-link" target="_blank" rel="noopener" aria-label="${attr(`Open ${entry.title} (opens in a new tab)`)}" data-media-id="${attr(entry.id)}">
-        <div class="tactic-mockup">
+  return `<a href="${attr(entry.url)}" class="media-link media media--link" target="_blank" rel="noopener" aria-label="${attr(`Open ${entry.title} (opens in a new tab)`)}" data-media-id="${attr(entry.id)}">
+        <div class="media-frame">
           ${chrome('website', host, true)}
           <div class="tactic-link-card-body">
             <div class="tactic-link-card-title">${plain(entry.title)}</div>
@@ -726,7 +733,7 @@ export function mediaEntry(entry, assetUrl) {
   switch (entry.type) {
     case 'image': return imageMedia(entry, assetUrl);
     case 'video': return videoMedia(entry);
-    case 'social_post': return `<div class="tactic-reel-row">${socialPost(entry, assetUrl)}</div>`;
+    case 'social_post': return `<div class="media-row">${socialPost(entry, assetUrl)}</div>`;
     case 'gallery': return galleryMedia(entry, assetUrl);
     case 'group': return groupMedia(entry, assetUrl);
     case 'link_card': return linkCardMedia(entry);
@@ -747,42 +754,50 @@ export function mediaList(list, assetUrl) {
       out.push(mediaEntry(entry, assetUrl));
     }
   }
-  return out.map(x => (Array.isArray(x) ? `<div class="tactic-reel-row">\n          ${x.join('\n          ')}\n        </div>` : x)).join('\n              ');
+  return out.map(x => (Array.isArray(x) ? `<div class="media-row">\n          ${x.join('\n          ')}\n        </div>` : x)).join('\n              ');
 }
 
-// ── Roadmap ────────────────────────────────────────────────────────────────
+// ── Roadmap (DESIGN-BRIEF.md section 6, "90-day roadmap") ─────────────────
+
+const NOTE_BUTTON = (id, extraId) => `<button type="button" class="link-btn link-btn--quiet note-btn"${extraId ? ` id="${extraId}"` : ''} onclick="toggleNote('${id}')" aria-controls="note-area-${id}">Note</button>`;
+const NOTE_AREA = id => `<div class="note-area" id="note-area-${id}">
+      <textarea class="note-textarea" id="note-${id}" placeholder="Add a note" aria-label="Note" oninput="saveNote('${id}',this.value)"></textarea>
+    </div>`;
 
 /**
- * One action as a tick box (DESIGN-BRIEF.md section 7: tasks are the
- * actions). This is the saved tick: its data-key is the action ID, which
- * shared/progress.js loads and saves. The dashboard's tick boxes mirror it.
- * link: { tactic, stepId } | 'quick_wins' | null
+ * One action: the saved tick (data-key is the action ID, which
+ * shared/progress.js loads and saves; the dashboard mirrors it), "How to"
+ * and "Note".
+ * link: { tactic, stepId, tacticName, preview: [bullet text] } | 'quick_wins' | null
  */
 export function actionItem(action, link, { howtoId, noteButtonId } = {}) {
   const id = attr(action.id);
   const idAttr = howtoId ? ` id="${howtoId}"` : '';
-  let button = '';
-  if (link === 'quick_wins') button = `<button class="howto-link"${idAttr} onclick="navigate('gbp')">how to</button>`;
-  else if (link) button = `<button class="howto-link"${idAttr} onclick="howToLink('tactic${link.tactic}','${attr(link.stepId)}')">how to</button>`;
-  return `<div class="check-item">
-  <div class="check-row">
-    <input type="checkbox" class="check-input" id="${id}" data-key="${id}" onchange="onCheck(this)">
-    <label class="check-box" for="${id}">${ICONS.check}</label>
-    <label class="check-label" for="${id}"${editKey(`${action.id}.text`)}>${md(action.text)}</label>
-    ${button}
-    <button class="note-toggle-btn"${noteButtonId ? ` id="${noteButtonId}"` : ''} onclick="toggleNote('${id}')" title="Add note">${ICONS.note}</button>
-  </div>
-  <div class="note-area" id="note-area-${id}">
-    <textarea class="note-textarea" id="note-${id}" placeholder="Add a note…" oninput="saveNote('${id}',this.value)"></textarea>
-  </div>
-</div>`;
+  let howTo = '';
+  let preview = '';
+  if (link === 'quick_wins') {
+    howTo = `<button type="button" class="link-btn"${idAttr} onclick="openGbpWins()">How to</button>`;
+  } else if (link) {
+    howTo = `<button type="button" class="link-btn"${idAttr} aria-expanded="false" aria-controls="howto-${id}" onclick="toggleHowTo('${id}', this)">How to</button>`;
+    const items = (link.preview || []).map(t => `<li>${md(t)}</li>`).join('');
+    preview = `
+    <div class="rm-howto" id="howto-${id}" hidden>
+      ${items ? `<ul class="rm-howto-list">${items}</ul>` : ''}
+      <button type="button" class="link-btn" onclick="howToLink('tactic${link.tactic}','${attr(link.stepId)}')">Open the full step in ${plain(link.tacticName)}</button>
+    </div>`;
+  }
+  return `<div class="rm-action task-row-wrap">
+    <div class="task-row rm-action-row">
+      <input type="checkbox" class="tick check-input" id="${id}" data-key="${id}" onchange="onCheck(this)">
+      <label class="task-label rm-action-label check-label" for="${id}"${editKey(`${action.id}.text`)}>${md(action.text)}</label>
+      ${howTo}
+      ${NOTE_BUTTON(id, noteButtonId)}
+    </div>${preview}
+    ${NOTE_AREA(id)}
+  </div>`;
 }
 
-/**
- * A roadmap week. Interim layout until the roadmap is rebuilt (brief phase 3):
- * the actions are the tick boxes, and the plan's checklist lines are kept in
- * content.json but not shown.
- */
+/** A week: a plain row with a small pie; open, it sits on a white panel. */
 export function weekCard(week, links, { first = false } = {}) {
   let howtoMarked = false;
   const actions = week.actions.map((a, i) => {
@@ -790,66 +805,78 @@ export function weekCard(week, links, { first = false } = {}) {
     if (mark) howtoMarked = true;
     return actionItem(a, links[i], { howtoId: mark ? 'w1-howto-example' : null, noteButtonId: first && i === 0 ? 'w1-note-example' : null });
   });
-  return `<div class="week-card" id="wc-${week.number}" data-week="${week.number}" data-week-id="${attr(week.id)}">
-  <div class="week-card-header" onclick="toggleWeek(${week.number})">
-    <div class="week-num">W${week.number}</div>
-    <div class="week-title"${editKey(`${week.id}.title`)}>${plain(week.title)}</div>
-    <div class="week-progress-pill" id="wp-${week.number}">0 / ${week.actions.length}</div>
-    ${ICONS.chevronWeek}
+  const n = week.number;
+  return `<div class="rm-week" id="wc-${n}" data-week="${n}" data-week-id="${attr(week.id)}">
+  <div class="rm-week-head" role="button" tabindex="0" aria-expanded="false" aria-controls="wb-${n}" onclick="toggleWeek(${n})">
+    <span class="rm-week-num">${n}</span>
+    <span class="rm-week-title"${editKey(`${week.id}.title`)}>${plain(week.title)}</span>
+    <span class="rm-week-count"><span data-live="week-${n}-done">0</span> of ${week.actions.length}</span>
+    <span class="pie" data-live-pie="week-${n}" aria-hidden="true"></span>
   </div>
-  <div class="week-card-body">
-    <div class="week-col-label">This week's actions</div>
-    <div class="check-list week-actions"${first ? ' id="w1-checklist"' : ''}>
+  <div class="rm-week-body" id="wb-${n}" hidden>
+    <div class="rm-actions"${first ? ' id="w1-checklist"' : ''}>
       ${actions.join('\n      ')}
     </div>
-    <div class="week-note-section"><div class="week-note-label">Week notes</div><textarea class="note-textarea week-note-textarea" id="note-${attr(week.id)}" placeholder="Add general notes for this week…" oninput="saveNote('${attr(week.id)}',this.value)"></textarea></div>
+    <div class="rm-notes">
+      <label class="rm-notes-label" for="note-${attr(week.id)}">Week notes</label>
+      <textarea class="note-textarea rm-notes-text" id="note-${attr(week.id)}" rows="2" placeholder="Add general notes for this week" oninput="saveNote('${attr(week.id)}',this.value)"></textarea>
+    </div>
   </div>
 </div>`;
 }
 
 export function phaseBlock(phase, n, weeksHtml, total) {
-  return `<div class="month-block">
-      <div class="month-header">
-        <span class="month-badge">Month ${n}</span>
-        <span class="month-title">${plain(phase.name)}</span>
-        <span class="month-progress" id="m${n}-prog"><span>0</span> of ${total} done</span>
+  return `<section class="rm-month">
+      <div class="rm-divider">
+        <h2 class="rm-h2">Month ${n} · ${plain(phase.name)}</h2>
+        <span class="rm-divider-count"><span data-live="phase-${n}-done">0</span> of ${total} done</span>
       </div>
       ${weeksHtml}
-    </div>`;
+    </section>`;
 }
 
-// ── Quick Wins ─────────────────────────────────────────────────────────────
+// ── Google profile and website wins (the plan's quick wins) ──────────────────
 
 export function quickWin(item) {
   const id = attr(item.id);
   const label = has(item.title) ? `<strong>${plain(item.title)}.</strong> ${md(item.text)}` : md(item.text);
-  return `<div class="check-item">
-        <div class="check-row">
-          <input type="checkbox" class="check-input" id="${id}" onchange="onCheck(this)">
-          <label class="check-box" for="${id}">${ICONS.checkSmall}</label>
-          <label class="check-label" for="${id}"${editKey(`${item.id}.label`)}>${label}</label>
-          <button class="note-toggle-btn" onclick="toggleNote('${id}')">${ICONS.noteOutline}</button>
-        </div>
-        <div class="note-area" id="note-area-${id}">
-          <textarea class="note-textarea" id="note-${id}" placeholder="Add a note…" oninput="saveNote('${id}',this.value)"></textarea>
-        </div>
-      </div>`;
+  return `<div class="rm-action task-row-wrap">
+    <div class="task-row rm-action-row">
+      <input type="checkbox" class="tick check-input" id="${id}" onchange="onCheck(this)">
+      <label class="task-label rm-action-label check-label" for="${id}"${editKey(`${item.id}.label`)}>${label}</label>
+      ${NOTE_BUTTON(id)}
+    </div>
+    ${NOTE_AREA(id)}
+  </div>`;
 }
 
 export function quickWinGroup(group) {
-  return `<div class="section-label">${plain(group.title)}</div>
-<div class="card qw-card">
-  <div class="card-body">
-    <div class="check-list qw-check-list">
+  return `<div class="rm-gbp-group">
+      <h3 class="tp-h3">${plain(group.title)}</h3>
       ${group.items.map(quickWin).join('\n      ')}
-    </div>
-  </div>
-</div>`;
+    </div>`;
 }
 
 export function quickWinsNote(note) {
   if (!note || !has(note.text)) return '';
-  return `<div class="callout">${has(note.title) ? `<strong>${plain(note.title)}.</strong> ` : ''}${md(note.text)}</div>`;
+  return `<div class="rm-watch">${has(note.title) ? `<strong>${plain(note.title)}.</strong> ` : ''}${md(note.text)}</div>`;
+}
+
+/** After the last month: the plan's quick-win groups and its note. Tickable; not plan progress. */
+export function gbpWins(qw) {
+  const groups = (qw && qw.groups) || [];
+  if (!groups.length) return '';
+  const total = groups.reduce((n, g) => n + g.items.length, 0);
+  return `<section class="rm-gbp" id="gbp-wins">
+      <div class="rm-divider">
+        <h2 class="rm-h2">Google profile and website wins</h2>
+        <span class="rm-divider-count"><span data-live="gbp-done">0</span> of ${total} done</span>
+      </div>
+      <div class="rm-gbp-panel">
+      ${groups.map(quickWinGroup).join('\n      ')}
+      </div>
+      ${quickWinsNote(qw.note)}
+    </section>`;
 }
 
 // ── Assessment ─────────────────────────────────────────────────────────────
@@ -866,203 +893,184 @@ export const ASSESSMENT_CATEGORIES = [
   { key: 'local_visibility', title: 'Local Visibility', iconClass: 'local', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>' }
 ];
 
-const FINDING_ICONS = {
-  positive: '<svg class="finding-icon positive" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>',
-  negative: '<svg class="finding-icon negative" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/></svg>'
-};
 
 const text = value => attr(value == null ? '' : value);
 const score = value => (value != null && value !== '' ? String(Math.round(Number(value))) : '--');
-export function gradeClass(grade) {
-  const letter = String(grade || '').trim().charAt(0).toLowerCase();
-  return letter && 'abcdf'.includes(letter) ? `grade-${letter}` : '';
-}
 
 /** True when the record has real assessment content, not an empty object. */
 export function hasAssessment(data) {
   return !!(data && data.overall && data.categories && Object.keys(data.categories).length > 0);
 }
 
-export function assessmentGradeCard(data) {
-  const summary = data.overall.summary || (data.executive_summary || {}).headline || '';
-  return `<div class="assessment-grade-card">
-      <div class="grade-circle" id="overallGrade">${text(data.overall.grade || '--')}</div>
-      <div class="grade-details">
-        <h3>Overall Score: <span id="overallScore">${score(data.overall.score)}</span>/100</h3>
-        ${has(summary) ? `<p id="overallSummary"${editKey(data.overall.summary ? 'assessment.overall.summary' : 'assessment.executive_summary.headline.card')}>${text(summary)}</p>` : ''}
-      </div>
-    </div>`;
+// ── Assessment page (DESIGN-BRIEF.md section 6, "Assessment") ─────────────
+// Shows what the approved mockups show, nothing more: the summary, each area
+// with its summary, numbers, findings, recommendations and sources, the quick
+// wins, the priority recommendations, and the four visitor and market notes.
+// Long lists show the first few and "Show all N".
+
+const LIST_FIRST = 4;
+const levelOf = grade => { const l = scoreLevel(grade); return l ? l.key : 'none'; };
+const words = key => String(key || '').replace(/([a-z])([A-Z])/g, (m, a, b) => `${a} ${b}`).replace(/_/g, ' ').replace(/^./, c => c.toUpperCase());
+
+/** A list that shows the first few items and a "Show all N" button. */
+function longList(tag, items, label, extraClass = '') {
+  if (!items.length) return '';
+  const rows = items.map((item, i) => (i < LIST_FIRST ? `<li>${item}</li>` : `<li data-more hidden>${item}</li>`)).join('\n                ');
+  const more = items.length > LIST_FIRST ? `<button type="button" class="link-btn show-all" onclick="showAll(this)">Show all ${items.length} ${label}</button>` : '';
+  return `<${tag} class="as-list${extraClass}">
+                ${rows}
+              </${tag}>${more}`;
 }
 
-export function categoryScore(category, cat) {
-  return `<div class="grade-breakdown-item">
-          <div class="grade-breakdown-category">
-            ${category.icon}
-            <span>${category.title}</span>
-          </div>
-          <div class="grade-breakdown-score">
-            <span class="grade-breakdown-number">${score(cat.score)}</span>
-            <span class="grade-breakdown-letter ${gradeClass(cat.grade)}">${text(cat.grade || '--')}</span>
-          </div>
-        </div>`;
-}
-
-export function executiveSummary(summary) {
-  if (!summary || !(has(summary.headline) || (summary.key_strengths || []).length || (summary.critical_gaps || []).length)) return '';
+export function assessmentSummary(data, { level }) {
+  const s = data.executive_summary || {};
   const list = (items, key) => (items || []).map((item, i) => `<li${editKey(`assessment.executive_summary.${key}.${i}`)}>${text(item)}</li>`).join('\n            ');
-  return `<div class="executive-summary" id="executiveSummary">
-      <h2>Executive Summary</h2>
-      ${has(summary.headline) ? `<p class="executive-headline"${editKey('assessment.executive_summary.headline')}>${text(summary.headline)}</p>` : ''}
-      <div class="executive-columns">
-        <div class="executive-column strengths">
-          <h4>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-            Key Strengths
-          </h4>
-          <ul>
-            ${list(summary.key_strengths, 'key_strengths')}
-          </ul>
-        </div>
-        <div class="executive-column gaps">
-          <h4>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-            Critical Gaps
-          </h4>
-          <ul>
-            ${list(summary.critical_gaps, 'critical_gaps')}
-          </ul>
+  const o = data.overall;
+  return `<section class="as-card as-summary" id="as-summary">
+      <div class="as-summary-top">
+        ${donut({ pct: o.score, tone: `score-${level ? level.key : 'none'}`, number: score(o.score), sub: 'out of 100', label: `Overall score ${score(o.score)} out of 100, grade ${o.grade}` })}
+        <div class="as-summary-text">
+          <h2 class="tp-h2">Overall grade ${text(o.grade || '')}${level ? ` <span class="as-level as-level--${level.key}">${level.word}</span>` : ''}</h2>
+          ${has(s.headline) ? `<p${editKey('assessment.executive_summary.headline')}>${text(s.headline)}</p>` : ''}
         </div>
       </div>
-      ${has(summary.bottom_line) ? `<div class="executive-bottom-line">
-        <strong>Bottom Line:</strong> <span${editKey('assessment.executive_summary.bottom_line')}>${text(summary.bottom_line)}</span>
+      ${(s.key_strengths || []).length || (s.critical_gaps || []).length ? `<div class="as-columns">
+        ${(s.key_strengths || []).length ? `<div><h3 class="tp-h3">Key strengths</h3><ul class="as-list">
+            ${list(s.key_strengths, 'key_strengths')}
+          </ul></div>` : ''}
+        ${(s.critical_gaps || []).length ? `<div><h3 class="tp-h3">Critical gaps</h3><ul class="as-list">
+            ${list(s.critical_gaps, 'critical_gaps')}
+          </ul></div>` : ''}
       </div>` : ''}
-    </div>`;
+      ${has(s.bottom_line) ? `<div class="as-bottom"><strong class="as-bottom-label">Bottom line.</strong> <span${editKey('assessment.executive_summary.bottom_line')}>${text(s.bottom_line)}</span></div>` : ''}
+    </section>`;
 }
 
-export function assessmentQuickWin(win, i) {
-  return `<div class="quick-win-item">
-          <div class="quick-win-number">${i + 1}</div>
-          <div class="quick-win-content">
-            <div class="quick-win-task"${editKey(`assessment.quick_wins.${i}.task`)}>${text(win.task)}</div>
-            ${has(win.impact) ? `<div class="quick-win-impact"${editKey(`assessment.quick_wins.${i}.impact`)}>${text(win.impact)}</div>` : ''}
-          </div>
-          ${has(win.time_estimate) ? `<div class="quick-win-time">${text(win.time_estimate)}</div>` : ''}
-        </div>`;
-}
-
-export function priorityRecommendation(rec, i) {
-  const tags = [
-    has(rec.category) ? `<span class="priority-item-tag">${text(rec.category)}</span>` : '',
-    has(rec.time_estimate) ? `<span class="priority-item-tag time">${text(rec.time_estimate)}</span>` : '',
-    has(rec.impact) ? `<span class="priority-item-tag impact-${text(String(rec.impact).toLowerCase())}">${text(rec.impact)} Impact</span>` : ''
-  ].filter(Boolean).join('\n              ');
-  return `<div class="priority-item">
-          <div class="priority-item-number">${i + 1}</div>
-          <div class="priority-item-content">
-            <h4${editKey(`assessment.priority_recommendations.${i}.text`)}>${text(rec.text || rec.title)}</h4>
-            ${tags ? `<div class="priority-item-meta">
-              ${tags}
-            </div>` : ''}
-            ${has(rec.expected_result) ? `<p class="priority-item-result"${editKey(`assessment.priority_recommendations.${i}.expected_result`)}>${text(rec.expected_result)}</p>` : ''}
-          </div>
-        </div>`;
-}
-
-export function categoryCard(category, cat) {
-  const metrics = (cat.metrics || []).slice(0, 4).map(metric => {
-    const status = ['good', 'warning', 'critical'].includes(metric.status) ? metric.status : 'good';
-    return `<div class="metric-item">
-                <div class="metric-label">${text(metric.label)}</div>
-                <div class="metric-value"><span class="metric-status ${status}"></span>${text(metric.value)}</div>
-              </div>`;
-  }).join('\n              ');
-  const findings = (cat.findings || []).slice(0, 4).map((finding, i) => `<div class="finding-item">
-                ${finding.type === 'positive' ? FINDING_ICONS.positive : FINDING_ICONS.negative}
-                <span${editKey(`assessment.categories.${category.key}.findings.${i}`)}>${text(finding.text)}</span>
-              </div>`).join('\n              ');
-  return `<div class="category-card">
-          <div class="category-header" onclick="this.parentElement.classList.toggle('open')">
-            <div class="category-icon ${category.iconClass}">
-              ${category.icon}
-            </div>
-            <div class="category-title-wrap">
-              <h3 class="category-title">${category.title}</h3>
-              <span class="category-grade ${gradeClass(cat.grade)}">${text(cat.grade || 'N/A')}</span>
-            </div>
-            <svg class="category-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-          </div>
-          <div class="category-body">
-            ${has(cat.summary) ? `<p class="category-summary"${editKey(`assessment.categories.${category.key}.summary`)}>${text(cat.summary)}</p>` : ''}
-            ${metrics ? `<div class="category-metrics">
+/** One area as a row that opens in place. tactic: { n, title } or null */
+export function areaRow(category, cat, tactic, reviewLabel = 'Final review') {
+  const key = category.key;
+  const level = scoreLevel(cat.grade);
+  const share = typeof cat.weight === 'number' ? `${Math.round(cat.weight * 100)}%` : '';
+  const metrics = (cat.metrics || []).map(m => `<div class="as-num"><b>${text(m.value)}</b><small>${text(m.label)}</small></div>`).join('\n              ');
+  const findings = (cat.findings || []).map((f, i) => `<span${editKey(`assessment.categories.${key}.findings.${i}`)}>${text(f.text)}</span>`);
+  const recs = (cat.recommendations || []).map((r, i) => `<span${editKey(`assessment.categories.${key}.recommendations.${i}`)}>${text(typeof r === 'string' ? r : r.text)}</span>`);
+  const sources = [...new Set([...(cat.dataSources || []), ...(cat.data_sources || [])])];
+  const sourceLine = sources.length ? `Sources: ${sources.join(', ')}.` : '';
+  return `<div class="as-area" data-area="${key}" id="area-${key}">
+          <button type="button" class="as-row" aria-expanded="false" aria-controls="area-${key}-body" onclick="toggleArea(this)">
+            <span class="as-row-name">${text(category.title)}</span>
+            <span class="as-row-score score score--${levelOf(cat.grade)}">${score(cat.score)}</span>
+            <span class="as-row-grade">${text(cat.grade || '')}${level ? `<span class="sr-only"> ${level.word}</span>` : ''}</span>
+            <span class="as-bar" aria-hidden="true"><span class="as-bar-fill as-bar-fill--${levelOf(cat.grade)}" style="--pct:${Number(cat.score) || 0}"></span></span>
+            <span class="as-row-share">${share}</span>
+            <span class="as-row-slot" data-slot="checkin" data-label="30 days" hidden></span>
+            <span class="as-row-slot" data-slot="review" data-label="${attr(reviewLabel)}" hidden></span>
+            <span class="chev" aria-hidden="true"></span>
+          </button>
+          <div class="as-area-body" id="area-${key}-body" hidden>
+            ${has(cat.summary) ? `<p${editKey(`assessment.categories.${key}.summary`)}>${text(cat.summary)}</p>` : ''}
+            ${metrics ? `<div class="as-nums">
               ${metrics}
             </div>` : ''}
-            ${findings ? `<div class="category-findings">
-              <h4>Key Findings</h4>
-              ${findings}
+            ${findings.length || recs.length ? `<div class="as-columns">
+              ${findings.length ? `<div><h3 class="tp-h3">What we found</h3>${longList('ul', findings, 'findings')}</div>` : ''}
+              ${recs.length ? `<div><h3 class="tp-h3">What we recommend</h3>${longList('ol', recs, 'recommendations')}</div>` : ''}
             </div>` : ''}
+            <div class="as-area-foot">
+              ${sourceLine ? `<span class="as-meta">${text(sourceLine)}</span>` : '<span></span>'}
+              ${tactic ? `<button type="button" class="link-btn" onclick="navigate('tactic${tactic.n}')">In your plan: ${plain(tactic.title)}</button>` : ''}
+            </div>
           </div>
         </div>`;
 }
 
-/** The whole Assessment page, or '' when there is no assessment. */
-export function assessmentPage(data, { date } = {}) {
+export function assessmentQuickWins2(wins) {
+  if (!wins.length) return '';
+  const rows = wins.map((w, i) => {
+    const id = `aqw-p-${i + 1}`;
+    const meta = has(w.time_estimate) ? text(w.time_estimate) : '';
+    return `<div class="task-row task-row--win"><input type="checkbox" class="tick" id="${id}" data-qw="aqw-${i + 1}" onchange="onQuickWinTick(this)"><div class="task-body"><label class="task-label task-label--strong" for="${id}"${editKey(`assessment.quick_wins.${i}.task`)}>${text(w.task)}</label>${has(w.impact) ? `<div class="task-sub"${editKey(`assessment.quick_wins.${i}.impact`)}>${text(w.impact)}</div>` : ''}</div>${meta ? `<span class="task-time">${meta}</span>` : ''}</div>`;
+  });
+  return `<section class="as-card as-card--sage" id="as-quick">
+      <div class="dash-card-head">
+        <div><h2 class="tp-h2">Quick wins</h2><p>Immediate actions you can complete today.</p></div>
+        <div><strong><span data-live="wins-done">0</span> of ${wins.length}</strong> done</div>
+      </div>
+      ${rows.join('\n      ')}
+    </section>`;
+}
+
+export function priorityTable(recs) {
+  if (!recs.length) return '';
+  const rows = recs.map((r, i) => `<tr><th scope="row"${editKey(`assessment.priority_recommendations.${i}.text`)}>${i + 1}. ${text(r.text || r.title)}</th><td>${text(r.category || '')}</td><td>${text(r.time_estimate || '')}</td><td class="as-impact">${text(has(r.impact) ? words(r.impact) : '')}</td><td${editKey(`assessment.priority_recommendations.${i}.expected_result`)}>${text(r.expected_result || '')}</td></tr>`).join('\n            ');
+  return `<section class="as-section" id="as-priority">
+      <div class="as-divider"><h2 class="tp-h2">Priority recommendations</h2><span class="as-meta">The changes that will make the biggest difference, in order.</span></div>
+      <div class="as-card as-card--table">
+        <div class="table-scroll">
+          <table class="plain-table as-priority">
+            <thead><tr><th scope="col">Recommendation</th><th scope="col">Area</th><th scope="col">Time</th><th scope="col">Impact</th><th scope="col">Expected result</th></tr></thead>
+            <tbody>
+            ${rows}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>`;
+}
+
+const MARKET_TITLES = { visitor_profile: 'Who visits', discovery_journey: 'How they find you', seasonal_considerations: 'Your seasons', trip_integration: 'Where you fit in a trip' };
+
+export function visitorsAndMarket(ctx) {
+  const entries = Object.keys(MARKET_TITLES).filter(k => has((ctx || {})[k])).map(k => [k, ctx[k]]);
+  if (!entries.length) return '';
+  return `<section class="as-section" id="as-market">
+      <div class="as-divider"><h2 class="tp-h2">Your visitors and market</h2></div>
+      <div class="as-market">
+        ${entries.map(([k, v]) => `<div class="as-card as-card--tile"><h3 class="tp-h3">${MARKET_TITLES[k]}</h3><p${editKey(`assessment.tourism_context.${k}`)}>${text(v)}</p></div>`).join('\n        ')}
+      </div>
+    </section>`;
+}
+
+/**
+ * The whole Assessment page, or '' when there is no assessment.
+ * options: { date, areaTactics: { areaKey: { n, title } } }
+ */
+export function assessmentPage(data, { date, areaTactics = {}, days = 90 } = {}) {
   if (!hasAssessment(data)) return '';
   const categories = ASSESSMENT_CATEGORIES.filter(c => data.categories[c.key]);
-  const wins = (data.quick_wins || []).slice(0, 6);
-  const recs = (data.priority_recommendations || []).slice(0, 4);
+  const wins = data.quick_wins || [];
+  const recs = data.priority_recommendations || [];
+  const level = scoreLevel(data.overall.grade);
+  const hasMarket = Object.keys(MARKET_TITLES).some(k => has((data.tourism_context || {})[k]));
+  const jumps = [['as-summary', 'Summary'], ['as-areas', `Your ${categories.length === 6 ? 'six' : categories.length} areas`], wins.length && ['as-quick', 'Quick wins'], recs.length && ['as-priority', 'Priority recommendations'], hasMarket && ['as-market', 'Your visitors and market']].filter(Boolean);
   return `<section id="page-assessment" class="page">
-  <div class="assessment-hero">
-    <div class="assessment-hero-top">
-      <div>
-        <h1 class="assessment-hero-title">Your Digital Marketing Assessment</h1>
-        ${has(date) ? `<p class="assessment-hero-date">Assessment Date: ${text(date)}</p>` : ''}
+  <div class="as">
+    <header class="as-head">
+      <div class="tp-head-text">
+        <h1 class="tp-h1">Your digital marketing assessment</h1>
+        ${has(date) ? `<p class="tp-sub">Assessed on ${text(date)}</p>` : ''}
       </div>
-      <div class="assessment-hero-actions">
-        <button class="download-pdf-btn" onclick="downloadPDF()">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-            <polyline points="7 10 12 15 17 10"/>
-            <line x1="12" y1="15" x2="12" y2="3"/>
-          </svg>
-          Download PDF
-        </button>
+      <button type="button" class="btn btn--outline" onclick="downloadPDF()">Download as PDF</button>
+    </header>
+    <nav class="as-jumps" aria-label="On this page">
+      ${jumps.map(([id, label]) => `<a href="#${id}" onclick="return jumpTo('${id}')">${label}</a>`).join('')}
+    </nav>
+    ${assessmentSummary(data, { level })}
+    <section class="as-section" id="as-areas">
+      <div class="as-divider"><h2 class="tp-h2">${jumps[1][1]}</h2><span class="as-meta">Open an area to see what we found and what we recommend.</span></div>
+      <div class="as-card as-card--list" data-areas>
+        <div class="as-row as-row--head" aria-hidden="true"><span>Area</span><span>Score</span><span>Grade</span><span>Where it sits</span><span>Share of total</span><span data-slot="checkin" hidden>30 days</span><span data-slot="review" hidden>${days} days</span><span></span></div>
+        ${categories.map(c => areaRow(c, data.categories[c.key], areaTactics[c.key] || null, `${days} days`)).join('\n        ')}
       </div>
-    </div>
-    ${assessmentGradeCard(data)}
-  </div>
-
-  <div class="content-area">
-    <div class="grade-breakdown">
-      <h2>Score Breakdown by Category</h2>
-      <div class="grade-breakdown-grid">
-        ${categories.map(c => categoryScore(c, data.categories[c.key])).join('\n        ')}
+      <span class="sample-badge" data-sample-only hidden>Sample scores for review</span>
+      <div class="as-slots" data-checkin-slots>
+        <div class="as-slot" data-slot-note="checkin"><strong>30-day check-in</strong><span class="as-meta">Your new scores will appear as a second column beside these.</span></div>
+        <div class="as-slot" data-slot-note="review"><strong>90-day review</strong><span class="as-meta">Your final scores will appear as a third column.</span></div>
       </div>
-    </div>
-
-    ${executiveSummary(data.executive_summary)}
-
-    ${wins.length ? `<div class="quick-wins" id="quickWins">
-      <h2>Quick Wins</h2>
-      <p class="quick-wins-intro">Immediate actions you can complete today:</p>
-      <div class="quick-wins-grid">
-        ${wins.map(assessmentQuickWin).join('\n        ')}
-      </div>
-    </div>` : ''}
-
-    ${recs.length ? `<div class="priority-section">
-      <h2>Priority Recommendations</h2>
-      <p class="priority-intro">The changes that will make the biggest difference, in priority order:</p>
-      <div class="priority-list" id="priorityList">
-        ${recs.map(priorityRecommendation).join('\n        ')}
-      </div>
-    </div>` : ''}
-
-    <div class="categories-section">
-      <h2>Detailed Category Analysis</h2>
-      <div class="categories-grid">
-        ${categories.map(c => categoryCard(c, data.categories[c.key])).join('\n        ')}
-      </div>
-    </div>
+    </section>
+    ${assessmentQuickWins2(wins)}
+    ${priorityTable(recs)}
+    ${visitorsAndMarket(data.tourism_context)}
   </div>
 </section>`;
 }
