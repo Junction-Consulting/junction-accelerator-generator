@@ -4764,16 +4764,11 @@ body:not(.has-plan) .plan-content{display:none}
   background:var(--cream-50);
 }
 
-/* Topic cluster cards (Tactic 3) */
-.cluster-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px;margin:14px 0 16px}
-.cluster-card{background:var(--cream-100);border:1px solid #eadfce;border-top:3px solid var(--navy-900);border-radius:var(--radius-sm);padding:14px 16px}
-.cluster-card-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
-.cluster-card-num{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;background:var(--navy-900);color:#fff;font-size:12px;font-weight:600}
-.cluster-card-week{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--navy-800);background:#fff;border:1px solid #eadfce;border-radius:999px;padding:3px 10px}
-.cluster-card-title{font-family:var(--font-display);font-weight:600;font-size:15px;line-height:1.35;color:var(--navy-900);margin-bottom:6px}
-.cluster-card-serves{font-size:13px;line-height:1.5;color:var(--navy-800);margin-bottom:8px}
-.cluster-card-questions{list-style:none;margin:0;padding:8px 0 0;border-top:1px solid #eadfce}
-.cluster-card-questions li{font-size:13px;line-height:1.5;color:var(--navy-800);font-style:italic;padding:3px 0}
+/* Topic cluster table (Tactic 3) */
+.cluster-table{margin:12px 0 16px}
+.cluster-table td{border-bottom:1px solid #eadfce}
+.cluster-table td:first-child{min-width:0;width:55%}
+.cluster-table tbody tr:nth-child(even){background:var(--cream-100)}
 
 /* Tips & Resources Lists */
 .tactic-tips-list,
@@ -7264,55 +7259,37 @@ button,
             <ul class="tactic-step-bullets">
               <li data-editable-key="t3-bullet-26">A topic cluster is a pillar page supported by question posts on the same subject. Pick five that match your audiences and your heritage knowledge. A starting set:</li>
             </ul>
-            <div class="cluster-grid">
-              <div class="cluster-card">
-                <div class="cluster-card-top"><span class="cluster-card-num">1</span><span class="cluster-card-week">Week 7</span></div>
-                <div class="cluster-card-title">The 1906 General Store and Kilby History</div>
-                <div class="cluster-card-serves"><strong>Serves:</strong> History enthusiasts, seniors, school groups</div>
-                <ul class="cluster-card-questions">
-                  <li>&ldquo;How old is the Kilby general store?&rdquo;</li>
-                  <li>&ldquo;Why is Kilby one of BC&#039;s 11 provincial heritage properties?&rdquo;</li>
-                </ul>
-              </div>
-              <div class="cluster-card">
-                <div class="cluster-card-top"><span class="cluster-card-num">2</span><span class="cluster-card-week">Week 8</span></div>
-                <div class="cluster-card-title">Farm Animals and Visiting with Kids</div>
-                <div class="cluster-card-serves"><strong>Serves:</strong> Young families, grandparents</div>
-                <ul class="cluster-card-questions">
-                  <li>&ldquo;Can you touch the animals at Kilby?&rdquo;</li>
-                  <li>&ldquo;Who is Maud the calf?&rdquo;</li>
-                  <li>&ldquo;Is Kilby good for toddlers?&rdquo;</li>
-                </ul>
-              </div>
-              <div class="cluster-card">
-                <div class="cluster-card-top"><span class="cluster-card-num">3</span><span class="cluster-card-week">Week 9</span></div>
-                <div class="cluster-card-title">The Cafe: Breakfast, Lunch, and Dinner Nights</div>
-                <div class="cluster-card-serves"><strong>Serves:</strong> Locals, day-trippers</div>
-                <ul class="cluster-card-questions">
-                  <li>&ldquo;Where can I eat breakfast in Harrison Mills?&rdquo;</li>
-                  <li>&ldquo;What is schnitzel night at Kilby?&rdquo;</li>
-                </ul>
-              </div>
-              <div class="cluster-card">
-                <div class="cluster-card-top"><span class="cluster-card-num">4</span><span class="cluster-card-week">Week 10</span></div>
-                <div class="cluster-card-title">Planning Your Visit: Day Trips and Camping</div>
-                <div class="cluster-card-serves"><strong>Serves:</strong> Visitors from Harrison and the Lower Mainland</div>
-                <ul class="cluster-card-questions">
-                  <li>&ldquo;What are the best things to do in Harrison Mills?&rdquo;</li>
-                  <li>&ldquo;Can I camp at Kilby?&rdquo;</li>
-                  <li>&ldquo;What are the best photo spots at Kilby?&rdquo;</li>
-                </ul>
-              </div>
-              <div class="cluster-card">
-                <div class="cluster-card-top"><span class="cluster-card-num">5</span><span class="cluster-card-week">Week 11</span></div>
-                <div class="cluster-card-title">Workshops, Events, and School Programs</div>
-                <div class="cluster-card-serves"><strong>Serves:</strong> Locals, families, teachers</div>
-                <ul class="cluster-card-questions">
-                  <li>&ldquo;What workshops does Kilby offer?&rdquo;</li>
-                  <li>&ldquo;How do I book a school field trip at Kilby?&rdquo;</li>
-                  <li>&ldquo;What is Old Fashioned Christmas at Kilby?&rdquo;</li>
-                </ul>
-              </div>
+            <div class="tactic-metrics-table cluster-table">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Cluster</th>
+                    <th>Serves</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>The 1906 General Store and Kilby History</td>
+                    <td>History enthusiasts, seniors, school groups</td>
+                  </tr>
+                  <tr>
+                    <td>Farm Animals and Visiting with Kids</td>
+                    <td>Young families, grandparents</td>
+                  </tr>
+                  <tr>
+                    <td>The Cafe: Breakfast, Lunch, and Dinner Nights</td>
+                    <td>Locals, day-trippers</td>
+                  </tr>
+                  <tr>
+                    <td>Planning Your Visit: Day Trips and Camping</td>
+                    <td>Visitors from Harrison and the Lower Mainland</td>
+                  </tr>
+                  <tr>
+                    <td>Workshops, Events, and School Programs</td>
+                    <td>Locals, families, teachers</td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
             <ul class="tactic-step-bullets">
               <li data-editable-key="t3-bullet-27">For each cluster, write down 8 to 10 candidate questions from your reviews, the questions you hear at the desk, and AnswerThePublic. Choose the two most specific for the pillar page and the first post.</li>
