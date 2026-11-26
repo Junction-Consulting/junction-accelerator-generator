@@ -260,9 +260,10 @@ AI tools do not rank pages, they assemble answers, and they favour sources that 
 
 #### Part B: Build the Foundation Pages
 
-3. **Build the FAQ page.**
-   - Create a page called "Frequently Asked Questions." Write each question as a heading and answer it in the first sentence below. The assessment recommends the questions visitors already ask: can we touch the animals, how long does a typical visit take, is the cafe open the same hours as the museum, and are pets allowed.
-   - Start with these and complete the facts only you have:
+3. **Update the FAQ page.**
+   - Open your current FAQ page in WordPress and read it the way a visitor would. List every question already on it, mark anything that is out of date, and note what is missing. Keep the questions that already work, and edit the page in place. Do not create a new page or change the web address, so the links and search history the page has already earned stay with it.
+   - Rewrite each question as a heading and answer it in the first sentence below. The assessment recommends covering the questions visitors already ask: can we touch the animals, how long does a typical visit take, is the cafe open the same hours as the museum, and are pets allowed.
+   - Check the page against this list, and add or update whatever is missing. Complete the facts only you have:
      - "What are Kilby's hours?" Kilby is open on Saturdays and Sundays from 10 AM to 4 PM, and the museum opens at 11 AM. [CONFIRM CURRENT SEASON HOURS AND THE BREAK DATES]
      - "How much does it cost to visit Kilby?" [INSERT ADMISSION PRICES AND ANY FAMILY RATE]
      - "Can you touch the animals at Kilby?" [CONFIRM RULES FOR EACH ANIMAL]
@@ -273,7 +274,7 @@ AI tools do not rank pages, they assemble answers, and they favour sources that 
      - "Can I bring a school group to Kilby?" [DESCRIBE SCHOOL PROGRAMS AND HOW TO BOOK]
      - "Is Kilby accessible?" [COPY THE EXISTING ACCESSIBILITY INFORMATION]
      - "Where is Kilby and where do I park?" Kilby is in Harrison Mills, and parking details are on the visit page. [ADD DRIVING DIRECTIONS FROM HARRISON HOT SPRINGS]
-   - Use visible headings instead of an accordion, so the text is easy for search engines and AI tools to read. Link the FAQ page from the footer and the main menu.
+   - If the page uses an accordion, switch to visible headings, so the text is easy for search engines and AI tools to read. Add a "last updated" date at the top, and link the page from the footer and the main menu if it is not already there.
 
 4. **Create a Plan Your Visit hub.**
    - Add a page called something like "Plan Your Harrison Mills Day Trip" and link it from the main menu. It is the front door to your topic clusters and the page you point partners to.
@@ -428,11 +429,11 @@ Month 3 Name: Publish and Prepare to Reopen
 - [ ] Five clusters and their questions are saved in a sheet
 - [ ] Posts are scheduled through the first week of January
 
-### Week 6: Correct the Record and Build the FAQ
+### Week 6: Correct the Record and Update the FAQ
 **Actions:**
 - Post your Wikipedia edit request on the Talk page with your connection disclosed and sources attached → links to: Tactic 3 / Step 2
 - Contact the owners of outdated pages and update your Tourism Harrison, FVRD, Destination BC, TripAdvisor, and Google listings → links to: Tactic 3 / Step 2
-- Build the FAQ page with direct first-sentence answers → links to: Tactic 3 / Step 3
+- Update the FAQ page with direct first-sentence answers → links to: Tactic 3 / Step 3
 - Add a "last updated" date to the hours and admission section of your visit page → links to: Tactic 1 / Step 5
 
 **Checklist:**
