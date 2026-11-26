@@ -260,7 +260,7 @@ AI tools do not rank pages, they assemble answers, and they favour sources that 
 
 #### Part B: Build the Foundation Pages
 
-3. **Build the FAQ page.**
+3. **Update the FAQ page.**
    - Open your current FAQ page in WordPress and read it the way a visitor would. List every question already on it, mark anything that is out of date, and note what is missing. Keep the questions that already work, and edit the page in place. Do not create a new page or change the web address, so the links and search history the page has already earned stay with it.
    - Rewrite each question as a heading and answer it in the first sentence below. The assessment recommends covering the questions visitors already ask: can we touch the animals, how long does a typical visit take, is the cafe open the same hours as the museum, and are pets allowed.
    - Check the page against this list, and add or update whatever is missing. Complete the facts only you have:
