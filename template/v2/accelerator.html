@@ -66,71 +66,7 @@
 
 <!-- DASHBOARD -->
 <section id="page-dashboard" class="page active">
-  <div class="dash-v2">
-    <div class="dash-header">
-      <h1 class="dash-greeting" id="dash-greeting">Good to see you, {{CLIENT_NAME}}</h1>
-    </div>
-
-    <div class="dash-progress-hero" id="goal-section">
-      <div class="dash-ring-large-wrap">
-        <svg class="dash-ring-large" width="200" height="200" viewBox="0 0 200 200">
-          <circle cx="100" cy="100" r="85" fill="none" stroke="var(--surface-sunken)" stroke-width="17"></circle>
-          <circle id="dash-ring" class="dash-ring-bar" cx="100" cy="100" r="85" fill="none" stroke="var(--mint-500)" stroke-width="17" stroke-linecap="round" stroke-dasharray="534.1" stroke-dashoffset="534.1"></circle>
-        </svg>
-        <div class="dash-ring-large-text">
-          <div class="dash-ring-pct" id="dash-pct">0%</div>
-          <div class="dash-ring-label"><span id="dash-done-count">0</span> of <span id="dash-total-count">{{TOTAL_TASKS}}</span> tasks</div>
-        </div>
-      </div>
-      <div class="dash-progress-content">
-        <h2 class="dash-headline" id="dash-headline">{{FIRST_HEADLINE}}</h2>
-        <p class="dash-subcopy" id="dash-subcopy">{{FIRST_SUBCOPY}}</p>
-        <div class="dash-phases-label">THE {{PROGRAM_DAYS}} DAYS</div>
-        <div class="dash-phases-grid" style="--columns:{{PHASE_COUNT}}">
-          {{DASHBOARD_PHASES}}
-        </div>
-      </div>
-    </div>
-
-    <div class="dash-next-step" id="objectives-section">
-      <div class="dash-next-main" id="next-step-main">
-        <div class="dash-next-eyebrow" id="dash-next-eyebrow">{{NEXT_EYEBROW}}</div>
-        <h2 class="dash-next-title" id="dash-next-title">{{NEXT_TITLE}}</h2>
-        <div class="dash-next-tasks" id="dash-next-tasks">{{NEXT_TASKS}}</div>
-        <div class="dash-next-actions">
-          <button class="dash-btn-primary" onclick="navigate('roadmap')">Open the roadmap</button>
-          <span class="dash-next-link" id="dash-next-link" onclick="navigate('tactic{{NEXT_TACTIC_NUM}}')">Open the full guide for this tactic →</span>
-        </div>
-      </div>
-      <div class="dash-next-sidebar">
-        <div class="dash-next-meta">
-          <div class="dash-next-meta-label">TACTIC</div>
-          <div class="dash-next-meta-value" id="dash-next-tactic">{{NEXT_TACTIC}}</div>
-        </div>
-        <div class="dash-next-meta" id="dash-next-time-wrap"{{NEXT_TIME_HIDDEN}}>
-          <div class="dash-next-meta-label">TIME NEEDED</div>
-          <div class="dash-next-meta-value" id="dash-next-time">{{NEXT_TIME}}</div>
-        </div>
-        <div class="dash-next-meta" id="dash-next-who-wrap"{{NEXT_WHO_HIDDEN}}>
-          <div class="dash-next-meta-label">WHO</div>
-          <div class="dash-next-meta-value" id="dash-next-who">{{NEXT_WHO}}</div>
-        </div>
-        <div class="dash-next-week-progress">
-          <div class="dash-next-week-header">
-            <span id="dash-week-progress-title">Week {{NEXT_WEEK}} tasks</span>
-            <span id="dash-week-progress-label">0/{{NEXT_TASK_COUNT}}</span>
-          </div>
-          <div class="dash-next-week-bar">
-            <div class="dash-next-week-bar-fill" id="dash-week-bar"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="dash-tactics-grid tactic-grid" id="tactic-cards-section" data-columns="{{TACTIC_COUNT}}">
-      {{TACTIC_PILLS}}
-    </div>
-  </div>
+  {{DASHBOARD}}
 </section>
 
 {{ASSESSMENT_PAGE}}
@@ -348,11 +284,14 @@
 
 </main>
 
+{{STAGE_SWITCHER}}
+
 <div class="lightbox-overlay" id="lightbox" onclick="closeLightbox()">
   <img id="lightbox-img" src="" alt="">
 </div>
 
 <script type="application/json" id="accelerator-data">{{PAGE_DATA}}</script>
+<script src="{{ASSET_BASE}}/progress-model.js"></script>
 <script src="{{ASSET_BASE}}/accelerator.js"></script>
 
 <!-- Shared scripts: login, progress, Edit Mode, analytics, sharing (unchanged from v1) -->

@@ -18,18 +18,20 @@
   --canopy-text: #2B764A;        /* buttons, links, tick boxes */
   --canopy: #2E7D4F;             /* progress fills, 2px dividers */
   --fern: #7FC99A;               /* accent and progress on dark */
+  --track-on-dark: #3A3A36;      /* empty track on dark */
   --sage: #C8E8D4;               /* highlight boxes */
   --forest: #1A4D2E;             /* text on Sage */
   --sage-25: #E9EEE3;            /* notes, tips */
   --gold: #C4963A;               /* stats on Carbon, current-stage marker */
   --gold-on-light: #A57E31;      /* large numerals on light */
+  --gold-text: #7A5C1E;          /* gold text on light: "You are here" */
   --copper: #A55527;             /* small meta labels on light, sparingly */
   --break-pink: #CD1561;         /* hover and active on clickable things, on light */
   --break-pink-on-dark: #ED5192; /* the same, on dark */
 
-  /* Assessment score scale: outside the brand palette on purpose, always
-     shown with the level word. The score ranges live with the code that
-     picks the level, in one place. */
+  /* Assessment score scale: outside the brand palette on purpose. The
+     level follows the letter grade (scoreLevel in progress-model.js), and
+     the letter is always shown beside the colour. */
   --score-needs-work: #B5503A;
   --score-fair: #D97F3A;
   --score-good: #3E8E8A;
@@ -48,6 +50,7 @@
   --progress-fill: var(--canopy);
   --progress-fill-on-dark: var(--fern);
   --progress-track: var(--track);
+  --progress-track-on-dark: var(--track-on-dark);
   --divider: var(--canopy);
   --divider-width: 2px;
   --ticked-opacity: .7;
@@ -110,6 +113,37 @@
   --wordmark-height-phone: 17px;
   --hamburger-bar-width: 20px;
   --hamburger-bar-height: 2.5px;
+
+  /* Dashboard (DESIGN-BRIEF.md sections 5 and 6) */
+  --type-donut-lg: 60px;
+  --type-donut-md: 42px;
+  --type-pull: 20px;
+  --donut-lg: 200px;
+  --donut-lg-hole: 148px;
+  --donut-md: 130px;
+  --donut-md-hole: 94px;
+  --ring-size: 40px;
+  --ring-hole: 24px;
+  --ring-size-sm: 52px;
+  --ring-hole-sm: 32px;
+  --read-dot: 20px;
+  --tick-size: 24px;
+  --strip-bar: 5px;
+  --phase-bar: 6px;
+  --card-pad: 32px;
+  --card-pad-phone: 22px;
+  --tile-pad-y: 22px;
+  --tile-pad-x: 24px;
+  --tile-min: 220px;
+  --dash-main-min: 480px;
+  --dash-side-min: 300px;
+  --measure: 560px;
+  --table-min: 560px;
+  --btn-pad-y: 13px;
+  --btn-pad-x: 22px;
+  --switcher-pad: 8px;
+  --switcher-room: 120px;
+  --switcher-room-phone: 200px;
 
   /* ── v1 names, re-pointed to the Junction roles ─────────────────────
      The pages not yet rebuilt (phases 2 to 4) still use these. Each one

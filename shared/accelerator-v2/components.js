@@ -14,6 +14,9 @@
  */
 
 import { escapeHtml, inlineMarkdown, stripMarkdown } from '../plan-generator.js';
+import Model from '../../assets/v2/progress-model.js';
+
+const { scoreLevel } = Model;
 
 // ── Text ───────────────────────────────────────────────────────────────────
 
@@ -74,27 +77,303 @@ export function navCoach(email) {
   return `<a class="nav-coach" href="mailto:${attr(email)}">Email your coach</a>`;
 }
 
-// ── Dashboard ──────────────────────────────────────────────────────────────
+// ── Dashboard (DESIGN-BRIEF.md sections 5 and 6) ──────────────────────────
+//
+// All four stage panels are on the page; the page script shows one and fills
+// every count from the ticks (data-live attributes). Labels here are neutral
+// program wording; every other word comes from the content or the assessment.
 
-export function phaseCard(phase, n) {
-  const desc = has(phase.description) ? `\n            <div class="dash-phase-desc">${plain(phase.description)}</div>` : '';
-  return `<div class="dash-phase" data-phase="${n}">
-            <div class="dash-phase-range">WEEKS ${phase.weeks[0]}-${phase.weeks[1]}</div>
-            <div class="dash-phase-name">${plain(phase.name)}</div>${desc}
+const STEP_LABELS = days => ({
+  onboarding: 'Onboarding call',
+  assessment: 'Assessment',
+  coaching: 'Coaching call',
+  plan: `${days}-day plan`,
+  checkin: '30-day check-in',
+  review: `${days}-day review`
+});
+
+/** A donut: a conic fill sized by --pct (0 to 100). tone: dark | light | score-<level> */
+export function donut({ pct = 0, tone = 'light', size = 'lg', number = '', sub = '', live = '', label = '' }) {
+  const liveAttr = live ? ` data-live-donut="${attr(live)}"` : '';
+  const numLive = live ? ` data-live="${attr(live)}-pct"` : '';
+  return `<div class="donut donut--${size} donut--${tone}" style="--pct:${Number(pct) || 0}"${liveAttr} role="img" aria-label="${attr(label)}"><div class="donut-hole"><span class="donut-num"${numLive}>${attr(number)}</span>${sub ? `<span class="donut-sub">${attr(sub)}</span>` : ''}</div></div>`;
+}
+
+export function stageStrip(days) {
+  const labels = STEP_LABELS(days);
+  return `<ol class="stage-strip" aria-label="Your program">
+      ${Object.entries(labels).map(([key, label]) => `<li class="stage-step" data-step="${key}"><span class="stage-step-bar" aria-hidden="true"></span><span class="stage-step-label">${label}</span><span class="stage-step-note" data-step-note></span></li>`).join('\n      ')}
+    </ol>`;
+}
+
+function phaseBars(phases, tone) {
+  return `<div class="phase-bars">
+          ${phases.map((p, i) => `<div class="phase-bar"><span class="bar bar--${tone}"><span class="bar-fill" data-live-bar="phase-${i + 1}"></span></span><span class="phase-bar-name">${plain(p.name)}</span><span class="phase-bar-weeks">Weeks ${p.weeks[0]} to ${p.weeks[1]}</span></div>`).join('\n          ')}
+        </div>`;
+}
+
+/** "Your progress": a donut, "N of M tasks checked off" and one bar per phase. */
+export function progressCard(phases, total, { dark = true, id = '' } = {}) {
+  const tone = dark ? 'dark' : 'light';
+  return `<section class="dash-card dash-progress dash-progress--${tone}"${id ? ` id="${id}"` : ''}>
+        <h2 class="dash-h3">Your progress</h2>
+        ${donut({ tone, number: '0%', sub: 'of your plan', live: 'plan', label: 'Plan progress' })}
+        <p><strong><span data-live="plan-done">0</span> of ${total}</strong> tasks checked off</p>
+        ${phaseBars(phases, tone)}
+      </section>`;
+}
+
+/** One card per tactic, with its ring and "N of M done". */
+export function tacticProgressCard(tactic, n, total) {
+  return `<button type="button" class="tactic-tile" onclick="navigate('tactic${n}')"><span class="ring" data-live-ring="tactic-${n}" aria-hidden="true"></span><span class="tactic-tile-text"><span class="tactic-tile-name">${plain(tactic.short_label || tactic.title)}</span><span class="tactic-tile-count"><span data-live="tactic-${n}-done">0</span> of ${total} done</span></span></button>`;
+}
+
+/** The actions of one week, as the "This week" card lists them. Tick boxes mirror the roadmap's. */
+export function thisWeekPanel(week, links) {
+  const rows = week.actions.map((a, i) => {
+    const link = links[i];
+    let howTo = '';
+    if (link === 'quick_wins') howTo = `<button type="button" class="link-btn" onclick="navigate('gbp')">How to</button>`;
+    else if (link) howTo = `<button type="button" class="link-btn" onclick="howToLink('tactic${link.tactic}','${attr(link.stepId)}')">How to</button>`;
+    const id = `dw-${attr(a.id)}`;
+    return `<div class="task-row"><input type="checkbox" class="tick" id="${id}" data-mirror="${attr(a.id)}" onchange="onMirrorTick(this)"><label class="task-label" for="${id}">${md(a.text)}</label>${howTo}</div>`;
+  });
+  return `<div class="week-panel" data-week-panel="${week.number}" hidden>
+            ${rows.join('\n            ')}
           </div>`;
 }
 
-export function tacticPill(tactic, n, total) {
-  return `<div class="dash-tactic-pill" onclick="navigate('tactic${n}')">
-        <svg class="dash-tactic-ring" width="44" height="44" viewBox="0 0 44 44">
-          <circle cx="22" cy="22" r="18" fill="none" stroke="var(--surface-sunken)" stroke-width="5"></circle>
-          <circle id="tactic${n}-ring" class="dash-tactic-ring-bar" cx="22" cy="22" r="18" fill="none" stroke="var(--tactic-ring-${cycle(n)})" stroke-width="5" stroke-linecap="round" stroke-dasharray="113.1" stroke-dashoffset="113.1"></circle>
-        </svg>
-        <div class="dash-tactic-info">
-          <div class="dash-tactic-name">${plain(tactic.short_label || tactic.title)}</div>
-          <div class="dash-tactic-label" id="tc${n}-stat">0 of ${total} done</div>
+const READ_LIST_STRATEGY = 'your goal, positioning and objectives';
+
+/** Stage 2a: Strategy and each tactic, with read state. */
+export function readList(tactics) {
+  const row = (key, title, detail) => `<button type="button" class="read-row" data-read="${attr(key)}" onclick="openToRead('${attr(key)}')"><span class="read-dot" aria-hidden="true"></span><span class="read-text"><strong>${title}</strong> · ${detail}</span><span class="read-state" data-read-state></span></button>`;
+  const steps = t => t.parts.reduce((n, p) => n + p.steps.length, 0);
+  return [row('strategy', 'Strategy', READ_LIST_STRATEGY)]
+    .concat(tactics.map(t => row(t.id, plain(t.title), `${steps(t)} step${steps(t) === 1 ? '' : 's'}`)))
+    .join('\n          ');
+}
+
+/** The assessment's quick wins on Sage, tickable. Kept in this browser; not plan progress. */
+export function assessmentQuickWins(data) {
+  const wins = (data && data.quick_wins) || [];
+  if (!wins.length) return '';
+  const rows = wins.map((w, i) => {
+    const id = `aqw-${i + 1}`;
+    return `<div class="task-row task-row--win"><input type="checkbox" class="tick" id="${id}" onchange="onQuickWinTick(this)"><div class="task-body"><label class="task-label task-label--strong" for="${id}">${text(w.task)}</label>${has(w.impact) ? `<div class="task-sub">${text(w.impact)}</div>` : ''}</div>${has(w.time_estimate) ? `<span class="task-time">${text(w.time_estimate)}</span>` : ''}</div>`;
+  });
+  return `<section class="dash-card dash-card--sage dash-wins">
+        <div class="dash-card-head">
+          <div><h2 class="dash-h2">Quick wins you can start today</h2><p>Small fixes from your assessment. No need to wait for the plan.</p></div>
+          <div class="dash-wins-count"><span class="ring ring--sage" data-live-ring="wins" aria-hidden="true"></span><span><strong><span data-live="wins-done">0</span> of ${wins.length}</strong> done</span></div>
         </div>
-      </div>`;
+        ${rows.join('\n        ')}
+      </section>`;
+}
+
+function materialsCard(hasAssessmentPdf, days) {
+  return `<section class="dash-tile">
+          <h3 class="dash-h3">Materials</h3>
+          ${hasAssessmentPdf ? '<button type="button" class="link-btn" onclick="downloadPDF()">Assessment report (PDF)</button>' : ''}
+          <button type="button" class="link-btn plan-ready-only" onclick="printRoadmap()">Your ${days}-day plan (PDF)</button>
+          <button type="button" class="link-btn" onclick="navigate('materials')">All materials</button>
+        </section>`;
+}
+
+function coachTile(email) {
+  if (!has(email)) return '';
+  return `<section class="dash-tile">
+          <h3 class="dash-h3">Your coach</h3>
+          <p class="dash-muted">Questions about the plan? Send a note any time.</p>
+          <a class="link-btn" href="mailto:${attr(email)}">Email your coach</a>
+        </section>`;
+}
+
+/**
+ * The whole dashboard.
+ * ctx: { content, data, links (week number -> resolved how-to links), assessment, days }
+ */
+export function dashboard(ctx) {
+  const { content, data, assessment, days } = ctx;
+  const { tactics, phases, roadmap } = content;
+  const total = data.tasks.all.length;
+  const hasA = hasAssessment(assessment);
+  const email = content.client.coach_email;
+  const overall = hasA ? assessment.overall : null;
+  const level = overall ? scoreLevel(overall.grade) : null;
+  const summary = hasA ? (assessment.overall.summary || (assessment.executive_summary || {}).headline || '') : '';
+  const firstWeek = roadmap.weeks.find(w => w.actions.length) || roadmap.weeks[0];
+
+  const scoreDonut = (size, extra = {}) => donut({ pct: overall.score, tone: level ? `score-${level.key}` : 'light', size, number: String(overall.score), label: `Overall score ${overall.score} out of 100, grade ${overall.grade}`, ...extra });
+
+  const before = `<div class="dash-stage" data-stage-panel="before" hidden>
+      <div class="dash-row">
+        ${hasA ? `<section class="dash-card dash-score">
+          ${scoreDonut('lg', { sub: 'out of 100' })}
+          <div class="dash-score-text">
+            <h2 class="dash-h2">Your digital marketing assessment</h2>
+            <p class="grade-line"><span class="grade-chip grade-chip--${level ? level.key : 'none'}">${text(overall.grade)}</span>${level ? ` ${level.word}` : ''}</p>
+            ${has(summary) ? `<p>${text(summary)}</p>` : ''}
+            <div class="btn-row"><button type="button" class="btn" onclick="navigate('assessment')">Read your assessment</button><button type="button" class="link-btn" onclick="downloadPDF()">Download as PDF</button></div>
+          </div>
+        </section>` : ''}
+        <section class="dash-card dash-card--dark dash-next">
+          <h2 class="dash-h3 dash-h3--gold">What happens next</h2>
+          <p>On your coaching call we walk through your assessment together and agree on the tactics that matter most.</p>
+          <p class="dash-muted-dark">Your ${days}-day plan appears here after the call.</p>
+        </section>
+      </div>
+      ${hasA ? assessmentQuickWins(assessment) : ''}
+      <section class="dash-section">
+        <h2 class="dash-h2 dash-h2--rule">Coming with your plan</h2>
+        <div class="dash-tiles dash-tiles--3">
+          <div class="dash-tile dash-tile--sunken"><strong>Strategy</strong><p class="dash-muted">Your goal, your positioning and your objectives.</p></div>
+          <div class="dash-tile dash-tile--sunken"><strong>Tactics</strong><p class="dash-muted">Step-by-step guides for each area you will work on.</p></div>
+          <div class="dash-tile dash-tile--sunken"><strong>${days}-day roadmap</strong><p class="dash-muted">What to do each week, ticked off as you go.</p></div>
+        </div>
+      </section>
+    </div>`;
+
+  const delivered = `<div class="dash-stage" data-stage-panel="delivered" hidden>
+      <div class="dash-row">
+        <section class="dash-card dash-read">
+          <div class="dash-card-head dash-card-head--baseline"><h2 class="dash-h2">Start here: read your plan</h2><span class="dash-muted"><span data-live="read-done">0</span> of ${tactics.length + 1} read</span></div>
+          <p class="dash-measure">Read it through once before you begin. The weekly tasks will make more sense, and you can always come back to the how-to later.</p>
+          <div class="read-list">
+          ${readList(tactics)}
+          </div>
+          <div class="btn-row btn-row--end"><button type="button" class="btn" data-continue-reading onclick="continueReading()">Continue reading</button><button type="button" class="link-btn" onclick="printRoadmap()">Download the plan as a PDF</button></div>
+        </section>
+        ${progressCard(phases, total, { dark: false })}
+      </div>
+      <section class="dash-card dash-then">
+        <div><h2 class="dash-h2 dash-h2--small">Then start week ${firstWeek.number}: ${plain(firstWeek.title)}</h2><p class="dash-muted">${attr(data.weeks[firstWeek.number].summary)}</p></div>
+        <button type="button" class="btn btn--outline" onclick="openRoadmapWeek(${firstWeek.number})">Open week ${firstWeek.number}</button>
+      </section>
+      <div class="dash-tiles dash-tiles--3">
+        ${hasA && (assessment.quick_wins || []).length ? `<section class="dash-tile">
+          <h3 class="dash-h3">Quick wins</h3>
+          <p class="dash-muted"><span data-live="wins-done">0</span> of ${assessment.quick_wins.length} done from your assessment.</p>
+          <button type="button" class="link-btn" onclick="navigate('assessment')">See your quick wins</button>
+        </section>` : ''}
+        ${coachTile(email)}
+        ${materialsCard(hasA, days)}
+      </div>
+    </div>`;
+
+  const weekPanels = roadmap.weeks.filter(w => w.actions.length).map(w => thisWeekPanel(w, ctx.links[w.number])).join('\n          ');
+  const firstPhaseEnd = phases.length ? phases[0].weeks[1] : null;
+  const during = `<div class="dash-stage" data-stage-panel="during" hidden>
+      <div class="dash-row">
+        <section class="dash-card dash-week" id="objectives-section">
+          <div>
+            <h2 class="dash-h2">This week: <span data-live="week-title"></span></h2>
+            <p class="dash-muted">Week <span data-live="week-number"></span> of ${content.program.weeks} · <span data-live="week-done">0</span> of <span data-live="week-total">0</span> done</p>
+          </div>
+          <div class="week-panels" id="next-step-main">
+          ${weekPanels}
+          </div>
+          <div class="dash-week-foot" data-week-foot="open">
+            <button type="button" class="btn" onclick="openRoadmapWeek(shownWeek)">Open week <span data-live="week-number"></span> in the roadmap</button>
+            <button type="button" class="link-btn" data-resume onclick="resumeLastStep()" hidden></button>
+          </div>
+          <div class="dash-week-foot dash-week-foot--done" data-week-foot="done" hidden>
+            <p><strong>Week <span data-live="week-number"></span> is done.</strong> <span data-live="week-up-next"></span></p>
+            <button type="button" class="btn btn--forest" data-week-advance onclick="advanceWeek()"></button>
+          </div>
+        </section>
+        ${progressCard(phases, total, { dark: true, id: 'goal-section' })}
+      </div>
+      <section class="dash-section">
+        <h2 class="dash-h2 dash-h2--rule">Your tactics</h2>
+        <div class="dash-tactics tactic-grid" id="tactic-cards-section" data-columns="${tactics.length}">
+          ${tactics.map((t, i) => tacticProgressCard(t, i + 1, data.tasks.byTactic[i + 1].length)).join('\n          ')}
+        </div>
+      </section>
+      <div class="dash-tiles dash-tiles--3">
+        <section class="dash-tile dash-tile--sage" data-coming-up>
+          <h3 class="dash-h3">Coming up</h3>
+          <p><strong data-live="next-title"></strong></p>
+          <p class="dash-small" data-live="next-summary"></p>
+          <button type="button" class="link-btn link-btn--forest" data-live-next onclick="openRoadmapWeek(this.dataset.week)">Look ahead</button>
+        </section>
+        <section class="dash-tile dash-tile--sage25">
+          <h3 class="dash-h3">30-day check-in</h3>
+          <p class="dash-small">${firstPhaseEnd ? `Opens after week ${firstPhaseEnd}. ` : ''}Your six areas are scored again so you can see what moved.</p>
+        </section>
+        ${materialsCard(hasA, days)}
+      </div>
+    </div>`;
+
+  const areaRows = hasA ? ASSESSMENT_CATEGORIES.filter(c => assessment.categories[c.key]).map(c => {
+    const cat = assessment.categories[c.key];
+    return `<tr data-area="${c.key}"><th scope="row">${text(c.title)}</th><td>${scoreCell(cat.score, cat.grade)}</td><td data-slot="checkin"><span class="slot-empty">Not yet</span></td><td data-slot="review"><span class="slot-empty">Not yet</span></td><td data-slot="change"><span class="slot-empty">Not yet</span></td></tr>`;
+  }) : [];
+
+  const done = `<div class="dash-stage" data-stage-panel="done" hidden>
+      ${hasA ? `<section class="dash-card dash-results">
+        <div class="dash-card-head"><h2 class="dash-h2">Your results</h2><span class="sample-badge" data-sample-only hidden>Sample scores for review</span></div>
+        <div class="results-top">
+          <div class="results-donuts">
+            <figure class="results-donut">${scoreDonut('md', { sub: `Grade ${overall.grade}` })}<figcaption>When you started</figcaption></figure>
+            <span class="dash-muted">to</span>
+            <figure class="results-donut" data-review-donut><div class="donut-slot">Not yet</div><figcaption>After ${days} days</figcaption></figure>
+          </div>
+          <div class="results-text">
+            <p class="results-line" data-live="results-line">Your ${days}-day review scores your six areas again so you can see what changed.</p>
+            <div class="btn-row"><button type="button" class="btn" onclick="navigate('assessment')">Read your assessment</button><button type="button" class="link-btn" onclick="downloadPDF()">Download as PDF</button></div>
+          </div>
+        </div>
+        <div class="table-scroll">
+          <table class="plain-table results-table">
+            <thead><tr><th scope="col">Area</th><th scope="col">Start</th><th scope="col">30 days</th><th scope="col">${days} days</th><th scope="col">Change</th></tr></thead>
+            <tbody>
+              ${areaRows.join('\n              ')}
+            </tbody>
+          </table>
+        </div>
+      </section>` : ''}
+      <section class="dash-card dash-keep" data-keep-doing hidden>
+        <div><h2 class="dash-h2">What to keep doing</h2><p class="dash-muted">The habits from your plan that keep these numbers where they are. This list resets each month.</p></div>
+        <span class="sample-badge">Sample list for review</span>
+        <div class="keep-list" data-keep-list></div>
+      </section>
+      <section class="dash-card dash-card--dark dash-junction">
+        <div><h2 class="dash-h2">Your next step with Junction</h2><p class="dash-muted-dark">Go through these results with your coach and decide what your next ${days} days should focus on.</p></div>
+        ${has(email) ? `<a class="btn btn--light" href="mailto:${attr(email)}">Email your coach</a>` : ''}
+      </section>
+      <p class="dash-muted dash-small">Your plan, assessment and materials stay here for you to come back to.</p>
+    </div>`;
+
+  return `<div class="dash-v2 dash" data-dashboard>
+    <header class="dash-head">
+      <h1 class="dash-h1" id="dash-greeting"></h1>
+      <p class="dash-sub" id="dash-sub" hidden></p>
+    </header>
+    ${stageStrip(days)}
+    ${before}
+    ${delivered}
+    ${during}
+    ${done}
+  </div>`;
+}
+
+/**
+ * Sandbox only (client.flags.sandbox): preview the four stages with sample
+ * state (DESIGN-BRIEF.md section 10). Styled apart from the product.
+ */
+export function stageSwitcher() {
+  const options = [['before', 'Before the plan'], ['delivered', 'Plan just delivered'], ['during', 'During the plan'], ['done', 'Plan done']];
+  return `<div class="stage-switcher" role="group" aria-label="Sandbox preview: choose a stage">
+  <span class="stage-switcher-label">Sandbox preview</span>
+  ${options.map(([key, label]) => `<button type="button" class="stage-switcher-btn" data-preview-stage="${key}" aria-pressed="false" onclick="choosePreviewStage('${key}')">${label}</button>`).join('\n  ')}
+</div>`;
+}
+
+/** A score with its letter, coloured by the letter's level. */
+export function scoreCell(score, grade) {
+  const level = scoreLevel(grade);
+  return `<span class="score score--${level ? level.key : 'none'}">${attr(score)} <span class="score-letter">${text(grade || '')}</span></span>`;
 }
 
 // ── Strategy ───────────────────────────────────────────────────────────────
@@ -473,13 +752,24 @@ export function mediaList(list, assetUrl) {
 
 // ── Roadmap ────────────────────────────────────────────────────────────────
 
-export function checklistItem(item, { noteButtonId } = {}) {
-  const id = attr(item.id);
+/**
+ * One action as a tick box (DESIGN-BRIEF.md section 7: tasks are the
+ * actions). This is the saved tick: its data-key is the action ID, which
+ * shared/progress.js loads and saves. The dashboard's tick boxes mirror it.
+ * link: { tactic, stepId } | 'quick_wins' | null
+ */
+export function actionItem(action, link, { howtoId, noteButtonId } = {}) {
+  const id = attr(action.id);
+  const idAttr = howtoId ? ` id="${howtoId}"` : '';
+  let button = '';
+  if (link === 'quick_wins') button = `<button class="howto-link"${idAttr} onclick="navigate('gbp')">how to</button>`;
+  else if (link) button = `<button class="howto-link"${idAttr} onclick="howToLink('tactic${link.tactic}','${attr(link.stepId)}')">how to</button>`;
   return `<div class="check-item">
   <div class="check-row">
     <input type="checkbox" class="check-input" id="${id}" data-key="${id}" onchange="onCheck(this)">
     <label class="check-box" for="${id}">${ICONS.check}</label>
-    <label class="check-label" for="${id}"${editKey(`${item.id}.text`)}>${md(item.text)}</label>
+    <label class="check-label" for="${id}"${editKey(`${action.id}.text`)}>${md(action.text)}</label>
+    ${button}
     <button class="note-toggle-btn"${noteButtonId ? ` id="${noteButtonId}"` : ''} onclick="toggleNote('${id}')" title="Add note">${ICONS.note}</button>
   </div>
   <div class="note-area" id="note-area-${id}">
@@ -489,48 +779,30 @@ export function checklistItem(item, { noteButtonId } = {}) {
 }
 
 /**
- * howTo(action) -> { page, stepId } | 'quick_wins' | null, resolved by the
- * page builder from the action's how_to.
+ * A roadmap week. Interim layout until the roadmap is rebuilt (brief phase 3):
+ * the actions are the tick boxes, and the plan's checklist lines are kept in
+ * content.json but not shown.
  */
-export function weekAction(action, link, { howtoId } = {}) {
-  let button = '';
-  const idAttr = howtoId ? ` id="${howtoId}"` : '';
-  if (link === 'quick_wins') button = ` <button class="howto-link"${idAttr} onclick="navigate('gbp')">how to</button>`;
-  else if (link) button = ` <button class="howto-link"${idAttr} onclick="howToLink('tactic${link.tactic}','${attr(link.stepId)}')">how to</button>`;
-  return `<li class="week-task-item"><div class="week-task-dot"></div><span class="week-task-text"${editKey(`${action.id}.text`)}>${md(action.text)}</span>${button}</li>`;
-}
-
 export function weekCard(week, links, { first = false } = {}) {
   let howtoMarked = false;
   const actions = week.actions.map((a, i) => {
     const mark = first && !howtoMarked && links[i];
     if (mark) howtoMarked = true;
-    return weekAction(a, links[i], { howtoId: mark ? 'w1-howto-example' : null });
+    return actionItem(a, links[i], { howtoId: mark ? 'w1-howto-example' : null, noteButtonId: first && i === 0 ? 'w1-note-example' : null });
   });
-  const checks = week.checklist.map((c, i) => checklistItem(c, { noteButtonId: first && i === 0 ? 'w1-note-example' : null }));
   return `<div class="week-card" id="wc-${week.number}" data-week="${week.number}" data-week-id="${attr(week.id)}">
   <div class="week-card-header" onclick="toggleWeek(${week.number})">
     <div class="week-num">W${week.number}</div>
     <div class="week-title"${editKey(`${week.id}.title`)}>${plain(week.title)}</div>
-    <div class="week-progress-pill" id="wp-${week.number}">0 / ${week.checklist.length}</div>
+    <div class="week-progress-pill" id="wp-${week.number}">0 / ${week.actions.length}</div>
     ${ICONS.chevronWeek}
   </div>
   <div class="week-card-body">
-    <div class="week-cols">
-      <div>
-        <div class="week-col-label">This Week's Actions</div>
-        <ul class="week-tasks-list">
-          ${actions.join('\n          ')}
-        </ul>
-      </div>
-      <div>
-        <div class="week-col-label">Completion Checklist</div>
-        <div class="check-list"${first ? ' id="w1-checklist"' : ''}>
-          ${checks.join('\n          ')}
-        </div>
-      </div>
+    <div class="week-col-label">This week's actions</div>
+    <div class="check-list week-actions"${first ? ' id="w1-checklist"' : ''}>
+      ${actions.join('\n      ')}
     </div>
-    <div class="week-note-section"><div class="week-note-label">Week Notes</div><textarea class="note-textarea week-note-textarea" id="note-${attr(week.id)}" placeholder="Add general notes for this week…" oninput="saveNote('${attr(week.id)}',this.value)"></textarea></div>
+    <div class="week-note-section"><div class="week-note-label">Week notes</div><textarea class="note-textarea week-note-textarea" id="note-${attr(week.id)}" placeholder="Add general notes for this week…" oninput="saveNote('${attr(week.id)}',this.value)"></textarea></div>
   </div>
 </div>`;
 }

@@ -50,25 +50,27 @@ The Accelerator is a Junction product. Remove every eLearningU reference from v2
 | Buttons, links, tick boxes | Canopy-text | `#2B764A` |
 | Progress fills, 2px dividers | Canopy | `#2E7D4F` |
 | Accent on dark, progress on dark | Fern | `#7FC99A` |
+| Empty track on dark | | `#3A3A36` |
 | Highlight boxes | Sage | `#C8E8D4` with Forest `#1A4D2E` text |
 | Notes, tips | Sage-25 | `#E9EEE3` |
 | Stats on Carbon, current-stage marker | Gold | `#C4963A` |
 | Large numerals on light | Gold-on-light | `#A57E31` |
+| Gold text on light ("You are here") | | `#7A5C1E` |
 | Small meta labels on light | Copper | `#A55527`, sparingly |
 | Hover and active on clickable things only | Break pink | `#CD1561` on light, `#ED5192` on dark |
 
 Do not use the JunctionU colours (`#16241C`, `#20352A`, `#B6F0C9`). Forest is not used as a large ground: the first rebrand read as too green.
 
-**Score scale.** Assessment scores use their own colours, deliberately outside the brand palette, always with the level word beside them:
+**Score scale.** Assessment scores use their own colours, deliberately outside the brand palette. The colour follows the letter grade the assessment gives, not a separate score range. Plus and minus grades follow their letter.
 
-| Level | Range | Value |
+| Level | Grade | Value |
 |---|---|---|
-| Needs work | under 65 | `#B5503A` |
-| Fair | 65 to 74 | `#D97F3A` |
-| Good | 75 to 89 | `#3E8E8A` |
-| Strong | 90 and up | `#1F5F6B` |
+| Strong | A | `#1F5F6B` |
+| Good | B | `#3E8E8A` |
+| Fair | C | `#D97F3A` |
+| Needs work | D and below | `#B5503A` |
 
-The ranges are provisional. Keep them in one place so they can change.
+Always show the letter grade beside a coloured score. The level word is optional where space is tight. Keep the grade-to-level mapping in one place so it can change. A score donut's arc and the number inside it are always the same colour.
 
 **Type** (Google Fonts)
 
@@ -198,6 +200,7 @@ Stop after each phase and report with desktop and phone screenshots.
 4. Assessment, Strategy, Materials.
 5. Phone pass.
 6. PDF templates.
+7. Welcome window and tour, rebuilt for the new layouts.
 
 **Sandbox stage switcher.** Build this in Phase 2. On the sandbox only, show a small "Preview stage" control fixed to the bottom of the screen with four options: Before the plan, Plan just delivered, During the plan, Plan done.
 

@@ -64,15 +64,25 @@ describe('what the shared scripts need', () => {
     expect([...order].sort((a, b) => a - b)).toEqual(order);
   });
 
-  test('progress keys are checklist item IDs, inside their week', () => {
+  test('progress keys are action IDs, inside their week, one saved tick box each (tasks are the actions)', () => {
     for (const week of CONTENT.roadmap.weeks) {
       const start = page.html.indexOf(`data-week="${week.number}"`);
       const end = page.html.indexOf('class="week-note-section"', start);
       const card = page.html.slice(start, end);
-      expect([...card.matchAll(/data-key="([^"]+)"/g)].map(m => m[1])).toEqual(week.checklist.map(c => c.id));
-      week.checklist.forEach(c => expect(card).toContain(`<label class="check-label" for="${c.id}" data-editable-key="${c.id}.text">`));
+      expect([...card.matchAll(/data-key="([^"]+)"/g)].map(m => m[1])).toEqual(week.actions.map(a => a.id));
+      week.actions.forEach(a => expect(card).toContain(`<label class="check-label" for="${a.id}" data-editable-key="${a.id}.text">`));
+      // The plan's checklist lines stay in content.json but are not shown
+      week.checklist.forEach(c => expect(page.html).not.toContain(c.id));
     }
-    expect([...page.html.matchAll(/data-key="([^"]+)"/g)].every(m => /^chk_/.test(m[1]))).toBe(true);
+    const keys = [...page.html.matchAll(/data-key="([^"]+)"/g)].map(m => m[1]);
+    expect(keys.every(k => /^act_/.test(k))).toBe(true);
+    expect(new Set(keys).size).toBe(keys.length);
+  });
+
+  test('the dashboard tick boxes mirror the saved ones and carry no key of their own', () => {
+    const mirrors = [...page.html.matchAll(/<input type="checkbox" class="tick" id="dw-(act_[a-z0-9]{6})" data-mirror="(act_[a-z0-9]{6})" onchange="onMirrorTick\(this\)">/g)];
+    expect(mirrors.map(m => m[1])).toEqual(CONTENT.roadmap.weeks.flatMap(w => w.actions.map(a => a.id)));
+    mirrors.forEach(m => expect(m[1]).toBe(m[2]));
   });
 
   test('edit keys are item IDs and fields, never positions, and each appears once', () => {
@@ -94,8 +104,9 @@ describe('what the shared scripts need', () => {
     expect(page.html).toContain(`onclick="howToLink('tactic1','${w1.actions[0].how_to}')"`);
     expect(page.html).toContain(`id="${w1.actions[0].how_to}"`);
     expect(page.html).toMatch(/<button class="howto-link" onclick="navigate\('gbp'\)">how to<\/button>/);
+    // Once on the roadmap and once on the dashboard's "This week" card
     const links = [...page.html.matchAll(/howToLink\('tactic\d+','(stp_[a-z0-9]{6})'\)/g)];
-    expect(links.length).toBe(CONTENT.roadmap.weeks.flatMap(w => w.actions).filter(a => a.how_to && a.how_to !== 'quick_wins').length);
+    expect(links.length).toBe(2 * CONTENT.roadmap.weeks.flatMap(w => w.actions).filter(a => a.how_to && a.how_to !== 'quick_wins').length);
   });
 
   test('the tour targets exist on the page', () => {
@@ -182,40 +193,140 @@ describe('navigation (DESIGN-BRIEF.md section 4)', () => {
   });
 });
 
+describe('dashboard stages (DESIGN-BRIEF.md section 5)', () => {
+  const panel = (html, stage) => {
+    const start = html.indexOf(`data-stage-panel="${stage}"`);
+    const next = html.indexOf('data-stage-panel=', start + 20);
+    return html.slice(start, next === -1 ? html.indexOf('\n</section>', html.indexOf('<section id="page-dashboard"')) : next);
+  };
+
+  test('all four stage panels are on the page, hidden until the page script picks one', () => {
+    ['before', 'delivered', 'during', 'done'].forEach(stage => expect(page.html).toContain(`<div class="dash-stage" data-stage-panel="${stage}" hidden>`));
+    expect(page.html).toContain('<script src="/assets/v2/progress-model.js"></script>\n<script src="/assets/v2/accelerator.js"></script>');
+  });
+
+  test('the six-step strip, in order', () => {
+    const steps = [...page.html.matchAll(/<li class="stage-step" data-step="(\w+)"><span class="stage-step-bar" aria-hidden="true"><\/span><span class="stage-step-label">([^<]+)<\/span>/g)].map(m => m[2]);
+    expect(steps).toEqual(['Onboarding call', 'Assessment', 'Coaching call', '90-day plan', '30-day check-in', '90-day review']);
+  });
+
+  test('during the plan: one "This week" list per week, with "How to" on linked actions', () => {
+    const during = panel(page.html, 'during');
+    CONTENT.roadmap.weeks.filter(w => w.actions.length).forEach(w => expect(during).toContain(`data-week-panel="${w.number}" hidden`));
+    const howTos = (during.match(/>How to<\/button>/g) || []).length;
+    expect(howTos).toBe(CONTENT.roadmap.weeks.flatMap(w => w.actions).filter(a => a.how_to).length);
+    expect(during).toContain('class="dash-card dash-progress dash-progress--dark" id="goal-section"');
+    expect(during).toContain('Coming up');
+    expect(during).toContain('30-day check-in');
+  });
+
+  test('before the plan: score, what happens next, the assessment quick wins, coming with your plan', () => {
+    const before = panel(page.html, 'before');
+    const a = ASSESSMENT.assessment_data;
+    expect(before).toContain(`style="--pct:${a.overall.score}"`);
+    expect(before).toContain('What happens next');
+    expect(before).toContain('Coming with your plan');
+    a.quick_wins.forEach((w, i) => expect(before).toContain(`id="aqw-${i + 1}" onchange="onQuickWinTick(this)"`));
+  });
+
+  test('a score donut is coloured by its letter grade, and the letter is shown', () => {
+    const before = panel(page.html, 'before');
+    // Andrea's Resort is a C: Fair
+    expect(before).toContain('class="donut donut--lg donut--score-fair"');
+    expect(before).toContain('<span class="grade-chip grade-chip--fair">C</span> Fair');
+    const done = panel(page.html, 'done');
+    expect(done).toContain('<span class="score score--needs-work">62 <span class="score-letter">D</span></span>');
+    expect(done).toContain('<span class="score score--good">78 <span class="score-letter">B-</span></span>');
+  });
+
+  test('plan delivered: Strategy and each tactic to read, then week 1', () => {
+    const delivered = panel(page.html, 'delivered');
+    expect(delivered).toContain('data-read="strategy"');
+    CONTENT.tactics.forEach(t => expect(delivered).toContain(`data-read="${t.id}"`));
+    expect(delivered).toContain(`of ${CONTENT.tactics.length + 1} read`);
+    expect(delivered).toContain(`Then start week 1: ${CONTENT.roadmap.weeks[0].title}`);
+    expect(delivered).toContain('3 actions, from Social Media and your quick wins');
+  });
+
+  test('plan done: results with empty slots for later scores, and the next step with Junction', () => {
+    const done = panel(page.html, 'done');
+    expect(done).toContain('Your results');
+    expect((done.match(/<span class="slot-empty">Not yet<\/span>/g) || []).length).toBe(3 * 6);
+    expect(done).toContain('Your next step with Junction');
+    expect(done).toContain('data-keep-doing hidden');
+  });
+
+  test('no calendar dates and nothing that says the client is behind', () => {
+    const dash = page.html.slice(page.html.indexOf('<section id="page-dashboard"'), page.html.indexOf('\n</section>', page.html.indexOf('<section id="page-dashboard"')));
+    expect(dash.length).toBeGreaterThan(10000);
+    expect(dash).not.toMatch(/\b(January|February|March|April|May|June|July|August|September|October|November|December)\b|\d{4}-\d{2}-\d{2}|behind|overdue|late\b/i);
+  });
+
+  test('the stage switcher shows only on the sandbox (client.flags.sandbox)', () => {
+    expect(page.html).toContain('<div class="stage-switcher" role="group" aria-label="Sandbox preview: choose a stage">');
+    ['before', 'delivered', 'during', 'done'].forEach(s => expect(page.html).toContain(`onclick="choosePreviewStage('${s}')"`));
+    const c = copy();
+    c.client.flags.sandbox = false;
+    expect(render(c).html).not.toContain('stage-switcher');
+    delete c.client.flags;
+    expect(render(c).html).not.toContain('stage-switcher');
+  });
+
+  test('without an assessment: no score card, no quick wins, no results table', () => {
+    const html = render(CONTENT, null).html;
+    expect(html).not.toContain('dash-score');
+    expect(html).not.toContain('aqw-1');
+    expect(html).not.toContain('Your results');
+    expect(html).toContain('What happens next');
+  });
+
+  test('without a coach email: no coach tile and no email button', () => {
+    const c = copy();
+    c.client.coach_email = null;
+    const html = render(c).html;
+    expect(html).not.toContain('Your coach</h3>');
+    expect(html).not.toContain('mailto:');
+  });
+});
+
 describe('computed, not typed', () => {
   test('totals and counts come from the content', () => {
-    const total = CONTENT.roadmap.weeks.reduce((n, w) => n + w.checklist.length, 0);
-    expect(page.data.checks.all).toHaveLength(total);
-    expect(page.html).toContain(`<span id="dash-total-count">${total}</span>`);
+    const total = CONTENT.roadmap.weeks.reduce((n, w) => n + w.actions.length, 0);
+    expect(page.data.tasks.all).toHaveLength(total);
+    expect(page.html).toContain(`<strong><span data-live="plan-done">0</span> of ${total}</strong> tasks checked off`);
     expect(page.html).toContain(`<div class="wm-step-lbl">${CONTENT.tactics.length} Tactics</div>`);
     expect(page.html).toContain(`id="tactic-cards-section" data-columns="${CONTENT.tactics.length}"`);
     // Every tactic card grid uses the shared rule, sized by the number of tactics
-    expect(page.html).toContain(`<div class="dash-tactics-grid tactic-grid" id="tactic-cards-section" data-columns="${CONTENT.tactics.length}">`);
+    expect(page.html).toContain(`<div class="dash-tactics tactic-grid" id="tactic-cards-section" data-columns="${CONTENT.tactics.length}">`);
     expect(page.html).toContain(`<div class="tactics-overview-grid tactic-grid" data-columns="${CONTENT.tactics.length}">`);
-    expect(page.html).toContain(`style="--columns:${CONTENT.phases.length}"`);
     expect((page.html.match(/class="nav-item" data-page="tactic\d"/g) || []).length).toBe(CONTENT.tactics.length);
     // Each tactic's navigation ring states its own total for screen readers
-    Object.entries(page.data.checks.byTactic).forEach(([n, ids]) => expect(page.html).toContain(`<span class="sr-only" id="nav-ring-${n}-text">, 0 of ${ids.length} done</span>`));
+    Object.entries(page.data.tasks.byTactic).forEach(([n, ids]) => expect(page.html).toContain(`<span class="sr-only" id="nav-ring-${n}-text">, 0 of ${ids.length} done</span>`));
     expect((page.html.match(/<section id="page-tactic\d"/g) || []).length).toBe(CONTENT.tactics.length);
   });
 
   test('phase blocks, totals and dashboard phases come from the phases', () => {
     CONTENT.phases.forEach((p, i) => {
-      const ids = page.data.checks.byPhase[i + 1];
+      const ids = page.data.tasks.byPhase[i + 1];
+      expect(ids).toEqual(CONTENT.roadmap.weeks.filter(w => w.number >= p.weeks[0] && w.number <= p.weeks[1]).flatMap(w => w.actions.map(a => a.id)));
       expect(page.html).toContain(`<span class="month-title">${p.name}</span>`);
       expect(page.html).toContain(`<span>0</span> of ${ids.length} done`);
-      expect(page.html).toContain(`WEEKS ${p.weeks[0]}-${p.weeks[1]}`);
+      expect(page.html).toContain(`<span class="bar-fill" data-live-bar="phase-${i + 1}"></span></span><span class="phase-bar-name">${p.name}</span><span class="phase-bar-weeks">Weeks ${p.weeks[0]} to ${p.weeks[1]}</span>`);
     });
   });
 
-  test('tactic progress counts each checklist item once, towards its own tactic', () => {
+  test('tactic progress counts the actions whose "how to" points into that tactic; others count overall only', () => {
     const { byTactic } = mapProgress(CONTENT);
-    const all = Object.values(byTactic).flat();
-    expect(all.sort()).toEqual(CONTENT.roadmap.weeks.flatMap(w => w.checklist.map(c => c.id)).sort());
+    const stepsOf = t => new Set(t.parts.flatMap(p => p.steps.map(st => st.id)));
+    const actions = CONTENT.roadmap.weeks.flatMap(w => w.actions);
     CONTENT.tactics.forEach((t, i) => {
-      expect(byTactic[i + 1]).toEqual(CONTENT.roadmap.weeks.flatMap(w => w.checklist.filter(c => c.tactic === t.id).map(c => c.id)));
-      expect(page.html).toContain(`id="tc${i + 1}-stat">0 of ${byTactic[i + 1].length} done`);
+      expect(byTactic[i + 1]).toEqual(actions.filter(a => stepsOf(t).has(a.how_to)).map(a => a.id));
+      expect(page.html).toContain(`<span data-live="tactic-${i + 1}-done">0</span> of ${byTactic[i + 1].length} done`);
     });
+    const unlinked = actions.filter(a => !CONTENT.tactics.some(t => stepsOf(t).has(a.how_to)));
+    expect(unlinked.length).toBeGreaterThan(0); // the sandbox has quick-win links and actions with no link
+    unlinked.forEach(a => expect(Object.values(byTactic).flat()).not.toContain(a.id));
+    expect(page.data.tasks.all).toEqual(actions.map(a => a.id));
   });
 
   test('the program length is computed, never typed', () => {
@@ -248,10 +359,7 @@ describe('computed, not typed', () => {
 });
 
 describe('missing means hidden', () => {
-  test('no Next Step time or who, no phase description, no time commitment, no part card description', () => {
-    expect(page.html).toContain('id="dash-next-time-wrap" hidden');
-    expect(page.html).toContain('id="dash-next-who-wrap" hidden');
-    expect(page.html).not.toContain('dash-phase-desc');
+  test('no time commitment, no part card description', () => {
     expect(page.html).not.toContain('Time Commitment');
     expect(page.html).not.toContain('tactic-breakdown-desc');
     expect(page.html).not.toMatch(/2-3 hours this week|You \+ your team|Implementation steps will be added|Metrics will be added|Tips will be added|Resources will be added/);
@@ -266,11 +374,12 @@ describe('missing means hidden', () => {
     c.roadmap.closing = 'Keep going.';
     c.quick_wins.note = { title: 'One Thing Worth Watching', text: 'Watch this.' };
     const r = render(c);
-    expect(r.html).toContain('<div class="dash-phase-desc">Profiles and first content</div>');
     expect(r.html).toContain('<span class="tactic-time-value">2 hrs</span>');
     expect(r.html).toContain('Content System</div>');
     expect(r.html).toContain('Fix both profiles and set a weekly pattern</div>');
-    expect(r.data.weeks[1]).toMatchObject({ timeNeeded: '1 to 2 hours', who: 'You' });
+    // Kept in content.json, but the redesigned dashboard does not show them
+    expect(r.html).not.toContain('Profiles and first content');
+    expect(r.html).not.toContain('1 to 2 hours');
     expect(r.html).toContain('data-editable-key="roadmap.closing">Keep going.</div>');
     expect(r.html).toContain('<strong>One Thing Worth Watching.</strong> Watch this.');
   });
@@ -405,6 +514,6 @@ describe('every real plan builds', () => {
     const r = renderDashboard(content, { template: TEMPLATE });
     expect(r.problems).toEqual([]);
     expect(validateDashboardV2(r.html, content)).toEqual([]);
-    expect(Object.values(pageData(content).checks.byTactic).every(ids => ids.length > 0)).toBe(true);
+    expect(Object.values(pageData(content).tasks.byTactic).every(ids => ids.length > 0)).toBe(true);
   });
 });

@@ -16,7 +16,8 @@ Code for v2 of the accelerator dashboard, as defined in `SCHEMA.md`. Nothing in 
 | `plan-json.js` | `generatePlanJsonV2(content)`: the email feed, in today's `plan.json` shape | yes |
 | `media.js` | Builds media entries with IDs, and neutral placeholder images | yes |
 | `render.js` | `renderDashboard(content, { template, assetUrl })`: the dashboard HTML, with every count, total and grid computed from the content. `validateDashboardV2()` checks the result | yes |
-| `components.js` | One function per recurring piece: tactic header, part, step, step labels, bullets, table, each media type and frame, metrics, tips, resources, week card, checklist item, quick win, objective, phase | yes |
+| `components.js` | One function per recurring piece: the dashboard and its four stage panels, donut, stage strip, tactic header, part, step, step labels, bullets, table, each media type and frame, metrics, tips, resources, week card, action item, quick win, objective, phase, the sandbox stage switcher | yes |
+| `../../assets/v2/progress-model.js` | Stage selection, the current week, counting and score levels (by letter grade). Loaded by the page as a classic script and required by the generator and the tests, so both run the same rules | yes |
 | `tools/tokenise-css.mjs` | Used once to move the v1 stylesheet's values into `assets/v2/tokens.css` | no |
 | `repo.js` | Reads other clients and the media library from the repository (Node only) | no |
 | `cli.mjs` | The command line, below | no |

@@ -70,8 +70,21 @@ Items are grouped by what breaks if they are skipped.
 - **Change:** decide the dashboard domain and coach addresses, then rebrand the shared pages and emails. Give `user-menu.js` and the Edit Mode switch a light variant so v2 no longer needs to override them.
 
 ### 12. Browser-only state added by the redesign
-- **Why:** the brief keeps the plan's read state (stage 2a) and the last step opened in the browser for now. Like item 7, they are lost on a new device and invisible to the coach.
-- **Change:** move them to the account with notes and Quick Wins ticks (item 7).
+- **Why:** the brief keeps the plan's read state (stage 2a), the last step opened and the ticks on the assessment's quick wins (dashboard, stage 1) in the browser for now. Like item 7, they are lost on a new device and invisible to the coach. The assessment's quick wins have no IDs, so their ticks are keyed by position (`aqw-N`).
+- **Change:** move them to the account with notes and Quick Wins ticks (item 7). Give the assessment's quick wins IDs in `client_assessments` first.
+
+### 14. Tasks are the actions: everything that counts checklist items
+- **Files:** `supabase/functions/send-friday-email/index.ts`, `my-clients/index.html`, `netlify/functions/notify-week-complete.js`, `shared/accelerator-v2/plan-json.js`
+- **Why:** v2 now saves a tick per action (`act_` ID) and counts actions as progress; the checklist is no longer shown. The Friday recap (item 1) and the My Clients totals count checklist items from `plan.json`, so for a v2 client they would report 0 done. The week-complete notification in `shared/progress.js` reads the ticked boxes in a week, which are now the actions, so it works, and names the tasks by their `.check-label`, which v2 keeps. Any sandbox ticks saved under `chk_` IDs before this change no longer show.
+- **Change:** with Conner's approval (brief section 11), put each week's action IDs into `plan.json` and count those in the Friday email and My Clients.
+
+### 15. Check-in and review scores
+- **Why:** the plan-done dashboard compares the first assessment with the 30-day check-in and 90-day review. There is nowhere to store those yet, so real clients see the starting score and empty slots. The sandbox's "Plan done" preview uses sample scores, labelled as sample.
+- **Change:** store check-in assessments (brief section 11) and pass them to the generator as `checkins` in the page data (`{ checkin, review }`, each `{ overall: { score, grade }, areas: { key: { score, grade } } }`).
+
+### 16. "What to keep doing" and the review call
+- **Why:** the plan-done dashboard has a "What to keep doing" list with no content source, and the brief's "Book your review call" and "Request your check-in" buttons need approval. Real clients see neither; the next step card offers "Email your coach". The sandbox preview fills the list with a sample (the last action of each tactic), labelled as sample.
+- **Change:** decide where the monthly list comes from, and whether the two buttons open a pre-filled email (brief section 11).
 
 ### 13. Web fonts from Google
 - **Why:** v2 loads Epilogue, DM Sans, Bebas Neue and Fraunces from Google Fonts. The Content Security Policy in `netlify.toml` already allows `fonts.googleapis.com` and `fonts.gstatic.com`, so nothing is blocked today. Keep them allowed if the policy changes, or self-host the four fonts in `assets/v2/`.

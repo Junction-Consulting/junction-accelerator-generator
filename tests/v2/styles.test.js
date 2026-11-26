@@ -9,7 +9,7 @@ const path = require('path');
 const ROOT = path.join(__dirname, '..', '..');
 const CSS = fs.readFileSync(path.join(ROOT, 'assets', 'v2', 'accelerator.css'), 'utf8');
 const TOKENS = fs.readFileSync(path.join(ROOT, 'assets', 'v2', 'tokens.css'), 'utf8');
-const JS = ['accelerator.js', 'accelerator-after.js'].map(f => fs.readFileSync(path.join(ROOT, 'assets', 'v2', f), 'utf8')).join('\n');
+const JS = ['accelerator.js', 'accelerator-after.js', 'progress-model.js'].map(f => fs.readFileSync(path.join(ROOT, 'assets', 'v2', f), 'utf8')).join('\n');
 const TEMPLATE = fs.readFileSync(path.join(ROOT, 'template', 'v2', 'accelerator.html'), 'utf8');
 const COMPONENTS = fs.readFileSync(path.join(ROOT, 'shared', 'accelerator-v2', 'components.js'), 'utf8');
 
