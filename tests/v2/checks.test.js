@@ -167,11 +167,13 @@ describe('warnings', () => {
   test('empty optional content is listed as hidden', () => {
     const result = checkContent(base);
     expect(result.hidden.map(h => h.field)).toEqual([
-      'phases[].description', 'roadmap.weeks[].next_step', 'tactics[].parts[].card', 'roadmap.closing', 'tactics[].time_commitment', 'quick_wins.note'
+      'tactics[].parts[].card', 'roadmap.closing', 'tactics[].time_commitment', 'quick_wins.note'
     ]);
     expect(result.hidden.map(h => h.field)).not.toContain('quick_wins.intro');
-    expect(result.hidden.find(h => h.field === 'roadmap.weeks[].next_step').where).toHaveLength(12);
-    expect(result.warnings.filter(w => /is empty, so it is hidden/.test(w.message))).toHaveLength(6);
+    // Kept in content.json but not shown by the redesigned dashboard, so nothing is hidden
+    expect(result.hidden.map(h => h.field)).not.toEqual(expect.arrayContaining(['phases[].description']));
+    expect(result.hidden.map(h => h.field)).not.toContain('roadmap.weeks[].next_step');
+    expect(result.warnings.filter(w => /is empty, so it is hidden/.test(w.message))).toHaveLength(4);
   });
 
   test('filled optional content is not listed', () => {

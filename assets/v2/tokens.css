@@ -4,35 +4,174 @@
  * is defined here and nowhere else. accelerator.css only uses var(--...).
  */
 :root {
-  /* Brand palette and named values carried over from v1 */
-  --navy-900: #11154b;
-  --navy-800: #1a1f6b;
-  --navy: #11154b;
-  --navy-light: #1a1f6b;
-  --mint-500: #aadab6;
-  --mint: #aadab6;
-  --mint-dark: #7bc490;
-  --cream-100: #fcf5ec;
-  --cream: #fcf5ec;
-  --slate-600: #708090;
-  --slate: #708090;
-  --link-blue: #067cbc;
-  --blue: #067cbc;
-  --dark: #181c2d;
-  --white: #ffffff;
-  --state-success: #2e7d32;
-  --state-warning: #ed6c02;
-  --state-danger: #d32f2f;
-  --card-bg: #ffffff;
-  --page-bg: #f0ece5;
-  --surface-sunken: #f5f1ea;
-  --border-subtle: rgba(17,21,75,.12);
-  --border-strong: rgba(17,21,75,.25);
-  --sidebar-w: 268px;
-  --font-display: 'Raleway', sans-serif;
-  --font-body: 'Open Sans', sans-serif;
-  --font-d: 'Raleway', sans-serif;
-  --font-b: 'Open Sans', sans-serif;
+  /* ── Junction brand (DESIGN-BRIEF.md section 3) ─────────────────────
+     New components use these names only. */
+
+  /* Colour roles */
+  --newsprint: #F4F0E8;          /* page ground */
+  --white: #FFFFFF;              /* card surface */
+  --newsprint-hover: #EDE6DA;    /* sunken or hover surface */
+  --track: #DDD5C6;              /* empty track, empty ring */
+  --carbon: #1C1C1A;             /* text, dark surfaces */
+  --flint: #6A6862;              /* secondary text */
+  --flint-on-dark: #BDB8AE;      /* secondary text on dark */
+  --canopy-text: #2B764A;        /* buttons, links, tick boxes */
+  --canopy: #2E7D4F;             /* progress fills, 2px dividers */
+  --fern: #7FC99A;               /* accent and progress on dark */
+  --track-on-dark: #3A3A36;      /* empty track on dark */
+  --sage: #C8E8D4;               /* highlight boxes */
+  --forest: #1A4D2E;             /* text on Sage */
+  --sage-25: #E9EEE3;            /* notes, tips */
+  --gold: #C4963A;               /* stats on Carbon, current-stage marker */
+  --gold-on-light: #A57E31;      /* large numerals on light */
+  --gold-text: #7A5C1E;          /* gold text on light: "You are here" */
+  --copper: #A55527;             /* small meta labels on light, sparingly */
+  --break-pink: #CD1561;         /* hover and active on clickable things, on light */
+  --break-pink-on-dark: #ED5192; /* the same, on dark */
+
+  /* Assessment score scale: outside the brand palette on purpose. The
+     level follows the letter grade (scoreLevel in progress-model.js), and
+     the letter is always shown beside the colour. */
+  --score-needs-work: #B5503A;
+  --score-fair: #D97F3A;
+  --score-good: #3E8E8A;
+  --score-strong: #1F5F6B;
+
+  /* Semantic roles */
+  --page-bg: var(--newsprint);
+  --card-bg: var(--white);
+  --surface-sunken: var(--newsprint-hover);
+  --text: var(--carbon);
+  --text-muted: var(--flint);
+  --text-muted-on-dark: var(--flint-on-dark);
+  --link: var(--canopy-text);
+  --link-hover: var(--break-pink);
+  --link-hover-on-dark: var(--break-pink-on-dark);
+  --progress-fill: var(--canopy);
+  --progress-fill-on-dark: var(--fern);
+  --progress-track: var(--track);
+  --progress-track-on-dark: var(--track-on-dark);
+  --divider: var(--canopy);
+  --divider-width: 2px;
+  --ticked-opacity: .7;
+  --focus-ring: var(--canopy-text);
+
+  /* Type (Google Fonts, loaded by the page) */
+  --font-heading: 'Epilogue', system-ui, sans-serif;  /* 900; smallest heading 600 */
+  --font-text: 'DM Sans', system-ui, sans-serif;      /* body, labels, buttons, numbers: 400 and 500 */
+  --font-numeral: 'Bebas Neue', 'DM Sans', sans-serif; /* donuts, step and week numerals only */
+  --font-quote: 'Fraunces', Georgia, serif;           /* 900 italic: positioning statement, pull quote */
+  --heading-weight: 900;
+  --heading-weight-small: 600;
+  --text-weight: 400;
+  --text-weight-strong: 500;
+  --type-h1: 40px;
+  --type-h1-phone: 30px;
+  --type-h2: 28px;
+  --type-h2-small: 24px;
+  --type-h3: 18px;
+  --type-body: 16px;
+  --type-small: 15px;
+  --type-meta: 14px;
+  --type-label: 12px;
+  --leading-heading: 1.05;
+  --leading-heading-2: 1.15;
+  --leading-body: 1.5;
+  --tracking-heading: -.01em;
+  --tracking-label: .14em;
+
+  /* Spacing, radii and sizes used by the new components */
+  --gap-2xs: 2px;
+  --gap-xs: 6px;
+  --gap-sm: 10px;
+  --gap-md: 14px;
+  --gap-lg: 18px;
+  --gap-xl: 22px;
+  --gap-2xl: 28px;
+  --gap-3xl: 36px;
+  --page-pad-top: 28px;
+  --page-pad-right: 40px;
+  --page-pad-bottom: 56px;
+  --page-pad-left: 28px;
+  --page-pad-phone: 20px;
+  --radius-control: 8px;
+  --radius-inner: 12px;
+  --radius-tile: 14px;
+  --radius-card: 16px;
+  --touch-target: 44px;
+
+  /* Side navigation panel (DESIGN-BRIEF.md section 4) */
+  --nav-width: 256px;
+  --nav-pad: 14px;
+  --nav-item-pad-y: 9px;
+  --nav-item-pad-x: 12px;
+  --nav-ring-size: 16px;
+  --nav-text: 15px;
+  --wordmark-width: 140px;
+  --wordmark-width-phone: 118px;
+  --wordmark-height: 20px;
+  --wordmark-height-phone: 17px;
+  --hamburger-bar-width: 20px;
+  --hamburger-bar-height: 2.5px;
+
+  /* Dashboard (DESIGN-BRIEF.md sections 5 and 6) */
+  --type-donut-lg: 60px;
+  --type-donut-md: 42px;
+  --type-pull: 20px;
+  --donut-lg: 200px;
+  --donut-lg-hole: 148px;
+  --donut-md: 130px;
+  --donut-md-hole: 94px;
+  --ring-size: 40px;
+  --ring-hole: 24px;
+  --ring-size-sm: 52px;
+  --ring-hole-sm: 32px;
+  --read-dot: 20px;
+  --tick-size: 24px;
+  --strip-bar: 5px;
+  --phase-bar: 6px;
+  --card-pad: 32px;
+  --card-pad-phone: 22px;
+  --tile-pad-y: 22px;
+  --tile-pad-x: 24px;
+  --tile-min: 220px;
+  --dash-main-min: 480px;
+  --dash-side-min: 300px;
+  --measure: 560px;
+  --table-min: 560px;
+  --btn-pad-y: 13px;
+  --btn-pad-x: 22px;
+  --switcher-pad: 8px;
+  --switcher-room: 120px;
+  --switcher-room-phone: 200px;
+
+  /* ── v1 names, re-pointed to the Junction roles ─────────────────────
+     The pages not yet rebuilt (phases 2 to 4) still use these. Each one
+     goes when the last component using it is rebuilt. */
+  --navy-900: var(--carbon);
+  --navy-800: var(--carbon);
+  --navy: var(--carbon);
+  --navy-light: var(--carbon);
+  --mint-500: var(--fern);
+  --mint: var(--fern);
+  --mint-dark: var(--canopy);
+  --cream-100: var(--newsprint);
+  --cream: var(--newsprint);
+  --slate-600: var(--flint);
+  --slate: var(--flint);
+  --link-blue: var(--canopy-text);
+  --blue: var(--canopy-text);
+  --dark: var(--carbon);
+  --state-success: var(--canopy);
+  --state-warning: var(--gold);
+  --state-danger: var(--score-needs-work);
+  --border-subtle: rgba(28,28,26,.12);
+  --border-strong: rgba(28,28,26,.25);
+  --sidebar-w: var(--nav-width);
+  --font-display: var(--font-heading);
+  --font-body: var(--font-text);
+  --font-d: var(--font-heading);
+  --font-b: var(--font-text);
   --radius-sm: 8px;
   --radius-md: 12px;
   --radius-lg: 16px;
@@ -42,9 +181,9 @@
   --r-md: 12px;
   --r-lg: 16px;
   --r-xl: 24px;
-  --shadow-sm: 0 1px 4px rgba(17,21,75,.07);
-  --shadow-md: 0 4px 20px rgba(17,21,75,.11);
-  --shadow-lg: 0 8px 40px rgba(17,21,75,.16);
+  --shadow-sm: 0 1px 4px rgba(28,28,26,.07);
+  --shadow-md: 0 4px 20px rgba(28,28,26,.11);
+  --shadow-lg: 0 8px 40px rgba(28,28,26,.16);
   --ease-spring: cubic-bezier(0.22, 0.61, 0.36, 1);
   --ease-spring-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
   --ease-snap: cubic-bezier(0.5, 0, 0.1, 1);
@@ -139,57 +278,57 @@
   --color-fce4ec: #fce4ec;
   --color-fff3cd: #fff3cd;
   --color-fff3e0: #fff3e0;
-  --link-blue-a3: rgba(6,124,188,.03);
-  --link-blue-a4: rgba(6,124,188,.04);
-  --link-blue-a5: rgba(6,124,188,.05);
-  --link-blue-a6: rgba(6,124,188,.06);
-  --link-blue-a8: rgba(6,124,188,.08);
-  --link-blue-a10: rgba(6,124,188,.1);
-  --link-blue-a12: rgba(6,124,188,.12);
-  --link-blue-a14: rgba(6,124,188,.14);
-  --link-blue-a15: rgba(6,124,188,.15);
-  --link-blue-a16: rgba(6,124,188,.16);
-  --link-blue-a20: rgba(6,124,188,.2);
-  --link-blue-a22: rgba(6,124,188,.22);
-  --link-blue-a30: rgba(6,124,188,.3);
-  --link-blue-a35: rgba(6,124,188,.35);
-  --link-blue-a45: rgba(6,124,188,.45);
-  --mint-500-a5: rgba(170,218,182,.05);
-  --mint-500-a6: rgba(170,218,182,.06);
-  --mint-500-a10: rgba(170,218,182,.1);
-  --mint-500-a12: rgba(170,218,182,.12);
-  --mint-500-a15: rgba(170,218,182,.15);
-  --mint-500-a18: rgba(170,218,182,.18);
-  --mint-500-a20: rgba(170,218,182,.2);
-  --mint-500-a22: rgba(170,218,182,.22);
-  --mint-500-a25: rgba(170,218,182,.25);
-  --mint-500-a30: rgba(170,218,182,.3);
-  --mint-500-a32: rgba(170,218,182,.32);
-  --mint-500-a40: rgba(170,218,182,.4);
-  --mint-500-a50: rgba(170,218,182,.5);
-  --mint-dark-a15: rgba(123,196,144,.15);
-  --navy-900-a2: rgba(17,21,75,.02);
-  --navy-900-a3: rgba(17,21,75,.03);
-  --navy-900-a4: rgba(17,21,75,.04);
-  --navy-900-a5: rgba(17,21,75,.05);
-  --navy-900-a6: rgba(17,21,75,.06);
-  --navy-900-a7: rgba(17,21,75,.07);
-  --navy-900-a8: rgba(17,21,75,.08);
-  --navy-900-a10: rgba(17,21,75,.1);
-  --navy-900-a12: rgba(17,21,75,.12);
-  --navy-900-a13: rgba(17,21,75,.13);
-  --navy-900-a14: rgba(17,21,75,.14);
-  --navy-900-a15: rgba(17,21,75,.15);
-  --navy-900-a18: rgba(17,21,75,.18);
-  --navy-900-a20: rgba(17,21,75,.2);
-  --navy-900-a25: rgba(17,21,75,.25);
-  --navy-900-a30: rgba(17,21,75,.3);
-  --navy-900-a35: rgba(17,21,75,.35);
-  --navy-900-a40: rgba(17,21,75,.4);
-  --navy-900-a50: rgba(17,21,75,.5);
-  --navy-900-a55: rgba(17,21,75,.55);
-  --navy-900-a88: rgba(17,21,75,0.88);
-  --navy-900-a92: rgba(17,21,75,0.92);
+  --canopy-text-a3: rgba(43,118,74,.03);
+  --canopy-text-a4: rgba(43,118,74,.04);
+  --canopy-text-a5: rgba(43,118,74,.05);
+  --canopy-text-a6: rgba(43,118,74,.06);
+  --canopy-text-a8: rgba(43,118,74,.08);
+  --canopy-text-a10: rgba(43,118,74,.1);
+  --canopy-text-a12: rgba(43,118,74,.12);
+  --canopy-text-a14: rgba(43,118,74,.14);
+  --canopy-text-a15: rgba(43,118,74,.15);
+  --canopy-text-a16: rgba(43,118,74,.16);
+  --canopy-text-a20: rgba(43,118,74,.2);
+  --canopy-text-a22: rgba(43,118,74,.22);
+  --canopy-text-a30: rgba(43,118,74,.3);
+  --canopy-text-a35: rgba(43,118,74,.35);
+  --canopy-text-a45: rgba(43,118,74,.45);
+  --fern-a5: rgba(127,201,154,.05);
+  --fern-a6: rgba(127,201,154,.06);
+  --fern-a10: rgba(127,201,154,.1);
+  --fern-a12: rgba(127,201,154,.12);
+  --fern-a15: rgba(127,201,154,.15);
+  --fern-a18: rgba(127,201,154,.18);
+  --fern-a20: rgba(127,201,154,.2);
+  --fern-a22: rgba(127,201,154,.22);
+  --fern-a25: rgba(127,201,154,.25);
+  --fern-a30: rgba(127,201,154,.3);
+  --fern-a32: rgba(127,201,154,.32);
+  --fern-a40: rgba(127,201,154,.4);
+  --fern-a50: rgba(127,201,154,.5);
+  --canopy-a15: rgba(46,125,79,.15);
+  --carbon-a2: rgba(28,28,26,.02);
+  --carbon-a3: rgba(28,28,26,.03);
+  --carbon-a4: rgba(28,28,26,.04);
+  --carbon-a5: rgba(28,28,26,.05);
+  --carbon-a6: rgba(28,28,26,.06);
+  --carbon-a7: rgba(28,28,26,.07);
+  --carbon-a8: rgba(28,28,26,.08);
+  --carbon-a10: rgba(28,28,26,.1);
+  --carbon-a12: rgba(28,28,26,.12);
+  --carbon-a13: rgba(28,28,26,.13);
+  --carbon-a14: rgba(28,28,26,.14);
+  --carbon-a15: rgba(28,28,26,.15);
+  --carbon-a18: rgba(28,28,26,.18);
+  --carbon-a20: rgba(28,28,26,.2);
+  --carbon-a25: rgba(28,28,26,.25);
+  --carbon-a30: rgba(28,28,26,.3);
+  --carbon-a35: rgba(28,28,26,.35);
+  --carbon-a40: rgba(28,28,26,.4);
+  --carbon-a50: rgba(28,28,26,.5);
+  --carbon-a55: rgba(28,28,26,.55);
+  --carbon-a88: rgba(28,28,26,0.88);
+  --carbon-a92: rgba(28,28,26,0.92);
   --white-a6: rgba(255,255,255,.06);
   --white-a7: rgba(255,255,255,.07);
   --white-a8: rgba(255,255,255,.08);
@@ -439,22 +578,22 @@
   --radius-100: 100px;
 
   /* Shadows */
-  --shadow-1: 0 2px 12px rgba(17,21,75,.3);
+  --shadow-1: 0 2px 12px rgba(28,28,26,.3);
   --shadow-2: 0 2px 12px rgba(0,0,0,.06);
   --shadow-3: 0 2px 8px rgba(0,0,0,.06);
   --shadow-4: 0 0 8px rgba(239,68,68,.4);
   --shadow-5: 0 0 8px rgba(249,115,22,.35);
   --shadow-6: 0 0 8px rgba(252,211,77,.4);
-  --shadow-7: 0 4px 12px rgba(17,21,75,.2);
-  --shadow-8: 0 6px 16px rgba(17,21,75,.25);
-  --shadow-9: 0 40px 100px rgba(17,21,75,.35),0 8px 32px rgba(17,21,75,.2);
-  --shadow-10: 0 6px 20px rgba(17,21,75,.25);
-  --shadow-11: 0 0 0 9999px rgba(17,21,75,.72);
-  --shadow-12: 0 28px 70px rgba(17,21,75,.28),0 4px 12px rgba(17,21,75,.12);
-  --shadow-13: 0 0 0 4px rgba(170,218,182,.25);
-  --shadow-14: 0 0 0 4px rgba(170,218,182,.12);
+  --shadow-7: 0 4px 12px rgba(28,28,26,.2);
+  --shadow-8: 0 6px 16px rgba(28,28,26,.25);
+  --shadow-9: 0 40px 100px rgba(28,28,26,.35),0 8px 32px rgba(28,28,26,.2);
+  --shadow-10: 0 6px 20px rgba(28,28,26,.25);
+  --shadow-11: 0 0 0 9999px rgba(28,28,26,.72);
+  --shadow-12: 0 28px 70px rgba(28,28,26,.28),0 4px 12px rgba(28,28,26,.12);
+  --shadow-13: 0 0 0 4px rgba(127,201,154,.25);
+  --shadow-14: 0 0 0 4px rgba(127,201,154,.12);
   --shadow-15: 0 1px 3px rgba(0,0,0,.1);
-  --shadow-16: 0 4px 14px rgba(30,25,15,.1);
+  --shadow-16: 0 4px 14px rgba(28,28,26,.1);
   --shadow-17: 0 8px 32px rgba(0,0,0,0.4);
   --shadow-18: 0 4px 12px rgba(0,0,0,0.3);
   --shadow-19: 0 1px 2px rgba(0,0,0,0.04), 0 4px 8px rgba(0,0,0,0.04), 0 8px 16px rgba(0,0,0,0.02);
@@ -464,31 +603,31 @@
   --shadow-23: 0 1px 2px rgba(0,0,0,0.02), 0 2px 4px rgba(0,0,0,0.02);
   --shadow-24: 0 2px 4px rgba(0,0,0,0.03), 0 4px 12px rgba(0,0,0,0.04);
   --shadow-25: 0 4px 12px rgba(0,0,0,0.08), 0 12px 32px rgba(0,0,0,0.06);
-  --shadow-26: 0 2px 4px rgba(0,0,0,0.08), 0 4px 12px rgba(170,218,182,0.3);
-  --shadow-27: 0 4px 8px rgba(0,0,0,0.1), 0 8px 20px rgba(170,218,182,0.4);
+  --shadow-26: 0 2px 4px rgba(0,0,0,0.08), 0 4px 12px rgba(127,201,154,0.3);
+  --shadow-27: 0 4px 8px rgba(0,0,0,0.1), 0 8px 20px rgba(127,201,154,0.4);
   --shadow-28: 0 1px 3px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.5);
-  --shadow-29: 0 10px 24px rgba(30,25,15,.16);
-  --shadow-30: 0 2px 6px rgba(17,21,75,.18);
-  --shadow-31: 0 12px 28px -14px rgba(30,25,15,.45);
-  --shadow-32: 0 18px 32px -14px rgba(30,25,15,.5);
+  --shadow-29: 0 10px 24px rgba(28,28,26,.16);
+  --shadow-30: 0 2px 6px rgba(28,28,26,.18);
+  --shadow-31: 0 12px 28px -14px rgba(28,28,26,.45);
+  --shadow-32: 0 18px 32px -14px rgba(28,28,26,.5);
 
   /* v2 components: named roles, built from the values above */
   --frame-narrow-max: 320px;
   --tactic-card-min: var(--size-200);
-  --tactic-color-1: var(--link-blue);
-  --tactic-color-2: var(--navy-900);
-  --tactic-color-3: var(--mint-500);
-  --tactic-color-4: var(--slate-600);
-  --objective-color-1: var(--link-blue);
-  --objective-color-2: var(--navy-900);
-  --objective-color-3: var(--mint-dark);
-  --objective-color-4: var(--slate-600);
-  --tactic-ring-1: var(--mint-500);
-  --tactic-ring-2: var(--link-blue);
-  --tactic-ring-3: var(--state-warning);
-  --tactic-ring-4: var(--state-success);
-  --confirm-bg: var(--color-fff3cd);
-  --confirm-text: var(--navy-900);
+  --tactic-color-1: var(--canopy);
+  --tactic-color-2: var(--carbon);
+  --tactic-color-3: var(--canopy);
+  --tactic-color-4: var(--carbon);
+  --objective-color-1: var(--canopy);
+  --objective-color-2: var(--carbon);
+  --objective-color-3: var(--canopy);
+  --objective-color-4: var(--carbon);
+  --tactic-ring-1: var(--progress-fill);
+  --tactic-ring-2: var(--progress-fill);
+  --tactic-ring-3: var(--progress-fill);
+  --tactic-ring-4: var(--progress-fill);
+  --confirm-bg: var(--sage);
+  --confirm-text: var(--forest);
   --confirm-radius: var(--radius-3);
   --confirm-pad-x: var(--space-4);
   --frame-chrome-bg: var(--color-e9e2d2);

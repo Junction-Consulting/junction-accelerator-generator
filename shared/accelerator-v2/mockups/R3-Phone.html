@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Dashboard on a phone</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500&family=Epilogue:wght@600;900&display=swap">
+<style>
+body{margin:0}
+a{color:#2B764A}a:hover{color:#CD1561}
+.cb{width:24px;height:24px;margin:0;accent-color:#2B764A;flex:none}
+.tc{display:flex;align-items:center;gap:12px;background:#FFFFFF;color:#1C1C1A;text-decoration:none;border-radius:12px;padding:14px 16px}
+.tc i{width:22px;height:22px;border-radius:50%;background:#DDD5C6;flex:none}
+.tc b{font-weight:500;flex:1}
+.tc small{font-size:14px;color:#6A6862}
+</style>
+</helmet>
+<div style="width: 390px; min-height: 1460px; box-sizing: border-box; background: #F4F0E8; color: #1C1C1A; font-family: 'DM Sans', system-ui, sans-serif; font-size: 16px; line-height: 1.45; display: flex; flex-direction: column">
+
+<header style="display: flex; justify-content: space-between; align-items: center; padding: 16px 20px 8px">
+<img src="/_blob/76b99816b510c96d0f3e5ae8ff2b1bf3" alt="Junction" style="width: 118px; height: auto; display: block">
+<button aria-label="Open menu" style="width: 44px; height: 44px; border: 0; border-radius: 10px; background: #FFFFFF; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 5px; cursor: pointer"><span style="width: 20px; height: 2.5px; background: #1C1C1A; border-radius: 2px"></span><span style="width: 20px; height: 2.5px; background: #1C1C1A; border-radius: 2px"></span><span style="width: 20px; height: 2.5px; background: #1C1C1A; border-radius: 2px"></span></button>
+</header>
+
+<main style="padding: 12px 20px 32px; display: flex; flex-direction: column; gap: 18px">
+
+<div>
+<h1 style="margin: 0; font-family: 'Epilogue', sans-serif; font-weight: 900; font-size: 30px; line-height: 1.05">Good evening, Andrea's Resort</h1>
+<p style="margin: 6px 0 0; font-size: 15px; color: #6A6862">90-day plan · next up is your 30-day check-in</p>
+</div>
+
+<section style="background: #FFFFFF; border-radius: 16px; padding: 22px 20px; display: flex; flex-direction: column; gap: 18px">
+<div>
+<h2 style="margin: 0; font-family: 'Epilogue', sans-serif; font-weight: 900; font-size: 22px; line-height: 1.15">This week: first Reels and review link</h2>
+<div style="font-size: 15px; color: #6A6862; margin-top: 4px">Week 3 of 12 · 1 of 3 done</div>
+</div>
+<div style="display: flex; gap: 12px; align-items: flex-start"><input type="checkbox" class="cb" id="p1" checked="{{ yes }}" onChange="{{ noop }}"><div style="flex: 1"><label for="p1" style="display: block; opacity: 0.7">Publish the first two Reels</label><a href="#" style="font-weight: 500; font-size: 14px">How to</a></div></div>
+<div style="display: flex; gap: 12px; align-items: flex-start"><input type="checkbox" class="cb" id="p2"><div style="flex: 1"><label for="p2" style="display: block">Turn on comment notifications and follow 50 local accounts</label><a href="#" style="font-weight: 500; font-size: 14px">How to</a></div></div>
+<div style="display: flex; gap: 12px; align-items: flex-start"><input type="checkbox" class="cb" id="p3"><div style="flex: 1"><label for="p3" style="display: block">Create the Google review link</label><a href="#" style="font-weight: 500; font-size: 14px">How to</a></div></div>
+<a href="#" style="background: #2B764A; color: #F4F0E8; text-decoration: none; font-weight: 500; font-size: 15px; padding: 14px 20px; border-radius: 8px; text-align: center">Open week 3 in the roadmap</a>
+</section>
+
+<section style="background: #1C1C1A; color: #F4F0E8; border-radius: 16px; padding: 22px 20px; display: flex; align-items: center; gap: 20px">
+<div role="img" aria-label="18% of your plan done" style="width: 116px; height: 116px; border-radius: 50%; flex: none; background: conic-gradient(#7FC99A 18%, #3A3A36 0); display: flex; align-items: center; justify-content: center"><div style="width: 84px; height: 84px; border-radius: 50%; background: #1C1C1A; display: flex; align-items: center; justify-content: center; font-family: 'Bebas Neue', sans-serif; font-size: 36px; line-height: 1; color: #C4963A">18%</div></div>
+<div>
+<h2 style="margin: 0; font-family: 'Epilogue', sans-serif; font-weight: 600; font-size: 18px">Your progress</h2>
+<div style="margin-top: 4px"><span style="font-weight: 500">6 of 34</span> tasks checked off</div>
+<div style="font-size: 14px; color: #BDB8AE; margin-top: 2px">Foundation · weeks 1 to 4</div>
+</div>
+</section>
+
+<section style="display: flex; flex-direction: column; gap: 8px">
+<h2 style="margin: 0 0 4px; font-family: 'Epilogue', sans-serif; font-weight: 900; font-size: 20px; border-bottom: 2px solid #2E7D4F; padding-bottom: 8px">Your tactics</h2>
+<a href="#" class="tc"><i style="background: conic-gradient(#2E7D4F 83%, #DDD5C6 0)"></i><b>Social Media</b><small>5 of 6</small></a>
+<a href="#" class="tc"><i></i><b>Reviews</b><small>0 of 4</small></a>
+<a href="#" class="tc"><i></i><b>Local Search</b><small>0 of 11</small></a>
+<a href="#" class="tc"><i></i><b>Booking and Email</b><small>0 of 6</small></a>
+</section>
+
+<section style="background: #C8E8D4; color: #1A4D2E; border-radius: 14px; padding: 18px 20px">
+<h2 style="margin: 0; font-family: 'Epilogue', sans-serif; font-weight: 600; font-size: 18px">Coming up</h2>
+<div style="font-weight: 500; margin-top: 4px">Week 4: review requests go live</div>
+<div style="font-size: 15px">3 tasks, from Reviews and Social Media</div>
+</section>
+
+<section style="background: #FFFFFF; border-radius: 14px; padding: 18px 20px; display: flex; flex-direction: column; gap: 6px">
+<h2 style="margin: 0; font-family: 'Epilogue', sans-serif; font-weight: 600; font-size: 18px">Materials</h2>
+<a href="#" style="font-weight: 500; font-size: 15px; padding: 6px 0">Assessment report (PDF)</a>
+<a href="#" style="font-weight: 500; font-size: 15px; padding: 6px 0">Coaching call summary</a>
+<a href="#" style="font-weight: 500; font-size: 15px; padding: 6px 0">Your 90-day plan (PDF)</a>
+</section>
+
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":1460}}'>
+class Component extends DCLogic {
+renderVals() {
+return { yes: true, noop: function () {} };
+}
+}
+</script>
+</body>
+</html>

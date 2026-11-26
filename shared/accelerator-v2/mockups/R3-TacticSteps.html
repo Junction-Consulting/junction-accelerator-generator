@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Tactic, implementation steps</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500&family=Epilogue:wght@600;900&display=swap">
+<style>
+body{margin:0}
+a{color:#2B764A}a:hover{color:#CD1561}
+.nv a{display:flex;align-items:center;gap:10px;color:#1C1C1A;text-decoration:none;padding:9px 12px;border-radius:8px}
+.nv a.on{background:#1C1C1A;color:#F4F0E8;font-weight:500}
+.nv .lb{font-size:12px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:#6A6862;padding:0 12px 6px}
+.nv i{width:16px;height:16px;border-radius:50%;background:#DDD5C6;flex:none}
+.t1{margin:0;font-family:'Epilogue',sans-serif;font-weight:900;font-size:40px;line-height:1.05;letter-spacing:-.01em}
+.t2{margin:0;font-family:'Epilogue',sans-serif;font-weight:900;font-size:24px;line-height:1.15}
+.st{margin:0;font-family:'Epilogue',sans-serif;font-weight:900;font-size:22px;line-height:1.2;flex:1}
+.num{font-family:'Bebas Neue',sans-serif;font-size:44px;line-height:.85;color:#A57E31;flex:none;width:30px}
+.chev{display:inline-block;width:10px;height:10px;border-right:2.5px solid #1C1C1A;border-bottom:2.5px solid #1C1C1A;transform:rotate(45deg);flex:none;margin:0 6px 4px}
+.chev.up{transform:rotate(-135deg);margin:4px 6px 0}
+.step{background:#FFFFFF;border-radius:16px;padding:24px 28px}
+.head{display:flex;align-items:center;gap:20px;color:#1C1C1A;text-decoration:none}
+</style>
+</helmet>
+<div style="display: flex; flex-wrap: wrap; gap: 36px; min-height: 1900px; box-sizing: border-box; padding: 28px 40px 56px 28px; background: #F4F0E8; color: #1C1C1A; font-family: 'DM Sans', system-ui, sans-serif; font-size: 16px; line-height: 1.5">
+
+<aside style="flex: 1 0 232px; max-width: 256px; align-self: flex-start; display: flex; flex-direction: column; gap: 22px">
+<img src="/_blob/76b99816b510c96d0f3e5ae8ff2b1bf3" alt="Junction" style="width: 140px; height: auto; display: block; margin: 8px 0 0 12px">
+<nav aria-label="Main" class="nv" style="background: #FFFFFF; border-radius: 16px; padding: 14px; display: flex; flex-direction: column; gap: 18px; font-size: 15px">
+<div><a href="R3-Dashboard.dc.html">Dashboard</a><a href="R3-Assessment.dc.html">Assessment</a><a href="R3-Strategy.dc.html">Strategy</a></div>
+<div><div class="lb">Tactics</div><a href="#" class="on"><i style="background: conic-gradient(#7FC99A 67%, #55554F 0)"></i>Social Media</a><a href="#"><i></i>Reviews</a><a href="#"><i></i>Local Search</a><a href="#"><i></i>Booking and Email</a></div>
+<div><div class="lb">Your plan</div><a href="R3-Roadmap.dc.html">90-day roadmap</a><a href="R3-Materials.dc.html">Materials</a></div>
+</nav>
+<a href="#" style="margin-left: 12px; font-weight: 500; font-size: 15px">Email your coach</a>
+</aside>
+
+<main style="flex: 999 1 560px; min-width: 0; padding-top: 8px; display: flex; flex-direction: column; gap: 14px">
+
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 24px">
+<div style="display: flex; flex-direction: column; gap: 8px; max-width: 640px">
+<h1 class="t1">Social Media Activation</h1>
+<div style="font-size: 13px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: #A55527">Tactic 1 · Foundation</div>
+</div>
+<div style="display: flex; align-items: center; gap: 16px">
+<div role="img" aria-label="67% of this tactic done" style="width: 92px; height: 92px; border-radius: 50%; background: conic-gradient(#2E7D4F 67%, #DDD5C6 0); display: flex; align-items: center; justify-content: center"><div style="width: 66px; height: 66px; border-radius: 50%; background: #F4F0E8; display: flex; align-items: center; justify-content: center; font-family: 'Bebas Neue', sans-serif; font-size: 28px; line-height: 1">67%</div></div>
+<div style="font-size: 15px; color: #6A6862">4 of 6 tasks done</div>
+</div>
+</div>
+
+<div style="display: flex; flex-wrap: wrap; gap: 28px; border-bottom: 2px solid #2E7D4F; margin: 14px 0">
+<a href="R3-TacticOverview.dc.html" style="color: #6A6862; text-decoration: none; font-weight: 500; padding: 0 0 12px">Overview</a>
+<a href="#" style="color: #1C1C1A; text-decoration: none; font-weight: 500; padding: 0 0 12px; box-shadow: inset 0 -4px 0 #2E7D4F">Implementation steps</a>
+</div>
+
+<h2 class="t2" style="margin: 8px 0 4px">Part A: set up your content system</h2>
+
+<section class="step" style="display: flex; flex-direction: column; gap: 18px">
+<a href="#" class="head" aria-expanded="true"><span class="num">1</span><span class="st">Fix both profiles before you post anything</span><span class="chev up" aria-hidden="true"></span></a>
+<div style="padding-left: 50px; display: flex; flex-direction: column; gap: 16px">
+<div style="display: flex; flex-wrap: wrap; gap: 6px 20px; font-size: 14px; color: #6A6862"><span>About 20 minutes</span><a href="R3-Roadmap.dc.html" style="font-weight: 500">On your roadmap in week 1</a></div>
+<ul style="margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 10px; max-width: 700px">
+<li>On Instagram, tap <strong>Edit profile</strong> and rewrite the bio to say what the resort is and where it is, including the <span style="background: #C8E8D4; color: #1A4D2E; border-radius: 4px; padding: 1px 6px">drive time from Kelowna</span>.</li>
+<li>Add the direct booking link in the <strong>Links</strong> field. It is currently empty, which is why the account has produced no website clicks.</li>
+<li>Add four story highlights:
+<ul style="margin: 8px 0 0; padding-left: 20px; display: flex; flex-direction: column; gap: 4px"><li>Cabins</li><li>The Lake</li><li>Getting Here</li><li>Things To Do</li></ul>
+</li>
+<li>Repeat the bio and booking link on the Facebook page.</li>
+</ul>
+<figure style="margin: 0; max-width: 540px">
+<div style="border-radius: 12px; overflow: hidden; background: #EDE6DA">
+<div style="display: flex; justify-content: space-between; align-items: center; background: #1C1C1A; color: #F4F0E8; font-size: 13px; padding: 9px 14px"><span>instagram.com/andreasresort</span><span style="background: #C4963A; color: #1C1C1A; border-radius: 4px; padding: 1px 8px; font-weight: 500">Mockup</span></div>
+<div style="height: 240px; display: flex; align-items: center; justify-content: center; font-size: 14px; color: #6A6862">Image of the updated profile</div>
+</div>
+<figcaption style="font-size: 14px; color: #6A6862; margin-top: 8px">Updated bio with location and booking link.</figcaption>
+</figure>
+</div>
+</section>
+
+<section class="step"><a href="#" class="head" aria-expanded="false"><span class="num">2</span><span class="st">Set a fixed weekly pattern</span><span class="chev" aria-hidden="true"></span></a></section>
+
+<h2 class="t2" style="margin: 28px 0 4px">Part B: create a month of content in one sitting</h2>
+
+<section class="step"><a href="#" class="head" aria-expanded="false"><span class="num">3</span><span class="st">Sort the 37 website photos into the three themes</span><span class="chev" aria-hidden="true"></span></a></section>
+<section class="step"><a href="#" class="head" aria-expanded="false"><span class="num">4</span><span class="st">Write 12 captions and schedule them in Meta Business Suite</span><span class="chev" aria-hidden="true"></span></a></section>
+
+<h2 class="t2" style="margin: 28px 0 4px">Part C: launch video and build engagement</h2>
+
+<section class="step" style="display: flex; flex-direction: column; gap: 18px">
+<a href="#" class="head" aria-expanded="true"><span class="num">5</span><span class="st">Publish two Reels a week</span><span class="chev up" aria-hidden="true"></span></a>
+<div style="padding-left: 50px; display: flex; flex-direction: column; gap: 16px">
+<div style="display: flex; flex-wrap: wrap; gap: 6px 20px; font-size: 14px; color: #6A6862"><a href="R3-Roadmap.dc.html" style="font-weight: 500">On your roadmap in week 3</a></div>
+<ul style="margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 10px; max-width: 700px">
+<li>Keep each one under 30 seconds and shoot it vertically on a phone.</li>
+<li>Start with formats that need no editing: a walk through a cabin, the dock at sunrise, the fire pit at night.</li>
+<li>Quiet footage with natural sound works well for this kind of property.</li>
+</ul>
+<figure style="margin: 0; display: flex; flex-wrap: wrap; gap: 16px">
+<div style="width: 150px"><div style="height: 250px; box-sizing: border-box; border: 5px solid #1C1C1A; border-radius: 22px; background: #EDE6DA; display: flex; align-items: center; justify-content: center; text-align: center; font-size: 13px; color: #6A6862; padding: 10px">Reel image</div><figcaption style="font-size: 14px; color: #6A6862; margin-top: 8px">Cabin walkthrough</figcaption></div>
+<div style="width: 150px"><div style="height: 250px; box-sizing: border-box; border: 5px solid #1C1C1A; border-radius: 22px; background: #EDE6DA; display: flex; align-items: center; justify-content: center; text-align: center; font-size: 13px; color: #6A6862; padding: 10px">Reel image</div><figcaption style="font-size: 14px; color: #6A6862; margin-top: 8px">Dock at sunrise</figcaption></div>
+</figure>
+</div>
+</section>
+
+<section class="step"><a href="#" class="head" aria-expanded="false"><span class="num">6</span><span class="st">Reply to every comment within two hours during the day</span><span class="chev" aria-hidden="true"></span></a></section>
+
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; align-items: center; margin-top: 20px">
+<a href="R3-TacticOverview.dc.html" style="font-weight: 500; font-size: 15px">Back to overview</a>
+<a href="#" style="background: #2B764A; color: #F4F0E8; text-decoration: none; font-weight: 500; font-size: 15px; padding: 13px 22px; border-radius: 8px">Next tactic: Review Generation</a>
+</div>
+
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1320,"height":1900}}'>
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+</body>
+</html>

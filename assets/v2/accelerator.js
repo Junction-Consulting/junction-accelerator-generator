@@ -13,21 +13,61 @@
 
 // ── Page data ──────────────────────────────────────────────
 const PAGE = JSON.parse(document.getElementById('accelerator-data').textContent);
-const ALL_CHECK_IDS = PAGE.checks.all;
-const WEEK_CHECKS = PAGE.checks.byWeek;
-const MONTH_CHECKS = PAGE.checks.byPhase;
-const TACTIC_CHECKS = PAGE.checks.byTactic;
+const MODEL = window.AcceleratorModel;
+// Tasks are the roadmap's actions (DESIGN-BRIEF.md section 7)
+const ALL_TASK_IDS = PAGE.tasks.all;
+const WEEK_TASKS = PAGE.tasks.byWeek;
+const PHASE_TASKS = PAGE.tasks.byPhase;
+const TACTIC_TASKS = PAGE.tasks.byTactic;
 const TACTIC_COUNT = PAGE.tactics.length;
 const TOTAL_WEEKS = PAGE.totalWeeks;
 const TOTAL_DAYS = PAGE.totalDays;
-const PHASES = PAGE.phases;
-const PROGRESS_HEADLINES = PAGE.headlines;
 const TOUR_STEPS = PAGE.tour;
 
 // ── State (this browser only: notes and Quick Wins ticks) ──
 const STATE_KEY = PAGE.slug + '_accelerator_v2';
 const OB_KEY = PAGE.slug + '_onboarded_v1';
 let state = { checks: {}, notes: {} };
+
+// Read state (stage 2a) and the last step opened: this browser only for now
+// (CUTOVER.md item 12).
+const READ_KEY = PAGE.slug + '_read_v2';
+const LAST_STEP_KEY = PAGE.slug + '_last_step_v2';
+const PREVIEW_KEY = PAGE.slug + '_preview_stage';
+function readStore(key, fallback) {
+  try { const v = localStorage.getItem(key); return v ? JSON.parse(v) : fallback; } catch (e) { return fallback; }
+}
+function writeStore(key, value) {
+  try { localStorage.setItem(key, JSON.stringify(value)); } catch (e) {}
+}
+
+// ── Sandbox stage preview (client.flags.sandbox only) ──────
+// A preview stage shows sample state and never writes saved progress.
+// "During the plan" uses the real ticks.
+const PREVIEW = (function () {
+  if (!PAGE.sandbox) return null;
+  const fromUrl = new URLSearchParams(window.location.search).get('stage');
+  if (MODEL.STAGES.indexOf(fromUrl) !== -1) { writeStore(PREVIEW_KEY, fromUrl); return fromUrl; }
+  const stored = readStore(PREVIEW_KEY, null);
+  return MODEL.STAGES.indexOf(stored) !== -1 ? stored : null;
+})();
+const IS_SAMPLE = !!PREVIEW && PREVIEW !== 'during';
+let sampleRead = {};
+
+function choosePreviewStage(stage) {
+  writeStore(PREVIEW_KEY, stage);
+  const url = new URL(window.location.href);
+  url.searchParams.set('stage', stage);
+  window.location.href = url.toString();
+}
+
+// In a sample stage, saved tick boxes cannot be changed
+if (IS_SAMPLE) {
+  document.addEventListener('click', function (e) {
+    const t = e.target;
+    if (t && t.matches && t.matches('input[data-key], input[data-mirror]')) { e.preventDefault(); e.stopPropagation(); }
+  }, true);
+}
 
 function loadState() {
   try {
@@ -42,12 +82,13 @@ function saveState() {
 // ── Navigation ─────────────────────────────────────────────
 function navigate(pageId) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => { n.classList.remove('active'); n.removeAttribute('aria-current'); });
   const page = document.getElementById('page-' + pageId);
   if (page) page.classList.add('active');
-  document.querySelectorAll(`[data-page="${pageId}"]`).forEach(n => n.classList.add('active'));
+  document.querySelectorAll(`.nav-item[data-page="${pageId}"]`).forEach(n => { n.classList.add('active'); n.setAttribute('aria-current', 'page'); });
   document.getElementById('main').scrollTop = 0;
   if (window.innerWidth <= 768) closeMobileDrawer();
+  markRead(pageId);
 }
 
 // ── PDF ────────────────────────────────────────────────────
@@ -66,11 +107,19 @@ function openMobileDrawer() {
   document.getElementById('sidebar').classList.add('open');
   document.getElementById('drawerOverlay').classList.add('open');
   document.body.classList.add('drawer-open');
+  setHamburger(true);
 }
 function closeMobileDrawer() {
   document.getElementById('sidebar').classList.remove('open');
   document.getElementById('drawerOverlay').classList.remove('open');
   document.body.classList.remove('drawer-open');
+  setHamburger(false);
+}
+function setHamburger(open) {
+  const btn = document.getElementById('nav-hamburger');
+  if (!btn) return;
+  btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  btn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
 }
 function toggleMobileDrawer() {
   if (document.getElementById('sidebar').classList.contains('open')) closeMobileDrawer();
@@ -134,6 +183,10 @@ function toggleTacticPart(btn) {
   const part = btn.closest('.tactic-part');
   part.classList.toggle('open');
   btn.setAttribute('aria-expanded', part.classList.contains('open') ? 'true' : 'false');
+  if (part.classList.contains('open')) {
+    const first = part.querySelector('.tactic-step-item[id]');
+    if (first) rememberStep(first.id);
+  }
 }
 function switchTacticTab(tacticNum, tabName) {
   document.querySelectorAll(`[data-tactic-tab="${tacticNum}"]`).forEach(t => {
@@ -180,15 +233,49 @@ function updateNoteBtn(id) {
   btn.classList.toggle('has-note', !!hasNote);
 }
 
-// ── Progress ───────────────────────────────────────────────
-// Read from the DOM so ticks loaded by progress.js are counted
-function countChecked(ids) {
-  return (ids || []).filter(id => {
-    const el = document.querySelector(`input[data-key="${id}"]`);
-    return el && el.checked;
-  }).length;
+// ── Ticks ──────────────────────────────────────────────────
+// The saved tick for an action is the roadmap's input[data-key]. Read from
+// the DOM so ticks loaded by progress.js are counted. The dashboard's tick
+// boxes (data-mirror) pass changes through to it.
+function realInput(id) { return document.querySelector(`input[data-key="${id}"]`); }
+
+function isTicked(id) {
+  if (IS_SAMPLE) return PREVIEW === 'done';
+  const el = realInput(id);
+  return !!(el && el.checked);
+}
+function countChecked(ids) { return MODEL.countTicked(ids, isTicked); }
+
+let tickedThisVisit = false;
+function onMirrorTick(el) {
+  const real = realInput(el.getAttribute('data-mirror'));
+  if (!real || IS_SAMPLE || real.disabled) { el.checked = !el.checked; return; }
+  real.checked = el.checked;
+  tickedThisVisit = true;
+  // Fires the roadmap box's own handlers: onCheck() and progress.js's save
+  real.dispatchEvent(new Event('change', { bubbles: true }));
 }
 
+function onQuickWinTick(el) {
+  state.checks[el.id] = el.checked;
+  saveState();
+  updateProgress();
+}
+
+function applySampleTicks() {
+  ALL_TASK_IDS.forEach(id => {
+    const el = realInput(id);
+    if (el) { el.checked = PREVIEW === 'done'; el.disabled = true; }
+  });
+}
+
+// ── Live values (data-live attributes on the page) ─────────
+function setLive(name, value) {
+  document.querySelectorAll(`[data-live="${name}"]`).forEach(el => { el.textContent = value; });
+}
+function setPct(selector, pct) {
+  document.querySelectorAll(selector).forEach(el => el.style.setProperty('--pct', pct));
+}
 function setRing(el, radius, pct) {
   if (!el) return;
   const circ = 2 * Math.PI * radius;
@@ -196,32 +283,31 @@ function setRing(el, radius, pct) {
   el.style.strokeDashoffset = circ - (circ * pct / 100);
 }
 
+// ── Progress ───────────────────────────────────────────────
+// Called by progress.js after it loads or saves a tick, so it must stay global.
 function updateProgress() {
-  const done = countChecked(ALL_CHECK_IDS);
-  const total = ALL_CHECK_IDS.length;
-  const pct = total > 0 ? Math.round(done / total * 100) : 0;
+  if (IS_SAMPLE) applySampleTicks();
+  const done = countChecked(ALL_TASK_IDS);
+  const total = ALL_TASK_IDS.length;
+  const pct = MODEL.percent(done, total);
 
-  setRing(document.getElementById('sidebar-ring'), 23, pct);
-  document.getElementById('sidebar-done').textContent = done;
-  document.getElementById('sidebar-total').textContent = total;
-  document.getElementById('roadmap-badge').textContent = pct + '%';
+  setLive('plan-done', done);
+  setLive('plan-pct', pct + '%');
+  setPct('[data-live-donut="plan"]', pct);
 
-  setRing(document.getElementById('dash-ring'), 85, pct);
-  const dashPct = document.getElementById('dash-pct');
-  if (dashPct) dashPct.textContent = pct + '%';
-  const dashDone = document.getElementById('dash-done-count');
-  if (dashDone) dashDone.textContent = done;
-  const dashTotal = document.getElementById('dash-total-count');
-  if (dashTotal) dashTotal.textContent = total;
+  Object.keys(PHASE_TASKS).forEach(p => setPct(`[data-live-bar="phase-${p}"]`, MODEL.percent(countChecked(PHASE_TASKS[p]), PHASE_TASKS[p].length)));
 
   for (let t = 1; t <= TACTIC_COUNT; t++) {
-    const ids = TACTIC_CHECKS[t] || [];
+    const ids = TACTIC_TASKS[t] || [];
     const d = countChecked(ids);
     const tot = ids.length;
-    const p = tot > 0 ? Math.round(d / tot * 100) : 0;
-    setRing(document.getElementById('tactic' + t + '-ring'), 18, p);
-    const stat = document.getElementById('tc' + t + '-stat');
-    if (stat) stat.textContent = d + ' of ' + tot + ' done';
+    const p = MODEL.percent(d, tot);
+    setPct(`[data-live-ring="tactic-${t}"]`, p);
+    setLive(`tactic-${t}-done`, d);
+    const navRing = document.getElementById('nav-ring-' + t);
+    if (navRing) navRing.style.setProperty('--pct', p + '%');
+    const navText = document.getElementById('nav-ring-' + t + '-text');
+    if (navText) navText.textContent = ', ' + d + ' of ' + tot + ' done';
     setRing(document.getElementById('t' + t + '-ring'), 31, p);
     const heroPct = document.getElementById('t' + t + '-pct');
     if (heroPct) heroPct.textContent = p + '%';
@@ -233,38 +319,82 @@ function updateProgress() {
     }
   }
 
-  updateNextStepWeekProgress();
-  updateNextStepTasks();
-
-  Object.keys(WEEK_CHECKS).forEach(w => {
-    const ids = WEEK_CHECKS[w];
+  Object.keys(WEEK_TASKS).forEach(w => {
+    const ids = WEEK_TASKS[w];
     const d = countChecked(ids);
     const pill = document.getElementById('wp-' + w);
     if (pill) {
       pill.textContent = d + ' / ' + ids.length;
-      pill.classList.toggle('done', d === ids.length);
+      pill.classList.toggle('done', ids.length > 0 && d === ids.length);
     }
   });
-
-  Object.keys(MONTH_CHECKS).forEach(m => {
-    const ids = MONTH_CHECKS[m];
+  Object.keys(PHASE_TASKS).forEach(m => {
+    const ids = PHASE_TASKS[m];
     const el = document.getElementById('m' + m + '-prog');
     if (el) el.innerHTML = '<span>' + countChecked(ids) + '</span> of ' + ids.length + ' done';
   });
+
+  // Dashboard tick boxes follow the saved ones; a ticked sentence fades
+  document.querySelectorAll('input[data-mirror]').forEach(m => {
+    const id = m.getAttribute('data-mirror');
+    const real = realInput(id);
+    m.checked = isTicked(id);
+    m.disabled = IS_SAMPLE || !!(real && real.disabled);
+  });
+  document.querySelectorAll('.task-row, .check-item').forEach(row => {
+    const box = row.querySelector('input[type="checkbox"]');
+    if (box) row.classList.toggle('is-ticked', box.checked);
+  });
+
+  // The assessment's quick wins (this browser; not plan progress)
+  const wins = [...document.querySelectorAll('input[id^="aqw-"]')];
+  const winsTotal = PAGE.assessment ? PAGE.assessment.quickWins : 0;
+  const winsDone = [...new Set(wins.filter(w => w.checked).map(w => w.id))].length;
+  setLive('wins-done', winsDone);
+  setPct('[data-live-ring="wins"]', MODEL.percent(winsDone, winsTotal));
+
+  renderDashboard();
 }
 
-// ── Dashboard ──────────────────────────────────────────────
-function cohortStart() { return document.body.getAttribute('data-cohort-start'); }
-
-function getDayInfo() {
-  const start = cohortStart();
-  if (!start) return { currentDay: 1, currentWeek: 1, daysRemaining: TOTAL_DAYS };
-  const diffDays = Math.floor((new Date().setHours(0, 0, 0, 0) - new Date(start + 'T00:00:00')) / 86400000);
-  if (diffDays < 0) return { currentDay: 0, currentWeek: 0, daysRemaining: TOTAL_DAYS, beforeStart: true, daysUntilStart: -diffDays };
-  if (diffDays >= TOTAL_DAYS) return { currentDay: TOTAL_DAYS, currentWeek: TOTAL_WEEKS, daysRemaining: 0, completed: true };
-  const currentDay = diffDays + 1;
-  return { currentDay, currentWeek: Math.min(Math.ceil(currentDay / 7), TOTAL_WEEKS), daysRemaining: TOTAL_DAYS - diffDays };
+// ── Read state and the last step opened ────────────────────
+function readKeyFor(pageId) {
+  if (pageId === 'strategy') return 'strategy';
+  const m = /^tactic(\d+)$/.exec(pageId || '');
+  return m && PAGE.tactics[m[1] - 1] ? PAGE.tactics[m[1] - 1].id : null;
 }
+function readSet() { return IS_SAMPLE ? sampleRead : readStore(READ_KEY, {}); }
+function readOrder() { return ['strategy'].concat(PAGE.tactics.map(t => t.id)); }
+function readCount() { const r = readSet(); return readOrder().filter(k => r[k]).length; }
+function markRead(pageId) {
+  const key = readKeyFor(pageId);
+  if (!key) return;
+  const r = readSet();
+  if (r[key]) return;
+  r[key] = true;
+  if (!IS_SAMPLE) writeStore(READ_KEY, r);
+  renderDashboard();
+}
+function pageForReadKey(key) {
+  if (key === 'strategy') return 'strategy';
+  const t = PAGE.tactics.find(x => x.id === key);
+  return t ? 'tactic' + t.num : 'dashboard';
+}
+function openToRead(key) { navigate(pageForReadKey(key)); }
+function continueReading() {
+  const r = readSet();
+  const next = readOrder().find(k => !r[k]);
+  navigate(next ? pageForReadKey(next) : 'roadmap');
+}
+function rememberStep(stepId) { if (PAGE.steps[stepId]) writeStore(LAST_STEP_KEY, stepId); }
+function resumeLastStep() {
+  const stepId = readStore(LAST_STEP_KEY, null);
+  if (stepId && PAGE.steps[stepId]) howToLink('tactic' + PAGE.steps[stepId], stepId);
+}
+
+// ── Dashboard: which stage, and what it shows ─────────────
+let shownWeek = null;          // the week on the "This week" card
+let resultsRequested = false;  // "See your results" after the last tick of the plan
+let lastStage = null;
 
 function getTimeGreeting() {
   const hour = new Date().getHours();
@@ -273,137 +403,212 @@ function getTimeGreeting() {
   return 'Good evening';
 }
 
-function getCurrentPhase(week) {
-  for (const phase of PHASES) if (phase.weeks.includes(week)) return phase.num;
-  return 1;
-}
-
-function weekNumbers() { return Object.keys(WEEK_CHECKS).map(Number).sort((a, b) => a - b); }
-
-function getFirstIncompleteWeek() {
-  const weeks = weekNumbers();
-  for (const w of weeks) {
-    const ids = WEEK_CHECKS[w];
-    if (countChecked(ids) < ids.length) return w;
-  }
-  return weeks[weeks.length - 1];
-}
-
-function getProgressHeadline(pct) {
-  for (const h of PROGRESS_HEADLINES) if (pct <= h.max) return h;
-  return PROGRESS_HEADLINES[PROGRESS_HEADLINES.length - 1];
-}
-
-function updateNextStepWeekProgress() {
-  const focusWeek = getFirstIncompleteWeek();
-  const ids = WEEK_CHECKS[focusWeek] || [];
-  const done = countChecked(ids);
-  const pct = ids.length > 0 ? Math.round(done / ids.length * 100) : 0;
-  const title = document.getElementById('dash-week-progress-title');
-  if (title) title.textContent = 'Week ' + focusWeek + ' tasks';
-  const label = document.getElementById('dash-week-progress-label');
-  if (label) label.textContent = done + '/' + ids.length;
-  const bar = document.getElementById('dash-week-bar');
-  if (bar) bar.style.width = pct + '%';
-}
-
-function updateNextStepTasks() {
-  const container = document.getElementById('dash-next-tasks');
-  if (!container) return;
-  container.querySelectorAll('.dash-next-task').forEach(taskEl => {
-    const checkbox = document.querySelector(`input[data-key="${taskEl.getAttribute('data-key')}"]`);
-    if (!checkbox) return;
-    const box = taskEl.querySelector('.dash-next-task-box');
-    const text = taskEl.querySelector('.dash-next-task-text');
-    if (box) box.classList.toggle('done', checkbox.checked);
-    if (text) text.classList.toggle('done', checkbox.checked);
+function currentStage() {
+  if (PREVIEW) return PREVIEW;
+  const stage = MODEL.selectStage({
+    hasPlan: PAGE.hasPlan,
+    totalTasks: ALL_TASK_IDS.length,
+    doneTasks: countChecked(ALL_TASK_IDS),
+    readCount: readCount(),
+    readTotal: readOrder().length
   });
+  // Ticking the plan's last action here keeps the week card in view until
+  // the client asks for their results
+  if (stage === 'done' && lastStage === 'during' && tickedThisVisit && !resultsRequested) return 'during';
+  return stage;
 }
 
-function labelFor(id) {
-  const checkbox = document.querySelector(`input[data-key="${id}"]`);
-  const label = checkbox && checkbox.closest('.check-row') && checkbox.closest('.check-row').querySelector('.check-label');
-  return label ? label.textContent : null;
-}
-
-function getFirstIncompleteTaskLabel(week) {
-  for (const id of WEEK_CHECKS[week] || []) {
-    const checkbox = document.querySelector(`input[data-key="${id}"]`);
-    if (checkbox && !checkbox.checked) return labelFor(id);
-  }
+function checkinScores() {
+  if (PAGE.checkins) return PAGE.checkins;
+  if (PREVIEW === 'done') return MODEL.sampleCheckins(PAGE.assessment);
   return null;
 }
 
-function populateNextStepTasks(week) {
-  const container = document.getElementById('dash-next-tasks');
-  if (!container) return;
-  container.innerHTML = '';
-  const ids = (WEEK_CHECKS[week] || []).slice(0, 4);
-  ids.forEach(id => {
-    const checkbox = document.querySelector(`input[data-key="${id}"]`);
-    if (!checkbox) return;
-    const taskEl = document.createElement('div');
-    taskEl.className = 'dash-next-task';
-    taskEl.setAttribute('data-key', id);
-    taskEl.onclick = function () {
-      navigate('roadmap');
-      setTimeout(function () {
-        const weekCard = document.getElementById('wc-' + week);
-        if (weekCard && !weekCard.classList.contains('open')) weekCard.classList.add('open');
-        checkbox.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }, 100);
-    };
-    const box = document.createElement('div');
-    box.className = 'dash-next-task-box' + (checkbox.checked ? ' done' : '');
-    box.innerHTML = '<svg width="14" height="14" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5,6 4.5,9 10.5,3"/></svg>';
-    const text = document.createElement('span');
-    text.className = 'dash-next-task-text' + (checkbox.checked ? ' done' : '');
-    text.textContent = labelFor(id) || '';
-    taskEl.appendChild(box);
-    taskEl.appendChild(text);
-    container.appendChild(taskEl);
-  });
+function setStageAttributes(stage) {
+  document.body.setAttribute('data-stage', stage);
+  document.body.setAttribute('data-plan', stage === 'before' ? 'coming' : 'ready');
 }
 
-function setMeta(wrapId, valueId, value) {
-  const wrap = document.getElementById(wrapId);
-  const el = document.getElementById(valueId);
-  if (!wrap || !el) return;
-  wrap.hidden = !value;
-  el.textContent = value || '';
-}
+function renderDashboard() {
+  const root = document.querySelector('[data-dashboard]');
+  if (!root) return;
+  const stage = currentStage();
+  if (stage !== lastStage) setStageAttributes(stage);
+  root.querySelectorAll('[data-stage-panel]').forEach(p => { p.hidden = p.getAttribute('data-stage-panel') !== stage; });
 
-function initDashboard() {
-  const dayInfo = getDayInfo();
-  const greeting = document.getElementById('dash-greeting');
-  if (greeting) greeting.textContent = getTimeGreeting() + ', ' + (document.body.getAttribute('data-client-name') || 'there');
+  const name = PAGE.name;
+  const total = ALL_TASK_IDS.length;
+  const heads = {
+    before: ['Welcome, ' + name, PAGE.assessment ? 'Your assessment is ready. Your ' + TOTAL_DAYS + '-day plan comes after your coaching call.' : 'Your ' + TOTAL_DAYS + '-day plan comes after your coaching call.'],
+    delivered: ['Your plan is ready, ' + name, PAGE.welcome],
+    during: [getTimeGreeting() + ', ' + name, null],
+    done: ['You finished your ' + TOTAL_DAYS + '-day plan', 'All ' + total + ' tasks are checked off. Here is what changed and what comes next.']
+  }[stage];
+  document.getElementById('dash-greeting').textContent = heads[0];
+  const sub = document.getElementById('dash-sub');
+  sub.textContent = heads[1] || '';
+  sub.hidden = !heads[1];
 
-  const currentPhase = getCurrentPhase(dayInfo.currentWeek || 1);
-  document.querySelectorAll('.dash-phase').forEach(el => {
-    el.setAttribute('data-active', parseInt(el.getAttribute('data-phase'), 10) === currentPhase ? 'true' : 'false');
+  const scores = checkinScores();
+  MODEL.stageSteps(stage, { checkin: !!(scores && scores.checkin), review: !!(scores && scores.review) }).forEach(step => {
+    const li = root.querySelector(`[data-step="${step.key}"]`);
+    if (!li) return;
+    li.setAttribute('data-state', step.state);
+    if (step.state === 'current') li.setAttribute('aria-current', 'step'); else li.removeAttribute('aria-current');
+    li.querySelector('[data-step-note]').textContent = step.note;
   });
 
-  const done = countChecked(ALL_CHECK_IDS);
-  const pct = ALL_CHECK_IDS.length > 0 ? Math.round(done / ALL_CHECK_IDS.length * 100) : 0;
-  const headline = getProgressHeadline(pct);
-  document.getElementById('dash-headline').textContent = headline.headline;
-  document.getElementById('dash-subcopy').textContent = headline.subcopy;
-
-  const focusWeek = getFirstIncompleteWeek();
-  const week = PAGE.weeks[focusWeek] || {};
-  const tactic = PAGE.tactics[(week.tactic || 1) - 1] || PAGE.tactics[0];
-  document.getElementById('dash-next-eyebrow').textContent = 'YOUR NEXT STEP · WEEK ' + focusWeek + ' OF ' + TOTAL_WEEKS + ' · ' + (week.title || '');
-  document.getElementById('dash-next-title').textContent = getFirstIncompleteTaskLabel(focusWeek) || 'Complete your tasks for this week';
-  document.getElementById('dash-next-tactic').textContent = tactic ? tactic.name : '';
-  const link = document.getElementById('dash-next-link');
-  if (link && tactic) link.setAttribute('onclick', "navigate('tactic" + tactic.num + "')");
-  setMeta('dash-next-time-wrap', 'dash-next-time', week.timeNeeded);
-  setMeta('dash-next-who-wrap', 'dash-next-who', week.who);
-
-  populateNextStepTasks(focusWeek);
-  updateNextStepWeekProgress();
+  if (stage === 'delivered') renderReadList();
+  if (stage === 'during') renderThisWeek();
+  if (stage === 'done') renderResults(scores);
+  lastStage = stage;
 }
-window.addEventListener('cohortDateUpdated', initDashboard);
+
+function renderReadList() {
+  const r = readSet();
+  const order = readOrder();
+  const next = order.find(k => !r[k]);
+  setLive('read-done', order.filter(k => r[k]).length);
+  document.querySelectorAll('[data-read]').forEach(row => {
+    const key = row.getAttribute('data-read');
+    row.classList.toggle('is-read', !!r[key]);
+    row.classList.toggle('is-next', key === next);
+    row.querySelector('[data-read-state]').textContent = r[key] ? 'Read' : (key === next ? 'Read next' : '');
+  });
+  const btn = document.querySelector('[data-continue-reading]');
+  if (btn) {
+    const label = next === 'strategy' ? 'Strategy' : (PAGE.tactics.find(t => t.id === next) || {}).name;
+    btn.textContent = next ? (readCount() ? 'Continue reading: ' : 'Start reading: ') + label : 'Open the roadmap';
+  }
+}
+
+function weekTitle(n) { return (PAGE.weeks[n] || {}).title || ''; }
+
+function renderThisWeek() {
+  const weeks = PAGE.weekList;
+  if (shownWeek === null || !WEEK_TASKS[shownWeek]) shownWeek = MODEL.currentWeek(weeks, isTicked);
+  if (shownWeek === null) return;
+  document.querySelectorAll('[data-week-panel]').forEach(p => { p.hidden = Number(p.getAttribute('data-week-panel')) !== shownWeek; });
+  const ids = WEEK_TASKS[shownWeek] || [];
+  const done = countChecked(ids);
+  setLive('week-title', weekTitle(shownWeek));
+  setLive('week-number', shownWeek);
+  setLive('week-done', done);
+  setLive('week-total', ids.length);
+
+  const complete = ids.length > 0 && done === ids.length;
+  const next = MODEL.nextWeek(weeks, shownWeek);
+  document.querySelector('[data-week-foot="open"]').hidden = complete;
+  document.querySelector('[data-week-foot="done"]').hidden = !complete;
+  const advance = document.querySelector('[data-week-advance]');
+  if (next) {
+    setLive('week-up-next', 'Up next is week ' + next + ': ' + weekTitle(next) + '.');
+    advance.textContent = 'Start week ' + next;
+  } else {
+    setLive('week-up-next', countChecked(ALL_TASK_IDS) === ALL_TASK_IDS.length ? 'Every task in your plan is done.' : 'That is the last week of your plan.');
+    advance.textContent = countChecked(ALL_TASK_IDS) === ALL_TASK_IDS.length ? 'See your results' : 'Open the roadmap';
+  }
+
+  const resume = document.querySelector('[data-resume]');
+  const stepId = readStore(LAST_STEP_KEY, null);
+  if (resume) {
+    const t = stepId && PAGE.steps[stepId] ? PAGE.tactics[PAGE.steps[stepId] - 1] : null;
+    resume.hidden = !t;
+    if (t) resume.textContent = 'Pick up where you left off: ' + t.name + ', step ' + PAGE.stepNumbers[stepId];
+  }
+
+  const coming = document.querySelector('[data-coming-up]');
+  const lookAhead = document.querySelector('[data-live-next]');
+  if (coming && lookAhead) {
+    setLive('next-title', next ? 'Week ' + next + ': ' + weekTitle(next) : 'This is the last week of your plan.');
+    setLive('next-summary', next ? PAGE.weeks[next].summary : '');
+    lookAhead.hidden = !next;
+    lookAhead.dataset.week = next || '';
+  }
+}
+
+function advanceWeek() {
+  const next = MODEL.nextWeek(PAGE.weekList, shownWeek);
+  if (next) shownWeek = next;
+  else if (countChecked(ALL_TASK_IDS) === ALL_TASK_IDS.length) resultsRequested = true;
+  else { openRoadmapWeek(shownWeek); return; }
+  renderDashboard();
+}
+
+function openRoadmapWeek(n) {
+  n = Number(n);
+  navigate('roadmap');
+  const card = document.getElementById('wc-' + n);
+  if (!card) return;
+  if (!card.classList.contains('open')) toggleWeek(n);
+  setTimeout(function () { card.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 120);
+}
+
+function scoreHtml(entry, size) {
+  const level = MODEL.scoreLevel(entry.grade);
+  const tone = level ? 'score-' + level.key : 'light';
+  return '<div class="donut donut--' + size + ' donut--' + tone + '" style="--pct:' + Number(entry.score) + '" role="img" aria-label="Score ' + Number(entry.score) + ', grade ' + escapeText(entry.grade) + '"><div class="donut-hole"><span class="donut-num">' + Number(entry.score) + '</span><span class="donut-sub">Grade ' + escapeText(entry.grade) + '</span></div></div>';
+}
+function cellHtml(entry) {
+  if (!entry) return '<span class="slot-empty">Not yet</span>';
+  const level = MODEL.scoreLevel(entry.grade);
+  return '<span class="score score--' + (level ? level.key : 'none') + '">' + Number(entry.score) + ' <span class="score-letter">' + escapeText(entry.grade) + '</span></span>';
+}
+function changeText(from, to) {
+  const d = to - from;
+  return d > 0 ? 'Up ' + d : (d < 0 ? 'Down ' + (-d) : 'No change');
+}
+
+function renderResults(scores) {
+  const a = PAGE.assessment;
+  const sampleBadge = document.querySelector('[data-sample-only]');
+  if (sampleBadge) sampleBadge.hidden = !(scores && ((scores.review && scores.review.sample) || (scores.checkin && scores.checkin.sample)));
+  if (a) {
+    const review = scores && scores.review;
+    const donutSlot = document.querySelector('[data-review-donut]');
+    if (donutSlot && review) donutSlot.firstElementChild.outerHTML = scoreHtml(review.overall, 'lg');
+    let line = 'Your ' + TOTAL_DAYS + '-day review scores your six areas again so you can see what changed.';
+    if (review) {
+      const d = review.overall.score - a.overall.score;
+      line = d > 0 ? 'Your overall score went up ' + d + ' points.' : (d < 0 ? 'Your overall score went down ' + (-d) + ' points.' : 'Your overall score stayed the same.');
+      let best = null;
+      Object.keys(a.areas).forEach(k => {
+        const r = review.areas[k];
+        if (r && (!best || r.score - a.areas[k].score > best.d)) best = { k: k, d: r.score - a.areas[k].score };
+      });
+      if (best && best.d > 0) line += ' The biggest move was ' + a.areas[best.k].name + '.';
+    }
+    setLive('results-line', line);
+    document.querySelectorAll('.results-table tr[data-area]').forEach(tr => {
+      const k = tr.getAttribute('data-area');
+      const c = scores && scores.checkin && scores.checkin.areas[k];
+      const r = scores && scores.review && scores.review.areas[k];
+      tr.querySelector('[data-slot="checkin"]').innerHTML = cellHtml(c);
+      tr.querySelector('[data-slot="review"]').innerHTML = cellHtml(r);
+      const latest = r || c;
+      tr.querySelector('[data-slot="change"]').innerHTML = latest ? '<strong>' + changeText(a.areas[k].score, latest.score) + '</strong>' : '<span class="slot-empty">Not yet</span>';
+    });
+  }
+
+  // "What to keep doing": the content does not exist yet (brief section 11).
+  // The sandbox preview fills it with a sample built from the plan: the last
+  // action of each tactic.
+  const keep = document.querySelector('[data-keep-doing]');
+  if (keep) {
+    keep.hidden = PREVIEW !== 'done';
+    const list = keep.querySelector('[data-keep-list]');
+    if (!keep.hidden && list && !list.children.length) {
+      PAGE.tactics.forEach(t => {
+        const last = ALL_TASK_IDS.filter(id => PAGE.actions[id].tactic === t.num).pop();
+        if (!last) return;
+        const row = document.createElement('div');
+        row.className = 'task-row';
+        row.innerHTML = '<input type="checkbox" class="tick" id="keep-' + t.num + '"><label class="task-label" for="keep-' + t.num + '">' + escapeText(PAGE.actions[last].text) + '</label><button type="button" class="link-btn" onclick="navigate(\'tactic' + t.num + '\')">' + escapeText(t.name) + '</button>';
+        list.appendChild(row);
+      });
+    }
+  }
+}
 
 // ── Restore this browser's state ───────────────────────────
 function restoreState() {
@@ -460,8 +665,9 @@ function startTour() {
   document.getElementById('tour-spotlight-box').classList.add('active');
   nextTourStep();
 }
-function nextTourStep() { goToTourStep(tourStep + 1); }
-function prevTourStep() { goToTourStep(Math.max(0, tourStep - 1)); }
+let tourDirection = 1;
+function nextTourStep() { tourDirection = 1; goToTourStep(tourStep + 1); }
+function prevTourStep() { tourDirection = -1; goToTourStep(Math.max(0, tourStep - 1)); }
 function advanceTour() { if (tourActive) nextTourStep(); }
 
 // The tour places a spotlight around each target and a tooltip beside it.
@@ -584,6 +790,12 @@ function goToTourStep(n) {
     if (tourStep !== n) return;
     const el = document.getElementById(target.id);
     if (!el) { endTour(); return; }
+    // A target this stage of the dashboard does not show is skipped
+    if (!el.getClientRects().length) {
+      if (tourDirection < 0 && n > 0) goToTourStep(n - 1);
+      else { tourDirection = 1; goToTourStep(n + 1); }
+      return;
+    }
     document.getElementById('tour-tooltip-box').classList.remove('active');
     fillTourTooltip(step, n, target.desc);
     bringIntoView(el, tourRoomBelow(el, target));
@@ -695,6 +907,7 @@ function checkOnboarding() {
 
 // ── "How to" deep link (the step ID is the element id) ─────
 function howToLink(page, stepId) {
+  rememberStep(stepId);
   navigate(page);
   setTimeout(function () {
     switchTacticTab(parseInt(page.replace('tactic', ''), 10), 'steps');
@@ -821,7 +1034,7 @@ document.addEventListener('DOMContentLoaded', function () {
   loadState();
   restoreState();
   updateProgress();
-  initDashboard();
+  document.querySelectorAll('[data-preview-stage]').forEach(b => b.setAttribute('aria-pressed', b.getAttribute('data-preview-stage') === (PREVIEW || 'during') ? 'true' : 'false'));
   checkOnboarding();
 
   const firstWeek = document.querySelector('.week-card');

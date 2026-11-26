@@ -17,7 +17,7 @@ This is the first dashboard built by Accelerator v2 (see `shared/accelerator-v2/
 | `sandbox-media.md` | The media this sandbox carries, and the cases it is built to test | Edited by hand |
 | `add-sandbox-media.mjs` | Adds the media in `sandbox-media.md`. A stand-in for the media tool | Run by hand |
 
-The page's stylesheet and scripts are shared, not copied in: `assets/v2/tokens.css`, `assets/v2/accelerator.css`, `assets/v2/accelerator.js` and `assets/v2/accelerator-after.js`, with the page layout in `template/v2/accelerator.html`.
+The page follows the Junction redesign in `shared/accelerator-v2/DESIGN-BRIEF.md` (phase 1, tokens and navigation, is in). Its stylesheet and scripts are shared, not copied in: `assets/v2/tokens.css`, `assets/v2/accelerator.css`, `assets/v2/accelerator.js` and `assets/v2/accelerator-after.js`, with the page layout in `template/v2/accelerator.html`.
 
 ## Workflow
 
@@ -57,7 +57,8 @@ For now, edit `add-sandbox-media.mjs` and run it. It only adds media to steps th
 ## Not yet in v2
 
 - The PDFs (the roadmap prints from the browser, as in v1).
-- Notes and Quick Wins ticks are saved in this browser only, as in v1. Checklist ticks are saved to the account, keyed by `chk_` ID.
+- Notes, Quick Wins ticks, read state and the last step opened are saved in this browser only. Task ticks (the roadmap's actions) are saved to the account, keyed by `act_` ID.
+- **Stage preview.** Because `flags.sandbox` is true, a "Sandbox preview" bar at the bottom switches between the four dashboard stages. Each has its own link: `?stage=before`, `?stage=delivered`, `?stage=during`, `?stage=done`. The choice is remembered in the browser. Every stage except "During the plan" shows sample state and cannot change saved ticks.
 - Edit Mode edits are saved by the existing Edit Mode, keyed by item ID and field (for example `stp_xxxxxx.title`), but they are not yet written back into `content.json`.
 
 ## Before a real client moves to v2

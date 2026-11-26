@@ -194,8 +194,9 @@ Hand-coded HTML mockups (the booking bar, the booking page, the emails) are not 
 ```
 
 - `how_to` is a step ID, `quick_wins` or empty. It is checked at build time, and it survives steps being added, removed or reordered.
-- `next_step` is optional. If it is missing, the Next Step card shows the action and tactic only.
-- Each checklist item counts towards exactly one tactic: `tactic` is that tactic's ID, and tactic progress counts the items that name it.
+- **Tasks are the actions** (DESIGN-BRIEF.md section 7). Each action is a tick box, saved under its `act_` ID. Progress counts ticked actions. An action counts towards the tactic its `how_to` step belongs to; an action with no link, or a link to `quick_wins`, counts towards the overall total only.
+- `next_step` is optional. The redesigned dashboard does not show it; it is kept for now.
+- The checklist stays in `content.json` (and in `plan.json` for the emails) but is not shown on the page and does not count towards progress. Each checklist item still records one tactic:
   - `tactic_source` is `plan` when the plan says so with `→ tactic: N` at the end of the item, and `guess` when the converter worked it out.
   - With no marker, the converter uses v1's rule: the tactic of the action in the matching position in the week, otherwise the week's main tactic (the one most of its actions link to; a week with no links keeps the previous linked week's).
   - Once stored, an assignment is kept on re-conversion unless the plan's marker changes, so a coach's correction is never replaced by a guess.
@@ -217,7 +218,7 @@ Hand-coded HTML mockups (the booking bar, the booking page, the emails) are not 
 
 ### Voice (optional)
 
-`progress_headlines` (one per progress tier) and `tour` (one description per tour stop). If missing, the neutral program wording from the template is used. This is the only place a template default is allowed, because the wording is about the program, not the client.
+`progress_headlines` (one per progress tier; not shown by the redesigned dashboard, kept for now) and `tour` (one description per tour stop). If missing, the neutral program wording from the template is used. This is the only place a template default is allowed, because the wording is about the program, not the client.
 
 ## Assessment
 
@@ -233,9 +234,11 @@ All saved state moves to Supabase and is keyed by item ID:
 
 | State | Today | v2 |
 |---|---|---|
-| Checklist ticks | Supabase, keyed by position | Supabase, keyed by `chk_` ID |
+| Task ticks (the actions) | Supabase, keyed by position (checklist items) | Supabase, keyed by `act_` ID |
+| Read state and last step opened (stage 2a) | none | this browser only for now, then Supabase |
+| The assessment's quick wins on the dashboard | none | this browser only for now, keyed by position (`aqw-N`: assessment items have no IDs) |
 | Quick Wins ticks | this browser only | Supabase, keyed by `qw_` ID |
-| Item and week notes | this browser only | Supabase, keyed by `chk_` or `wk_` ID |
+| Item and week notes | this browser only | Supabase, keyed by `act_` or `wk_` ID |
 | Text edits | Supabase, keyed by position | keyed by item ID and field |
 
 ## Checks that block publishing
@@ -254,7 +257,7 @@ All saved state moves to Supabase and is keyed by item ID:
 
 Warnings (do not block). The coach sees these in the upload report and in Edit Mode:
 
-- Optional content that is empty and will therefore be hidden: phase descriptions, Next Step time and who, part card descriptions, the roadmap closing note, time commitment, tactic phase labels, the Quick Wins intro and closing note
+- Optional content that is empty and will therefore be hidden: part card descriptions, the roadmap closing note, time commitment, tactic phase labels, the Quick Wins intro and closing note
 - `[INSERT ...]` or `[ADD ...]` left in visible text, which usually means an unfinished draft
 - House copy rules: no em dashes, no "--", "then" in place of arrows, Canadian spelling
 - A short label over 28 characters
@@ -314,3 +317,4 @@ This needs changes to login and access (`shared/auth.js`, the access rules in Su
   - Asset IDs are media IDs for now (open decision 2, for Conner).
   - Planned, not built: draft and published plan status.
 - 2026-11-24 (Stage 2 follow-ups): Checklist items count towards exactly one tactic (`tactic`, `tactic_source`, the `→ tactic: N` marker). The Assessment page comes from the client's `client_assessments` record. `CUTOVER.md` lists what must change outside v2 before a real client moves.
+- 2026-11-26 (design brief phase 2): Tasks are the actions: progress, tactic progress and the saved ticks use `act_` IDs, and the checklist is kept but not shown. Phase descriptions, `next_step` and `progress_headlines` are not shown by the redesigned dashboard. Stage selection, the current week and score levels (by letter grade) live in `assets/v2/progress-model.js`.

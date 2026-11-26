@@ -3,102 +3,64 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>90-Day Accelerator: Andrea&#039;s Resort</title>
+<title>90-day Accelerator: Andrea&#039;s Resort</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&amp;family=DM+Sans:wght@400;500&amp;family=Epilogue:wght@600;900&amp;family=Fraunces:ital,wght@1,900&amp;display=swap">
 <link rel="stylesheet" href="/assets/v2/tokens.css">
 <link rel="stylesheet" href="/assets/v2/accelerator.css">
 </head>
-<body data-client-slug="andreas-resort" data-client-name="Andrea&#039;s Resort" data-cohort-start="2026-10-15" data-total-days="90" data-total-weeks="12" data-template-version="v2">
+<body data-client-slug="andreas-resort" data-client-name="Andrea&#039;s Resort" data-cohort-start="2026-10-15" data-total-days="90" data-total-weeks="12" data-template-version="v2" data-plan="ready">
 <a href="#main" class="skip-link">Skip to main content</a>
 
-<!-- ── Sidebar ──────────────────────────────────────────────── -->
-<aside id="sidebar">
-  <div class="sidebar-logo">
-    <img id="sidebar-logo-img" src="/assets/v2/elearningu-logo-white.png" alt="eLearningU">
-  </div>
-  <div class="sidebar-progress-wrap">
-    <div class="sidebar-ring-wrap">
-      <svg class="sidebar-ring-svg" viewBox="0 0 56 56">
-        <circle class="sidebar-ring-bg" cx="28" cy="28" r="23"/>
-        <circle class="sidebar-ring-progress" id="sidebar-ring" cx="28" cy="28" r="23" stroke-dasharray="144.51" stroke-dashoffset="144.51"/>
-      </svg>
+<!-- ── Navigation (DESIGN-BRIEF.md section 4) ─────────────────── -->
+<aside id="sidebar" aria-label="Navigation">
+  <a class="nav-wordmark" href="#main" onclick="navigate('dashboard');return false;"><img src="/assets/v2/junction-wordmark-solid.png" alt="Junction" width="140" height="20"></a>
+  <nav class="nav-panel" aria-label="Main">
+    <div class="nav-group">
+      <button type="button" class="nav-item active" data-page="dashboard" onclick="navigate('dashboard')" aria-current="page">Dashboard</button>
+      <button type="button" class="nav-item" data-page="assessment" onclick="navigate('assessment')">Assessment</button>
+      <button type="button" class="nav-item plan-ready-only" data-page="strategy" onclick="navigate('strategy')">Strategy</button>
+      <button type="button" class="nav-item plan-coming-only" data-page="materials" onclick="navigate('materials')">Materials</button>
     </div>
-    <div class="sidebar-progress-text">
-      <div class="sidebar-progress-main">
-        <span class="sidebar-progress-count-big" id="sidebar-done">0</span>
-        <span class="sidebar-progress-of">of <span id="sidebar-total">33</span></span>
-      </div>
-      <div class="sidebar-progress-label">tasks checked off</div>
+    <div class="nav-group plan-ready-only">
+      <div class="nav-section-label">Tactics</div>
+      <button type="button" class="nav-item" data-page="tactic1" onclick="navigate('tactic1')"><span class="nav-ring" id="nav-ring-1" aria-hidden="true"></span><span class="nav-label">Social Media</span><span class="sr-only" id="nav-ring-1-text">, 0 of 6 done</span></button>
+      <button type="button" class="nav-item" data-page="tactic2" onclick="navigate('tactic2')"><span class="nav-ring" id="nav-ring-2" aria-hidden="true"></span><span class="nav-label">Reviews</span><span class="sr-only" id="nav-ring-2-text">, 0 of 4 done</span></button>
+      <button type="button" class="nav-item" data-page="tactic3" onclick="navigate('tactic3')"><span class="nav-ring" id="nav-ring-3" aria-hidden="true"></span><span class="nav-label">Local Search</span><span class="sr-only" id="nav-ring-3-text">, 0 of 11 done</span></button>
+      <button type="button" class="nav-item" data-page="tactic4" onclick="navigate('tactic4')"><span class="nav-ring" id="nav-ring-4" aria-hidden="true"></span><span class="nav-label">Booking and Email</span><span class="sr-only" id="nav-ring-4-text">, 0 of 6 done</span></button>
     </div>
-  </div>
-  <nav>
-    <div class="nav-item active" data-page="dashboard" onclick="navigate('dashboard')">
-      <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"/></svg>
-      Dashboard
+    <div class="nav-group plan-ready-only">
+      <div class="nav-section-label">Your plan</div>
+      <button type="button" class="nav-item" id="nav-roadmap" data-page="roadmap" onclick="navigate('roadmap')">90-day roadmap</button>
+      <button type="button" class="nav-item" data-page="materials" onclick="navigate('materials')">Materials</button>
     </div>
-    <div class="nav-section-label">Your Assessment</div>
-    <div class="nav-item" data-page="assessment" onclick="navigate('assessment')">
-      <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm2 10a1 1 0 10-2 0v3a1 1 0 102 0v-3zm2-3a1 1 0 011 1v5a1 1 0 11-2 0v-5a1 1 0 011-1zm4-1a1 1 0 10-2 0v7a1 1 0 102 0V8z" clip-rule="evenodd"/></svg>
-      Assessment
+    <div class="nav-group plan-coming-only">
+      <div class="nav-section-label">Coming with your plan</div>
+      <span class="nav-item nav-item--coming" aria-disabled="true">Strategy</span>
+      <span class="nav-item nav-item--coming" aria-disabled="true">Tactics</span>
+      <span class="nav-item nav-item--coming" aria-disabled="true">90-day roadmap</span>
     </div>
-    <div class="nav-section-label">Your Strategy</div>
-    <div class="nav-item" data-page="strategy" onclick="navigate('strategy')">
-      <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 6a3 3 0 013-3h10a1 1 0 01.8 1.6L14.25 8l2.55 3.4A1 1 0 0116 13H6a1 1 0 00-1 1v3a1 1 0 11-2 0V6z" clip-rule="evenodd"/></svg>
-      Strategy
-    </div>
-    <div class="nav-section-label">The Tactics</div>
-    <div class="nav-item" data-page="tactic1" onclick="navigate('tactic1')">
-      <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zm6-4a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zm6-3a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"/></svg>
-      Social Media
-    </div>
-    <div class="nav-item" data-page="tactic2" onclick="navigate('tactic2')">
-      <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"/></svg>
-      Reviews
-    </div>
-    <div class="nav-item" data-page="tactic3" onclick="navigate('tactic3')">
-      <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path d="M15 8a3 3 0 10-2.977-2.63l-4.94 2.47a3 3 0 100 4.319l4.94 2.47a3 3 0 10.895-1.789l-4.94-2.47a3.027 3.027 0 000-.74l4.94-2.47C13.456 7.68 14.19 8 15 8z"/></svg>
-      Local Search
-    </div>
-    <div class="nav-item" data-page="tactic4" onclick="navigate('tactic4')">
-      <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/><path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/></svg>
-      Booking and Email
-    </div>
-    <div class="nav-section-label">Your Plan</div>
-    <div class="nav-item" id="nav-roadmap" data-page="roadmap" onclick="navigate('roadmap')">
-      <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"/></svg>
-      90-Day Roadmap
-      <span class="nav-badge" id="roadmap-badge">0%</span>
-    </div>
-    <div class="nav-item" data-page="gbp" onclick="navigate('gbp')">
-      <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd"/></svg>
-      Quick Wins
-    </div>
-
-    <!-- Activity Nav (Admin/PSM/Coach only) -->
-    <div class="nav-section-label" id="nav-activity-label" hidden>Insights</div>
-    <div class="nav-item" id="nav-activity" onclick="navigate('activity')" hidden>
-      <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zm6-4a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zm6-3a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"/></svg>
-      Activity
+    <div class="nav-group" id="nav-activity-group" hidden>
+      <div class="nav-section-label" id="nav-activity-label">Insights</div>
+      <button type="button" class="nav-item" id="nav-activity" data-page="activity" onclick="navigate('activity')">Activity</button>
     </div>
   </nav>
+  <a class="nav-coach" href="mailto:conner@elearningu.com">Email your coach</a>
   <div class="sidebar-footer">
-    <button id="replayTour" class="restart-tour-btn" onclick="startWelcome()">
-      <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>
-      Replay welcome tour
-    </button>
+    <button id="replayTour" class="restart-tour-btn" onclick="startWelcome()">Replay welcome tour</button>
   </div>
   <div class="sidebar-user">
     <div class="user-menu-container" id="sidebarUserMenu"></div>
   </div>
 </aside>
 
-<!-- ── Mobile header ────────────────────────────────────────── -->
+<!-- ── Phone header ─────────────────────────────────────────── -->
 <header class="mobile-header">
-  <img id="mobile-logo-img" src="/assets/v2/elearningu-logo-white.png" alt="eLearningU">
+  <img id="mobile-logo-img" src="/assets/v2/junction-wordmark-solid.png" alt="Junction" width="118" height="17">
   <div class="user-menu-container" id="mobileUserMenu"></div>
-  <button class="hamburger" id="nav-hamburger" onclick="toggleMobileDrawer()" aria-label="Menu">
-    <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"/></svg>
-  </button>
+  <button class="hamburger" id="nav-hamburger" onclick="toggleMobileDrawer()" aria-label="Open menu" aria-controls="sidebar" aria-expanded="false"><span></span><span></span><span></span></button>
 </header>
 <div id="drawerOverlay" onclick="closeMobileDrawer()"></div>
 
@@ -107,119 +69,256 @@
 
 <!-- DASHBOARD -->
 <section id="page-dashboard" class="page active">
-  <div class="dash-v2">
-    <div class="dash-header">
-      <h1 class="dash-greeting" id="dash-greeting">Good to see you, Andrea&#039;s Resort</h1>
+  <div class="dash-v2 dash" data-dashboard>
+    <header class="dash-head">
+      <h1 class="dash-h1" id="dash-greeting"></h1>
+      <p class="dash-sub" id="dash-sub" hidden></p>
+    </header>
+    <ol class="stage-strip" aria-label="Your program">
+      <li class="stage-step" data-step="onboarding"><span class="stage-step-bar" aria-hidden="true"></span><span class="stage-step-label">Onboarding call</span><span class="stage-step-note" data-step-note></span></li>
+      <li class="stage-step" data-step="assessment"><span class="stage-step-bar" aria-hidden="true"></span><span class="stage-step-label">Assessment</span><span class="stage-step-note" data-step-note></span></li>
+      <li class="stage-step" data-step="coaching"><span class="stage-step-bar" aria-hidden="true"></span><span class="stage-step-label">Coaching call</span><span class="stage-step-note" data-step-note></span></li>
+      <li class="stage-step" data-step="plan"><span class="stage-step-bar" aria-hidden="true"></span><span class="stage-step-label">90-day plan</span><span class="stage-step-note" data-step-note></span></li>
+      <li class="stage-step" data-step="checkin"><span class="stage-step-bar" aria-hidden="true"></span><span class="stage-step-label">30-day check-in</span><span class="stage-step-note" data-step-note></span></li>
+      <li class="stage-step" data-step="review"><span class="stage-step-bar" aria-hidden="true"></span><span class="stage-step-label">90-day review</span><span class="stage-step-note" data-step-note></span></li>
+    </ol>
+    <div class="dash-stage" data-stage-panel="before" hidden>
+      <div class="dash-row">
+        <section class="dash-card dash-score">
+          <div class="donut donut--lg donut--score-fair" style="--pct:74" role="img" aria-label="Overall score 74 out of 100, grade C"><div class="donut-hole"><span class="donut-num">74</span><span class="donut-sub">out of 100</span></div></div>
+          <div class="dash-score-text">
+            <h2 class="dash-h2">Your digital marketing assessment</h2>
+            <p class="grade-line"><span class="grade-chip grade-chip--fair">C</span> Fair</p>
+            <p>Andrea&#039;s Resort has excellent technical foundations, perfect Google ratings, and strong pre-arrival information, but is not fully using social media. Key opportunities include increasing posting frequency and adding operating hours to the website.</p>
+            <div class="btn-row"><button type="button" class="btn" onclick="navigate('assessment')">Read your assessment</button><button type="button" class="link-btn" onclick="downloadPDF()">Download as PDF</button></div>
+          </div>
+        </section>
+        <section class="dash-card dash-card--dark dash-next">
+          <h2 class="dash-h3 dash-h3--gold">What happens next</h2>
+          <p>On your coaching call we walk through your assessment together and agree on the tactics that matter most.</p>
+          <p class="dash-muted-dark">Your 90-day plan appears here after the call.</p>
+        </section>
+      </div>
+      <section class="dash-card dash-card--sage dash-wins">
+        <div class="dash-card-head">
+          <div><h2 class="dash-h2">Quick wins you can start today</h2><p>Small fixes from your assessment. No need to wait for the plan.</p></div>
+          <div class="dash-wins-count"><span class="ring ring--sage" data-live-ring="wins" aria-hidden="true"></span><span><strong><span data-live="wins-done">0</span> of 4</strong> done</span></div>
+        </div>
+        <div class="task-row task-row--win"><input type="checkbox" class="tick" id="aqw-1" onchange="onQuickWinTick(this)"><div class="task-body"><label class="task-label task-label--strong" for="aqw-1">Make phone and email more prominent in website header/footer (currently available on Location page)</label><div class="task-sub">Visitors to remote wilderness resorts need direct contact for questions about access, weather, activities - expect 20-30% increase in booking inquiries</div></div><span class="task-time">30 minutes</span></div>
+        <div class="task-row task-row--win"><input type="checkbox" class="tick" id="aqw-2" onchange="onQuickWinTick(this)"><div class="task-body"><label class="task-label task-label--strong" for="aqw-2">Create simple FAQ page answering &#039;How do I get here?&#039;, &#039;What&#039;s included?&#039;, &#039;Best time to visit?&#039; - currently no Q&amp;A content detected</label><div class="task-sub">Reduces repetitive inquiry emails, improves SEO for long-tail searches, better GEO/AI visibility</div></div><span class="task-time">2 hours</span></div>
+        <div class="task-row task-row--win"><input type="checkbox" class="tick" id="aqw-3" onchange="onQuickWinTick(this)"><div class="task-body"><label class="task-label task-label--strong" for="aqw-3">Post to Instagram 3x per week using existing gorgeous wilderness/cabin photos from website (37 images detected) - currently posting 0.1x per week</label><div class="task-sub">At 3x weekly posting, expect follower growth from 194 to 400-500 within 6 months, improving brand awareness in outdoor/adventure travel community</div></div><span class="task-time">15 minutes per post</span></div>
+        <div class="task-row task-row--win"><input type="checkbox" class="tick" id="aqw-4" onchange="onQuickWinTick(this)"><div class="task-body"><label class="task-label task-label--strong" for="aqw-4">Add Local Business Schema markup to homepage with proper NAP data - currently missing despite having Google Business Profile</label><div class="task-sub">Improves local search visibility and rich snippet appearance in Google results for &#039;Lakeside resort&#039; searches</div></div><span class="task-time">45 minutes</span></div>
+      </section>
+      <section class="dash-section">
+        <h2 class="dash-h2 dash-h2--rule">Coming with your plan</h2>
+        <div class="dash-tiles dash-tiles--3">
+          <div class="dash-tile dash-tile--sunken"><strong>Strategy</strong><p class="dash-muted">Your goal, your positioning and your objectives.</p></div>
+          <div class="dash-tile dash-tile--sunken"><strong>Tactics</strong><p class="dash-muted">Step-by-step guides for each area you will work on.</p></div>
+          <div class="dash-tile dash-tile--sunken"><strong>90-day roadmap</strong><p class="dash-muted">What to do each week, ticked off as you go.</p></div>
+        </div>
+      </section>
     </div>
-
-    <div class="dash-progress-hero" id="goal-section">
-      <div class="dash-ring-large-wrap">
-        <svg class="dash-ring-large" width="200" height="200" viewBox="0 0 200 200">
-          <circle cx="100" cy="100" r="85" fill="none" stroke="var(--surface-sunken)" stroke-width="17"></circle>
-          <circle id="dash-ring" class="dash-ring-bar" cx="100" cy="100" r="85" fill="none" stroke="var(--mint-500)" stroke-width="17" stroke-linecap="round" stroke-dasharray="534.1" stroke-dashoffset="534.1"></circle>
-        </svg>
-        <div class="dash-ring-large-text">
-          <div class="dash-ring-pct" id="dash-pct">0%</div>
-          <div class="dash-ring-label"><span id="dash-done-count">0</span> of <span id="dash-total-count">33</span> tasks</div>
+    <div class="dash-stage" data-stage-panel="delivered" hidden>
+      <div class="dash-row">
+        <section class="dash-card dash-read">
+          <div class="dash-card-head dash-card-head--baseline"><h2 class="dash-h2">Start here: read your plan</h2><span class="dash-muted"><span data-live="read-done">0</span> of 5 read</span></div>
+          <p class="dash-measure">Read it through once before you begin. The weekly tasks will make more sense, and you can always come back to the how-to later.</p>
+          <div class="read-list">
+          <button type="button" class="read-row" data-read="strategy" onclick="openToRead('strategy')"><span class="read-dot" aria-hidden="true"></span><span class="read-text"><strong>Strategy</strong> · your goal, positioning and objectives</span><span class="read-state" data-read-state></span></button>
+          <button type="button" class="read-row" data-read="tac_epjtr3" onclick="openToRead('tac_epjtr3')"><span class="read-dot" aria-hidden="true"></span><span class="read-text"><strong>Social Media Activation</strong> · 6 steps</span><span class="read-state" data-read-state></span></button>
+          <button type="button" class="read-row" data-read="tac_yvx418" onclick="openToRead('tac_yvx418')"><span class="read-dot" aria-hidden="true"></span><span class="read-text"><strong>Review Generation</strong> · 4 steps</span><span class="read-state" data-read-state></span></button>
+          <button type="button" class="read-row" data-read="tac_1e8c92" onclick="openToRead('tac_1e8c92')"><span class="read-dot" aria-hidden="true"></span><span class="read-text"><strong>Local Search Visibility and the Pages That Earn Search Traffic All Year</strong> · 10 steps</span><span class="read-state" data-read-state></span></button>
+          <button type="button" class="read-row" data-read="tac_1ar79b" onclick="openToRead('tac_1ar79b')"><span class="read-dot" aria-hidden="true"></span><span class="read-text"><strong>Direct Booking and Guest Email</strong> · 6 steps</span><span class="read-state" data-read-state></span></button>
+          </div>
+          <div class="btn-row btn-row--end"><button type="button" class="btn" data-continue-reading onclick="continueReading()">Continue reading</button><button type="button" class="link-btn" onclick="printRoadmap()">Download the plan as a PDF</button></div>
+        </section>
+        <section class="dash-card dash-progress dash-progress--light">
+        <h2 class="dash-h3">Your progress</h2>
+        <div class="donut donut--lg donut--light" style="--pct:0" data-live-donut="plan" role="img" aria-label="Plan progress"><div class="donut-hole"><span class="donut-num" data-live="plan-pct">0%</span><span class="donut-sub">of your plan</span></div></div>
+        <p><strong><span data-live="plan-done">0</span> of 34</strong> tasks checked off</p>
+        <div class="phase-bars">
+          <div class="phase-bar"><span class="bar bar--light"><span class="bar-fill" data-live-bar="phase-1"></span></span><span class="phase-bar-name">Foundation</span><span class="phase-bar-weeks">Weeks 1 to 4</span></div>
+          <div class="phase-bar"><span class="bar bar--light"><span class="bar-fill" data-live-bar="phase-2"></span></span><span class="phase-bar-name">Growth</span><span class="phase-bar-weeks">Weeks 5 to 8</span></div>
+          <div class="phase-bar"><span class="bar bar--light"><span class="bar-fill" data-live-bar="phase-3"></span></span><span class="phase-bar-name">Scale</span><span class="phase-bar-weeks">Weeks 9 to 12</span></div>
         </div>
+      </section>
       </div>
-      <div class="dash-progress-content">
-        <h2 class="dash-headline" id="dash-headline">Getting started</h2>
-        <p class="dash-subcopy" id="dash-subcopy">You&#039;re in the first phase of your accelerator. Keep checking items off your roadmap to move forward.</p>
-        <div class="dash-phases-label">THE 90 DAYS</div>
-        <div class="dash-phases-grid" style="--columns:3">
-          <div class="dash-phase" data-phase="1">
-            <div class="dash-phase-range">WEEKS 1-4</div>
-            <div class="dash-phase-name">Foundation</div>
-          </div>
-          <div class="dash-phase" data-phase="2">
-            <div class="dash-phase-range">WEEKS 5-8</div>
-            <div class="dash-phase-name">Growth</div>
-          </div>
-          <div class="dash-phase" data-phase="3">
-            <div class="dash-phase-range">WEEKS 9-12</div>
-            <div class="dash-phase-name">Scale</div>
-          </div>
-        </div>
+      <section class="dash-card dash-then">
+        <div><h2 class="dash-h2 dash-h2--small">Then start week 1: Profiles and Pattern</h2><p class="dash-muted">3 actions, from Social Media and your quick wins</p></div>
+        <button type="button" class="btn btn--outline" onclick="openRoadmapWeek(1)">Open week 1</button>
+      </section>
+      <div class="dash-tiles dash-tiles--3">
+        <section class="dash-tile">
+          <h3 class="dash-h3">Quick wins</h3>
+          <p class="dash-muted"><span data-live="wins-done">0</span> of 4 done from your assessment.</p>
+          <button type="button" class="link-btn" onclick="navigate('assessment')">See your quick wins</button>
+        </section>
+        <section class="dash-tile">
+          <h3 class="dash-h3">Your coach</h3>
+          <p class="dash-muted">Questions about the plan? Send a note any time.</p>
+          <a class="link-btn" href="mailto:conner@elearningu.com">Email your coach</a>
+        </section>
+        <section class="dash-tile">
+          <h3 class="dash-h3">Materials</h3>
+          <button type="button" class="link-btn" onclick="downloadPDF()">Assessment report (PDF)</button>
+          <button type="button" class="link-btn plan-ready-only" onclick="printRoadmap()">Your 90-day plan (PDF)</button>
+          <button type="button" class="link-btn" onclick="navigate('materials')">All materials</button>
+        </section>
       </div>
     </div>
-
-    <div class="dash-next-step" id="objectives-section">
-      <div class="dash-next-main" id="next-step-main">
-        <div class="dash-next-eyebrow" id="dash-next-eyebrow">YOUR NEXT STEP · WEEK 1 OF 12 · Profiles and Pattern</div>
-        <h2 class="dash-next-title" id="dash-next-title">Both bios say where the resort is and link to the booking page</h2>
-        <div class="dash-next-tasks" id="dash-next-tasks"><div class="dash-next-task" data-key="chk_ufgw6d"><div class="dash-next-task-box"><svg width="14" height="14" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5,6 4.5,9 10.5,3"/></svg></div><span class="dash-next-task-text">Both bios say where the resort is and link to the booking page</span></div><div class="dash-next-task" data-key="chk_iwcfe9"><div class="dash-next-task-box"><svg width="14" height="14" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5,6 4.5,9 10.5,3"/></svg></div><span class="dash-next-task-text">Four story highlights are live</span></div><div class="dash-next-task" data-key="chk_h4fm6g"><div class="dash-next-task-box"><svg width="14" height="14" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5,6 4.5,9 10.5,3"/></svg></div><span class="dash-next-task-text">The weekly pattern is written down and shared</span></div><div class="dash-next-task" data-key="chk_mtz30d"><div class="dash-next-task-box"><svg width="14" height="14" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5,6 4.5,9 10.5,3"/></svg></div><span class="dash-next-task-text">Every existing Google review has a reply</span></div></div>
-        <div class="dash-next-actions">
-          <button class="dash-btn-primary" onclick="navigate('roadmap')">Open the roadmap</button>
-          <span class="dash-next-link" id="dash-next-link" onclick="navigate('tactic1')">Open the full guide for this tactic →</span>
+    <div class="dash-stage" data-stage-panel="during" hidden>
+      <div class="dash-row">
+        <section class="dash-card dash-week" id="objectives-section">
+          <div>
+            <h2 class="dash-h2">This week: <span data-live="week-title"></span></h2>
+            <p class="dash-muted">Week <span data-live="week-number"></span> of 12 · <span data-live="week-done">0</span> of <span data-live="week-total">0</span> done</p>
+          </div>
+          <div class="week-panels" id="next-step-main">
+          <div class="week-panel" data-week-panel="1" hidden>
+            <div class="task-row"><input type="checkbox" class="tick" id="dw-act_yfl9u1" data-mirror="act_yfl9u1" onchange="onMirrorTick(this)"><label class="task-label" for="dw-act_yfl9u1">Rewrite the Instagram and Facebook bios and add the booking link</label><button type="button" class="link-btn" onclick="howToLink('tactic1','stp_vucz24')">How to</button></div>
+            <div class="task-row"><input type="checkbox" class="tick" id="dw-act_fho0jx" data-mirror="act_fho0jx" onchange="onMirrorTick(this)"><label class="task-label" for="dw-act_fho0jx">Decide the weekly posting pattern</label><button type="button" class="link-btn" onclick="howToLink('tactic1','stp_osaub2')">How to</button></div>
+            <div class="task-row"><input type="checkbox" class="tick" id="dw-act_1exn37" data-mirror="act_1exn37" onchange="onMirrorTick(this)"><label class="task-label" for="dw-act_1exn37">Reply to all 20 existing Google reviews</label><button type="button" class="link-btn" onclick="navigate('gbp')">How to</button></div>
+          </div>
+          <div class="week-panel" data-week-panel="2" hidden>
+            <div class="task-row"><input type="checkbox" class="tick" id="dw-act_weo3f8" data-mirror="act_weo3f8" onchange="onMirrorTick(this)"><label class="task-label" for="dw-act_weo3f8">Sort the website photos into three folders</label><button type="button" class="link-btn" onclick="howToLink('tactic1','stp_7clf9y')">How to</button></div>
+            <div class="task-row"><input type="checkbox" class="tick" id="dw-act_fh1dkz" data-mirror="act_fh1dkz" onchange="onMirrorTick(this)"><label class="task-label" for="dw-act_fh1dkz">Write 12 captions and schedule them</label><button type="button" class="link-btn" onclick="howToLink('tactic1','stp_k6gy5q')">How to</button></div>
+          </div>
+          <div class="week-panel" data-week-panel="3" hidden>
+            <div class="task-row"><input type="checkbox" class="tick" id="dw-act_g7efyz" data-mirror="act_g7efyz" onchange="onMirrorTick(this)"><label class="task-label" for="dw-act_g7efyz">Publish the first two Reels</label><button type="button" class="link-btn" onclick="howToLink('tactic1','stp_7v8nsi')">How to</button></div>
+            <div class="task-row"><input type="checkbox" class="tick" id="dw-act_4dz0vq" data-mirror="act_4dz0vq" onchange="onMirrorTick(this)"><label class="task-label" for="dw-act_4dz0vq">Turn on comment notifications and follow 50 local accounts</label><button type="button" class="link-btn" onclick="howToLink('tactic1','stp_hky03f')">How to</button></div>
+            <div class="task-row"><input type="checkbox" class="tick" id="dw-act_f5jtpu" data-mirror="act_f5jtpu" onchange="onMirrorTick(this)"><label class="task-label" for="dw-act_f5jtpu">Create the Google review link</label><button type="button" class="link-btn" onclick="howToLink('tactic2','stp_abuzpq')">How to</button></div>
+          </div>
+          <div class="week-panel" data-week-panel="4" hidden>
+            <div class="task-row"><input type="checkbox" class="tick" id="dw-act_rul48f" data-mirror="act_rul48f" onchange="onMirrorTick(this)"><label class="task-label" for="dw-act_rul48f">Set up the review request email</label><button type="button" class="link-btn" onclick="howToLink('tactic2','stp_6sh853')">How to</button></div>
+            <div class="task-row"><input type="checkbox" class="tick" id="dw-act_eseeyf" data-mirror="act_eseeyf" onchange="onMirrorTick(this)"><label class="task-label" for="dw-act_eseeyf">Print and place QR cards in every cabin</label><button type="button" class="link-btn" onclick="howToLink('tactic2','stp_stx85v')">How to</button></div>
+            <div class="task-row"><input type="checkbox" class="tick" id="dw-act_i2aaub" data-mirror="act_i2aaub" onchange="onMirrorTick(this)"><label class="task-label" for="dw-act_i2aaub">Check Instagram insights and note the three best posts</label></div>
+          </div>
+          <div class="week-panel" data-week-panel="5" hidden>
+            <div class="task-row"><input type="checkbox" class="tick" id="dw-act_gwejdx" data-mirror="act_gwejdx" onchange="onMirrorTick(this)"><label class="task-label" for="dw-act_gwejdx">Complete every section of the Google Business Profile</label><button type="button" class="link-btn" onclick="howToLink('tactic3','stp_7zsjl9')">How to</button></div>
+            <div class="task-row"><input type="checkbox" class="tick" id="dw-act_7zt8eb" data-mirror="act_7zt8eb" onchange="onMirrorTick(this)"><label class="task-label" for="dw-act_7zt8eb">Upload ten new photos and publish the first Google Post</label><button type="button" class="link-btn" onclick="howToLink('tactic3','stp_1t63jy')">How to</button></div>
+            <div class="task-row"><input type="checkbox" class="tick" id="dw-act_5wb77i" data-mirror="act_5wb77i" onchange="onMirrorTick(this)"><label class="task-label" for="dw-act_5wb77i">Reply to new reviews within 24 hours</label><button type="button" class="link-btn" onclick="howToLink('tactic2','stp_1x7cm0')">How to</button></div>
+          </div>
+          <div class="week-panel" data-week-panel="6" hidden>
+            <div class="task-row"><input type="checkbox" class="tick" id="dw-act_qd4zxs" data-mirror="act_qd4zxs" onchange="onMirrorTick(this)"><label class="task-label" for="dw-act_qd4zxs">Record the Search Console baseline</label><button type="button" class="link-btn" onclick="howToLink('tactic3','stp_t68zdj')">How to</button></div>
+            <div class="task-row"><input type="checkbox" class="tick" id="dw-act_ntmmfe" data-mirror="act_ntmmfe" onchange="onMirrorTick(this)"><label class="task-label" for="dw-act_ntmmfe">Shorten the homepage title and add headings</label><button type="button" class="link-btn" onclick="howToLink('tactic3','stp_nirjva')">How to</button></div>
+            <div class="task-row"><input type="checkbox" class="tick" id="dw-act_2yxyv4" data-mirror="act_2yxyv4" onchange="onMirrorTick(this)"><label class="task-label" for="dw-act_2yxyv4">Brief the web developer on structured data</label><button type="button" class="link-btn" onclick="howToLink('tactic3','stp_vns9eq')">How to</button></div>
+          </div>
+          <div class="week-panel" data-week-panel="7" hidden>
+            <div class="task-row"><input type="checkbox" class="tick" id="dw-act_f4jh7b" data-mirror="act_f4jh7b" onchange="onMirrorTick(this)"><label class="task-label" for="dw-act_f4jh7b">Audit existing listings</label><button type="button" class="link-btn" onclick="howToLink('tactic3','stp_usobs9')">How to</button></div>
+            <div class="task-row"><input type="checkbox" class="tick" id="dw-act_ig8pyy" data-mirror="act_ig8pyy" onchange="onMirrorTick(this)"><label class="task-label" for="dw-act_ig8pyy">Claim the four priority listings</label><button type="button" class="link-btn" onclick="howToLink('tactic3','stp_nsxfk6')">How to</button></div>
+            <div class="task-row"><input type="checkbox" class="tick" id="dw-act_yhg9py" data-mirror="act_yhg9py" onchange="onMirrorTick(this)"><label class="task-label" for="dw-act_yhg9py">Brief the Book Now button</label><button type="button" class="link-btn" onclick="howToLink('tactic4','stp_pywh56')">How to</button></div>
+          </div>
+          <div class="week-panel" data-week-panel="8" hidden>
+            <div class="task-row"><input type="checkbox" class="tick" id="dw-act_nr9j25" data-mirror="act_nr9j25" onchange="onMirrorTick(this)"><label class="task-label" for="dw-act_nr9j25">Add rates, cabin types and the cancellation policy to the booking page</label><button type="button" class="link-btn" onclick="howToLink('tactic4','stp_zgdzxg')">How to</button></div>
+            <div class="task-row"><input type="checkbox" class="tick" id="dw-act_jffb6m" data-mirror="act_jffb6m" onchange="onMirrorTick(this)"><label class="task-label" for="dw-act_jffb6m">Write the Know Before You Go page</label><button type="button" class="link-btn" onclick="howToLink('tactic3','stp_sgvdaa')">How to</button></div>
+            <div class="task-row"><input type="checkbox" class="tick" id="dw-act_0f8hky" data-mirror="act_0f8hky" onchange="onMirrorTick(this)"><label class="task-label" for="dw-act_0f8hky">Keep posting three times a week</label></div>
+          </div>
+          <div class="week-panel" data-week-panel="9" hidden>
+            <div class="task-row"><input type="checkbox" class="tick" id="dw-act_zy07dh" data-mirror="act_zy07dh" onchange="onMirrorTick(this)"><label class="task-label" for="dw-act_zy07dh">Import past guests and send the permission email</label><button type="button" class="link-btn" onclick="howToLink('tactic4','stp_h87vst')">How to</button></div>
+            <div class="task-row"><input type="checkbox" class="tick" id="dw-act_y6zj6i" data-mirror="act_y6zj6i" onchange="onMirrorTick(this)"><label class="task-label" for="dw-act_y6zj6i">Add the sign-up form to the footer</label><button type="button" class="link-btn" onclick="howToLink('tactic4','stp_hrs4ys')">How to</button></div>
+            <div class="task-row"><input type="checkbox" class="tick" id="dw-act_cwkd8p" data-mirror="act_cwkd8p" onchange="onMirrorTick(this)"><label class="task-label" for="dw-act_cwkd8p">Publish the three-day itinerary</label><button type="button" class="link-btn" onclick="howToLink('tactic3','stp_9yv5z9')">How to</button></div>
+          </div>
+          <div class="week-panel" data-week-panel="10" hidden>
+            <div class="task-row"><input type="checkbox" class="tick" id="dw-act_sk3yjr" data-mirror="act_sk3yjr" onchange="onMirrorTick(this)"><label class="task-label" for="dw-act_sk3yjr">Build and switch on the pre-arrival email</label><button type="button" class="link-btn" onclick="howToLink('tactic4','stp_77peyg')">How to</button></div>
+            <div class="task-row"><input type="checkbox" class="tick" id="dw-act_i007aq" data-mirror="act_i007aq" onchange="onMirrorTick(this)"><label class="task-label" for="dw-act_i007aq">Check local ranking for your three key phrases</label><button type="button" class="link-btn" onclick="howToLink('tactic3','stp_blf1ij')">How to</button></div>
+          </div>
+          <div class="week-panel" data-week-panel="11" hidden>
+            <div class="task-row"><input type="checkbox" class="tick" id="dw-act_lmq8w7" data-mirror="act_lmq8w7" onchange="onMirrorTick(this)"><label class="task-label" for="dw-act_lmq8w7">Send the seasonal availability email</label><button type="button" class="link-btn" onclick="howToLink('tactic4','stp_wd1l3v')">How to</button></div>
+            <div class="task-row"><input type="checkbox" class="tick" id="dw-act_ihvgx4" data-mirror="act_ihvgx4" onchange="onMirrorTick(this)"><label class="task-label" for="dw-act_ihvgx4">Publish the second local guide</label><button type="button" class="link-btn" onclick="howToLink('tactic3','stp_9yv5z9')">How to</button></div>
+            <div class="task-row"><input type="checkbox" class="tick" id="dw-act_2ty5lb" data-mirror="act_2ty5lb" onchange="onMirrorTick(this)"><label class="task-label" for="dw-act_2ty5lb">Share two recent reviews on social</label></div>
+          </div>
+          <div class="week-panel" data-week-panel="12" hidden>
+            <div class="task-row"><input type="checkbox" class="tick" id="dw-act_sul75e" data-mirror="act_sul75e" onchange="onMirrorTick(this)"><label class="task-label" for="dw-act_sul75e">Compare followers, reviews, search clicks and direct bookings against the baseline</label></div>
+            <div class="task-row"><input type="checkbox" class="tick" id="dw-act_l7igws" data-mirror="act_l7igws" onchange="onMirrorTick(this)"><label class="task-label" for="dw-act_l7igws">Write down what worked, what did not and what to repeat</label></div>
+            <div class="task-row"><input type="checkbox" class="tick" id="dw-act_mizw23" data-mirror="act_mizw23" onchange="onMirrorTick(this)"><label class="task-label" for="dw-act_mizw23">Set a monthly routine for posts, review replies and Google Posts</label></div>
+          </div>
+          </div>
+          <div class="dash-week-foot" data-week-foot="open">
+            <button type="button" class="btn" onclick="openRoadmapWeek(shownWeek)">Open week <span data-live="week-number"></span> in the roadmap</button>
+            <button type="button" class="link-btn" data-resume onclick="resumeLastStep()" hidden></button>
+          </div>
+          <div class="dash-week-foot dash-week-foot--done" data-week-foot="done" hidden>
+            <p><strong>Week <span data-live="week-number"></span> is done.</strong> <span data-live="week-up-next"></span></p>
+            <button type="button" class="btn btn--forest" data-week-advance onclick="advanceWeek()"></button>
+          </div>
+        </section>
+        <section class="dash-card dash-progress dash-progress--dark" id="goal-section">
+        <h2 class="dash-h3">Your progress</h2>
+        <div class="donut donut--lg donut--dark" style="--pct:0" data-live-donut="plan" role="img" aria-label="Plan progress"><div class="donut-hole"><span class="donut-num" data-live="plan-pct">0%</span><span class="donut-sub">of your plan</span></div></div>
+        <p><strong><span data-live="plan-done">0</span> of 34</strong> tasks checked off</p>
+        <div class="phase-bars">
+          <div class="phase-bar"><span class="bar bar--dark"><span class="bar-fill" data-live-bar="phase-1"></span></span><span class="phase-bar-name">Foundation</span><span class="phase-bar-weeks">Weeks 1 to 4</span></div>
+          <div class="phase-bar"><span class="bar bar--dark"><span class="bar-fill" data-live-bar="phase-2"></span></span><span class="phase-bar-name">Growth</span><span class="phase-bar-weeks">Weeks 5 to 8</span></div>
+          <div class="phase-bar"><span class="bar bar--dark"><span class="bar-fill" data-live-bar="phase-3"></span></span><span class="phase-bar-name">Scale</span><span class="phase-bar-weeks">Weeks 9 to 12</span></div>
         </div>
+      </section>
       </div>
-      <div class="dash-next-sidebar">
-        <div class="dash-next-meta">
-          <div class="dash-next-meta-label">TACTIC</div>
-          <div class="dash-next-meta-value" id="dash-next-tactic">Social Media</div>
+      <section class="dash-section">
+        <h2 class="dash-h2 dash-h2--rule">Your tactics</h2>
+        <div class="dash-tactics tactic-grid" id="tactic-cards-section" data-columns="4">
+          <button type="button" class="tactic-tile" onclick="navigate('tactic1')"><span class="ring" data-live-ring="tactic-1" aria-hidden="true"></span><span class="tactic-tile-text"><span class="tactic-tile-name">Social Media</span><span class="tactic-tile-count"><span data-live="tactic-1-done">0</span> of 6 done</span></span></button>
+          <button type="button" class="tactic-tile" onclick="navigate('tactic2')"><span class="ring" data-live-ring="tactic-2" aria-hidden="true"></span><span class="tactic-tile-text"><span class="tactic-tile-name">Reviews</span><span class="tactic-tile-count"><span data-live="tactic-2-done">0</span> of 4 done</span></span></button>
+          <button type="button" class="tactic-tile" onclick="navigate('tactic3')"><span class="ring" data-live-ring="tactic-3" aria-hidden="true"></span><span class="tactic-tile-text"><span class="tactic-tile-name">Local Search</span><span class="tactic-tile-count"><span data-live="tactic-3-done">0</span> of 11 done</span></span></button>
+          <button type="button" class="tactic-tile" onclick="navigate('tactic4')"><span class="ring" data-live-ring="tactic-4" aria-hidden="true"></span><span class="tactic-tile-text"><span class="tactic-tile-name">Booking and Email</span><span class="tactic-tile-count"><span data-live="tactic-4-done">0</span> of 6 done</span></span></button>
         </div>
-        <div class="dash-next-meta" id="dash-next-time-wrap" hidden>
-          <div class="dash-next-meta-label">TIME NEEDED</div>
-          <div class="dash-next-meta-value" id="dash-next-time"></div>
-        </div>
-        <div class="dash-next-meta" id="dash-next-who-wrap" hidden>
-          <div class="dash-next-meta-label">WHO</div>
-          <div class="dash-next-meta-value" id="dash-next-who"></div>
-        </div>
-        <div class="dash-next-week-progress">
-          <div class="dash-next-week-header">
-            <span id="dash-week-progress-title">Week 1 tasks</span>
-            <span id="dash-week-progress-label">0/4</span>
-          </div>
-          <div class="dash-next-week-bar">
-            <div class="dash-next-week-bar-fill" id="dash-week-bar"></div>
-          </div>
-        </div>
+      </section>
+      <div class="dash-tiles dash-tiles--3">
+        <section class="dash-tile dash-tile--sage" data-coming-up>
+          <h3 class="dash-h3">Coming up</h3>
+          <p><strong data-live="next-title"></strong></p>
+          <p class="dash-small" data-live="next-summary"></p>
+          <button type="button" class="link-btn link-btn--forest" data-live-next onclick="openRoadmapWeek(this.dataset.week)">Look ahead</button>
+        </section>
+        <section class="dash-tile dash-tile--sage25">
+          <h3 class="dash-h3">30-day check-in</h3>
+          <p class="dash-small">Opens after week 4. Your six areas are scored again so you can see what moved.</p>
+        </section>
+        <section class="dash-tile">
+          <h3 class="dash-h3">Materials</h3>
+          <button type="button" class="link-btn" onclick="downloadPDF()">Assessment report (PDF)</button>
+          <button type="button" class="link-btn plan-ready-only" onclick="printRoadmap()">Your 90-day plan (PDF)</button>
+          <button type="button" class="link-btn" onclick="navigate('materials')">All materials</button>
+        </section>
       </div>
     </div>
-
-    <div class="dash-tactics-grid tactic-grid" id="tactic-cards-section" data-columns="4">
-      <div class="dash-tactic-pill" onclick="navigate('tactic1')">
-        <svg class="dash-tactic-ring" width="44" height="44" viewBox="0 0 44 44">
-          <circle cx="22" cy="22" r="18" fill="none" stroke="var(--surface-sunken)" stroke-width="5"></circle>
-          <circle id="tactic1-ring" class="dash-tactic-ring-bar" cx="22" cy="22" r="18" fill="none" stroke="var(--tactic-ring-1)" stroke-width="5" stroke-linecap="round" stroke-dasharray="113.1" stroke-dashoffset="113.1"></circle>
-        </svg>
-        <div class="dash-tactic-info">
-          <div class="dash-tactic-name">Social Media</div>
-          <div class="dash-tactic-label" id="tc1-stat">0 of 8 done</div>
+    <div class="dash-stage" data-stage-panel="done" hidden>
+      <section class="dash-card dash-results">
+        <div class="dash-card-head"><h2 class="dash-h2">Your results</h2><span class="sample-badge" data-sample-only hidden>Sample scores for review</span></div>
+        <div class="results-top">
+          <div class="results-donuts">
+            <figure class="results-donut"><div class="donut donut--md donut--score-fair" style="--pct:74" role="img" aria-label="Overall score 74 out of 100, grade C"><div class="donut-hole"><span class="donut-num">74</span><span class="donut-sub">Grade C</span></div></div><figcaption>When you started</figcaption></figure>
+            <span class="dash-muted">to</span>
+            <figure class="results-donut" data-review-donut><div class="donut-slot">Not yet</div><figcaption>After 90 days</figcaption></figure>
+          </div>
+          <div class="results-text">
+            <p class="results-line" data-live="results-line">Your 90-day review scores your six areas again so you can see what changed.</p>
+            <div class="btn-row"><button type="button" class="btn" onclick="navigate('assessment')">Read your assessment</button><button type="button" class="link-btn" onclick="downloadPDF()">Download as PDF</button></div>
+          </div>
         </div>
-      </div>
-      <div class="dash-tactic-pill" onclick="navigate('tactic2')">
-        <svg class="dash-tactic-ring" width="44" height="44" viewBox="0 0 44 44">
-          <circle cx="22" cy="22" r="18" fill="none" stroke="var(--surface-sunken)" stroke-width="5"></circle>
-          <circle id="tactic2-ring" class="dash-tactic-ring-bar" cx="22" cy="22" r="18" fill="none" stroke="var(--tactic-ring-2)" stroke-width="5" stroke-linecap="round" stroke-dasharray="113.1" stroke-dashoffset="113.1"></circle>
-        </svg>
-        <div class="dash-tactic-info">
-          <div class="dash-tactic-name">Reviews</div>
-          <div class="dash-tactic-label" id="tc2-stat">0 of 5 done</div>
+        <div class="table-scroll">
+          <table class="plain-table results-table">
+            <thead><tr><th scope="col">Area</th><th scope="col">Start</th><th scope="col">30 days</th><th scope="col">90 days</th><th scope="col">Change</th></tr></thead>
+            <tbody>
+              <tr data-area="website_technical"><th scope="row">Website &amp; Technical</th><td><span class="score score--good">78 <span class="score-letter">B-</span></span></td><td data-slot="checkin"><span class="slot-empty">Not yet</span></td><td data-slot="review"><span class="slot-empty">Not yet</span></td><td data-slot="change"><span class="slot-empty">Not yet</span></td></tr>
+              <tr data-area="reviews_reputation"><th scope="row">Reviews &amp; Reputation</th><td><span class="score score--fair">71 <span class="score-letter">C</span></span></td><td data-slot="checkin"><span class="slot-empty">Not yet</span></td><td data-slot="review"><span class="slot-empty">Not yet</span></td><td data-slot="change"><span class="slot-empty">Not yet</span></td></tr>
+              <tr data-area="booking_conversion"><th scope="row">Online Booking &amp; Conversion</th><td><span class="score score--good">80 <span class="score-letter">B</span></span></td><td data-slot="checkin"><span class="slot-empty">Not yet</span></td><td data-slot="review"><span class="slot-empty">Not yet</span></td><td data-slot="change"><span class="slot-empty">Not yet</span></td></tr>
+              <tr data-area="social_media"><th scope="row">Social Media &amp; Content</th><td><span class="score score--needs-work">62 <span class="score-letter">D</span></span></td><td data-slot="checkin"><span class="slot-empty">Not yet</span></td><td data-slot="review"><span class="slot-empty">Not yet</span></td><td data-slot="change"><span class="slot-empty">Not yet</span></td></tr>
+              <tr data-area="guest_experience"><th scope="row">Digital Guest Experience</th><td><span class="score score--good">84 <span class="score-letter">B</span></span></td><td data-slot="checkin"><span class="slot-empty">Not yet</span></td><td data-slot="review"><span class="slot-empty">Not yet</span></td><td data-slot="change"><span class="slot-empty">Not yet</span></td></tr>
+              <tr data-area="local_visibility"><th scope="row">Local Visibility</th><td><span class="score score--good">81 <span class="score-letter">B</span></span></td><td data-slot="checkin"><span class="slot-empty">Not yet</span></td><td data-slot="review"><span class="slot-empty">Not yet</span></td><td data-slot="change"><span class="slot-empty">Not yet</span></td></tr>
+            </tbody>
+          </table>
         </div>
-      </div>
-      <div class="dash-tactic-pill" onclick="navigate('tactic3')">
-        <svg class="dash-tactic-ring" width="44" height="44" viewBox="0 0 44 44">
-          <circle cx="22" cy="22" r="18" fill="none" stroke="var(--surface-sunken)" stroke-width="5"></circle>
-          <circle id="tactic3-ring" class="dash-tactic-ring-bar" cx="22" cy="22" r="18" fill="none" stroke="var(--tactic-ring-3)" stroke-width="5" stroke-linecap="round" stroke-dasharray="113.1" stroke-dashoffset="113.1"></circle>
-        </svg>
-        <div class="dash-tactic-info">
-          <div class="dash-tactic-name">Local Search</div>
-          <div class="dash-tactic-label" id="tc3-stat">0 of 14 done</div>
-        </div>
-      </div>
-      <div class="dash-tactic-pill" onclick="navigate('tactic4')">
-        <svg class="dash-tactic-ring" width="44" height="44" viewBox="0 0 44 44">
-          <circle cx="22" cy="22" r="18" fill="none" stroke="var(--surface-sunken)" stroke-width="5"></circle>
-          <circle id="tactic4-ring" class="dash-tactic-ring-bar" cx="22" cy="22" r="18" fill="none" stroke="var(--tactic-ring-4)" stroke-width="5" stroke-linecap="round" stroke-dasharray="113.1" stroke-dashoffset="113.1"></circle>
-        </svg>
-        <div class="dash-tactic-info">
-          <div class="dash-tactic-name">Booking and Email</div>
-          <div class="dash-tactic-label" id="tc4-stat">0 of 6 done</div>
-        </div>
-      </div>
+      </section>
+      <section class="dash-card dash-keep" data-keep-doing hidden>
+        <div><h2 class="dash-h2">What to keep doing</h2><p class="dash-muted">The habits from your plan that keep these numbers where they are. This list resets each month.</p></div>
+        <span class="sample-badge">Sample list for review</span>
+        <div class="keep-list" data-keep-list></div>
+      </section>
+      <section class="dash-card dash-card--dark dash-junction">
+        <div><h2 class="dash-h2">Your next step with Junction</h2><p class="dash-muted-dark">Go through these results with your coach and decide what your next 90 days should focus on.</p></div>
+        <a class="btn btn--light" href="mailto:conner@elearningu.com">Email your coach</a>
+      </section>
+      <p class="dash-muted dash-small">Your plan, assessment and materials stay here for you to come back to.</p>
     </div>
   </div>
 </section>
@@ -1961,7 +2060,7 @@
 
     <div class="print-only">
       <div class="print-cover">
-        <div class="print-cover-logo">e<span>Learning</span>U</div>
+        <img class="print-cover-logo" src="/assets/v2/junction-wordmark-solid.png" alt="Junction" width="140" height="20">
         <div class="print-cover-badge">Tourism Digital Marketing Accelerator</div>
         <h1 class="print-cover-title">90-Day Roadmap</h1>
         <p class="print-cover-client">Andrea&#039;s Resort</p>
@@ -1971,14 +2070,14 @@
           <strong>Program Duration:</strong> 12 Weeks
         </p>
         <div class="print-cover-footer">
-          <p>Prepared by eLearningU Accelerator Program</p>
+          <p>Prepared by the Junction Accelerator</p>
         </div>
       </div>
 
       <div class="print-overview">
         <div class="print-section">
           <h2>About This Document</h2>
-          <p>This roadmap was created as part of the eLearningU Tourism Digital Marketing Accelerator program. It is a customised 90-day action plan designed specifically for Andrea&#039;s Resort based on a comprehensive digital assessment and strategy session with your coach.</p>
+          <p>This roadmap was created as part of the Junction Accelerator. It is a customised 90-day action plan designed specifically for Andrea&#039;s Resort based on a comprehensive digital assessment and strategy session with your coach.</p>
           <p>The plan is structured as 12 weekly sprints across three phases: Foundation (Weeks 1-4), Growth (Weeks 5-8), and Scale (Weeks 9-12).</p>
         </div>
         <div class="print-section">
@@ -2001,76 +2100,56 @@
       <div class="month-header">
         <span class="month-badge">Month 1</span>
         <span class="month-title">Foundation</span>
-        <span class="month-progress" id="m1-prog"><span>0</span> of 12 done</span>
+        <span class="month-progress" id="m1-prog"><span>0</span> of 11 done</span>
       </div>
       <div class="week-card" id="wc-1" data-week="1" data-week-id="wk_ttofa1">
   <div class="week-card-header" onclick="toggleWeek(1)">
     <div class="week-num">W1</div>
     <div class="week-title" data-editable-key="wk_ttofa1.title">Profiles and Pattern</div>
-    <div class="week-progress-pill" id="wp-1">0 / 4</div>
+    <div class="week-progress-pill" id="wp-1">0 / 3</div>
     <svg class="week-chevron" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
   </div>
   <div class="week-card-body">
-    <div class="week-cols">
-      <div>
-        <div class="week-col-label">This Week's Actions</div>
-        <ul class="week-tasks-list">
-          <li class="week-task-item"><div class="week-task-dot"></div><span class="week-task-text" data-editable-key="act_yfl9u1.text">Rewrite the Instagram and Facebook bios and add the booking link</span> <button class="howto-link" id="w1-howto-example" onclick="howToLink('tactic1','stp_vucz24')">how to</button></li>
-          <li class="week-task-item"><div class="week-task-dot"></div><span class="week-task-text" data-editable-key="act_fho0jx.text">Decide the weekly posting pattern</span> <button class="howto-link" onclick="howToLink('tactic1','stp_osaub2')">how to</button></li>
-          <li class="week-task-item"><div class="week-task-dot"></div><span class="week-task-text" data-editable-key="act_1exn37.text">Reply to all 20 existing Google reviews</span> <button class="howto-link" onclick="navigate('gbp')">how to</button></li>
-        </ul>
-      </div>
-      <div>
-        <div class="week-col-label">Completion Checklist</div>
-        <div class="check-list" id="w1-checklist">
-          <div class="check-item">
+    <div class="week-col-label">This week's actions</div>
+    <div class="check-list week-actions" id="w1-checklist">
+      <div class="check-item">
   <div class="check-row">
-    <input type="checkbox" class="check-input" id="chk_ufgw6d" data-key="chk_ufgw6d" onchange="onCheck(this)">
-    <label class="check-box" for="chk_ufgw6d"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5,6 4.5,9 10.5,3"/></svg></label>
-    <label class="check-label" for="chk_ufgw6d" data-editable-key="chk_ufgw6d.text">Both bios say where the resort is and link to the booking page</label>
-    <button class="note-toggle-btn" id="w1-note-example" onclick="toggleNote('chk_ufgw6d')" title="Add note"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M13 2.5H3a.5.5 0 00-.5.5v14a.5.5 0 00.5.5h10a.5.5 0 00.5-.5V3a.5.5 0 00-.5-.5zM3 0h10a3 3 0 013 3v14a3 3 0 01-3 3H3a3 3 0 01-3-3V3a3 3 0 013-3zm2 5h6v2H5V5zm0 4h6v2H5V9z"/></svg></button>
+    <input type="checkbox" class="check-input" id="act_yfl9u1" data-key="act_yfl9u1" onchange="onCheck(this)">
+    <label class="check-box" for="act_yfl9u1"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5,6 4.5,9 10.5,3"/></svg></label>
+    <label class="check-label" for="act_yfl9u1" data-editable-key="act_yfl9u1.text">Rewrite the Instagram and Facebook bios and add the booking link</label>
+    <button class="howto-link" id="w1-howto-example" onclick="howToLink('tactic1','stp_vucz24')">how to</button>
+    <button class="note-toggle-btn" id="w1-note-example" onclick="toggleNote('act_yfl9u1')" title="Add note"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M13 2.5H3a.5.5 0 00-.5.5v14a.5.5 0 00.5.5h10a.5.5 0 00.5-.5V3a.5.5 0 00-.5-.5zM3 0h10a3 3 0 013 3v14a3 3 0 01-3 3H3a3 3 0 01-3-3V3a3 3 0 013-3zm2 5h6v2H5V5zm0 4h6v2H5V9z"/></svg></button>
   </div>
-  <div class="note-area" id="note-area-chk_ufgw6d">
-    <textarea class="note-textarea" id="note-chk_ufgw6d" placeholder="Add a note…" oninput="saveNote('chk_ufgw6d',this.value)"></textarea>
+  <div class="note-area" id="note-area-act_yfl9u1">
+    <textarea class="note-textarea" id="note-act_yfl9u1" placeholder="Add a note…" oninput="saveNote('act_yfl9u1',this.value)"></textarea>
   </div>
 </div>
-          <div class="check-item">
+      <div class="check-item">
   <div class="check-row">
-    <input type="checkbox" class="check-input" id="chk_iwcfe9" data-key="chk_iwcfe9" onchange="onCheck(this)">
-    <label class="check-box" for="chk_iwcfe9"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5,6 4.5,9 10.5,3"/></svg></label>
-    <label class="check-label" for="chk_iwcfe9" data-editable-key="chk_iwcfe9.text">Four story highlights are live</label>
-    <button class="note-toggle-btn" onclick="toggleNote('chk_iwcfe9')" title="Add note"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M13 2.5H3a.5.5 0 00-.5.5v14a.5.5 0 00.5.5h10a.5.5 0 00.5-.5V3a.5.5 0 00-.5-.5zM3 0h10a3 3 0 013 3v14a3 3 0 01-3 3H3a3 3 0 01-3-3V3a3 3 0 013-3zm2 5h6v2H5V5zm0 4h6v2H5V9z"/></svg></button>
+    <input type="checkbox" class="check-input" id="act_fho0jx" data-key="act_fho0jx" onchange="onCheck(this)">
+    <label class="check-box" for="act_fho0jx"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5,6 4.5,9 10.5,3"/></svg></label>
+    <label class="check-label" for="act_fho0jx" data-editable-key="act_fho0jx.text">Decide the weekly posting pattern</label>
+    <button class="howto-link" onclick="howToLink('tactic1','stp_osaub2')">how to</button>
+    <button class="note-toggle-btn" onclick="toggleNote('act_fho0jx')" title="Add note"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M13 2.5H3a.5.5 0 00-.5.5v14a.5.5 0 00.5.5h10a.5.5 0 00.5-.5V3a.5.5 0 00-.5-.5zM3 0h10a3 3 0 013 3v14a3 3 0 01-3 3H3a3 3 0 01-3-3V3a3 3 0 013-3zm2 5h6v2H5V5zm0 4h6v2H5V9z"/></svg></button>
   </div>
-  <div class="note-area" id="note-area-chk_iwcfe9">
-    <textarea class="note-textarea" id="note-chk_iwcfe9" placeholder="Add a note…" oninput="saveNote('chk_iwcfe9',this.value)"></textarea>
+  <div class="note-area" id="note-area-act_fho0jx">
+    <textarea class="note-textarea" id="note-act_fho0jx" placeholder="Add a note…" oninput="saveNote('act_fho0jx',this.value)"></textarea>
   </div>
 </div>
-          <div class="check-item">
+      <div class="check-item">
   <div class="check-row">
-    <input type="checkbox" class="check-input" id="chk_h4fm6g" data-key="chk_h4fm6g" onchange="onCheck(this)">
-    <label class="check-box" for="chk_h4fm6g"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5,6 4.5,9 10.5,3"/></svg></label>
-    <label class="check-label" for="chk_h4fm6g" data-editable-key="chk_h4fm6g.text">The weekly pattern is written down and shared</label>
-    <button class="note-toggle-btn" onclick="toggleNote('chk_h4fm6g')" title="Add note"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M13 2.5H3a.5.5 0 00-.5.5v14a.5.5 0 00.5.5h10a.5.5 0 00.5-.5V3a.5.5 0 00-.5-.5zM3 0h10a3 3 0 013 3v14a3 3 0 01-3 3H3a3 3 0 01-3-3V3a3 3 0 013-3zm2 5h6v2H5V5zm0 4h6v2H5V9z"/></svg></button>
+    <input type="checkbox" class="check-input" id="act_1exn37" data-key="act_1exn37" onchange="onCheck(this)">
+    <label class="check-box" for="act_1exn37"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5,6 4.5,9 10.5,3"/></svg></label>
+    <label class="check-label" for="act_1exn37" data-editable-key="act_1exn37.text">Reply to all 20 existing Google reviews</label>
+    <button class="howto-link" onclick="navigate('gbp')">how to</button>
+    <button class="note-toggle-btn" onclick="toggleNote('act_1exn37')" title="Add note"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M13 2.5H3a.5.5 0 00-.5.5v14a.5.5 0 00.5.5h10a.5.5 0 00.5-.5V3a.5.5 0 00-.5-.5zM3 0h10a3 3 0 013 3v14a3 3 0 01-3 3H3a3 3 0 01-3-3V3a3 3 0 013-3zm2 5h6v2H5V5zm0 4h6v2H5V9z"/></svg></button>
   </div>
-  <div class="note-area" id="note-area-chk_h4fm6g">
-    <textarea class="note-textarea" id="note-chk_h4fm6g" placeholder="Add a note…" oninput="saveNote('chk_h4fm6g',this.value)"></textarea>
+  <div class="note-area" id="note-area-act_1exn37">
+    <textarea class="note-textarea" id="note-act_1exn37" placeholder="Add a note…" oninput="saveNote('act_1exn37',this.value)"></textarea>
   </div>
 </div>
-          <div class="check-item">
-  <div class="check-row">
-    <input type="checkbox" class="check-input" id="chk_mtz30d" data-key="chk_mtz30d" onchange="onCheck(this)">
-    <label class="check-box" for="chk_mtz30d"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5,6 4.5,9 10.5,3"/></svg></label>
-    <label class="check-label" for="chk_mtz30d" data-editable-key="chk_mtz30d.text">Every existing Google review has a reply</label>
-    <button class="note-toggle-btn" onclick="toggleNote('chk_mtz30d')" title="Add note"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M13 2.5H3a.5.5 0 00-.5.5v14a.5.5 0 00.5.5h10a.5.5 0 00.5-.5V3a.5.5 0 00-.5-.5zM3 0h10a3 3 0 013 3v14a3 3 0 01-3 3H3a3 3 0 01-3-3V3a3 3 0 013-3zm2 5h6v2H5V5zm0 4h6v2H5V9z"/></svg></button>
-  </div>
-  <div class="note-area" id="note-area-chk_mtz30d">
-    <textarea class="note-textarea" id="note-chk_mtz30d" placeholder="Add a note…" oninput="saveNote('chk_mtz30d',this.value)"></textarea>
-  </div>
-</div>
-        </div>
-      </div>
     </div>
-    <div class="week-note-section"><div class="week-note-label">Week Notes</div><textarea class="note-textarea week-note-textarea" id="note-wk_ttofa1" placeholder="Add general notes for this week…" oninput="saveNote('wk_ttofa1',this.value)"></textarea></div>
+    <div class="week-note-section"><div class="week-note-label">Week notes</div><textarea class="note-textarea week-note-textarea" id="note-wk_ttofa1" placeholder="Add general notes for this week…" oninput="saveNote('wk_ttofa1',this.value)"></textarea></div>
   </div>
 </div>
 <div class="week-card" id="wc-2" data-week="2" data-week-id="wk_wc90vw">
@@ -2081,43 +2160,34 @@
     <svg class="week-chevron" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
   </div>
   <div class="week-card-body">
-    <div class="week-cols">
-      <div>
-        <div class="week-col-label">This Week's Actions</div>
-        <ul class="week-tasks-list">
-          <li class="week-task-item"><div class="week-task-dot"></div><span class="week-task-text" data-editable-key="act_weo3f8.text">Sort the website photos into three folders</span> <button class="howto-link" onclick="howToLink('tactic1','stp_7clf9y')">how to</button></li>
-          <li class="week-task-item"><div class="week-task-dot"></div><span class="week-task-text" data-editable-key="act_fh1dkz.text">Write 12 captions and schedule them</span> <button class="howto-link" onclick="howToLink('tactic1','stp_k6gy5q')">how to</button></li>
-        </ul>
-      </div>
-      <div>
-        <div class="week-col-label">Completion Checklist</div>
-        <div class="check-list">
-          <div class="check-item">
+    <div class="week-col-label">This week's actions</div>
+    <div class="check-list week-actions">
+      <div class="check-item">
   <div class="check-row">
-    <input type="checkbox" class="check-input" id="chk_0itnz2" data-key="chk_0itnz2" onchange="onCheck(this)">
-    <label class="check-box" for="chk_0itnz2"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5,6 4.5,9 10.5,3"/></svg></label>
-    <label class="check-label" for="chk_0itnz2" data-editable-key="chk_0itnz2.text">Three folders hold at least four photos each</label>
-    <button class="note-toggle-btn" onclick="toggleNote('chk_0itnz2')" title="Add note"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M13 2.5H3a.5.5 0 00-.5.5v14a.5.5 0 00.5.5h10a.5.5 0 00.5-.5V3a.5.5 0 00-.5-.5zM3 0h10a3 3 0 013 3v14a3 3 0 01-3 3H3a3 3 0 01-3-3V3a3 3 0 013-3zm2 5h6v2H5V5zm0 4h6v2H5V9z"/></svg></button>
+    <input type="checkbox" class="check-input" id="act_weo3f8" data-key="act_weo3f8" onchange="onCheck(this)">
+    <label class="check-box" for="act_weo3f8"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5,6 4.5,9 10.5,3"/></svg></label>
+    <label class="check-label" for="act_weo3f8" data-editable-key="act_weo3f8.text">Sort the website photos into three folders</label>
+    <button class="howto-link" onclick="howToLink('tactic1','stp_7clf9y')">how to</button>
+    <button class="note-toggle-btn" onclick="toggleNote('act_weo3f8')" title="Add note"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M13 2.5H3a.5.5 0 00-.5.5v14a.5.5 0 00.5.5h10a.5.5 0 00.5-.5V3a.5.5 0 00-.5-.5zM3 0h10a3 3 0 013 3v14a3 3 0 01-3 3H3a3 3 0 01-3-3V3a3 3 0 013-3zm2 5h6v2H5V5zm0 4h6v2H5V9z"/></svg></button>
   </div>
-  <div class="note-area" id="note-area-chk_0itnz2">
-    <textarea class="note-textarea" id="note-chk_0itnz2" placeholder="Add a note…" oninput="saveNote('chk_0itnz2',this.value)"></textarea>
+  <div class="note-area" id="note-area-act_weo3f8">
+    <textarea class="note-textarea" id="note-act_weo3f8" placeholder="Add a note…" oninput="saveNote('act_weo3f8',this.value)"></textarea>
   </div>
 </div>
-          <div class="check-item">
+      <div class="check-item">
   <div class="check-row">
-    <input type="checkbox" class="check-input" id="chk_v9z5bn" data-key="chk_v9z5bn" onchange="onCheck(this)">
-    <label class="check-box" for="chk_v9z5bn"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5,6 4.5,9 10.5,3"/></svg></label>
-    <label class="check-label" for="chk_v9z5bn" data-editable-key="chk_v9z5bn.text">12 posts are scheduled in Meta Business Suite</label>
-    <button class="note-toggle-btn" onclick="toggleNote('chk_v9z5bn')" title="Add note"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M13 2.5H3a.5.5 0 00-.5.5v14a.5.5 0 00.5.5h10a.5.5 0 00.5-.5V3a.5.5 0 00-.5-.5zM3 0h10a3 3 0 013 3v14a3 3 0 01-3 3H3a3 3 0 01-3-3V3a3 3 0 013-3zm2 5h6v2H5V5zm0 4h6v2H5V9z"/></svg></button>
+    <input type="checkbox" class="check-input" id="act_fh1dkz" data-key="act_fh1dkz" onchange="onCheck(this)">
+    <label class="check-box" for="act_fh1dkz"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5,6 4.5,9 10.5,3"/></svg></label>
+    <label class="check-label" for="act_fh1dkz" data-editable-key="act_fh1dkz.text">Write 12 captions and schedule them</label>
+    <button class="howto-link" onclick="howToLink('tactic1','stp_k6gy5q')">how to</button>
+    <button class="note-toggle-btn" onclick="toggleNote('act_fh1dkz')" title="Add note"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M13 2.5H3a.5.5 0 00-.5.5v14a.5.5 0 00.5.5h10a.5.5 0 00.5-.5V3a.5.5 0 00-.5-.5zM3 0h10a3 3 0 013 3v14a3 3 0 01-3 3H3a3 3 0 01-3-3V3a3 3 0 013-3zm2 5h6v2H5V5zm0 4h6v2H5V9z"/></svg></button>
   </div>
-  <div class="note-area" id="note-area-chk_v9z5bn">
-    <textarea class="note-textarea" id="note-chk_v9z5bn" placeholder="Add a note…" oninput="saveNote('chk_v9z5bn',this.value)"></textarea>
+  <div class="note-area" id="note-area-act_fh1dkz">
+    <textarea class="note-textarea" id="note-act_fh1dkz" placeholder="Add a note…" oninput="saveNote('act_fh1dkz',this.value)"></textarea>
   </div>
 </div>
-        </div>
-      </div>
     </div>
-    <div class="week-note-section"><div class="week-note-label">Week Notes</div><textarea class="note-textarea week-note-textarea" id="note-wk_wc90vw" placeholder="Add general notes for this week…" oninput="saveNote('wk_wc90vw',this.value)"></textarea></div>
+    <div class="week-note-section"><div class="week-note-label">Week notes</div><textarea class="note-textarea week-note-textarea" id="note-wk_wc90vw" placeholder="Add general notes for this week…" oninput="saveNote('wk_wc90vw',this.value)"></textarea></div>
   </div>
 </div>
 <div class="week-card" id="wc-3" data-week="3" data-week-id="wk_2lrnhl">
@@ -2128,55 +2198,46 @@
     <svg class="week-chevron" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
   </div>
   <div class="week-card-body">
-    <div class="week-cols">
-      <div>
-        <div class="week-col-label">This Week's Actions</div>
-        <ul class="week-tasks-list">
-          <li class="week-task-item"><div class="week-task-dot"></div><span class="week-task-text" data-editable-key="act_g7efyz.text">Publish the first two Reels</span> <button class="howto-link" onclick="howToLink('tactic1','stp_7v8nsi')">how to</button></li>
-          <li class="week-task-item"><div class="week-task-dot"></div><span class="week-task-text" data-editable-key="act_4dz0vq.text">Turn on comment notifications and follow 50 local accounts</span> <button class="howto-link" onclick="howToLink('tactic1','stp_hky03f')">how to</button></li>
-          <li class="week-task-item"><div class="week-task-dot"></div><span class="week-task-text" data-editable-key="act_f5jtpu.text">Create the Google review link</span> <button class="howto-link" onclick="howToLink('tactic2','stp_abuzpq')">how to</button></li>
-        </ul>
-      </div>
-      <div>
-        <div class="week-col-label">Completion Checklist</div>
-        <div class="check-list">
-          <div class="check-item">
+    <div class="week-col-label">This week's actions</div>
+    <div class="check-list week-actions">
+      <div class="check-item">
   <div class="check-row">
-    <input type="checkbox" class="check-input" id="chk_fon2vi" data-key="chk_fon2vi" onchange="onCheck(this)">
-    <label class="check-box" for="chk_fon2vi"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5,6 4.5,9 10.5,3"/></svg></label>
-    <label class="check-label" for="chk_fon2vi" data-editable-key="chk_fon2vi.text">Two Reels are published</label>
-    <button class="note-toggle-btn" onclick="toggleNote('chk_fon2vi')" title="Add note"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M13 2.5H3a.5.5 0 00-.5.5v14a.5.5 0 00.5.5h10a.5.5 0 00.5-.5V3a.5.5 0 00-.5-.5zM3 0h10a3 3 0 013 3v14a3 3 0 01-3 3H3a3 3 0 01-3-3V3a3 3 0 013-3zm2 5h6v2H5V5zm0 4h6v2H5V9z"/></svg></button>
+    <input type="checkbox" class="check-input" id="act_g7efyz" data-key="act_g7efyz" onchange="onCheck(this)">
+    <label class="check-box" for="act_g7efyz"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5,6 4.5,9 10.5,3"/></svg></label>
+    <label class="check-label" for="act_g7efyz" data-editable-key="act_g7efyz.text">Publish the first two Reels</label>
+    <button class="howto-link" onclick="howToLink('tactic1','stp_7v8nsi')">how to</button>
+    <button class="note-toggle-btn" onclick="toggleNote('act_g7efyz')" title="Add note"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M13 2.5H3a.5.5 0 00-.5.5v14a.5.5 0 00.5.5h10a.5.5 0 00.5-.5V3a.5.5 0 00-.5-.5zM3 0h10a3 3 0 013 3v14a3 3 0 01-3 3H3a3 3 0 01-3-3V3a3 3 0 013-3zm2 5h6v2H5V5zm0 4h6v2H5V9z"/></svg></button>
   </div>
-  <div class="note-area" id="note-area-chk_fon2vi">
-    <textarea class="note-textarea" id="note-chk_fon2vi" placeholder="Add a note…" oninput="saveNote('chk_fon2vi',this.value)"></textarea>
+  <div class="note-area" id="note-area-act_g7efyz">
+    <textarea class="note-textarea" id="note-act_g7efyz" placeholder="Add a note…" oninput="saveNote('act_g7efyz',this.value)"></textarea>
   </div>
 </div>
-          <div class="check-item">
+      <div class="check-item">
   <div class="check-row">
-    <input type="checkbox" class="check-input" id="chk_9dcuqw" data-key="chk_9dcuqw" onchange="onCheck(this)">
-    <label class="check-box" for="chk_9dcuqw"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5,6 4.5,9 10.5,3"/></svg></label>
-    <label class="check-label" for="chk_9dcuqw" data-editable-key="chk_9dcuqw.text">50 local accounts are followed</label>
-    <button class="note-toggle-btn" onclick="toggleNote('chk_9dcuqw')" title="Add note"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M13 2.5H3a.5.5 0 00-.5.5v14a.5.5 0 00.5.5h10a.5.5 0 00.5-.5V3a.5.5 0 00-.5-.5zM3 0h10a3 3 0 013 3v14a3 3 0 01-3 3H3a3 3 0 01-3-3V3a3 3 0 013-3zm2 5h6v2H5V5zm0 4h6v2H5V9z"/></svg></button>
+    <input type="checkbox" class="check-input" id="act_4dz0vq" data-key="act_4dz0vq" onchange="onCheck(this)">
+    <label class="check-box" for="act_4dz0vq"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5,6 4.5,9 10.5,3"/></svg></label>
+    <label class="check-label" for="act_4dz0vq" data-editable-key="act_4dz0vq.text">Turn on comment notifications and follow 50 local accounts</label>
+    <button class="howto-link" onclick="howToLink('tactic1','stp_hky03f')">how to</button>
+    <button class="note-toggle-btn" onclick="toggleNote('act_4dz0vq')" title="Add note"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M13 2.5H3a.5.5 0 00-.5.5v14a.5.5 0 00.5.5h10a.5.5 0 00.5-.5V3a.5.5 0 00-.5-.5zM3 0h10a3 3 0 013 3v14a3 3 0 01-3 3H3a3 3 0 01-3-3V3a3 3 0 013-3zm2 5h6v2H5V5zm0 4h6v2H5V9z"/></svg></button>
   </div>
-  <div class="note-area" id="note-area-chk_9dcuqw">
-    <textarea class="note-textarea" id="note-chk_9dcuqw" placeholder="Add a note…" oninput="saveNote('chk_9dcuqw',this.value)"></textarea>
+  <div class="note-area" id="note-area-act_4dz0vq">
+    <textarea class="note-textarea" id="note-act_4dz0vq" placeholder="Add a note…" oninput="saveNote('act_4dz0vq',this.value)"></textarea>
   </div>
 </div>
-          <div class="check-item">
+      <div class="check-item">
   <div class="check-row">
-    <input type="checkbox" class="check-input" id="chk_gqpumh" data-key="chk_gqpumh" onchange="onCheck(this)">
-    <label class="check-box" for="chk_gqpumh"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5,6 4.5,9 10.5,3"/></svg></label>
-    <label class="check-label" for="chk_gqpumh" data-editable-key="chk_gqpumh.text">The review link is saved where the whole team can find it</label>
-    <button class="note-toggle-btn" onclick="toggleNote('chk_gqpumh')" title="Add note"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M13 2.5H3a.5.5 0 00-.5.5v14a.5.5 0 00.5.5h10a.5.5 0 00.5-.5V3a.5.5 0 00-.5-.5zM3 0h10a3 3 0 013 3v14a3 3 0 01-3 3H3a3 3 0 01-3-3V3a3 3 0 013-3zm2 5h6v2H5V5zm0 4h6v2H5V9z"/></svg></button>
+    <input type="checkbox" class="check-input" id="act_f5jtpu" data-key="act_f5jtpu" onchange="onCheck(this)">
+    <label class="check-box" for="act_f5jtpu"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5,6 4.5,9 10.5,3"/></svg></label>
+    <label class="check-label" for="act_f5jtpu" data-editable-key="act_f5jtpu.text">Create the Google review link</label>
+    <button class="howto-link" onclick="howToLink('tactic2','stp_abuzpq')">how to</button>
+    <button class="note-toggle-btn" onclick="toggleNote('act_f5jtpu')" title="Add note"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M13 2.5H3a.5.5 0 00-.5.5v14a.5.5 0 00.5.5h10a.5.5 0 00.5-.5V3a.5.5 0 00-.5-.5zM3 0h10a3 3 0 013 3v14a3 3 0 01-3 3H3a3 3 0 01-3-3V3a3 3 0 013-3zm2 5h6v2H5V5zm0 4h6v2H5V9z"/></svg></button>
   </div>
-  <div class="note-area" id="note-area-chk_gqpumh">
-    <textarea class="note-textarea" id="note-chk_gqpumh" placeholder="Add a note…" oninput="saveNote('chk_gqpumh',this.value)"></textarea>
+  <div class="note-area" id="note-area-act_f5jtpu">
+    <textarea class="note-textarea" id="note-act_f5jtpu" placeholder="Add a note…" oninput="saveNote('act_f5jtpu',this.value)"></textarea>
   </div>
 </div>
-        </div>
-      </div>
     </div>
-    <div class="week-note-section"><div class="week-note-label">Week Notes</div><textarea class="note-textarea week-note-textarea" id="note-wk_2lrnhl" placeholder="Add general notes for this week…" oninput="saveNote('wk_2lrnhl',this.value)"></textarea></div>
+    <div class="week-note-section"><div class="week-note-label">Week notes</div><textarea class="note-textarea week-note-textarea" id="note-wk_2lrnhl" placeholder="Add general notes for this week…" oninput="saveNote('wk_2lrnhl',this.value)"></textarea></div>
   </div>
 </div>
 <div class="week-card" id="wc-4" data-week="4" data-week-id="wk_dtmxj4">
@@ -2187,55 +2248,46 @@
     <svg class="week-chevron" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
   </div>
   <div class="week-card-body">
-    <div class="week-cols">
-      <div>
-        <div class="week-col-label">This Week's Actions</div>
-        <ul class="week-tasks-list">
-          <li class="week-task-item"><div class="week-task-dot"></div><span class="week-task-text" data-editable-key="act_rul48f.text">Set up the review request email</span> <button class="howto-link" onclick="howToLink('tactic2','stp_6sh853')">how to</button></li>
-          <li class="week-task-item"><div class="week-task-dot"></div><span class="week-task-text" data-editable-key="act_eseeyf.text">Print and place QR cards in every cabin</span> <button class="howto-link" onclick="howToLink('tactic2','stp_stx85v')">how to</button></li>
-          <li class="week-task-item"><div class="week-task-dot"></div><span class="week-task-text" data-editable-key="act_i2aaub.text">Check Instagram insights and note the three best posts</span></li>
-        </ul>
-      </div>
-      <div>
-        <div class="week-col-label">Completion Checklist</div>
-        <div class="check-list">
-          <div class="check-item">
+    <div class="week-col-label">This week's actions</div>
+    <div class="check-list week-actions">
+      <div class="check-item">
   <div class="check-row">
-    <input type="checkbox" class="check-input" id="chk_2awi16" data-key="chk_2awi16" onchange="onCheck(this)">
-    <label class="check-box" for="chk_2awi16"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5,6 4.5,9 10.5,3"/></svg></label>
-    <label class="check-label" for="chk_2awi16" data-editable-key="chk_2awi16.text">The review request sends automatically three days after checkout</label>
-    <button class="note-toggle-btn" onclick="toggleNote('chk_2awi16')" title="Add note"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M13 2.5H3a.5.5 0 00-.5.5v14a.5.5 0 00.5.5h10a.5.5 0 00.5-.5V3a.5.5 0 00-.5-.5zM3 0h10a3 3 0 013 3v14a3 3 0 01-3 3H3a3 3 0 01-3-3V3a3 3 0 013-3zm2 5h6v2H5V5zm0 4h6v2H5V9z"/></svg></button>
+    <input type="checkbox" class="check-input" id="act_rul48f" data-key="act_rul48f" onchange="onCheck(this)">
+    <label class="check-box" for="act_rul48f"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5,6 4.5,9 10.5,3"/></svg></label>
+    <label class="check-label" for="act_rul48f" data-editable-key="act_rul48f.text">Set up the review request email</label>
+    <button class="howto-link" onclick="howToLink('tactic2','stp_6sh853')">how to</button>
+    <button class="note-toggle-btn" onclick="toggleNote('act_rul48f')" title="Add note"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M13 2.5H3a.5.5 0 00-.5.5v14a.5.5 0 00.5.5h10a.5.5 0 00.5-.5V3a.5.5 0 00-.5-.5zM3 0h10a3 3 0 013 3v14a3 3 0 01-3 3H3a3 3 0 01-3-3V3a3 3 0 013-3zm2 5h6v2H5V5zm0 4h6v2H5V9z"/></svg></button>
   </div>
-  <div class="note-area" id="note-area-chk_2awi16">
-    <textarea class="note-textarea" id="note-chk_2awi16" placeholder="Add a note…" oninput="saveNote('chk_2awi16',this.value)"></textarea>
+  <div class="note-area" id="note-area-act_rul48f">
+    <textarea class="note-textarea" id="note-act_rul48f" placeholder="Add a note…" oninput="saveNote('act_rul48f',this.value)"></textarea>
   </div>
 </div>
-          <div class="check-item">
+      <div class="check-item">
   <div class="check-row">
-    <input type="checkbox" class="check-input" id="chk_hift62" data-key="chk_hift62" onchange="onCheck(this)">
-    <label class="check-box" for="chk_hift62"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5,6 4.5,9 10.5,3"/></svg></label>
-    <label class="check-label" for="chk_hift62" data-editable-key="chk_hift62.text">A QR card is in every cabin</label>
-    <button class="note-toggle-btn" onclick="toggleNote('chk_hift62')" title="Add note"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M13 2.5H3a.5.5 0 00-.5.5v14a.5.5 0 00.5.5h10a.5.5 0 00.5-.5V3a.5.5 0 00-.5-.5zM3 0h10a3 3 0 013 3v14a3 3 0 01-3 3H3a3 3 0 01-3-3V3a3 3 0 013-3zm2 5h6v2H5V5zm0 4h6v2H5V9z"/></svg></button>
+    <input type="checkbox" class="check-input" id="act_eseeyf" data-key="act_eseeyf" onchange="onCheck(this)">
+    <label class="check-box" for="act_eseeyf"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5,6 4.5,9 10.5,3"/></svg></label>
+    <label class="check-label" for="act_eseeyf" data-editable-key="act_eseeyf.text">Print and place QR cards in every cabin</label>
+    <button class="howto-link" onclick="howToLink('tactic2','stp_stx85v')">how to</button>
+    <button class="note-toggle-btn" onclick="toggleNote('act_eseeyf')" title="Add note"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M13 2.5H3a.5.5 0 00-.5.5v14a.5.5 0 00.5.5h10a.5.5 0 00.5-.5V3a.5.5 0 00-.5-.5zM3 0h10a3 3 0 013 3v14a3 3 0 01-3 3H3a3 3 0 01-3-3V3a3 3 0 013-3zm2 5h6v2H5V5zm0 4h6v2H5V9z"/></svg></button>
   </div>
-  <div class="note-area" id="note-area-chk_hift62">
-    <textarea class="note-textarea" id="note-chk_hift62" placeholder="Add a note…" oninput="saveNote('chk_hift62',this.value)"></textarea>
+  <div class="note-area" id="note-area-act_eseeyf">
+    <textarea class="note-textarea" id="note-act_eseeyf" placeholder="Add a note…" oninput="saveNote('act_eseeyf',this.value)"></textarea>
   </div>
 </div>
-          <div class="check-item">
+      <div class="check-item">
   <div class="check-row">
-    <input type="checkbox" class="check-input" id="chk_l9oowu" data-key="chk_l9oowu" onchange="onCheck(this)">
-    <label class="check-box" for="chk_l9oowu"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5,6 4.5,9 10.5,3"/></svg></label>
-    <label class="check-label" for="chk_l9oowu" data-editable-key="chk_l9oowu.text">The three best posts of the month are noted</label>
-    <button class="note-toggle-btn" onclick="toggleNote('chk_l9oowu')" title="Add note"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M13 2.5H3a.5.5 0 00-.5.5v14a.5.5 0 00.5.5h10a.5.5 0 00.5-.5V3a.5.5 0 00-.5-.5zM3 0h10a3 3 0 013 3v14a3 3 0 01-3 3H3a3 3 0 01-3-3V3a3 3 0 013-3zm2 5h6v2H5V5zm0 4h6v2H5V9z"/></svg></button>
+    <input type="checkbox" class="check-input" id="act_i2aaub" data-key="act_i2aaub" onchange="onCheck(this)">
+    <label class="check-box" for="act_i2aaub"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5,6 4.5,9 10.5,3"/></svg></label>
+    <label class="check-label" for="act_i2aaub" data-editable-key="act_i2aaub.text">Check Instagram insights and note the three best posts</label>
+    
+    <button class="note-toggle-btn" onclick="toggleNote('act_i2aaub')" title="Add note"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M13 2.5H3a.5.5 0 00-.5.5v14a.5.5 0 00.5.5h10a.5.5 0 00.5-.5V3a.5.5 0 00-.5-.5zM3 0h10a3 3 0 013 3v14a3 3 0 01-3 3H3a3 3 0 01-3-3V3a3 3 0 013-3zm2 5h6v2H5V5zm0 4h6v2H5V9z"/></svg></button>
   </div>
-  <div class="note-area" id="note-area-chk_l9oowu">
-    <textarea class="note-textarea" id="note-chk_l9oowu" placeholder="Add a note…" oninput="saveNote('chk_l9oowu',this.value)"></textarea>
+  <div class="note-area" id="note-area-act_i2aaub">
+    <textarea class="note-textarea" id="note-act_i2aaub" placeholder="Add a note…" oninput="saveNote('act_i2aaub',this.value)"></textarea>
   </div>
 </div>
-        </div>
-      </div>
     </div>
-    <div class="week-note-section"><div class="week-note-label">Week Notes</div><textarea class="note-textarea week-note-textarea" id="note-wk_dtmxj4" placeholder="Add general notes for this week…" oninput="saveNote('wk_dtmxj4',this.value)"></textarea></div>
+    <div class="week-note-section"><div class="week-note-label">Week notes</div><textarea class="note-textarea week-note-textarea" id="note-wk_dtmxj4" placeholder="Add general notes for this week…" oninput="saveNote('wk_dtmxj4',this.value)"></textarea></div>
   </div>
 </div>
     </div>
@@ -2244,7 +2296,7 @@
       <div class="month-header">
         <span class="month-badge">Month 2</span>
         <span class="month-title">Growth</span>
-        <span class="month-progress" id="m2-prog"><span>0</span> of 11 done</span>
+        <span class="month-progress" id="m2-prog"><span>0</span> of 12 done</span>
       </div>
       <div class="week-card" id="wc-5" data-week="5" data-week-id="wk_zkohrc">
   <div class="week-card-header" onclick="toggleWeek(5)">
@@ -2254,55 +2306,46 @@
     <svg class="week-chevron" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
   </div>
   <div class="week-card-body">
-    <div class="week-cols">
-      <div>
-        <div class="week-col-label">This Week's Actions</div>
-        <ul class="week-tasks-list">
-          <li class="week-task-item"><div class="week-task-dot"></div><span class="week-task-text" data-editable-key="act_gwejdx.text">Complete every section of the Google Business Profile</span> <button class="howto-link" onclick="howToLink('tactic3','stp_7zsjl9')">how to</button></li>
-          <li class="week-task-item"><div class="week-task-dot"></div><span class="week-task-text" data-editable-key="act_7zt8eb.text">Upload ten new photos and publish the first Google Post</span> <button class="howto-link" onclick="howToLink('tactic3','stp_1t63jy')">how to</button></li>
-          <li class="week-task-item"><div class="week-task-dot"></div><span class="week-task-text" data-editable-key="act_5wb77i.text">Reply to new reviews within 24 hours</span> <button class="howto-link" onclick="howToLink('tactic2','stp_1x7cm0')">how to</button></li>
-        </ul>
-      </div>
-      <div>
-        <div class="week-col-label">Completion Checklist</div>
-        <div class="check-list">
-          <div class="check-item">
+    <div class="week-col-label">This week's actions</div>
+    <div class="check-list week-actions">
+      <div class="check-item">
   <div class="check-row">
-    <input type="checkbox" class="check-input" id="chk_9k5vv8" data-key="chk_9k5vv8" onchange="onCheck(this)">
-    <label class="check-box" for="chk_9k5vv8"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5,6 4.5,9 10.5,3"/></svg></label>
-    <label class="check-label" for="chk_9k5vv8" data-editable-key="chk_9k5vv8.text">Seasonal dates and check-in hours show on the profile</label>
-    <button class="note-toggle-btn" onclick="toggleNote('chk_9k5vv8')" title="Add note"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M13 2.5H3a.5.5 0 00-.5.5v14a.5.5 0 00.5.5h10a.5.5 0 00.5-.5V3a.5.5 0 00-.5-.5zM3 0h10a3 3 0 013 3v14a3 3 0 01-3 3H3a3 3 0 01-3-3V3a3 3 0 013-3zm2 5h6v2H5V5zm0 4h6v2H5V9z"/></svg></button>
+    <input type="checkbox" class="check-input" id="act_gwejdx" data-key="act_gwejdx" onchange="onCheck(this)">
+    <label class="check-box" for="act_gwejdx"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5,6 4.5,9 10.5,3"/></svg></label>
+    <label class="check-label" for="act_gwejdx" data-editable-key="act_gwejdx.text">Complete every section of the Google Business Profile</label>
+    <button class="howto-link" onclick="howToLink('tactic3','stp_7zsjl9')">how to</button>
+    <button class="note-toggle-btn" onclick="toggleNote('act_gwejdx')" title="Add note"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M13 2.5H3a.5.5 0 00-.5.5v14a.5.5 0 00.5.5h10a.5.5 0 00.5-.5V3a.5.5 0 00-.5-.5zM3 0h10a3 3 0 013 3v14a3 3 0 01-3 3H3a3 3 0 01-3-3V3a3 3 0 013-3zm2 5h6v2H5V5zm0 4h6v2H5V9z"/></svg></button>
   </div>
-  <div class="note-area" id="note-area-chk_9k5vv8">
-    <textarea class="note-textarea" id="note-chk_9k5vv8" placeholder="Add a note…" oninput="saveNote('chk_9k5vv8',this.value)"></textarea>
+  <div class="note-area" id="note-area-act_gwejdx">
+    <textarea class="note-textarea" id="note-act_gwejdx" placeholder="Add a note…" oninput="saveNote('act_gwejdx',this.value)"></textarea>
   </div>
 </div>
-          <div class="check-item">
+      <div class="check-item">
   <div class="check-row">
-    <input type="checkbox" class="check-input" id="chk_bav8kl" data-key="chk_bav8kl" onchange="onCheck(this)">
-    <label class="check-box" for="chk_bav8kl"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5,6 4.5,9 10.5,3"/></svg></label>
-    <label class="check-label" for="chk_bav8kl" data-editable-key="chk_bav8kl.text">Ten new photos are live</label>
-    <button class="note-toggle-btn" onclick="toggleNote('chk_bav8kl')" title="Add note"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M13 2.5H3a.5.5 0 00-.5.5v14a.5.5 0 00.5.5h10a.5.5 0 00.5-.5V3a.5.5 0 00-.5-.5zM3 0h10a3 3 0 013 3v14a3 3 0 01-3 3H3a3 3 0 01-3-3V3a3 3 0 013-3zm2 5h6v2H5V5zm0 4h6v2H5V9z"/></svg></button>
+    <input type="checkbox" class="check-input" id="act_7zt8eb" data-key="act_7zt8eb" onchange="onCheck(this)">
+    <label class="check-box" for="act_7zt8eb"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5,6 4.5,9 10.5,3"/></svg></label>
+    <label class="check-label" for="act_7zt8eb" data-editable-key="act_7zt8eb.text">Upload ten new photos and publish the first Google Post</label>
+    <button class="howto-link" onclick="howToLink('tactic3','stp_1t63jy')">how to</button>
+    <button class="note-toggle-btn" onclick="toggleNote('act_7zt8eb')" title="Add note"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M13 2.5H3a.5.5 0 00-.5.5v14a.5.5 0 00.5.5h10a.5.5 0 00.5-.5V3a.5.5 0 00-.5-.5zM3 0h10a3 3 0 013 3v14a3 3 0 01-3 3H3a3 3 0 01-3-3V3a3 3 0 013-3zm2 5h6v2H5V5zm0 4h6v2H5V9z"/></svg></button>
   </div>
-  <div class="note-area" id="note-area-chk_bav8kl">
-    <textarea class="note-textarea" id="note-chk_bav8kl" placeholder="Add a note…" oninput="saveNote('chk_bav8kl',this.value)"></textarea>
+  <div class="note-area" id="note-area-act_7zt8eb">
+    <textarea class="note-textarea" id="note-act_7zt8eb" placeholder="Add a note…" oninput="saveNote('act_7zt8eb',this.value)"></textarea>
   </div>
 </div>
-          <div class="check-item">
+      <div class="check-item">
   <div class="check-row">
-    <input type="checkbox" class="check-input" id="chk_duris1" data-key="chk_duris1" onchange="onCheck(this)">
-    <label class="check-box" for="chk_duris1"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5,6 4.5,9 10.5,3"/></svg></label>
-    <label class="check-label" for="chk_duris1" data-editable-key="chk_duris1.text">The first Google Post is published</label>
-    <button class="note-toggle-btn" onclick="toggleNote('chk_duris1')" title="Add note"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M13 2.5H3a.5.5 0 00-.5.5v14a.5.5 0 00.5.5h10a.5.5 0 00.5-.5V3a.5.5 0 00-.5-.5zM3 0h10a3 3 0 013 3v14a3 3 0 01-3 3H3a3 3 0 01-3-3V3a3 3 0 013-3zm2 5h6v2H5V5zm0 4h6v2H5V9z"/></svg></button>
+    <input type="checkbox" class="check-input" id="act_5wb77i" data-key="act_5wb77i" onchange="onCheck(this)">
+    <label class="check-box" for="act_5wb77i"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5,6 4.5,9 10.5,3"/></svg></label>
+    <label class="check-label" for="act_5wb77i" data-editable-key="act_5wb77i.text">Reply to new reviews within 24 hours</label>
+    <button class="howto-link" onclick="howToLink('tactic2','stp_1x7cm0')">how to</button>
+    <button class="note-toggle-btn" onclick="toggleNote('act_5wb77i')" title="Add note"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M13 2.5H3a.5.5 0 00-.5.5v14a.5.5 0 00.5.5h10a.5.5 0 00.5-.5V3a.5.5 0 00-.5-.5zM3 0h10a3 3 0 013 3v14a3 3 0 01-3 3H3a3 3 0 01-3-3V3a3 3 0 013-3zm2 5h6v2H5V5zm0 4h6v2H5V9z"/></svg></button>
   </div>
-  <div class="note-area" id="note-area-chk_duris1">
-    <textarea class="note-textarea" id="note-chk_duris1" placeholder="Add a note…" oninput="saveNote('chk_duris1',this.value)"></textarea>
+  <div class="note-area" id="note-area-act_5wb77i">
+    <textarea class="note-textarea" id="note-act_5wb77i" placeholder="Add a note…" oninput="saveNote('act_5wb77i',this.value)"></textarea>
   </div>
 </div>
-        </div>
-      </div>
     </div>
-    <div class="week-note-section"><div class="week-note-label">Week Notes</div><textarea class="note-textarea week-note-textarea" id="note-wk_zkohrc" placeholder="Add general notes for this week…" oninput="saveNote('wk_zkohrc',this.value)"></textarea></div>
+    <div class="week-note-section"><div class="week-note-label">Week notes</div><textarea class="note-textarea week-note-textarea" id="note-wk_zkohrc" placeholder="Add general notes for this week…" oninput="saveNote('wk_zkohrc',this.value)"></textarea></div>
   </div>
 </div>
 <div class="week-card" id="wc-6" data-week="6" data-week-id="wk_mfu8sf">
@@ -2313,55 +2356,46 @@
     <svg class="week-chevron" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
   </div>
   <div class="week-card-body">
-    <div class="week-cols">
-      <div>
-        <div class="week-col-label">This Week's Actions</div>
-        <ul class="week-tasks-list">
-          <li class="week-task-item"><div class="week-task-dot"></div><span class="week-task-text" data-editable-key="act_qd4zxs.text">Record the Search Console baseline</span> <button class="howto-link" onclick="howToLink('tactic3','stp_t68zdj')">how to</button></li>
-          <li class="week-task-item"><div class="week-task-dot"></div><span class="week-task-text" data-editable-key="act_ntmmfe.text">Shorten the homepage title and add headings</span> <button class="howto-link" onclick="howToLink('tactic3','stp_nirjva')">how to</button></li>
-          <li class="week-task-item"><div class="week-task-dot"></div><span class="week-task-text" data-editable-key="act_2yxyv4.text">Brief the web developer on structured data</span> <button class="howto-link" onclick="howToLink('tactic3','stp_vns9eq')">how to</button></li>
-        </ul>
-      </div>
-      <div>
-        <div class="week-col-label">Completion Checklist</div>
-        <div class="check-list">
-          <div class="check-item">
+    <div class="week-col-label">This week's actions</div>
+    <div class="check-list week-actions">
+      <div class="check-item">
   <div class="check-row">
-    <input type="checkbox" class="check-input" id="chk_dfrglv" data-key="chk_dfrglv" onchange="onCheck(this)">
-    <label class="check-box" for="chk_dfrglv"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5,6 4.5,9 10.5,3"/></svg></label>
-    <label class="check-label" for="chk_dfrglv" data-editable-key="chk_dfrglv.text">The baseline export is saved with a date in the file name</label>
-    <button class="note-toggle-btn" onclick="toggleNote('chk_dfrglv')" title="Add note"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M13 2.5H3a.5.5 0 00-.5.5v14a.5.5 0 00.5.5h10a.5.5 0 00.5-.5V3a.5.5 0 00-.5-.5zM3 0h10a3 3 0 013 3v14a3 3 0 01-3 3H3a3 3 0 01-3-3V3a3 3 0 013-3zm2 5h6v2H5V5zm0 4h6v2H5V9z"/></svg></button>
+    <input type="checkbox" class="check-input" id="act_qd4zxs" data-key="act_qd4zxs" onchange="onCheck(this)">
+    <label class="check-box" for="act_qd4zxs"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5,6 4.5,9 10.5,3"/></svg></label>
+    <label class="check-label" for="act_qd4zxs" data-editable-key="act_qd4zxs.text">Record the Search Console baseline</label>
+    <button class="howto-link" onclick="howToLink('tactic3','stp_t68zdj')">how to</button>
+    <button class="note-toggle-btn" onclick="toggleNote('act_qd4zxs')" title="Add note"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M13 2.5H3a.5.5 0 00-.5.5v14a.5.5 0 00.5.5h10a.5.5 0 00.5-.5V3a.5.5 0 00-.5-.5zM3 0h10a3 3 0 013 3v14a3 3 0 01-3 3H3a3 3 0 01-3-3V3a3 3 0 013-3zm2 5h6v2H5V5zm0 4h6v2H5V9z"/></svg></button>
   </div>
-  <div class="note-area" id="note-area-chk_dfrglv">
-    <textarea class="note-textarea" id="note-chk_dfrglv" placeholder="Add a note…" oninput="saveNote('chk_dfrglv',this.value)"></textarea>
+  <div class="note-area" id="note-area-act_qd4zxs">
+    <textarea class="note-textarea" id="note-act_qd4zxs" placeholder="Add a note…" oninput="saveNote('act_qd4zxs',this.value)"></textarea>
   </div>
 </div>
-          <div class="check-item">
+      <div class="check-item">
   <div class="check-row">
-    <input type="checkbox" class="check-input" id="chk_yxj4xx" data-key="chk_yxj4xx" onchange="onCheck(this)">
-    <label class="check-box" for="chk_yxj4xx"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5,6 4.5,9 10.5,3"/></svg></label>
-    <label class="check-label" for="chk_yxj4xx" data-editable-key="chk_yxj4xx.text">The homepage title is under 60 characters</label>
-    <button class="note-toggle-btn" onclick="toggleNote('chk_yxj4xx')" title="Add note"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M13 2.5H3a.5.5 0 00-.5.5v14a.5.5 0 00.5.5h10a.5.5 0 00.5-.5V3a.5.5 0 00-.5-.5zM3 0h10a3 3 0 013 3v14a3 3 0 01-3 3H3a3 3 0 01-3-3V3a3 3 0 013-3zm2 5h6v2H5V5zm0 4h6v2H5V9z"/></svg></button>
+    <input type="checkbox" class="check-input" id="act_ntmmfe" data-key="act_ntmmfe" onchange="onCheck(this)">
+    <label class="check-box" for="act_ntmmfe"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5,6 4.5,9 10.5,3"/></svg></label>
+    <label class="check-label" for="act_ntmmfe" data-editable-key="act_ntmmfe.text">Shorten the homepage title and add headings</label>
+    <button class="howto-link" onclick="howToLink('tactic3','stp_nirjva')">how to</button>
+    <button class="note-toggle-btn" onclick="toggleNote('act_ntmmfe')" title="Add note"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M13 2.5H3a.5.5 0 00-.5.5v14a.5.5 0 00.5.5h10a.5.5 0 00.5-.5V3a.5.5 0 00-.5-.5zM3 0h10a3 3 0 013 3v14a3 3 0 01-3 3H3a3 3 0 01-3-3V3a3 3 0 013-3zm2 5h6v2H5V5zm0 4h6v2H5V9z"/></svg></button>
   </div>
-  <div class="note-area" id="note-area-chk_yxj4xx">
-    <textarea class="note-textarea" id="note-chk_yxj4xx" placeholder="Add a note…" oninput="saveNote('chk_yxj4xx',this.value)"></textarea>
+  <div class="note-area" id="note-area-act_ntmmfe">
+    <textarea class="note-textarea" id="note-act_ntmmfe" placeholder="Add a note…" oninput="saveNote('act_ntmmfe',this.value)"></textarea>
   </div>
 </div>
-          <div class="check-item">
+      <div class="check-item">
   <div class="check-row">
-    <input type="checkbox" class="check-input" id="chk_cvlzr8" data-key="chk_cvlzr8" onchange="onCheck(this)">
-    <label class="check-box" for="chk_cvlzr8"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5,6 4.5,9 10.5,3"/></svg></label>
-    <label class="check-label" for="chk_cvlzr8" data-editable-key="chk_cvlzr8.text">The developer has confirmed a delivery date</label>
-    <button class="note-toggle-btn" onclick="toggleNote('chk_cvlzr8')" title="Add note"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M13 2.5H3a.5.5 0 00-.5.5v14a.5.5 0 00.5.5h10a.5.5 0 00.5-.5V3a.5.5 0 00-.5-.5zM3 0h10a3 3 0 013 3v14a3 3 0 01-3 3H3a3 3 0 01-3-3V3a3 3 0 013-3zm2 5h6v2H5V5zm0 4h6v2H5V9z"/></svg></button>
+    <input type="checkbox" class="check-input" id="act_2yxyv4" data-key="act_2yxyv4" onchange="onCheck(this)">
+    <label class="check-box" for="act_2yxyv4"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5,6 4.5,9 10.5,3"/></svg></label>
+    <label class="check-label" for="act_2yxyv4" data-editable-key="act_2yxyv4.text">Brief the web developer on structured data</label>
+    <button class="howto-link" onclick="howToLink('tactic3','stp_vns9eq')">how to</button>
+    <button class="note-toggle-btn" onclick="toggleNote('act_2yxyv4')" title="Add note"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M13 2.5H3a.5.5 0 00-.5.5v14a.5.5 0 00.5.5h10a.5.5 0 00.5-.5V3a.5.5 0 00-.5-.5zM3 0h10a3 3 0 013 3v14a3 3 0 01-3 3H3a3 3 0 01-3-3V3a3 3 0 013-3zm2 5h6v2H5V5zm0 4h6v2H5V9z"/></svg></button>
   </div>
-  <div class="note-area" id="note-area-chk_cvlzr8">
-    <textarea class="note-textarea" id="note-chk_cvlzr8" placeholder="Add a note…" oninput="saveNote('chk_cvlzr8',this.value)"></textarea>
+  <div class="note-area" id="note-area-act_2yxyv4">
+    <textarea class="note-textarea" id="note-act_2yxyv4" placeholder="Add a note…" oninput="saveNote('act_2yxyv4',this.value)"></textarea>
   </div>
 </div>
-        </div>
-      </div>
     </div>
-    <div class="week-note-section"><div class="week-note-label">Week Notes</div><textarea class="note-textarea week-note-textarea" id="note-wk_mfu8sf" placeholder="Add general notes for this week…" oninput="saveNote('wk_mfu8sf',this.value)"></textarea></div>
+    <div class="week-note-section"><div class="week-note-label">Week notes</div><textarea class="note-textarea week-note-textarea" id="note-wk_mfu8sf" placeholder="Add general notes for this week…" oninput="saveNote('wk_mfu8sf',this.value)"></textarea></div>
   </div>
 </div>
 <div class="week-card" id="wc-7" data-week="7" data-week-id="wk_3t7ry6">
@@ -2372,103 +2406,96 @@
     <svg class="week-chevron" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
   </div>
   <div class="week-card-body">
-    <div class="week-cols">
-      <div>
-        <div class="week-col-label">This Week's Actions</div>
-        <ul class="week-tasks-list">
-          <li class="week-task-item"><div class="week-task-dot"></div><span class="week-task-text" data-editable-key="act_f4jh7b.text">Audit existing listings</span> <button class="howto-link" onclick="howToLink('tactic3','stp_usobs9')">how to</button></li>
-          <li class="week-task-item"><div class="week-task-dot"></div><span class="week-task-text" data-editable-key="act_ig8pyy.text">Claim the four priority listings</span> <button class="howto-link" onclick="howToLink('tactic3','stp_nsxfk6')">how to</button></li>
-          <li class="week-task-item"><div class="week-task-dot"></div><span class="week-task-text" data-editable-key="act_yhg9py.text">Brief the Book Now button</span> <button class="howto-link" onclick="howToLink('tactic4','stp_pywh56')">how to</button></li>
-        </ul>
-      </div>
-      <div>
-        <div class="week-col-label">Completion Checklist</div>
-        <div class="check-list">
-          <div class="check-item">
+    <div class="week-col-label">This week's actions</div>
+    <div class="check-list week-actions">
+      <div class="check-item">
   <div class="check-row">
-    <input type="checkbox" class="check-input" id="chk_ttpjqu" data-key="chk_ttpjqu" onchange="onCheck(this)">
-    <label class="check-box" for="chk_ttpjqu"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5,6 4.5,9 10.5,3"/></svg></label>
-    <label class="check-label" for="chk_ttpjqu" data-editable-key="chk_ttpjqu.text">Every existing listing is recorded with its name, address and phone number</label>
-    <button class="note-toggle-btn" onclick="toggleNote('chk_ttpjqu')" title="Add note"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M13 2.5H3a.5.5 0 00-.5.5v14a.5.5 0 00.5.5h10a.5.5 0 00.5-.5V3a.5.5 0 00-.5-.5zM3 0h10a3 3 0 013 3v14a3 3 0 01-3 3H3a3 3 0 01-3-3V3a3 3 0 013-3zm2 5h6v2H5V5zm0 4h6v2H5V9z"/></svg></button>
+    <input type="checkbox" class="check-input" id="act_f4jh7b" data-key="act_f4jh7b" onchange="onCheck(this)">
+    <label class="check-box" for="act_f4jh7b"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5,6 4.5,9 10.5,3"/></svg></label>
+    <label class="check-label" for="act_f4jh7b" data-editable-key="act_f4jh7b.text">Audit existing listings</label>
+    <button class="howto-link" onclick="howToLink('tactic3','stp_usobs9')">how to</button>
+    <button class="note-toggle-btn" onclick="toggleNote('act_f4jh7b')" title="Add note"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M13 2.5H3a.5.5 0 00-.5.5v14a.5.5 0 00.5.5h10a.5.5 0 00.5-.5V3a.5.5 0 00-.5-.5zM3 0h10a3 3 0 013 3v14a3 3 0 01-3 3H3a3 3 0 01-3-3V3a3 3 0 013-3zm2 5h6v2H5V5zm0 4h6v2H5V9z"/></svg></button>
   </div>
-  <div class="note-area" id="note-area-chk_ttpjqu">
-    <textarea class="note-textarea" id="note-chk_ttpjqu" placeholder="Add a note…" oninput="saveNote('chk_ttpjqu',this.value)"></textarea>
+  <div class="note-area" id="note-area-act_f4jh7b">
+    <textarea class="note-textarea" id="note-act_f4jh7b" placeholder="Add a note…" oninput="saveNote('act_f4jh7b',this.value)"></textarea>
   </div>
 </div>
-          <div class="check-item">
+      <div class="check-item">
   <div class="check-row">
-    <input type="checkbox" class="check-input" id="chk_onueeu" data-key="chk_onueeu" onchange="onCheck(this)">
-    <label class="check-box" for="chk_onueeu"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5,6 4.5,9 10.5,3"/></svg></label>
-    <label class="check-label" for="chk_onueeu" data-editable-key="chk_onueeu.text">Apple Maps, Bing Places, Tripadvisor and the tourism office listings are claimed</label>
-    <button class="note-toggle-btn" onclick="toggleNote('chk_onueeu')" title="Add note"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M13 2.5H3a.5.5 0 00-.5.5v14a.5.5 0 00.5.5h10a.5.5 0 00.5-.5V3a.5.5 0 00-.5-.5zM3 0h10a3 3 0 013 3v14a3 3 0 01-3 3H3a3 3 0 01-3-3V3a3 3 0 013-3zm2 5h6v2H5V5zm0 4h6v2H5V9z"/></svg></button>
+    <input type="checkbox" class="check-input" id="act_ig8pyy" data-key="act_ig8pyy" onchange="onCheck(this)">
+    <label class="check-box" for="act_ig8pyy"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5,6 4.5,9 10.5,3"/></svg></label>
+    <label class="check-label" for="act_ig8pyy" data-editable-key="act_ig8pyy.text">Claim the four priority listings</label>
+    <button class="howto-link" onclick="howToLink('tactic3','stp_nsxfk6')">how to</button>
+    <button class="note-toggle-btn" onclick="toggleNote('act_ig8pyy')" title="Add note"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M13 2.5H3a.5.5 0 00-.5.5v14a.5.5 0 00.5.5h10a.5.5 0 00.5-.5V3a.5.5 0 00-.5-.5zM3 0h10a3 3 0 013 3v14a3 3 0 01-3 3H3a3 3 0 01-3-3V3a3 3 0 013-3zm2 5h6v2H5V5zm0 4h6v2H5V9z"/></svg></button>
   </div>
-  <div class="note-area" id="note-area-chk_onueeu">
-    <textarea class="note-textarea" id="note-chk_onueeu" placeholder="Add a note…" oninput="saveNote('chk_onueeu',this.value)"></textarea>
+  <div class="note-area" id="note-area-act_ig8pyy">
+    <textarea class="note-textarea" id="note-act_ig8pyy" placeholder="Add a note…" oninput="saveNote('act_ig8pyy',this.value)"></textarea>
   </div>
 </div>
-          <div class="check-item">
+      <div class="check-item">
   <div class="check-row">
-    <input type="checkbox" class="check-input" id="chk_78juin" data-key="chk_78juin" onchange="onCheck(this)">
-    <label class="check-box" for="chk_78juin"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5,6 4.5,9 10.5,3"/></svg></label>
-    <label class="check-label" for="chk_78juin" data-editable-key="chk_78juin.text">The Book Now button is scheduled with the developer</label>
-    <button class="note-toggle-btn" onclick="toggleNote('chk_78juin')" title="Add note"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M13 2.5H3a.5.5 0 00-.5.5v14a.5.5 0 00.5.5h10a.5.5 0 00.5-.5V3a.5.5 0 00-.5-.5zM3 0h10a3 3 0 013 3v14a3 3 0 01-3 3H3a3 3 0 01-3-3V3a3 3 0 013-3zm2 5h6v2H5V5zm0 4h6v2H5V9z"/></svg></button>
+    <input type="checkbox" class="check-input" id="act_yhg9py" data-key="act_yhg9py" onchange="onCheck(this)">
+    <label class="check-box" for="act_yhg9py"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5,6 4.5,9 10.5,3"/></svg></label>
+    <label class="check-label" for="act_yhg9py" data-editable-key="act_yhg9py.text">Brief the Book Now button</label>
+    <button class="howto-link" onclick="howToLink('tactic4','stp_pywh56')">how to</button>
+    <button class="note-toggle-btn" onclick="toggleNote('act_yhg9py')" title="Add note"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M13 2.5H3a.5.5 0 00-.5.5v14a.5.5 0 00.5.5h10a.5.5 0 00.5-.5V3a.5.5 0 00-.5-.5zM3 0h10a3 3 0 013 3v14a3 3 0 01-3 3H3a3 3 0 01-3-3V3a3 3 0 013-3zm2 5h6v2H5V5zm0 4h6v2H5V9z"/></svg></button>
   </div>
-  <div class="note-area" id="note-area-chk_78juin">
-    <textarea class="note-textarea" id="note-chk_78juin" placeholder="Add a note…" oninput="saveNote('chk_78juin',this.value)"></textarea>
+  <div class="note-area" id="note-area-act_yhg9py">
+    <textarea class="note-textarea" id="note-act_yhg9py" placeholder="Add a note…" oninput="saveNote('act_yhg9py',this.value)"></textarea>
   </div>
 </div>
-        </div>
-      </div>
     </div>
-    <div class="week-note-section"><div class="week-note-label">Week Notes</div><textarea class="note-textarea week-note-textarea" id="note-wk_3t7ry6" placeholder="Add general notes for this week…" oninput="saveNote('wk_3t7ry6',this.value)"></textarea></div>
+    <div class="week-note-section"><div class="week-note-label">Week notes</div><textarea class="note-textarea week-note-textarea" id="note-wk_3t7ry6" placeholder="Add general notes for this week…" oninput="saveNote('wk_3t7ry6',this.value)"></textarea></div>
   </div>
 </div>
 <div class="week-card" id="wc-8" data-week="8" data-week-id="wk_avsrb8">
   <div class="week-card-header" onclick="toggleWeek(8)">
     <div class="week-num">W8</div>
     <div class="week-title" data-editable-key="wk_avsrb8.title">Booking Page</div>
-    <div class="week-progress-pill" id="wp-8">0 / 2</div>
+    <div class="week-progress-pill" id="wp-8">0 / 3</div>
     <svg class="week-chevron" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
   </div>
   <div class="week-card-body">
-    <div class="week-cols">
-      <div>
-        <div class="week-col-label">This Week's Actions</div>
-        <ul class="week-tasks-list">
-          <li class="week-task-item"><div class="week-task-dot"></div><span class="week-task-text" data-editable-key="act_nr9j25.text">Add rates, cabin types and the cancellation policy to the booking page</span> <button class="howto-link" onclick="howToLink('tactic4','stp_zgdzxg')">how to</button></li>
-          <li class="week-task-item"><div class="week-task-dot"></div><span class="week-task-text" data-editable-key="act_jffb6m.text">Write the Know Before You Go page</span> <button class="howto-link" onclick="howToLink('tactic3','stp_sgvdaa')">how to</button></li>
-          <li class="week-task-item"><div class="week-task-dot"></div><span class="week-task-text" data-editable-key="act_0f8hky.text">Keep posting three times a week</span></li>
-        </ul>
-      </div>
-      <div>
-        <div class="week-col-label">Completion Checklist</div>
-        <div class="check-list">
-          <div class="check-item">
+    <div class="week-col-label">This week's actions</div>
+    <div class="check-list week-actions">
+      <div class="check-item">
   <div class="check-row">
-    <input type="checkbox" class="check-input" id="chk_h9xvqb" data-key="chk_h9xvqb" onchange="onCheck(this)">
-    <label class="check-box" for="chk_h9xvqb"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5,6 4.5,9 10.5,3"/></svg></label>
-    <label class="check-label" for="chk_h9xvqb" data-editable-key="chk_h9xvqb.text">Rates and the cancellation policy show on the booking page</label>
-    <button class="note-toggle-btn" onclick="toggleNote('chk_h9xvqb')" title="Add note"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M13 2.5H3a.5.5 0 00-.5.5v14a.5.5 0 00.5.5h10a.5.5 0 00.5-.5V3a.5.5 0 00-.5-.5zM3 0h10a3 3 0 013 3v14a3 3 0 01-3 3H3a3 3 0 01-3-3V3a3 3 0 013-3zm2 5h6v2H5V5zm0 4h6v2H5V9z"/></svg></button>
+    <input type="checkbox" class="check-input" id="act_nr9j25" data-key="act_nr9j25" onchange="onCheck(this)">
+    <label class="check-box" for="act_nr9j25"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5,6 4.5,9 10.5,3"/></svg></label>
+    <label class="check-label" for="act_nr9j25" data-editable-key="act_nr9j25.text">Add rates, cabin types and the cancellation policy to the booking page</label>
+    <button class="howto-link" onclick="howToLink('tactic4','stp_zgdzxg')">how to</button>
+    <button class="note-toggle-btn" onclick="toggleNote('act_nr9j25')" title="Add note"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M13 2.5H3a.5.5 0 00-.5.5v14a.5.5 0 00.5.5h10a.5.5 0 00.5-.5V3a.5.5 0 00-.5-.5zM3 0h10a3 3 0 013 3v14a3 3 0 01-3 3H3a3 3 0 01-3-3V3a3 3 0 013-3zm2 5h6v2H5V5zm0 4h6v2H5V9z"/></svg></button>
   </div>
-  <div class="note-area" id="note-area-chk_h9xvqb">
-    <textarea class="note-textarea" id="note-chk_h9xvqb" placeholder="Add a note…" oninput="saveNote('chk_h9xvqb',this.value)"></textarea>
+  <div class="note-area" id="note-area-act_nr9j25">
+    <textarea class="note-textarea" id="note-act_nr9j25" placeholder="Add a note…" oninput="saveNote('act_nr9j25',this.value)"></textarea>
   </div>
 </div>
-          <div class="check-item">
+      <div class="check-item">
   <div class="check-row">
-    <input type="checkbox" class="check-input" id="chk_buyhyb" data-key="chk_buyhyb" onchange="onCheck(this)">
-    <label class="check-box" for="chk_buyhyb"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5,6 4.5,9 10.5,3"/></svg></label>
-    <label class="check-label" for="chk_buyhyb" data-editable-key="chk_buyhyb.text">Know Before You Go is published and in the main menu</label>
-    <button class="note-toggle-btn" onclick="toggleNote('chk_buyhyb')" title="Add note"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M13 2.5H3a.5.5 0 00-.5.5v14a.5.5 0 00.5.5h10a.5.5 0 00.5-.5V3a.5.5 0 00-.5-.5zM3 0h10a3 3 0 013 3v14a3 3 0 01-3 3H3a3 3 0 01-3-3V3a3 3 0 013-3zm2 5h6v2H5V5zm0 4h6v2H5V9z"/></svg></button>
+    <input type="checkbox" class="check-input" id="act_jffb6m" data-key="act_jffb6m" onchange="onCheck(this)">
+    <label class="check-box" for="act_jffb6m"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5,6 4.5,9 10.5,3"/></svg></label>
+    <label class="check-label" for="act_jffb6m" data-editable-key="act_jffb6m.text">Write the Know Before You Go page</label>
+    <button class="howto-link" onclick="howToLink('tactic3','stp_sgvdaa')">how to</button>
+    <button class="note-toggle-btn" onclick="toggleNote('act_jffb6m')" title="Add note"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M13 2.5H3a.5.5 0 00-.5.5v14a.5.5 0 00.5.5h10a.5.5 0 00.5-.5V3a.5.5 0 00-.5-.5zM3 0h10a3 3 0 013 3v14a3 3 0 01-3 3H3a3 3 0 01-3-3V3a3 3 0 013-3zm2 5h6v2H5V5zm0 4h6v2H5V9z"/></svg></button>
   </div>
-  <div class="note-area" id="note-area-chk_buyhyb">
-    <textarea class="note-textarea" id="note-chk_buyhyb" placeholder="Add a note…" oninput="saveNote('chk_buyhyb',this.value)"></textarea>
+  <div class="note-area" id="note-area-act_jffb6m">
+    <textarea class="note-textarea" id="note-act_jffb6m" placeholder="Add a note…" oninput="saveNote('act_jffb6m',this.value)"></textarea>
   </div>
 </div>
-        </div>
-      </div>
+      <div class="check-item">
+  <div class="check-row">
+    <input type="checkbox" class="check-input" id="act_0f8hky" data-key="act_0f8hky" onchange="onCheck(this)">
+    <label class="check-box" for="act_0f8hky"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5,6 4.5,9 10.5,3"/></svg></label>
+    <label class="check-label" for="act_0f8hky" data-editable-key="act_0f8hky.text">Keep posting three times a week</label>
+    
+    <button class="note-toggle-btn" onclick="toggleNote('act_0f8hky')" title="Add note"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M13 2.5H3a.5.5 0 00-.5.5v14a.5.5 0 00.5.5h10a.5.5 0 00.5-.5V3a.5.5 0 00-.5-.5zM3 0h10a3 3 0 013 3v14a3 3 0 01-3 3H3a3 3 0 01-3-3V3a3 3 0 013-3zm2 5h6v2H5V5zm0 4h6v2H5V9z"/></svg></button>
+  </div>
+  <div class="note-area" id="note-area-act_0f8hky">
+    <textarea class="note-textarea" id="note-act_0f8hky" placeholder="Add a note…" oninput="saveNote('act_0f8hky',this.value)"></textarea>
+  </div>
+</div>
     </div>
-    <div class="week-note-section"><div class="week-note-label">Week Notes</div><textarea class="note-textarea week-note-textarea" id="note-wk_avsrb8" placeholder="Add general notes for this week…" oninput="saveNote('wk_avsrb8',this.value)"></textarea></div>
+    <div class="week-note-section"><div class="week-note-label">Week notes</div><textarea class="note-textarea week-note-textarea" id="note-wk_avsrb8" placeholder="Add general notes for this week…" oninput="saveNote('wk_avsrb8',this.value)"></textarea></div>
   </div>
 </div>
     </div>
@@ -2477,7 +2504,7 @@
       <div class="month-header">
         <span class="month-badge">Month 3</span>
         <span class="month-title">Scale</span>
-        <span class="month-progress" id="m3-prog"><span>0</span> of 10 done</span>
+        <span class="month-progress" id="m3-prog"><span>0</span> of 11 done</span>
       </div>
       <div class="week-card" id="wc-9" data-week="9" data-week-id="wk_89b2uc">
   <div class="week-card-header" onclick="toggleWeek(9)">
@@ -2487,55 +2514,46 @@
     <svg class="week-chevron" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
   </div>
   <div class="week-card-body">
-    <div class="week-cols">
-      <div>
-        <div class="week-col-label">This Week's Actions</div>
-        <ul class="week-tasks-list">
-          <li class="week-task-item"><div class="week-task-dot"></div><span class="week-task-text" data-editable-key="act_zy07dh.text">Import past guests and send the permission email</span> <button class="howto-link" onclick="howToLink('tactic4','stp_h87vst')">how to</button></li>
-          <li class="week-task-item"><div class="week-task-dot"></div><span class="week-task-text" data-editable-key="act_y6zj6i.text">Add the sign-up form to the footer</span> <button class="howto-link" onclick="howToLink('tactic4','stp_hrs4ys')">how to</button></li>
-          <li class="week-task-item"><div class="week-task-dot"></div><span class="week-task-text" data-editable-key="act_cwkd8p.text">Publish the three-day itinerary</span> <button class="howto-link" onclick="howToLink('tactic3','stp_9yv5z9')">how to</button></li>
-        </ul>
-      </div>
-      <div>
-        <div class="week-col-label">Completion Checklist</div>
-        <div class="check-list">
-          <div class="check-item">
+    <div class="week-col-label">This week's actions</div>
+    <div class="check-list week-actions">
+      <div class="check-item">
   <div class="check-row">
-    <input type="checkbox" class="check-input" id="chk_xz8jd0" data-key="chk_xz8jd0" onchange="onCheck(this)">
-    <label class="check-box" for="chk_xz8jd0"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5,6 4.5,9 10.5,3"/></svg></label>
-    <label class="check-label" for="chk_xz8jd0" data-editable-key="chk_xz8jd0.text">The permission email has been sent</label>
-    <button class="note-toggle-btn" onclick="toggleNote('chk_xz8jd0')" title="Add note"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M13 2.5H3a.5.5 0 00-.5.5v14a.5.5 0 00.5.5h10a.5.5 0 00.5-.5V3a.5.5 0 00-.5-.5zM3 0h10a3 3 0 013 3v14a3 3 0 01-3 3H3a3 3 0 01-3-3V3a3 3 0 013-3zm2 5h6v2H5V5zm0 4h6v2H5V9z"/></svg></button>
+    <input type="checkbox" class="check-input" id="act_zy07dh" data-key="act_zy07dh" onchange="onCheck(this)">
+    <label class="check-box" for="act_zy07dh"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5,6 4.5,9 10.5,3"/></svg></label>
+    <label class="check-label" for="act_zy07dh" data-editable-key="act_zy07dh.text">Import past guests and send the permission email</label>
+    <button class="howto-link" onclick="howToLink('tactic4','stp_h87vst')">how to</button>
+    <button class="note-toggle-btn" onclick="toggleNote('act_zy07dh')" title="Add note"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M13 2.5H3a.5.5 0 00-.5.5v14a.5.5 0 00.5.5h10a.5.5 0 00.5-.5V3a.5.5 0 00-.5-.5zM3 0h10a3 3 0 013 3v14a3 3 0 01-3 3H3a3 3 0 01-3-3V3a3 3 0 013-3zm2 5h6v2H5V5zm0 4h6v2H5V9z"/></svg></button>
   </div>
-  <div class="note-area" id="note-area-chk_xz8jd0">
-    <textarea class="note-textarea" id="note-chk_xz8jd0" placeholder="Add a note…" oninput="saveNote('chk_xz8jd0',this.value)"></textarea>
+  <div class="note-area" id="note-area-act_zy07dh">
+    <textarea class="note-textarea" id="note-act_zy07dh" placeholder="Add a note…" oninput="saveNote('act_zy07dh',this.value)"></textarea>
   </div>
 </div>
-          <div class="check-item">
+      <div class="check-item">
   <div class="check-row">
-    <input type="checkbox" class="check-input" id="chk_gnvc5y" data-key="chk_gnvc5y" onchange="onCheck(this)">
-    <label class="check-box" for="chk_gnvc5y"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5,6 4.5,9 10.5,3"/></svg></label>
-    <label class="check-label" for="chk_gnvc5y" data-editable-key="chk_gnvc5y.text">The footer sign-up form is live</label>
-    <button class="note-toggle-btn" onclick="toggleNote('chk_gnvc5y')" title="Add note"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M13 2.5H3a.5.5 0 00-.5.5v14a.5.5 0 00.5.5h10a.5.5 0 00.5-.5V3a.5.5 0 00-.5-.5zM3 0h10a3 3 0 013 3v14a3 3 0 01-3 3H3a3 3 0 01-3-3V3a3 3 0 013-3zm2 5h6v2H5V5zm0 4h6v2H5V9z"/></svg></button>
+    <input type="checkbox" class="check-input" id="act_y6zj6i" data-key="act_y6zj6i" onchange="onCheck(this)">
+    <label class="check-box" for="act_y6zj6i"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5,6 4.5,9 10.5,3"/></svg></label>
+    <label class="check-label" for="act_y6zj6i" data-editable-key="act_y6zj6i.text">Add the sign-up form to the footer</label>
+    <button class="howto-link" onclick="howToLink('tactic4','stp_hrs4ys')">how to</button>
+    <button class="note-toggle-btn" onclick="toggleNote('act_y6zj6i')" title="Add note"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M13 2.5H3a.5.5 0 00-.5.5v14a.5.5 0 00.5.5h10a.5.5 0 00.5-.5V3a.5.5 0 00-.5-.5zM3 0h10a3 3 0 013 3v14a3 3 0 01-3 3H3a3 3 0 01-3-3V3a3 3 0 013-3zm2 5h6v2H5V5zm0 4h6v2H5V9z"/></svg></button>
   </div>
-  <div class="note-area" id="note-area-chk_gnvc5y">
-    <textarea class="note-textarea" id="note-chk_gnvc5y" placeholder="Add a note…" oninput="saveNote('chk_gnvc5y',this.value)"></textarea>
+  <div class="note-area" id="note-area-act_y6zj6i">
+    <textarea class="note-textarea" id="note-act_y6zj6i" placeholder="Add a note…" oninput="saveNote('act_y6zj6i',this.value)"></textarea>
   </div>
 </div>
-          <div class="check-item">
+      <div class="check-item">
   <div class="check-row">
-    <input type="checkbox" class="check-input" id="chk_cvu7u2" data-key="chk_cvu7u2" onchange="onCheck(this)">
-    <label class="check-box" for="chk_cvu7u2"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5,6 4.5,9 10.5,3"/></svg></label>
-    <label class="check-label" for="chk_cvu7u2" data-editable-key="chk_cvu7u2.text">The first local guide is published</label>
-    <button class="note-toggle-btn" onclick="toggleNote('chk_cvu7u2')" title="Add note"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M13 2.5H3a.5.5 0 00-.5.5v14a.5.5 0 00.5.5h10a.5.5 0 00.5-.5V3a.5.5 0 00-.5-.5zM3 0h10a3 3 0 013 3v14a3 3 0 01-3 3H3a3 3 0 01-3-3V3a3 3 0 013-3zm2 5h6v2H5V5zm0 4h6v2H5V9z"/></svg></button>
+    <input type="checkbox" class="check-input" id="act_cwkd8p" data-key="act_cwkd8p" onchange="onCheck(this)">
+    <label class="check-box" for="act_cwkd8p"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5,6 4.5,9 10.5,3"/></svg></label>
+    <label class="check-label" for="act_cwkd8p" data-editable-key="act_cwkd8p.text">Publish the three-day itinerary</label>
+    <button class="howto-link" onclick="howToLink('tactic3','stp_9yv5z9')">how to</button>
+    <button class="note-toggle-btn" onclick="toggleNote('act_cwkd8p')" title="Add note"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M13 2.5H3a.5.5 0 00-.5.5v14a.5.5 0 00.5.5h10a.5.5 0 00.5-.5V3a.5.5 0 00-.5-.5zM3 0h10a3 3 0 013 3v14a3 3 0 01-3 3H3a3 3 0 01-3-3V3a3 3 0 013-3zm2 5h6v2H5V5zm0 4h6v2H5V9z"/></svg></button>
   </div>
-  <div class="note-area" id="note-area-chk_cvu7u2">
-    <textarea class="note-textarea" id="note-chk_cvu7u2" placeholder="Add a note…" oninput="saveNote('chk_cvu7u2',this.value)"></textarea>
+  <div class="note-area" id="note-area-act_cwkd8p">
+    <textarea class="note-textarea" id="note-act_cwkd8p" placeholder="Add a note…" oninput="saveNote('act_cwkd8p',this.value)"></textarea>
   </div>
 </div>
-        </div>
-      </div>
     </div>
-    <div class="week-note-section"><div class="week-note-label">Week Notes</div><textarea class="note-textarea week-note-textarea" id="note-wk_89b2uc" placeholder="Add general notes for this week…" oninput="saveNote('wk_89b2uc',this.value)"></textarea></div>
+    <div class="week-note-section"><div class="week-note-label">Week notes</div><textarea class="note-textarea week-note-textarea" id="note-wk_89b2uc" placeholder="Add general notes for this week…" oninput="saveNote('wk_89b2uc',this.value)"></textarea></div>
   </div>
 </div>
 <div class="week-card" id="wc-10" data-week="10" data-week-id="wk_pgi1vu">
@@ -2546,43 +2564,34 @@
     <svg class="week-chevron" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
   </div>
   <div class="week-card-body">
-    <div class="week-cols">
-      <div>
-        <div class="week-col-label">This Week's Actions</div>
-        <ul class="week-tasks-list">
-          <li class="week-task-item"><div class="week-task-dot"></div><span class="week-task-text" data-editable-key="act_sk3yjr.text">Build and switch on the pre-arrival email</span> <button class="howto-link" onclick="howToLink('tactic4','stp_77peyg')">how to</button></li>
-          <li class="week-task-item"><div class="week-task-dot"></div><span class="week-task-text" data-editable-key="act_i007aq.text">Check local ranking for your three key phrases</span> <button class="howto-link" onclick="howToLink('tactic3','stp_blf1ij')">how to</button></li>
-        </ul>
-      </div>
-      <div>
-        <div class="week-col-label">Completion Checklist</div>
-        <div class="check-list">
-          <div class="check-item">
+    <div class="week-col-label">This week's actions</div>
+    <div class="check-list week-actions">
+      <div class="check-item">
   <div class="check-row">
-    <input type="checkbox" class="check-input" id="chk_4os2y5" data-key="chk_4os2y5" onchange="onCheck(this)">
-    <label class="check-box" for="chk_4os2y5"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5,6 4.5,9 10.5,3"/></svg></label>
-    <label class="check-label" for="chk_4os2y5" data-editable-key="chk_4os2y5.text">The pre-arrival email sends automatically five days before arrival</label>
-    <button class="note-toggle-btn" onclick="toggleNote('chk_4os2y5')" title="Add note"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M13 2.5H3a.5.5 0 00-.5.5v14a.5.5 0 00.5.5h10a.5.5 0 00.5-.5V3a.5.5 0 00-.5-.5zM3 0h10a3 3 0 013 3v14a3 3 0 01-3 3H3a3 3 0 01-3-3V3a3 3 0 013-3zm2 5h6v2H5V5zm0 4h6v2H5V9z"/></svg></button>
+    <input type="checkbox" class="check-input" id="act_sk3yjr" data-key="act_sk3yjr" onchange="onCheck(this)">
+    <label class="check-box" for="act_sk3yjr"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5,6 4.5,9 10.5,3"/></svg></label>
+    <label class="check-label" for="act_sk3yjr" data-editable-key="act_sk3yjr.text">Build and switch on the pre-arrival email</label>
+    <button class="howto-link" onclick="howToLink('tactic4','stp_77peyg')">how to</button>
+    <button class="note-toggle-btn" onclick="toggleNote('act_sk3yjr')" title="Add note"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M13 2.5H3a.5.5 0 00-.5.5v14a.5.5 0 00.5.5h10a.5.5 0 00.5-.5V3a.5.5 0 00-.5-.5zM3 0h10a3 3 0 013 3v14a3 3 0 01-3 3H3a3 3 0 01-3-3V3a3 3 0 013-3zm2 5h6v2H5V5zm0 4h6v2H5V9z"/></svg></button>
   </div>
-  <div class="note-area" id="note-area-chk_4os2y5">
-    <textarea class="note-textarea" id="note-chk_4os2y5" placeholder="Add a note…" oninput="saveNote('chk_4os2y5',this.value)"></textarea>
+  <div class="note-area" id="note-area-act_sk3yjr">
+    <textarea class="note-textarea" id="note-act_sk3yjr" placeholder="Add a note…" oninput="saveNote('act_sk3yjr',this.value)"></textarea>
   </div>
 </div>
-          <div class="check-item">
+      <div class="check-item">
   <div class="check-row">
-    <input type="checkbox" class="check-input" id="chk_udta4i" data-key="chk_udta4i" onchange="onCheck(this)">
-    <label class="check-box" for="chk_udta4i"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5,6 4.5,9 10.5,3"/></svg></label>
-    <label class="check-label" for="chk_udta4i" data-editable-key="chk_udta4i.text">This month&#039;s ranking positions are recorded</label>
-    <button class="note-toggle-btn" onclick="toggleNote('chk_udta4i')" title="Add note"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M13 2.5H3a.5.5 0 00-.5.5v14a.5.5 0 00.5.5h10a.5.5 0 00.5-.5V3a.5.5 0 00-.5-.5zM3 0h10a3 3 0 013 3v14a3 3 0 01-3 3H3a3 3 0 01-3-3V3a3 3 0 013-3zm2 5h6v2H5V5zm0 4h6v2H5V9z"/></svg></button>
+    <input type="checkbox" class="check-input" id="act_i007aq" data-key="act_i007aq" onchange="onCheck(this)">
+    <label class="check-box" for="act_i007aq"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5,6 4.5,9 10.5,3"/></svg></label>
+    <label class="check-label" for="act_i007aq" data-editable-key="act_i007aq.text">Check local ranking for your three key phrases</label>
+    <button class="howto-link" onclick="howToLink('tactic3','stp_blf1ij')">how to</button>
+    <button class="note-toggle-btn" onclick="toggleNote('act_i007aq')" title="Add note"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M13 2.5H3a.5.5 0 00-.5.5v14a.5.5 0 00.5.5h10a.5.5 0 00.5-.5V3a.5.5 0 00-.5-.5zM3 0h10a3 3 0 013 3v14a3 3 0 01-3 3H3a3 3 0 01-3-3V3a3 3 0 013-3zm2 5h6v2H5V5zm0 4h6v2H5V9z"/></svg></button>
   </div>
-  <div class="note-area" id="note-area-chk_udta4i">
-    <textarea class="note-textarea" id="note-chk_udta4i" placeholder="Add a note…" oninput="saveNote('chk_udta4i',this.value)"></textarea>
+  <div class="note-area" id="note-area-act_i007aq">
+    <textarea class="note-textarea" id="note-act_i007aq" placeholder="Add a note…" oninput="saveNote('act_i007aq',this.value)"></textarea>
   </div>
 </div>
-        </div>
-      </div>
     </div>
-    <div class="week-note-section"><div class="week-note-label">Week Notes</div><textarea class="note-textarea week-note-textarea" id="note-wk_pgi1vu" placeholder="Add general notes for this week…" oninput="saveNote('wk_pgi1vu',this.value)"></textarea></div>
+    <div class="week-note-section"><div class="week-note-label">Week notes</div><textarea class="note-textarea week-note-textarea" id="note-wk_pgi1vu" placeholder="Add general notes for this week…" oninput="saveNote('wk_pgi1vu',this.value)"></textarea></div>
   </div>
 </div>
 <div class="week-card" id="wc-11" data-week="11" data-week-id="wk_9avvdn">
@@ -2593,103 +2602,96 @@
     <svg class="week-chevron" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
   </div>
   <div class="week-card-body">
-    <div class="week-cols">
-      <div>
-        <div class="week-col-label">This Week's Actions</div>
-        <ul class="week-tasks-list">
-          <li class="week-task-item"><div class="week-task-dot"></div><span class="week-task-text" data-editable-key="act_lmq8w7.text">Send the seasonal availability email</span> <button class="howto-link" onclick="howToLink('tactic4','stp_wd1l3v')">how to</button></li>
-          <li class="week-task-item"><div class="week-task-dot"></div><span class="week-task-text" data-editable-key="act_ihvgx4.text">Publish the second local guide</span> <button class="howto-link" onclick="howToLink('tactic3','stp_9yv5z9')">how to</button></li>
-          <li class="week-task-item"><div class="week-task-dot"></div><span class="week-task-text" data-editable-key="act_2ty5lb.text">Share two recent reviews on social</span></li>
-        </ul>
-      </div>
-      <div>
-        <div class="week-col-label">Completion Checklist</div>
-        <div class="check-list">
-          <div class="check-item">
+    <div class="week-col-label">This week's actions</div>
+    <div class="check-list week-actions">
+      <div class="check-item">
   <div class="check-row">
-    <input type="checkbox" class="check-input" id="chk_kkmhgj" data-key="chk_kkmhgj" onchange="onCheck(this)">
-    <label class="check-box" for="chk_kkmhgj"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5,6 4.5,9 10.5,3"/></svg></label>
-    <label class="check-label" for="chk_kkmhgj" data-editable-key="chk_kkmhgj.text">The seasonal email has been sent to confirmed subscribers</label>
-    <button class="note-toggle-btn" onclick="toggleNote('chk_kkmhgj')" title="Add note"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M13 2.5H3a.5.5 0 00-.5.5v14a.5.5 0 00.5.5h10a.5.5 0 00.5-.5V3a.5.5 0 00-.5-.5zM3 0h10a3 3 0 013 3v14a3 3 0 01-3 3H3a3 3 0 01-3-3V3a3 3 0 013-3zm2 5h6v2H5V5zm0 4h6v2H5V9z"/></svg></button>
+    <input type="checkbox" class="check-input" id="act_lmq8w7" data-key="act_lmq8w7" onchange="onCheck(this)">
+    <label class="check-box" for="act_lmq8w7"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5,6 4.5,9 10.5,3"/></svg></label>
+    <label class="check-label" for="act_lmq8w7" data-editable-key="act_lmq8w7.text">Send the seasonal availability email</label>
+    <button class="howto-link" onclick="howToLink('tactic4','stp_wd1l3v')">how to</button>
+    <button class="note-toggle-btn" onclick="toggleNote('act_lmq8w7')" title="Add note"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M13 2.5H3a.5.5 0 00-.5.5v14a.5.5 0 00.5.5h10a.5.5 0 00.5-.5V3a.5.5 0 00-.5-.5zM3 0h10a3 3 0 013 3v14a3 3 0 01-3 3H3a3 3 0 01-3-3V3a3 3 0 013-3zm2 5h6v2H5V5zm0 4h6v2H5V9z"/></svg></button>
   </div>
-  <div class="note-area" id="note-area-chk_kkmhgj">
-    <textarea class="note-textarea" id="note-chk_kkmhgj" placeholder="Add a note…" oninput="saveNote('chk_kkmhgj',this.value)"></textarea>
+  <div class="note-area" id="note-area-act_lmq8w7">
+    <textarea class="note-textarea" id="note-act_lmq8w7" placeholder="Add a note…" oninput="saveNote('act_lmq8w7',this.value)"></textarea>
   </div>
 </div>
-          <div class="check-item">
+      <div class="check-item">
   <div class="check-row">
-    <input type="checkbox" class="check-input" id="chk_knq63c" data-key="chk_knq63c" onchange="onCheck(this)">
-    <label class="check-box" for="chk_knq63c"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5,6 4.5,9 10.5,3"/></svg></label>
-    <label class="check-label" for="chk_knq63c" data-editable-key="chk_knq63c.text">The second local guide is published</label>
-    <button class="note-toggle-btn" onclick="toggleNote('chk_knq63c')" title="Add note"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M13 2.5H3a.5.5 0 00-.5.5v14a.5.5 0 00.5.5h10a.5.5 0 00.5-.5V3a.5.5 0 00-.5-.5zM3 0h10a3 3 0 013 3v14a3 3 0 01-3 3H3a3 3 0 01-3-3V3a3 3 0 013-3zm2 5h6v2H5V5zm0 4h6v2H5V9z"/></svg></button>
+    <input type="checkbox" class="check-input" id="act_ihvgx4" data-key="act_ihvgx4" onchange="onCheck(this)">
+    <label class="check-box" for="act_ihvgx4"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5,6 4.5,9 10.5,3"/></svg></label>
+    <label class="check-label" for="act_ihvgx4" data-editable-key="act_ihvgx4.text">Publish the second local guide</label>
+    <button class="howto-link" onclick="howToLink('tactic3','stp_9yv5z9')">how to</button>
+    <button class="note-toggle-btn" onclick="toggleNote('act_ihvgx4')" title="Add note"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M13 2.5H3a.5.5 0 00-.5.5v14a.5.5 0 00.5.5h10a.5.5 0 00.5-.5V3a.5.5 0 00-.5-.5zM3 0h10a3 3 0 013 3v14a3 3 0 01-3 3H3a3 3 0 01-3-3V3a3 3 0 013-3zm2 5h6v2H5V5zm0 4h6v2H5V9z"/></svg></button>
   </div>
-  <div class="note-area" id="note-area-chk_knq63c">
-    <textarea class="note-textarea" id="note-chk_knq63c" placeholder="Add a note…" oninput="saveNote('chk_knq63c',this.value)"></textarea>
+  <div class="note-area" id="note-area-act_ihvgx4">
+    <textarea class="note-textarea" id="note-act_ihvgx4" placeholder="Add a note…" oninput="saveNote('act_ihvgx4',this.value)"></textarea>
   </div>
 </div>
-          <div class="check-item">
+      <div class="check-item">
   <div class="check-row">
-    <input type="checkbox" class="check-input" id="chk_98rr04" data-key="chk_98rr04" onchange="onCheck(this)">
-    <label class="check-box" for="chk_98rr04"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5,6 4.5,9 10.5,3"/></svg></label>
-    <label class="check-label" for="chk_98rr04" data-editable-key="chk_98rr04.text">Two reviews have been shared on social</label>
-    <button class="note-toggle-btn" onclick="toggleNote('chk_98rr04')" title="Add note"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M13 2.5H3a.5.5 0 00-.5.5v14a.5.5 0 00.5.5h10a.5.5 0 00.5-.5V3a.5.5 0 00-.5-.5zM3 0h10a3 3 0 013 3v14a3 3 0 01-3 3H3a3 3 0 01-3-3V3a3 3 0 013-3zm2 5h6v2H5V5zm0 4h6v2H5V9z"/></svg></button>
+    <input type="checkbox" class="check-input" id="act_2ty5lb" data-key="act_2ty5lb" onchange="onCheck(this)">
+    <label class="check-box" for="act_2ty5lb"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5,6 4.5,9 10.5,3"/></svg></label>
+    <label class="check-label" for="act_2ty5lb" data-editable-key="act_2ty5lb.text">Share two recent reviews on social</label>
+    
+    <button class="note-toggle-btn" onclick="toggleNote('act_2ty5lb')" title="Add note"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M13 2.5H3a.5.5 0 00-.5.5v14a.5.5 0 00.5.5h10a.5.5 0 00.5-.5V3a.5.5 0 00-.5-.5zM3 0h10a3 3 0 013 3v14a3 3 0 01-3 3H3a3 3 0 01-3-3V3a3 3 0 013-3zm2 5h6v2H5V5zm0 4h6v2H5V9z"/></svg></button>
   </div>
-  <div class="note-area" id="note-area-chk_98rr04">
-    <textarea class="note-textarea" id="note-chk_98rr04" placeholder="Add a note…" oninput="saveNote('chk_98rr04',this.value)"></textarea>
+  <div class="note-area" id="note-area-act_2ty5lb">
+    <textarea class="note-textarea" id="note-act_2ty5lb" placeholder="Add a note…" oninput="saveNote('act_2ty5lb',this.value)"></textarea>
   </div>
 </div>
-        </div>
-      </div>
     </div>
-    <div class="week-note-section"><div class="week-note-label">Week Notes</div><textarea class="note-textarea week-note-textarea" id="note-wk_9avvdn" placeholder="Add general notes for this week…" oninput="saveNote('wk_9avvdn',this.value)"></textarea></div>
+    <div class="week-note-section"><div class="week-note-label">Week notes</div><textarea class="note-textarea week-note-textarea" id="note-wk_9avvdn" placeholder="Add general notes for this week…" oninput="saveNote('wk_9avvdn',this.value)"></textarea></div>
   </div>
 </div>
 <div class="week-card" id="wc-12" data-week="12" data-week-id="wk_ypo1fi">
   <div class="week-card-header" onclick="toggleWeek(12)">
     <div class="week-num">W12</div>
     <div class="week-title" data-editable-key="wk_ypo1fi.title">Review and Plan Ahead</div>
-    <div class="week-progress-pill" id="wp-12">0 / 2</div>
+    <div class="week-progress-pill" id="wp-12">0 / 3</div>
     <svg class="week-chevron" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
   </div>
   <div class="week-card-body">
-    <div class="week-cols">
-      <div>
-        <div class="week-col-label">This Week's Actions</div>
-        <ul class="week-tasks-list">
-          <li class="week-task-item"><div class="week-task-dot"></div><span class="week-task-text" data-editable-key="act_sul75e.text">Compare followers, reviews, search clicks and direct bookings against the baseline</span></li>
-          <li class="week-task-item"><div class="week-task-dot"></div><span class="week-task-text" data-editable-key="act_l7igws.text">Write down what worked, what did not and what to repeat</span></li>
-          <li class="week-task-item"><div class="week-task-dot"></div><span class="week-task-text" data-editable-key="act_mizw23.text">Set a monthly routine for posts, review replies and Google Posts</span></li>
-        </ul>
-      </div>
-      <div>
-        <div class="week-col-label">Completion Checklist</div>
-        <div class="check-list">
-          <div class="check-item">
+    <div class="week-col-label">This week's actions</div>
+    <div class="check-list week-actions">
+      <div class="check-item">
   <div class="check-row">
-    <input type="checkbox" class="check-input" id="chk_pa9juj" data-key="chk_pa9juj" onchange="onCheck(this)">
-    <label class="check-box" for="chk_pa9juj"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5,6 4.5,9 10.5,3"/></svg></label>
-    <label class="check-label" for="chk_pa9juj" data-editable-key="chk_pa9juj.text">The 90-day numbers are recorded beside the baseline</label>
-    <button class="note-toggle-btn" onclick="toggleNote('chk_pa9juj')" title="Add note"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M13 2.5H3a.5.5 0 00-.5.5v14a.5.5 0 00.5.5h10a.5.5 0 00.5-.5V3a.5.5 0 00-.5-.5zM3 0h10a3 3 0 013 3v14a3 3 0 01-3 3H3a3 3 0 01-3-3V3a3 3 0 013-3zm2 5h6v2H5V5zm0 4h6v2H5V9z"/></svg></button>
+    <input type="checkbox" class="check-input" id="act_sul75e" data-key="act_sul75e" onchange="onCheck(this)">
+    <label class="check-box" for="act_sul75e"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5,6 4.5,9 10.5,3"/></svg></label>
+    <label class="check-label" for="act_sul75e" data-editable-key="act_sul75e.text">Compare followers, reviews, search clicks and direct bookings against the baseline</label>
+    
+    <button class="note-toggle-btn" onclick="toggleNote('act_sul75e')" title="Add note"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M13 2.5H3a.5.5 0 00-.5.5v14a.5.5 0 00.5.5h10a.5.5 0 00.5-.5V3a.5.5 0 00-.5-.5zM3 0h10a3 3 0 013 3v14a3 3 0 01-3 3H3a3 3 0 01-3-3V3a3 3 0 013-3zm2 5h6v2H5V5zm0 4h6v2H5V9z"/></svg></button>
   </div>
-  <div class="note-area" id="note-area-chk_pa9juj">
-    <textarea class="note-textarea" id="note-chk_pa9juj" placeholder="Add a note…" oninput="saveNote('chk_pa9juj',this.value)"></textarea>
+  <div class="note-area" id="note-area-act_sul75e">
+    <textarea class="note-textarea" id="note-act_sul75e" placeholder="Add a note…" oninput="saveNote('act_sul75e',this.value)"></textarea>
   </div>
 </div>
-          <div class="check-item">
+      <div class="check-item">
   <div class="check-row">
-    <input type="checkbox" class="check-input" id="chk_ihak5d" data-key="chk_ihak5d" onchange="onCheck(this)">
-    <label class="check-box" for="chk_ihak5d"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5,6 4.5,9 10.5,3"/></svg></label>
-    <label class="check-label" for="chk_ihak5d" data-editable-key="chk_ihak5d.text">A monthly routine is written down and on the calendar</label>
-    <button class="note-toggle-btn" onclick="toggleNote('chk_ihak5d')" title="Add note"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M13 2.5H3a.5.5 0 00-.5.5v14a.5.5 0 00.5.5h10a.5.5 0 00.5-.5V3a.5.5 0 00-.5-.5zM3 0h10a3 3 0 013 3v14a3 3 0 01-3 3H3a3 3 0 01-3-3V3a3 3 0 013-3zm2 5h6v2H5V5zm0 4h6v2H5V9z"/></svg></button>
+    <input type="checkbox" class="check-input" id="act_l7igws" data-key="act_l7igws" onchange="onCheck(this)">
+    <label class="check-box" for="act_l7igws"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5,6 4.5,9 10.5,3"/></svg></label>
+    <label class="check-label" for="act_l7igws" data-editable-key="act_l7igws.text">Write down what worked, what did not and what to repeat</label>
+    
+    <button class="note-toggle-btn" onclick="toggleNote('act_l7igws')" title="Add note"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M13 2.5H3a.5.5 0 00-.5.5v14a.5.5 0 00.5.5h10a.5.5 0 00.5-.5V3a.5.5 0 00-.5-.5zM3 0h10a3 3 0 013 3v14a3 3 0 01-3 3H3a3 3 0 01-3-3V3a3 3 0 013-3zm2 5h6v2H5V5zm0 4h6v2H5V9z"/></svg></button>
   </div>
-  <div class="note-area" id="note-area-chk_ihak5d">
-    <textarea class="note-textarea" id="note-chk_ihak5d" placeholder="Add a note…" oninput="saveNote('chk_ihak5d',this.value)"></textarea>
+  <div class="note-area" id="note-area-act_l7igws">
+    <textarea class="note-textarea" id="note-act_l7igws" placeholder="Add a note…" oninput="saveNote('act_l7igws',this.value)"></textarea>
   </div>
 </div>
-        </div>
-      </div>
+      <div class="check-item">
+  <div class="check-row">
+    <input type="checkbox" class="check-input" id="act_mizw23" data-key="act_mizw23" onchange="onCheck(this)">
+    <label class="check-box" for="act_mizw23"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5,6 4.5,9 10.5,3"/></svg></label>
+    <label class="check-label" for="act_mizw23" data-editable-key="act_mizw23.text">Set a monthly routine for posts, review replies and Google Posts</label>
+    
+    <button class="note-toggle-btn" onclick="toggleNote('act_mizw23')" title="Add note"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M13 2.5H3a.5.5 0 00-.5.5v14a.5.5 0 00.5.5h10a.5.5 0 00.5-.5V3a.5.5 0 00-.5-.5zM3 0h10a3 3 0 013 3v14a3 3 0 01-3 3H3a3 3 0 01-3-3V3a3 3 0 013-3zm2 5h6v2H5V5zm0 4h6v2H5V9z"/></svg></button>
+  </div>
+  <div class="note-area" id="note-area-act_mizw23">
+    <textarea class="note-textarea" id="note-act_mizw23" placeholder="Add a note…" oninput="saveNote('act_mizw23',this.value)"></textarea>
+  </div>
+</div>
     </div>
-    <div class="week-note-section"><div class="week-note-label">Week Notes</div><textarea class="note-textarea week-note-textarea" id="note-wk_ypo1fi" placeholder="Add general notes for this week…" oninput="saveNote('wk_ypo1fi',this.value)"></textarea></div>
+    <div class="week-note-section"><div class="week-note-label">Week notes</div><textarea class="note-textarea week-note-textarea" id="note-wk_ypo1fi" placeholder="Add general notes for this week…" oninput="saveNote('wk_ypo1fi',this.value)"></textarea></div>
   </div>
 </div>
     </div>
@@ -2697,10 +2699,28 @@
     
 
     <div class="print-only print-footer">
-      <div class="print-footer-brand">e<span>Learning</span>U</div>
+      <div class="print-footer-brand">Junction</div>
       <div class="print-footer-contact">
         <strong>Questions?</strong> Contact your coach at conner@elearningu.com
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- MATERIALS (interim: Phase 4 builds the full page) -->
+<section id="page-materials" class="page">
+  <div class="materials">
+    <div class="materials-header">
+      <h1>Materials</h1>
+      <p>Everything from your program, in one place.</p>
+    </div>
+    <div class="materials-item">
+      <div><h2>Assessment report</h2><p>Your digital marketing assessment as a document to print or save as a PDF.</p></div>
+      <button type="button" class="materials-btn" onclick="downloadPDF()">Download PDF</button>
+    </div>
+    <div class="materials-item plan-ready-only">
+      <div><h2>Your 90-day plan</h2><p>Your roadmap as a document to print or save as a PDF.</p></div>
+      <button type="button" class="materials-btn" onclick="printRoadmap()">Download PDF</button>
     </div>
   </div>
 </section>
@@ -2792,8 +2812,8 @@
     <div class="wm-header">
       <div class="wm-header-glow-a"></div>
       <div class="wm-header-glow-b"></div>
-      <img class="wm-logo-img" src="/assets/v2/elearningu-logo-white.png" alt="eLearningU">
-      <div class="wm-eyebrow">eLearningU · Accelerator Program</div>
+      <img class="wm-logo-img" src="/assets/v2/junction-wordmark-reverse.png" alt="Junction" width="140" height="20">
+      <div class="wm-eyebrow">Accelerator</div>
       <div class="wm-headline">Welcome to your<br>Implementation Plan.</div>
       <p class="wm-subline">You already deliver a five-star stay. This plan is about making sure the people planning their next trip can see that before they book somewhere else.</p>
     </div>
@@ -2884,11 +2904,20 @@
 
 </main>
 
+<div class="stage-switcher" role="group" aria-label="Sandbox preview: choose a stage">
+  <span class="stage-switcher-label">Sandbox preview</span>
+  <button type="button" class="stage-switcher-btn" data-preview-stage="before" aria-pressed="false" onclick="choosePreviewStage('before')">Before the plan</button>
+  <button type="button" class="stage-switcher-btn" data-preview-stage="delivered" aria-pressed="false" onclick="choosePreviewStage('delivered')">Plan just delivered</button>
+  <button type="button" class="stage-switcher-btn" data-preview-stage="during" aria-pressed="false" onclick="choosePreviewStage('during')">During the plan</button>
+  <button type="button" class="stage-switcher-btn" data-preview-stage="done" aria-pressed="false" onclick="choosePreviewStage('done')">Plan done</button>
+</div>
+
 <div class="lightbox-overlay" id="lightbox" onclick="closeLightbox()">
   <img id="lightbox-img" src="" alt="">
 </div>
 
-<script type="application/json" id="accelerator-data">{"slug":"andreas-resort","totalWeeks":12,"totalDays":90,"checks":{"all":["chk_ufgw6d","chk_iwcfe9","chk_h4fm6g","chk_mtz30d","chk_0itnz2","chk_v9z5bn","chk_fon2vi","chk_9dcuqw","chk_gqpumh","chk_2awi16","chk_hift62","chk_l9oowu","chk_9k5vv8","chk_bav8kl","chk_duris1","chk_dfrglv","chk_yxj4xx","chk_cvlzr8","chk_ttpjqu","chk_onueeu","chk_78juin","chk_h9xvqb","chk_buyhyb","chk_xz8jd0","chk_gnvc5y","chk_cvu7u2","chk_4os2y5","chk_udta4i","chk_kkmhgj","chk_knq63c","chk_98rr04","chk_pa9juj","chk_ihak5d"],"byWeek":{"1":["chk_ufgw6d","chk_iwcfe9","chk_h4fm6g","chk_mtz30d"],"2":["chk_0itnz2","chk_v9z5bn"],"3":["chk_fon2vi","chk_9dcuqw","chk_gqpumh"],"4":["chk_2awi16","chk_hift62","chk_l9oowu"],"5":["chk_9k5vv8","chk_bav8kl","chk_duris1"],"6":["chk_dfrglv","chk_yxj4xx","chk_cvlzr8"],"7":["chk_ttpjqu","chk_onueeu","chk_78juin"],"8":["chk_h9xvqb","chk_buyhyb"],"9":["chk_xz8jd0","chk_gnvc5y","chk_cvu7u2"],"10":["chk_4os2y5","chk_udta4i"],"11":["chk_kkmhgj","chk_knq63c","chk_98rr04"],"12":["chk_pa9juj","chk_ihak5d"]},"byPhase":{"1":["chk_ufgw6d","chk_iwcfe9","chk_h4fm6g","chk_mtz30d","chk_0itnz2","chk_v9z5bn","chk_fon2vi","chk_9dcuqw","chk_gqpumh","chk_2awi16","chk_hift62","chk_l9oowu"],"2":["chk_9k5vv8","chk_bav8kl","chk_duris1","chk_dfrglv","chk_yxj4xx","chk_cvlzr8","chk_ttpjqu","chk_onueeu","chk_78juin","chk_h9xvqb","chk_buyhyb"],"3":["chk_xz8jd0","chk_gnvc5y","chk_cvu7u2","chk_4os2y5","chk_udta4i","chk_kkmhgj","chk_knq63c","chk_98rr04","chk_pa9juj","chk_ihak5d"]},"byTactic":{"1":["chk_ufgw6d","chk_iwcfe9","chk_h4fm6g","chk_0itnz2","chk_v9z5bn","chk_fon2vi","chk_9dcuqw","chk_98rr04"],"2":["chk_mtz30d","chk_gqpumh","chk_2awi16","chk_hift62","chk_l9oowu"],"3":["chk_9k5vv8","chk_bav8kl","chk_duris1","chk_dfrglv","chk_yxj4xx","chk_cvlzr8","chk_ttpjqu","chk_onueeu","chk_buyhyb","chk_cvu7u2","chk_udta4i","chk_knq63c","chk_pa9juj","chk_ihak5d"],"4":["chk_78juin","chk_h9xvqb","chk_xz8jd0","chk_gnvc5y","chk_4os2y5","chk_kkmhgj"]}},"weeks":{"1":{"id":"wk_ttofa1","title":"Profiles and Pattern","tactic":1,"timeNeeded":null,"who":null},"2":{"id":"wk_wc90vw","title":"A Month of Content","tactic":1,"timeNeeded":null,"who":null},"3":{"id":"wk_2lrnhl","title":"First Reels and Review Link","tactic":1,"timeNeeded":null,"who":null},"4":{"id":"wk_dtmxj4","title":"Review Requests Go Live","tactic":2,"timeNeeded":null,"who":null},"5":{"id":"wk_zkohrc","title":"Google Profile","tactic":3,"timeNeeded":null,"who":null},"6":{"id":"wk_mfu8sf","title":"Technical Basics","tactic":3,"timeNeeded":null,"who":null},"7":{"id":"wk_3t7ry6","title":"Listings and Book Now","tactic":3,"timeNeeded":null,"who":null},"8":{"id":"wk_avsrb8","title":"Booking Page","tactic":4,"timeNeeded":null,"who":null},"9":{"id":"wk_89b2uc","title":"Guest List","tactic":4,"timeNeeded":null,"who":null},"10":{"id":"wk_pgi1vu","title":"Pre-arrival Email","tactic":4,"timeNeeded":null,"who":null},"11":{"id":"wk_9avvdn","title":"Seasonal Email","tactic":4,"timeNeeded":null,"who":null},"12":{"id":"wk_ypo1fi","title":"Review and Plan Ahead","tactic":4,"timeNeeded":null,"who":null}},"tactics":[{"num":1,"id":"tac_epjtr3","name":"Social Media"},{"num":2,"id":"tac_yvx418","name":"Reviews"},{"num":3,"id":"tac_1e8c92","name":"Local Search"},{"num":4,"id":"tac_1ar79b","name":"Booking and Email"}],"phases":[{"num":1,"name":"Foundation","weeks":[1,2,3,4]},{"num":2,"name":"Growth","weeks":[5,6,7,8]},{"num":3,"name":"Scale","weeks":[9,10,11,12]}],"steps":{"stp_vucz24":1,"stp_osaub2":1,"stp_7clf9y":1,"stp_k6gy5q":1,"stp_7v8nsi":1,"stp_hky03f":1,"stp_abuzpq":2,"stp_6sh853":2,"stp_stx85v":2,"stp_1x7cm0":2,"stp_7zsjl9":3,"stp_1t63jy":3,"stp_nirjva":3,"stp_vns9eq":3,"stp_usobs9":3,"stp_nsxfk6":3,"stp_sgvdaa":3,"stp_9yv5z9":3,"stp_t68zdj":3,"stp_blf1ij":3,"stp_pywh56":4,"stp_zgdzxg":4,"stp_h87vst":4,"stp_hrs4ys":4,"stp_77peyg":4,"stp_wd1l3v":4},"headlines":[{"max":10,"headline":"Getting started","subcopy":"You're in the first phase of your accelerator. Keep checking items off your roadmap to move forward."},{"max":25,"headline":"Building momentum","subcopy":"You've made solid progress on the early weeks. Keep the pace going."},{"max":50,"headline":"Halfway there","subcopy":"You're closing in on the halfway mark. The work you've done so far is the base for everything that follows."},{"max":75,"headline":"The home stretch","subcopy":"Impressive progress. Most of the plan is behind you. Keep working through the remaining weeks."},{"max":99,"headline":"Almost there","subcopy":"Just a few more items to check off. Finish strong."},{"max":100,"headline":"You did it","subcopy":"Every week is complete. Take a moment to look back at how much you've put in place."}],"tour":[{"targetId":"sidebar","mobileTargetId":"nav-hamburger","page":"dashboard","title":"Navigate Your Plan","desc":"Use the sidebar to move between sections: tactics, your 90-day roadmap, and quick wins. Your progress is always visible at the top.","mobileDesc":"Tap the menu icon to move between sections: tactics, your 90-day roadmap, and quick wins.","pos":"right","pad":0,"mobilePos":"below"},{"targetId":"goal-section","page":"dashboard","title":"Your Progress Overview","desc":"This shows your overall completion and which phase of the 90-day plan you are in. The ring fills as you check off tasks.","pos":"below","pad":8},{"targetId":"objectives-section","mobileTargetId":"next-step-main","page":"dashboard","title":"Your Next Step","desc":"This card shows exactly what to focus on right now. It updates automatically as you complete tasks in the roadmap.","pos":"below","pad":8},{"targetId":"tactic-cards-section","page":"dashboard","title":"Track Each Tactic","desc":"These cards show progress on each of your tactics. Click a card to open its detailed guide and implementation steps.","mobileDesc":"These cards show progress on each of your tactics. Tap a card to open its detailed guide and implementation steps.","pos":"below","pad":8},{"targetId":"nav-roadmap","mobileTargetId":"roadmap-page-header","page":"dashboard","mobilePage":"roadmap","title":"Your Week-by-Week Action Plan","desc":"The 90-Day Roadmap is your primary tracker. Each week shows exactly what to do and how to confirm it's done.","pos":"right","pad":8,"mobilePos":"below"},{"targetId":"wc-1","mobileTargetId":"w1-checklist","page":"roadmap","weekToOpen":1,"title":"Check Off Tasks as You Go","desc":"Each week has a completion checklist on the right. Check off each item as you finish it. Your progress saves automatically.","pos":"below","pad":8},{"targetId":"w1-howto-example","page":"roadmap","weekToOpen":1,"title":"\"How To\" Links","desc":"Tap \"how to\" next to any action to jump straight to the step-by-step guide in the tactics section: exactly what to click, type, and verify.","pos":"below","pad":8},{"targetId":"w1-note-example","page":"roadmap","weekToOpen":1,"title":"Notes on Every Task","desc":"Tap the pencil icon on any checklist item to add a personal note: a reminder, a date, a decision. Notes save automatically and are here every time you return.","pos":"below","pad":8}]}</script>
+<script type="application/json" id="accelerator-data">{"slug":"andreas-resort","name":"Andrea's Resort","sandbox":true,"hasPlan":true,"totalWeeks":12,"totalDays":90,"welcome":"You already deliver a five-star stay. This plan is about making sure the people planning their next trip can see that before they book somewhere else.","tasks":{"all":["act_yfl9u1","act_fho0jx","act_1exn37","act_weo3f8","act_fh1dkz","act_g7efyz","act_4dz0vq","act_f5jtpu","act_rul48f","act_eseeyf","act_i2aaub","act_gwejdx","act_7zt8eb","act_5wb77i","act_qd4zxs","act_ntmmfe","act_2yxyv4","act_f4jh7b","act_ig8pyy","act_yhg9py","act_nr9j25","act_jffb6m","act_0f8hky","act_zy07dh","act_y6zj6i","act_cwkd8p","act_sk3yjr","act_i007aq","act_lmq8w7","act_ihvgx4","act_2ty5lb","act_sul75e","act_l7igws","act_mizw23"],"byWeek":{"1":["act_yfl9u1","act_fho0jx","act_1exn37"],"2":["act_weo3f8","act_fh1dkz"],"3":["act_g7efyz","act_4dz0vq","act_f5jtpu"],"4":["act_rul48f","act_eseeyf","act_i2aaub"],"5":["act_gwejdx","act_7zt8eb","act_5wb77i"],"6":["act_qd4zxs","act_ntmmfe","act_2yxyv4"],"7":["act_f4jh7b","act_ig8pyy","act_yhg9py"],"8":["act_nr9j25","act_jffb6m","act_0f8hky"],"9":["act_zy07dh","act_y6zj6i","act_cwkd8p"],"10":["act_sk3yjr","act_i007aq"],"11":["act_lmq8w7","act_ihvgx4","act_2ty5lb"],"12":["act_sul75e","act_l7igws","act_mizw23"]},"byPhase":{"1":["act_yfl9u1","act_fho0jx","act_1exn37","act_weo3f8","act_fh1dkz","act_g7efyz","act_4dz0vq","act_f5jtpu","act_rul48f","act_eseeyf","act_i2aaub"],"2":["act_gwejdx","act_7zt8eb","act_5wb77i","act_qd4zxs","act_ntmmfe","act_2yxyv4","act_f4jh7b","act_ig8pyy","act_yhg9py","act_nr9j25","act_jffb6m","act_0f8hky"],"3":["act_zy07dh","act_y6zj6i","act_cwkd8p","act_sk3yjr","act_i007aq","act_lmq8w7","act_ihvgx4","act_2ty5lb","act_sul75e","act_l7igws","act_mizw23"]},"byTactic":{"1":["act_yfl9u1","act_fho0jx","act_weo3f8","act_fh1dkz","act_g7efyz","act_4dz0vq"],"2":["act_f5jtpu","act_rul48f","act_eseeyf","act_5wb77i"],"3":["act_gwejdx","act_7zt8eb","act_qd4zxs","act_ntmmfe","act_2yxyv4","act_f4jh7b","act_ig8pyy","act_jffb6m","act_cwkd8p","act_i007aq","act_ihvgx4"],"4":["act_yhg9py","act_nr9j25","act_zy07dh","act_y6zj6i","act_sk3yjr","act_lmq8w7"]}},"weekList":[{"number":1,"actions":["act_yfl9u1","act_fho0jx","act_1exn37"]},{"number":2,"actions":["act_weo3f8","act_fh1dkz"]},{"number":3,"actions":["act_g7efyz","act_4dz0vq","act_f5jtpu"]},{"number":4,"actions":["act_rul48f","act_eseeyf","act_i2aaub"]},{"number":5,"actions":["act_gwejdx","act_7zt8eb","act_5wb77i"]},{"number":6,"actions":["act_qd4zxs","act_ntmmfe","act_2yxyv4"]},{"number":7,"actions":["act_f4jh7b","act_ig8pyy","act_yhg9py"]},{"number":8,"actions":["act_nr9j25","act_jffb6m","act_0f8hky"]},{"number":9,"actions":["act_zy07dh","act_y6zj6i","act_cwkd8p"]},{"number":10,"actions":["act_sk3yjr","act_i007aq"]},{"number":11,"actions":["act_lmq8w7","act_ihvgx4","act_2ty5lb"]},{"number":12,"actions":["act_sul75e","act_l7igws","act_mizw23"]}],"weeks":{"1":{"id":"wk_ttofa1","title":"Profiles and Pattern","tactic":1,"summary":"3 actions, from Social Media and your quick wins"},"2":{"id":"wk_wc90vw","title":"A Month of Content","tactic":1,"summary":"2 actions, from Social Media"},"3":{"id":"wk_2lrnhl","title":"First Reels and Review Link","tactic":1,"summary":"3 actions, from Social Media and Reviews"},"4":{"id":"wk_dtmxj4","title":"Review Requests Go Live","tactic":2,"summary":"3 actions, from Reviews"},"5":{"id":"wk_zkohrc","title":"Google Profile","tactic":3,"summary":"3 actions, from Local Search and Reviews"},"6":{"id":"wk_mfu8sf","title":"Technical Basics","tactic":3,"summary":"3 actions, from Local Search"},"7":{"id":"wk_3t7ry6","title":"Listings and Book Now","tactic":3,"summary":"3 actions, from Local Search and Booking and Email"},"8":{"id":"wk_avsrb8","title":"Booking Page","tactic":4,"summary":"3 actions, from Booking and Email and Local Search"},"9":{"id":"wk_89b2uc","title":"Guest List","tactic":4,"summary":"3 actions, from Booking and Email and Local Search"},"10":{"id":"wk_pgi1vu","title":"Pre-arrival Email","tactic":4,"summary":"2 actions, from Booking and Email and Local Search"},"11":{"id":"wk_9avvdn","title":"Seasonal Email","tactic":4,"summary":"3 actions, from Booking and Email and Local Search"},"12":{"id":"wk_ypo1fi","title":"Review and Plan Ahead","tactic":4,"summary":"3 actions"}},"actions":{"act_yfl9u1":{"text":"Rewrite the Instagram and Facebook bios and add the booking link","week":1,"tactic":1},"act_fho0jx":{"text":"Decide the weekly posting pattern","week":1,"tactic":1},"act_1exn37":{"text":"Reply to all 20 existing Google reviews","week":1,"tactic":null},"act_weo3f8":{"text":"Sort the website photos into three folders","week":2,"tactic":1},"act_fh1dkz":{"text":"Write 12 captions and schedule them","week":2,"tactic":1},"act_g7efyz":{"text":"Publish the first two Reels","week":3,"tactic":1},"act_4dz0vq":{"text":"Turn on comment notifications and follow 50 local accounts","week":3,"tactic":1},"act_f5jtpu":{"text":"Create the Google review link","week":3,"tactic":2},"act_rul48f":{"text":"Set up the review request email","week":4,"tactic":2},"act_eseeyf":{"text":"Print and place QR cards in every cabin","week":4,"tactic":2},"act_i2aaub":{"text":"Check Instagram insights and note the three best posts","week":4,"tactic":null},"act_gwejdx":{"text":"Complete every section of the Google Business Profile","week":5,"tactic":3},"act_7zt8eb":{"text":"Upload ten new photos and publish the first Google Post","week":5,"tactic":3},"act_5wb77i":{"text":"Reply to new reviews within 24 hours","week":5,"tactic":2},"act_qd4zxs":{"text":"Record the Search Console baseline","week":6,"tactic":3},"act_ntmmfe":{"text":"Shorten the homepage title and add headings","week":6,"tactic":3},"act_2yxyv4":{"text":"Brief the web developer on structured data","week":6,"tactic":3},"act_f4jh7b":{"text":"Audit existing listings","week":7,"tactic":3},"act_ig8pyy":{"text":"Claim the four priority listings","week":7,"tactic":3},"act_yhg9py":{"text":"Brief the Book Now button","week":7,"tactic":4},"act_nr9j25":{"text":"Add rates, cabin types and the cancellation policy to the booking page","week":8,"tactic":4},"act_jffb6m":{"text":"Write the Know Before You Go page","week":8,"tactic":3},"act_0f8hky":{"text":"Keep posting three times a week","week":8,"tactic":null},"act_zy07dh":{"text":"Import past guests and send the permission email","week":9,"tactic":4},"act_y6zj6i":{"text":"Add the sign-up form to the footer","week":9,"tactic":4},"act_cwkd8p":{"text":"Publish the three-day itinerary","week":9,"tactic":3},"act_sk3yjr":{"text":"Build and switch on the pre-arrival email","week":10,"tactic":4},"act_i007aq":{"text":"Check local ranking for your three key phrases","week":10,"tactic":3},"act_lmq8w7":{"text":"Send the seasonal availability email","week":11,"tactic":4},"act_ihvgx4":{"text":"Publish the second local guide","week":11,"tactic":3},"act_2ty5lb":{"text":"Share two recent reviews on social","week":11,"tactic":null},"act_sul75e":{"text":"Compare followers, reviews, search clicks and direct bookings against the baseline","week":12,"tactic":null},"act_l7igws":{"text":"Write down what worked, what did not and what to repeat","week":12,"tactic":null},"act_mizw23":{"text":"Set a monthly routine for posts, review replies and Google Posts","week":12,"tactic":null}},"tactics":[{"num":1,"id":"tac_epjtr3","name":"Social Media","title":"Social Media Activation"},{"num":2,"id":"tac_yvx418","name":"Reviews","title":"Review Generation"},{"num":3,"id":"tac_1e8c92","name":"Local Search","title":"Local Search Visibility and the Pages That Earn Search Traffic All Year"},{"num":4,"id":"tac_1ar79b","name":"Booking and Email","title":"Direct Booking and Guest Email"}],"phases":[{"num":1,"name":"Foundation","weeks":[1,2,3,4]},{"num":2,"name":"Growth","weeks":[5,6,7,8]},{"num":3,"name":"Scale","weeks":[9,10,11,12]}],"steps":{"stp_vucz24":1,"stp_osaub2":1,"stp_7clf9y":1,"stp_k6gy5q":1,"stp_7v8nsi":1,"stp_hky03f":1,"stp_abuzpq":2,"stp_6sh853":2,"stp_stx85v":2,"stp_1x7cm0":2,"stp_7zsjl9":3,"stp_1t63jy":3,"stp_nirjva":3,"stp_vns9eq":3,"stp_usobs9":3,"stp_nsxfk6":3,"stp_sgvdaa":3,"stp_9yv5z9":3,"stp_t68zdj":3,"stp_blf1ij":3,"stp_pywh56":4,"stp_zgdzxg":4,"stp_h87vst":4,"stp_hrs4ys":4,"stp_77peyg":4,"stp_wd1l3v":4},"stepNumbers":{"stp_vucz24":1,"stp_osaub2":2,"stp_7clf9y":3,"stp_k6gy5q":4,"stp_7v8nsi":5,"stp_hky03f":6,"stp_abuzpq":1,"stp_6sh853":2,"stp_stx85v":3,"stp_1x7cm0":4,"stp_7zsjl9":1,"stp_1t63jy":2,"stp_nirjva":3,"stp_vns9eq":4,"stp_usobs9":5,"stp_nsxfk6":6,"stp_sgvdaa":7,"stp_9yv5z9":8,"stp_t68zdj":9,"stp_blf1ij":10,"stp_pywh56":1,"stp_zgdzxg":2,"stp_h87vst":3,"stp_hrs4ys":4,"stp_77peyg":5,"stp_wd1l3v":6},"assessment":{"overall":{"score":74,"grade":"C"},"areas":{"website_technical":{"name":"Website & Technical","score":78,"grade":"B-"},"reviews_reputation":{"name":"Reviews & Reputation","score":71,"grade":"C"},"booking_conversion":{"name":"Online Booking & Conversion","score":80,"grade":"B"},"social_media":{"name":"Social Media & Content","score":62,"grade":"D"},"guest_experience":{"name":"Digital Guest Experience","score":84,"grade":"B"},"local_visibility":{"name":"Local Visibility","score":81,"grade":"B"}},"quickWins":4},"checkins":null,"tour":[{"targetId":"sidebar","mobileTargetId":"nav-hamburger","page":"dashboard","title":"Find your way around","desc":"Use the menu on the left to move between sections: your tactics, your 90-day roadmap and your materials. The small ring beside each tactic fills as you tick off its tasks.","mobileDesc":"Tap the menu icon to move between sections: your tactics, your 90-day roadmap and your materials.","pos":"right","pad":0,"mobilePos":"below"},{"targetId":"goal-section","page":"dashboard","title":"Your Progress Overview","desc":"This shows your overall completion and which phase of the 90-day plan you are in. The ring fills as you check off tasks.","pos":"below","pad":8},{"targetId":"objectives-section","mobileTargetId":"next-step-main","page":"dashboard","title":"Your Next Step","desc":"This card shows exactly what to focus on right now. It updates automatically as you complete tasks in the roadmap.","pos":"below","pad":8},{"targetId":"tactic-cards-section","page":"dashboard","title":"Track Each Tactic","desc":"These cards show progress on each of your tactics. Click a card to open its detailed guide and implementation steps.","mobileDesc":"These cards show progress on each of your tactics. Tap a card to open its detailed guide and implementation steps.","pos":"below","pad":8},{"targetId":"nav-roadmap","mobileTargetId":"roadmap-page-header","page":"dashboard","mobilePage":"roadmap","title":"Your Week-by-Week Action Plan","desc":"The 90-Day Roadmap is your primary tracker. Each week shows exactly what to do and how to confirm it's done.","pos":"right","pad":8,"mobilePos":"below"},{"targetId":"wc-1","mobileTargetId":"w1-checklist","page":"roadmap","weekToOpen":1,"title":"Check Off Tasks as You Go","desc":"Each week has a completion checklist on the right. Check off each item as you finish it. Your progress saves automatically.","pos":"below","pad":8},{"targetId":"w1-howto-example","page":"roadmap","weekToOpen":1,"title":"\"How To\" Links","desc":"Tap \"how to\" next to any action to jump straight to the step-by-step guide in the tactics section: exactly what to click, type, and verify.","pos":"below","pad":8},{"targetId":"w1-note-example","page":"roadmap","weekToOpen":1,"title":"Notes on Every Task","desc":"Tap the pencil icon on any checklist item to add a personal note: a reminder, a date, a decision. Notes save automatically and are here every time you return.","pos":"below","pad":8}]}</script>
+<script src="/assets/v2/progress-model.js"></script>
 <script src="/assets/v2/accelerator.js"></script>
 
 <!-- Shared scripts: login, progress, Edit Mode, analytics, sharing (unchanged from v1) -->

@@ -9,7 +9,7 @@ const path = require('path');
 const ROOT = path.join(__dirname, '..', '..');
 const CSS = fs.readFileSync(path.join(ROOT, 'assets', 'v2', 'accelerator.css'), 'utf8');
 const TOKENS = fs.readFileSync(path.join(ROOT, 'assets', 'v2', 'tokens.css'), 'utf8');
-const JS = ['accelerator.js', 'accelerator-after.js'].map(f => fs.readFileSync(path.join(ROOT, 'assets', 'v2', f), 'utf8')).join('\n');
+const JS = ['accelerator.js', 'accelerator-after.js', 'progress-model.js'].map(f => fs.readFileSync(path.join(ROOT, 'assets', 'v2', f), 'utf8')).join('\n');
 const TEMPLATE = fs.readFileSync(path.join(ROOT, 'template', 'v2', 'accelerator.html'), 'utf8');
 const COMPONENTS = fs.readFileSync(path.join(ROOT, 'shared', 'accelerator-v2', 'components.js'), 'utf8');
 
@@ -46,9 +46,10 @@ test('the tokens file is the one place that defines them', () => {
 test('every token the stylesheet uses is defined', () => {
   const defined = new Set([...(CSS + TOKENS).matchAll(/(--[\w-]+)\s*:/g)].map(m => m[1]));
   const used = new Set([...(CSS + TOKENS).matchAll(/var\((--[\w-]+)/g)].map(m => m[1]));
-  // Set on the element by the markup (--columns, --color, --obj-color), or
+  // Set on the element by the markup (--columns, --color, --obj-color) or the
+  // page script (--pct, a navigation ring's fill), or
   // used but never defined in v1 either (kept so the look does not change)
-  const allowed = new Set(['--columns', '--color', '--obj-color', '--coral-500', '--coral-600', '--cream-200', '--cream-50', '--danger', '--navy-200', '--navy-600', '--navy-700', '--r-full', '--success']);
+  const allowed = new Set(['--columns', '--pct', '--color', '--obj-color', '--coral-500', '--coral-600', '--cream-200', '--cream-50', '--danger', '--navy-200', '--navy-600', '--navy-700', '--r-full', '--success']);
   expect([...used].filter(t => !defined.has(t) && !allowed.has(t))).toEqual([]);
 });
 
