@@ -67,7 +67,6 @@ A slow page loses people before they read a word, and a page without a clear nex
    - Make sure the page has one H1 and that each button starts with a verb. Add a "Plan Your Visit" button to the header menu as well, so it is visible on every page.
 
 5. **Add a tap-to-call phone number and clear Book and Reserve buttons.**
-   - Make the phone number, (604) 796-9576, a tap-to-call link everywhere it appears. Select the number, click the link icon, and enter tel:+16047969576. Add it to the header or footer of every page, and to the event and contact pages where visitors have booking questions. Seventy percent of tourism traffic is on mobile, and tapping is far easier than copying.
    - On the event pages and the cafe pages, add a button in a contrasting colour that says "Reserve Your Spot" or "Book Your Visit," placed above the fold and again at the end of the page. The assessment estimates that a clearer conversion path can lift booking rates by 15 to 25 percent.
    - Add a "last updated" date next to the hours and admission information on your visit page. It helps visitors trust what they read, and it tells search engines the page is current.
 
