@@ -92,15 +92,13 @@ function navigate(pageId) {
 }
 
 // ── PDF ────────────────────────────────────────────────────
-function printRoadmap() {
-  navigate('roadmap');
-  setTimeout(function () { window.print(); }, 100);
+// "Download as PDF" opens the PDF template, which opens the print dialog
+// (DESIGN-BRIEF.md section 8). A PDF service can render the same page later.
+function openPdf(file) {
+  window.open(PAGE.pdfBase + '/' + file + '?print=1', '_blank', 'noopener');
 }
-
-function downloadPDF() {
-  navigate('assessment');
-  setTimeout(function () { window.print(); }, 100);
-}
+function printRoadmap() { openPdf('plan.html'); }
+function downloadPDF() { openPdf('assessment.html'); }
 
 // ── Mobile navigation ──────────────────────────────────────
 function openMobileDrawer() {

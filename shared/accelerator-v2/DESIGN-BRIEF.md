@@ -10,7 +10,8 @@ This brief turns the approved mockups into a build spec for the v2 template, com
 - Everything is generated from `content.json` (and the assessment record). No client copy in templates, no layout in content.
 - Every colour, size, radius and spacing value comes from `assets/v2/tokens.css`. No raw values in components.
 - Empty optional content is hidden, never replaced with default text.
-- Show no content, field or feature that is not in this brief or the mockups. If the data holds something the mockups do not show, list it and ask. Do not add it.
+- Anything a coach writes in a plan, and anything the current dashboard shows a client, stays unless Andrea has said to remove it.
+- Showing data clients have never seen, or adding a feature, needs approval first. If the data holds something the brief and mockups do not cover, list it and ask. Do not add it.
 - If something here needs a change outside the v2 paths, stop and list it. Do not make it.
 
 ## 2. The reference mockups
@@ -133,7 +134,7 @@ Notes:
 **Assessment.** Everything the approved mockups show is kept. Fields in the assessment record that the mockups do not show (confidence levels, the per-measure score breakdowns, metric sources and statuses, internal scoring fields) are not shown.
 
 - Jump links: Summary, Your six areas, Quick wins, Priority recommendations, Your visitors and market.
-- Summary: overall score donut, grade, headline, key strengths, critical gaps, bottom line.
+- Summary: overall score donut, grade (the letter with its level word, for example "C Fair"), headline, key strengths, critical gaps, bottom line.
 - Your six areas: one list. Each row shows area, score, grade, bar and share of total, with a chevron, and opens in place to show the summary, the numbers, findings, recommendations and sources, plus a link to the tactic that covers it when there is one. Which tactic covers which area is stated in the plan, never guessed: an optional `Assessment Areas:` line on each tactic. Long lists show the first few with "Show all N".
 - Slots for the 30-day check-in and 90-day review: later scores become extra columns in the same list.
 - Quick wins on Sage, tickable, with time and impact.
@@ -147,7 +148,8 @@ Notes:
 - Overview: What this is, Why it matters, What we heard from you (Sage, with a pull quote in Fraunces when the plan gives one: an optional `Quote:` line on each tactic. Nothing shown when absent, and never a sentence picked automatically), Success metrics as a plain table, Tips (Sage-25), Resources. No "What this breaks into".
 - Implementation steps: one continuous scroll. Parts are headings, not tabs. Every step is collapsible with a chevron. An open step shows its labels (time, cost, Contractor, Critical), a link to its week on the roadmap, bullets and sub-bullets, tables, media and step resources.
 - `[CONFIRM ...]` notes render inline as a Sage highlight.
-- Media uses one frame per type (website, document, phone, email, none) with a Mockup or Example badge and an optional caption, always below the step text.
+- Media uses one frame per type (website, document, phone, email, none) with a Mockup or Example badge and an optional caption, always below the step text. Every media type the plans use is shown: framed images, video, gallery, image group, social post, link card, and frames that link to a site ("Open site").
+- Resources show their title and, when the plan has one, their description.
 - Footer: back to overview, and next tactic.
 
 **90-day roadmap**
@@ -156,7 +158,7 @@ Notes:
 - Weeks are plain rows with a small ring. Only the open week sits on a white panel.
 - Inside a week: one list of actions, each with a tick box, "How to" and "Note". "How to" expands a short preview from the linked step (its first two bullets) with a link to the full step.
 - Week notes field.
-- After Month 3: a section named "Google profile and website wins" holding the plan's own quick-win groups and its "One thing worth watching" note. Tickable. Roadmap actions that point to quick wins link here.
+- After Month 3: a section named "Google profile and website wins" holding the plan's intro paragraph (when it has one), its own quick-win groups and its "One thing worth watching" note. Tickable. Roadmap actions that point to quick wins link here.
 - Download as PDF.
 
 **Materials.** One row per item: assessment report, onboarding call notes, coaching call summary, 90-day plan PDF. Items that do not exist yet (30-day check-in report, 90-day review) show greyed with when they arrive. Only the two PDFs can be wired now. List the rest under section 11.

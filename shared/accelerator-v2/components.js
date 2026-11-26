@@ -502,7 +502,7 @@ export function resources(tactic) {
   return `<section class="tp-card">
           <h2 class="tp-h3">Resources</h2>
           <ul class="tp-links">
-            ${tactic.resources.map((r, i) => `<li><a href="${attr(r.url)}" data-editable-link="${attr(`${tactic.id}.resources.${i}`)}" target="_blank" rel="noopener">${plain(r.title)}</a></li>`).join('\n            ')}
+            ${tactic.resources.map((r, i) => `<li><a href="${attr(r.url)}" data-editable-link="${attr(`${tactic.id}.resources.${i}`)}" target="_blank" rel="noopener">${plain(r.title)}</a>${has(r.description) ? `<span class="tp-link-note">${md(r.description)}</span>` : ''}</li>`).join('\n            ')}
           </ul>
         </section>`;
 }
@@ -872,6 +872,7 @@ export function gbpWins(qw) {
         <h2 class="rm-h2">Google profile and website wins</h2>
         <span class="rm-divider-count"><span data-live="gbp-done">0</span> of ${total} done</span>
       </div>
+      ${has(qw.intro) ? `<p class="rm-gbp-intro" data-editable-key="quick_wins.intro">${md(qw.intro)}</p>` : ''}
       <div class="rm-gbp-panel">
       ${groups.map(quickWinGroup).join('\n      ')}
       </div>

@@ -29,6 +29,7 @@ import { checkContent, formatCheckIssue } from './checks.js';
 import { generatePlanJsonV2 } from './plan-json.js';
 import { loadOtherClients, assetChecker, readContent, toJson, findAsset } from './repo.js';
 import { renderDashboard, validateDashboardV2 } from './render.js';
+import { renderPlanPdf, renderAssessmentPdf } from './pdf.js';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
 export const V2_CLIENTS = ['andreas-resort'];
@@ -75,7 +76,13 @@ export function buildPage(slug, content) {
   const assessmentPath = path.join(ROOT, 'clients', slug, 'assessment.json');
   const assessment = fs.existsSync(assessmentPath) ? JSON.parse(fs.readFileSync(assessmentPath, 'utf8')).assessment_data : null;
   const { html, problems } = renderDashboard(content, { template, assetUrl, assessment });
-  return { html, problems: [...problems, ...validateDashboardV2(html, content)] };
+  // The two PDF templates (DESIGN-BRIEF.md section 8), opened by "Download as PDF"
+  const pdfTemplate = fs.readFileSync(path.join(ROOT, 'template', 'v2', 'pdf.html'), 'utf8');
+  const pdfs = {
+    'plan.html': renderPlanPdf(content, { template: pdfTemplate, assetUrl }),
+    'assessment.html': renderAssessmentPdf(content, { template: pdfTemplate, assessment })
+  };
+  return { html, pdfs, problems: [...problems, ...validateDashboardV2(html, content)] };
 }
 
 async function main() {
@@ -105,7 +112,13 @@ async function main() {
     if (!rest.includes('--save')) { console.log(`\nBuilt ${result.html.length} characters. Nothing written (add --save to write index.html).`); return; }
     if (!V2_CLIENTS.includes(slug)) { console.log(`\nNot saved: clients/${slug} is not a v2 client.`); process.exit(1); }
     fs.writeFileSync(path.join(dir, 'index.html'), result.html);
-    console.log(`\nSaved clients/${slug}/index.html.`);
+    fs.mkdirSync(path.join(dir, 'pdf'), { recursive: true });
+    for (const [file, pdfHtml] of Object.entries(result.pdfs)) {
+      const target = path.join(dir, 'pdf', file);
+      if (pdfHtml) fs.writeFileSync(target, pdfHtml);
+      else if (fs.existsSync(target)) fs.unlinkSync(target);
+    }
+    console.log(`\nSaved clients/${slug}/index.html and clients/${slug}/pdf/ (${Object.entries(result.pdfs).filter(([, h]) => h).map(([f]) => f).join(', ')}).`);
     return;
   }
 

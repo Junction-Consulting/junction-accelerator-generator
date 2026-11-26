@@ -485,11 +485,14 @@ describe('missing means hidden', () => {
     c.roadmap.weeks[0].next_step = { time_needed: '1 to 2 hours', who: 'You' };
     c.roadmap.closing = 'Keep going.';
     c.quick_wins.note = { title: 'One Thing Worth Watching', text: 'Watch this.' };
-    c.quick_wins.intro = 'Zqx intro.';
-    c.tactics[0].resources[0].description = 'Zqx resource note';
+    c.quick_wins.intro = 'Qyv intro.';
+    c.tactics[0].resources[0].description = 'Qyv resource note';
     const r = render(c);
     // Not in the brief or mockups, so never shown (kept in content.json)
-    ['2 hrs', 'Keep going.', 'Zqx intro.', 'Zqx resource note'].forEach(t => expect(r.html).not.toContain(t));
+    ['2 hrs', 'Keep going.'].forEach(t => expect(r.html).not.toContain(t));
+    // Written by the coach and shown to clients before, so kept
+    expect(r.html).toContain('<p class="rm-gbp-intro" data-editable-key="quick_wins.intro">Qyv intro.</p>');
+    expect(r.html).toContain('<span class="tp-link-note">Qyv resource note</span>');
     // Part cards were "What this breaks into", which the redesign removes
     expect(r.html).not.toContain('Zqx');
     // Kept in content.json, but the redesigned dashboard does not show them

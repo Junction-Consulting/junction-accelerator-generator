@@ -122,6 +122,7 @@ export function pageData(content, assessment) {
   const actionsIn = weeks => weeks.flatMap(w => w.actions.map(a => a.id));
   return {
     slug: client.slug,
+    pdfBase: `/clients/${client.slug}/pdf`,
     name: client.name,
     sandbox: !!(client.flags && client.flags.sandbox),
     hasPlan: tactics.length > 0 && roadmap.weeks.some(w => w.actions.length > 0),

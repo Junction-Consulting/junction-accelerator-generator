@@ -197,6 +197,54 @@
   --tick-size-phone: 26px;
   --slot-label-col: 72px;
 
+  /* PDFs (DESIGN-BRIEF.md section 8). Letter size; print sizes in points.
+     Body text is never below 11pt. */
+  --pdf-page-width: 8.5in;
+  --pdf-page-height: 11in;
+  --pdf-margin-top: .9in;
+  --pdf-margin-side: .75in;
+  --pdf-margin-bottom: .8in;
+  --pdf-cover-pad: .8in;
+  --pdf-wordmark: 1.1in;
+  --pdf-wordmark-cover: 1.6in;
+  --pdf-body: 11pt;
+  --pdf-small: 11pt;
+  --pdf-meta: 9pt;
+  --pdf-h1: 26pt;
+  --pdf-h2: 17pt;
+  --pdf-h3: 13pt;
+  --pdf-cover-label: 10pt;
+  --pdf-cover-title: 42pt;
+  --pdf-cover-client: 18pt;
+  --pdf-cover-goal: 13pt;
+  --pdf-cover-score: 96pt;
+  --pdf-numeral: 30pt;
+  --pdf-area-score: 40pt;
+  --pdf-quote: 15pt;
+  --pdf-gap-xs: 3pt;
+  --pdf-gap-sm: 6pt;
+  --pdf-gap-md: 10pt;
+  --pdf-gap-lg: 16pt;
+  --pdf-gap-xl: 24pt;
+  --pdf-radius: 6pt;
+  --pdf-tick: 11pt;
+  --pdf-tick-line: 1.5pt;
+  --pdf-media-max: 3.2in;
+  --pdf-media-height: 3in;
+  --pdf-phone: 1.4in;
+  --pdf-phone-border: 3pt;
+  --pdf-phone-radius: 14pt;
+  --pdf-donut: 1.2in;
+  --pdf-donut-hole: .86in;
+  --pdf-donut-num: 30pt;
+  --pdf-bar: 7pt;
+  --pdf-numeral-col: 26pt;
+  --pdf-notes-height: .9in;
+  --pdf-area-col: 1.9in;
+  --pdf-score-col: .5in;
+  --pdf-share-col: .55in;
+  --pdf-screen-gap: 24px;
+
   /* ── v1 names, re-pointed to the Junction roles ─────────────────────
      The pages not yet rebuilt (phases 2 to 4) still use these. Each one
      goes when the last component using it is rebuilt. */

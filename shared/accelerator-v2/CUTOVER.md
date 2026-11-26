@@ -59,8 +59,8 @@ Items are grouped by what breaks if they are skipped.
 
 ### 10. The PDF service
 - **File:** `netlify/functions/generate-pdf.js`
-- **Why:** server-side accelerator PDFs are not implemented (`generateAcceleratorHTML` throws "not yet available"); the roadmap prints from the browser, as in v1. SCHEMA.md builds the dashboard and the PDFs from the same `content.json` and tokens.
-- **Change:** build the accelerator PDF HTML from `content.json` with the v2 components and `assets/v2/tokens.css`, including Edit Mode edits (item 8).
+- **Why:** v2 now builds both PDFs as print-ready pages (`shared/accelerator-v2/pdf.js`, `template/v2/pdf.html`, `assets/v2/print.css`), written to `clients/<slug>/pdf/plan.html` and `pdf/assessment.html` and opened with the browser's print dialog. Which renderer makes real PDF files is Conner's decision (DESIGN-BRIEF.md section 11).
+- **Change:** have the service call `renderPlanPdf` and `renderAssessmentPdf` itself (they are pure) and send the HTML to DocRaptor or PDFShift, rather than fetching the page URL: the pages sit behind login. Whatever renders them must support CSS page margin boxes (the running header and page numbers) and `break-*` rules; Prince (DocRaptor) and current Chromium both do. Apply Edit Mode edits first (item 8).
 
 ## Added by the v2 redesign (DESIGN-BRIEF.md)
 
@@ -101,6 +101,11 @@ Items are grouped by what breaks if they are skipped.
   - `Assessment Areas: Social media and content, Local visibility` Which assessment areas the tactic covers, so the Assessment page can link each area to its tactic. With no line, there is no link.
   Neither is in `PLAN_FORMAT.md` or the drafting instructions yet. The v1 reader ignores both lines when they come before `Phase:`, but would add them to the subtitle if they came after `Subtitle:`.
 - **Change:** document both lines (and where they go) in the plan format and drafting instructions, and teach the v1 validator to accept them.
+
+### 19. PDF links and client names
+- **Files:** `_redirects`, the plan headings in `clients/<slug>/plan.md`
+- **Why:** the PDF templates are served at `/clients/<slug>/pdf/...`, because the `/:slug/*` rules send anything else to login. A rule like `/:slug/pdf/* /clients/:slug/pdf/:splat 200` would give them the client's own address. Separately, the converter takes the client name from the plan's title, so a plan titled "Red Cariboo Resort — Accelerator Implementation Plan" puts that whole title, dash included, on the PDF cover and running header.
+- **Change:** add the redirect rule if wanted, and take the client name from the project record (or a `Client Name:` line) rather than the plan title.
 
 ## Already handled inside v2
 
