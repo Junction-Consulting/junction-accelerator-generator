@@ -32,7 +32,7 @@ The website is old, was built by several people over time, and is not always int
 
 ### What This Is
 
-Three jobs, in order. The first is speed: find out why the homepage carries so many images, compress and resize them, and switch on lazy loading and caching. The second is clarity: a three-card call-to-action carousel on the homepage, a tap-to-call phone number, and Book and Reserve buttons on the pages where visitors make decisions. The third is booking: map what is slow about the current process and pilot a better option on one event before you commit to a change.
+Three jobs, in order. The first is speed: find out why the homepage carries so many images, compress and resize them, and switch on lazy loading and caching. The second is clarity: a three-card call-to-action carousel on the homepage and Book and Reserve buttons on the pages where visitors make decisions. The third is booking: map what is slow about the current process and pilot a better option on one event before you commit to a change.
 
 ### Why It Matters
 
@@ -66,14 +66,14 @@ A slow page loses people before they read a word, and a page without a clear nex
    - In WordPress, use the slider or carousel block your theme provides, or a free plugin such as Smart Slider 3. Keep it to three slides with no fast autoplay. If your theme does not have a slider, three side-by-side cards built from the Columns and Cover blocks do the same job and load faster, so they are a good fallback.
    - Make sure the page has one H1 and that each button starts with a verb. Add a "Plan Your Visit" button to the header menu as well, so it is visible on every page.
 
-5. **Add a tap-to-call phone number and clear Book and Reserve buttons.**
+5. **Add clear Book and Reserve buttons.**
    - On the event pages and the cafe pages, add a button in a contrasting colour that says "Reserve Your Spot" or "Book Your Visit," placed above the fold and again at the end of the page. The assessment estimates that a clearer conversion path can lift booking rates by 15 to 25 percent.
    - Add a "last updated" date next to the hours and admission information on your visit page. It helps visitors trust what they read, and it tells search engines the page is current.
 
 6. **Install analytics and the Meta Pixel, and set up Search Console.**
    - Install Google's Site Kit plugin, which connects Google Analytics 4 and Search Console to WordPress in a guided setup. The assessment recommends GA4 so you can see which social platforms and content drive actual bookings. Search Console also holds up to 16 months of history, which gives you a baseline from before this plan began.
    - Install the Meta Pixel using Meta's official WordPress plugin, or paste the pixel code into the header with a plugin such as WPCode. Confirm it works by installing the Meta Pixel Helper extension for Chrome and visiting your own homepage. The Pixel is what lets your occasional Meta ads learn from real visitors.
-   - Mark three actions as key events in GA4: clicks on Book and Reserve buttons, taps on the phone number, and visits to the booking confirmation page. This turns a count of visits into a count of intentions.
+   - Mark two actions as key events in GA4: clicks on Book and Reserve buttons, and visits to the booking confirmation page. This turns a count of visits into a count of intentions.
    - Add UTM tags to every link you send from the newsletter, Facebook, Instagram, and Google Business Profile. Google's Campaign URL Builder makes this a copy-and-paste job.
 
 #### Part C: Easier Booking
@@ -94,7 +94,7 @@ A slow page loses people before they read a word, and a page without a clear nex
 |--------|---------|---------|---------|
 | Homepage images | Source of the 257 images found and the count under 100 | Under 40 images | Under 40 images, with new uploads optimized automatically |
 | Page speed | Mobile and desktop speed 75 or higher | 80 or higher | 80 or higher and holding after new content is added |
-| Calls to action | Tap-to-call phone live on every page | Homepage carousel live with Museum, Cafe, and Campground buttons | Click and tap events recorded in GA4 each month |
+| Calls to action | Book and Reserve buttons live on the event and cafe pages | Homepage carousel live with Museum, Cafe, and Campground buttons | Button click events recorded in GA4 each month |
 | Analytics and tracking | GA4, Search Console, and Meta Pixel installed and verified | Key events recording and baselines written down | Monthly website traffic compared with the Search Console history |
 | Booking process | Current process mapped with minutes per booking recorded | Shortlist chosen and pilot event set up | Pilot results compared and a decision made |
 | Admin time | Baseline minutes per booking recorded | Pilot running on one event | Admin time per booking reduced on the pilot event compared with the baseline |
@@ -407,13 +407,13 @@ Month 3 Name: Publish and Prepare to Reopen
 ### Week 4: Homepage Calls to Action and the AI Baseline
 **Actions:**
 - Build the homepage call-to-action carousel for the museum, cafe, and campground → links to: Tactic 1 / Step 4
-- Make the phone number tap-to-call and add Book and Reserve buttons on the event, cafe, and contact pages → links to: Tactic 1 / Step 5
+- Add Book and Reserve buttons on the event, cafe, and contact pages → links to: Tactic 1 / Step 5
 - Run the 12-prompt AI baseline across ChatGPT, Perplexity, Gemini, and Google AI Overviews → links to: Tactic 3 / Step 1
 - Schedule the holiday-week posts in Plannable → links to: Tactic 2 / Step 3
 
 **Checklist:**
 - [ ] The homepage carousel is live with Museum, Cafe, and Campground buttons
-- [ ] The phone number is tappable on every page and Book buttons are visible
+- [ ] Book and Reserve buttons are visible on the event, cafe, and contact pages
 - [ ] AI baseline results are recorded in a sheet
 - [ ] Holiday-week posts are scheduled
 
@@ -485,7 +485,7 @@ Month 3 Name: Publish and Prepare to Reopen
 - Publish the planning and camping question post and pillar page → links to: Tactic 3 / Step 7
 - Update the campground page, confirm the booking link and dates, and draft the February announcement with a UTM tag → links to: Tactic 2 / Step 6
 - Run the second AI visibility test and compare it with the baseline → links to: Tactic 3 / Step 8
-- Check that GA4 is recording clicks on Book buttons, phone taps, and booking page visits → links to: Tactic 1 / Step 6
+- Check that GA4 is recording clicks on Book buttons and booking page visits → links to: Tactic 1 / Step 6
 
 **Checklist:**
 - [ ] The planning and camping posts are published
@@ -537,7 +537,6 @@ These are small jobs that pay back quickly. Most take under an hour, and none ne
 
 ### On the Website
 
-- **Make the phone number tap-to-call.** (604) 796-9576 appears in the footer and on the contact page but cannot be tapped. Seventy percent of tourism traffic is on mobile.
 - **Compress the homepage images.** The assessment lists 257 images and recommends free tools such as TinyPNG or Squoosh for a quick first pass, and it is the single biggest speed improvement available.
 - **Install Google Analytics 4 and the Meta Pixel.** Without them you cannot tell which platforms and posts lead to bookings.
 - **Add an embedded Google Map with a Get Directions button.** Your directions are strong, and a one-tap map on the contact page helps spontaneous day-trippers on rural roads.
