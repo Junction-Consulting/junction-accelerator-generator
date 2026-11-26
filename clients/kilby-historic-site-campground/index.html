@@ -5172,6 +5172,18 @@ body:not(.has-plan) .plan-content{display:none}
   background:#f7f2e9;
 }
 
+/* "Mockup" badge in the top corner of a mockup */
+.tactic-mockup-body{position:relative}
+.tactic-mockup-body img{cursor:zoom-in}
+.tactic-mockup-badge{
+  position:absolute;
+  top:10px;
+  left:10px;
+  z-index:1;
+  box-shadow:0 2px 6px rgba(17,21,75,.18);
+}
+
+
 /* Two-column step layout */
 .tactic-step-row{
   display:flex;
@@ -5588,7 +5600,7 @@ button,
     <div class="sidebar-progress-text">
       <div class="sidebar-progress-main">
         <span class="sidebar-progress-count-big" id="sidebar-done">0</span>
-        <span class="sidebar-progress-of">of <span id="sidebar-total">47</span></span>
+        <span class="sidebar-progress-of">of <span id="sidebar-total">49</span></span>
       </div>
       <div class="sidebar-progress-label">tasks checked off</div>
     </div>
@@ -6523,6 +6535,18 @@ button,
               <li data-editable-key="t1-bullet-2">Work out what is generating the images. A blog feed, a gallery block, a slider, or a hidden set of thumbnails can add dozens without anyone noticing. A homepage does not need 257 images. Aim for fewer than 40.</li>
               <li data-editable-key="t1-bullet-3">Move galleries to their own pages, reduce the number of posts shown in any feed on the homepage, and delete sliders you no longer use. Record the new image count and the new PageSpeed score.</li>
             </ul>
+            <div class="tactic-mockup">
+              <div class="tactic-mockup-chrome">
+                <span class="tactic-mockup-dot red"></span>
+                <span class="tactic-mockup-dot yellow"></span>
+                <span class="tactic-mockup-dot green"></span>
+                <div class="tactic-mockup-url">kilby.ca</div>
+              </div>
+              <div class="tactic-mockup-body">
+                <span class="tactic-step-media-badge tactic-mockup-badge">Mockup</span>
+                <img src="/assets/kilby-historic-site-campground-mockups/media/t1-s1-devtools-images.png" alt="Chrome DevTools Network tab filtered to images and sorted by size, listing the largest homepage files and the 257 image count" class="lightbox-trigger" onclick="openLightbox(this.src, this.alt)" loading="lazy">
+              </div>
+            </div>
           </div>
         </li>
         <li class="tactic-step-item" id="step-t1-2">
@@ -6535,6 +6559,18 @@ button,
               <li data-editable-key="t1-bullet-6">Keep a backup of the original files. Then run the plugin&#039;s bulk optimize on the homepage images first, and on the rest of the media library as the free tier allows.</li>
               <li data-editable-key="t1-bullet-7">Re-run PageSpeed Insights. The assessment estimates that this step alone can improve the speed score by 20 to 30 points, and the target is 80 or higher.</li>
             </ul>
+            <div class="tactic-mockup">
+              <div class="tactic-mockup-chrome">
+                <span class="tactic-mockup-dot red"></span>
+                <span class="tactic-mockup-dot yellow"></span>
+                <span class="tactic-mockup-dot green"></span>
+                <div class="tactic-mockup-url">kilby.ca/wp-admin</div>
+              </div>
+              <div class="tactic-mockup-body">
+                <span class="tactic-step-media-badge tactic-mockup-badge">Mockup</span>
+                <img src="/assets/kilby-historic-site-campground-mockups/media/t1-s2-bulk-optimize.png" alt="WordPress image optimization plugin running a bulk optimize with WebP, 80% quality, 2,000 px resize and original backups on" class="lightbox-trigger" onclick="openLightbox(this.src, this.alt)" loading="lazy">
+              </div>
+            </div>
           </div>
         </li>
         <li class="tactic-step-item" id="step-t1-3">
@@ -6546,6 +6582,18 @@ button,
               <li data-editable-key="t1-bullet-9">Install one caching plugin. WP Super Cache is a free option, and LiteSpeed Cache is the right choice if your host runs LiteSpeed. Ask your host first which caching they already provide, since some include it, and never run two caching plugins at once. Caching also adds the browser caching headers the assessment recommends, so returning visitors do not re-download your images.</li>
               <li data-editable-key="t1-bullet-10">Test the homepage on your phone using mobile data, not WiFi. That is the experience a visitor on a rural connection has.</li>
             </ul>
+            <div class="tactic-mockup">
+              <div class="tactic-mockup-chrome">
+                <span class="tactic-mockup-dot red"></span>
+                <span class="tactic-mockup-dot yellow"></span>
+                <span class="tactic-mockup-dot green"></span>
+                <div class="tactic-mockup-url">kilby.ca/wp-admin</div>
+              </div>
+              <div class="tactic-mockup-body">
+                <span class="tactic-step-media-badge tactic-mockup-badge">Mockup</span>
+                <img src="/assets/kilby-historic-site-campground-mockups/media/t1-s3-caching.png" alt="WP Super Cache settings with caching turned on and a passing cache test" class="lightbox-trigger" onclick="openLightbox(this.src, this.alt)" loading="lazy">
+              </div>
+            </div>
           </div>
         </li>
       </ol>
@@ -6570,6 +6618,18 @@ button,
               <li data-editable-key="t1-bullet-13">In WordPress, use the slider or carousel block your theme provides, or a free plugin such as Smart Slider 3. Keep it to three slides with no fast autoplay. If your theme does not have a slider, three side-by-side cards built from the Columns and Cover blocks do the same job and load faster, so they are a good fallback.</li>
               <li data-editable-key="t1-bullet-14">Make sure the page has one H1 and that each button starts with a verb. Add a &quot;Plan Your Visit&quot; button to the header menu as well, so it is visible on every page.</li>
             </ul>
+            <div class="tactic-mockup">
+              <div class="tactic-mockup-chrome">
+                <span class="tactic-mockup-dot red"></span>
+                <span class="tactic-mockup-dot yellow"></span>
+                <span class="tactic-mockup-dot green"></span>
+                <div class="tactic-mockup-url">kilby.ca</div>
+              </div>
+              <div class="tactic-mockup-body">
+                <span class="tactic-step-media-badge tactic-mockup-badge">Mockup</span>
+                <img src="/assets/kilby-historic-site-campground-mockups/media/t1-s4-homepage-cards.png" alt="Kilby homepage on desktop and mobile with three cards for the museum, café and campground, each with one verb button" class="lightbox-trigger" onclick="openLightbox(this.src, this.alt)" loading="lazy">
+              </div>
+            </div>
           </div>
         </li>
         <li class="tactic-step-item" id="step-t1-5">
@@ -6580,6 +6640,18 @@ button,
               <li data-editable-key="t1-bullet-16">On the event pages and the cafe pages, add a button in a contrasting colour that says &quot;Reserve Your Spot&quot; or &quot;Book Your Visit,&quot; placed above the fold and again at the end of the page. The assessment estimates that a clearer conversion path can lift booking rates by 15 to 25 percent.</li>
               <li data-editable-key="t1-bullet-17">Add a &quot;last updated&quot; date next to the hours and admission information on your visit page. It helps visitors trust what they read, and it tells search engines the page is current.</li>
             </ul>
+            <div class="tactic-mockup">
+              <div class="tactic-mockup-chrome">
+                <span class="tactic-mockup-dot red"></span>
+                <span class="tactic-mockup-dot yellow"></span>
+                <span class="tactic-mockup-dot green"></span>
+                <div class="tactic-mockup-url">kilby.ca/program/yuletide-brunch-buffet/</div>
+              </div>
+              <div class="tactic-mockup-body">
+                <span class="tactic-step-media-badge tactic-mockup-badge">Mockup</span>
+                <img src="/assets/kilby-historic-site-campground-mockups/media/t1-s5-reserve-button.png" alt="Yuletide Brunch Buffet event page with a Reserve Your Spot button above the fold, and the mobile Hours and Fees page with a last-updated date and tap-to-call button" class="lightbox-trigger" onclick="openLightbox(this.src, this.alt)" loading="lazy">
+              </div>
+            </div>
           </div>
         </li>
         <li class="tactic-step-item" id="step-t1-6">
@@ -6592,6 +6664,18 @@ button,
               <li data-editable-key="t1-bullet-20">Mark two actions as key events in GA4: clicks on Book and Reserve buttons, and visits to the booking confirmation page. This turns a count of visits into a count of intentions.</li>
               <li data-editable-key="t1-bullet-21">Add UTM tags to every link you send from the newsletter, Facebook, Instagram, and Google Business Profile. Google&#039;s Campaign URL Builder makes this a copy-and-paste job.</li>
             </ul>
+            <div class="tactic-mockup">
+              <div class="tactic-mockup-chrome">
+                <span class="tactic-mockup-dot red"></span>
+                <span class="tactic-mockup-dot yellow"></span>
+                <span class="tactic-mockup-dot green"></span>
+                <div class="tactic-mockup-url">kilby.ca/wp-admin</div>
+              </div>
+              <div class="tactic-mockup-body">
+                <span class="tactic-step-media-badge tactic-mockup-badge">Mockup</span>
+                <img src="/assets/kilby-historic-site-campground-mockups/media/t1-s6-site-kit.png" alt="Site Kit dashboard with Search Console, Analytics and PageSpeed connected, Week 1 baseline tiles, GA4 key events and an active Meta Pixel" class="lightbox-trigger" onclick="openLightbox(this.src, this.alt)" loading="lazy">
+              </div>
+            </div>
           </div>
         </li>
       </ol>
@@ -6841,6 +6925,18 @@ button,
               <li data-editable-key="t2-bullet-3">Check the audience insights for the days and times your followers are most active, and use them when you schedule in Plannable. The assessment suggests the first hour after posting is the most important.</li>
               <li data-editable-key="t2-bullet-4">Write a short caption formula and keep it where you schedule: say what it is, name Harrison Mills, add one specific detail, and ask one question.</li>
             </ul>
+            <div class="tactic-mockup">
+              <div class="tactic-mockup-chrome">
+                <span class="tactic-mockup-dot red"></span>
+                <span class="tactic-mockup-dot yellow"></span>
+                <span class="tactic-mockup-dot green"></span>
+                <div class="tactic-mockup-url">Google Docs</div>
+              </div>
+              <div class="tactic-mockup-body">
+                <span class="tactic-step-media-badge tactic-mockup-badge">Mockup</span>
+                <img src="/assets/kilby-historic-site-campground-mockups/media/t2-s1-what-works.png" alt="One-page top 10 posts table led by the 70,000-reach breakfast post, beside the four-part caption formula card" class="lightbox-trigger" onclick="openLightbox(this.src, this.alt)" loading="lazy">
+              </div>
+            </div>
           </div>
         </li>
         <li class="tactic-step-item" id="step-t2-2">
@@ -6878,6 +6974,18 @@ button,
               <li data-editable-key="t2-bullet-12">Swap, do not add. Replace two or three of your weekly static Instagram posts with Reels, and keep your still images on Facebook, where they already perform well. Schedule the Reels in Plannable, or in Meta Business Suite if your Plannable plan does not support them.</li>
               <li data-editable-key="t2-bullet-13">If a summer student or volunteer is available, give them the formats and a list of the clips so they can do the editing.</li>
             </ul>
+            <div class="tactic-mockup">
+              <div class="tactic-mockup-chrome">
+                <span class="tactic-mockup-dot red"></span>
+                <span class="tactic-mockup-dot yellow"></span>
+                <span class="tactic-mockup-dot green"></span>
+                <div class="tactic-mockup-url">Google Docs</div>
+              </div>
+              <div class="tactic-mockup-body">
+                <span class="tactic-step-media-badge tactic-mockup-badge">Mockup</span>
+                <img src="/assets/kilby-historic-site-campground-mockups/media/t2-s3-shot-list.png" alt="Two-week capture checklist for animals, the 1906 store, the café and December events, with vertical video tips" class="lightbox-trigger" onclick="openLightbox(this.src, this.alt)" loading="lazy">
+              </div>
+            </div>
           </div>
         </li>
         <li class="tactic-step-item" id="step-t2-4">
@@ -6891,6 +6999,18 @@ button,
               <li data-editable-key="t2-bullet-17">Set a 15-minute weekly routine for Google reviews. Reply to every new review, thank the reviewer by name, and mention what they praised, such as the general store volunteer, the schnitzel nights, or Maud. Write three template replies for the store, the cafe, and the animals so each reply takes five minutes.</li>
               <li data-editable-key="t2-bullet-18">Reply to the four-star review about the rabbit hutch with care. Thank the reviewer, explain your animal care standards, and mention any improvements you have made. [DESCRIBE YOUR ANIMAL CARE STANDARDS AND ANY HUTCH IMPROVEMENTS]</li>
             </ul>
+            <div class="tactic-mockup">
+              <div class="tactic-mockup-chrome">
+                <span class="tactic-mockup-dot red"></span>
+                <span class="tactic-mockup-dot yellow"></span>
+                <span class="tactic-mockup-dot green"></span>
+                <div class="tactic-mockup-url">google.com/maps</div>
+              </div>
+              <div class="tactic-mockup-body">
+                <span class="tactic-step-media-badge tactic-mockup-badge">Mockup</span>
+                <img src="/assets/kilby-historic-site-campground-mockups/media/t2-s4-review-replies.png" alt="Owner replies to a campground review and a history review, with store, café and animal reply templates" class="lightbox-trigger" onclick="openLightbox(this.src, this.alt)" loading="lazy">
+              </div>
+            </div>
           </div>
         </li>
       </ol>
@@ -6916,6 +7036,18 @@ button,
               <li data-editable-key="t2-bullet-22">Track local reach with Facebook Insights by looking at the top cities for your audience, and record the share from the Harrison and Fraser Valley area now so you can see it move.</li>
               <li data-editable-key="t2-bullet-23">Keep the cost low for younger visitors. Feature the free and low-cost parts of a Kilby day, such as the animals, the grounds, and the photo spots, and show the cafe as a budget-friendly stop.</li>
             </ul>
+            <div class="tactic-mockup">
+              <div class="tactic-mockup-chrome">
+                <span class="tactic-mockup-dot red"></span>
+                <span class="tactic-mockup-dot yellow"></span>
+                <span class="tactic-mockup-dot green"></span>
+                <div class="tactic-mockup-url">business.facebook.com</div>
+              </div>
+              <div class="tactic-mockup-body">
+                <span class="tactic-step-media-badge tactic-mockup-badge">Mockup</span>
+                <img src="/assets/kilby-historic-site-campground-mockups/media/t2-s5-top-cities.png" alt="Meta Business Suite audience top cities with Harrison Mills, Agassiz and Mission marked as the local reach baseline" class="lightbox-trigger" onclick="openLightbox(this.src, this.alt)" loading="lazy">
+              </div>
+            </div>
           </div>
         </li>
         <li class="tactic-step-item" id="step-t2-6">
@@ -6928,6 +7060,18 @@ button,
               <li data-editable-key="t2-bullet-26">Add a sign-up link to the cafe counter and the museum desk, and to the website footer.</li>
               <li data-editable-key="t2-bullet-27">The campground announcement in February gets your highest open rate, so treat it as the main event of the year. Update the campground page, confirm the booking link and dates, and add a UTM tag so you can see how many bookings follow. Send it as usual, and share the same announcement on Facebook and Google Business Profile.</li>
             </ul>
+            <div class="tactic-mockup">
+              <div class="tactic-mockup-chrome">
+                <span class="tactic-mockup-dot red"></span>
+                <span class="tactic-mockup-dot yellow"></span>
+                <span class="tactic-mockup-dot green"></span>
+                <div class="tactic-mockup-url">Mailchimp</div>
+              </div>
+              <div class="tactic-mockup-body">
+                <span class="tactic-step-media-badge tactic-mockup-badge">Mockup</span>
+                <img src="/assets/kilby-historic-site-campground-mockups/media/t2-s6-newsletter.png" alt="Story-first newsletter with a short piece on the 1906 General Store, followed by upcoming events" class="lightbox-trigger" onclick="openLightbox(this.src, this.alt)" loading="lazy">
+              </div>
+            </div>
           </div>
         </li>
         <li class="tactic-step-item" id="step-t2-7">
@@ -6950,6 +7094,18 @@ button,
               <li data-editable-key="t2-bullet-32">Set a small budget, for example $5 to $10 a day for five days, and target people within about 25 kilometres for local events. Add a UTM tag so you can see the visits.</li>
               <li data-editable-key="t2-bullet-33">On the first of each month, spend 30 minutes with three questions: which three posts earned the most reach and saves, which format did best, and what did the boosts cost per click. Do more of whatever won.</li>
             </ul>
+            <div class="tactic-mockup">
+              <div class="tactic-mockup-chrome">
+                <span class="tactic-mockup-dot red"></span>
+                <span class="tactic-mockup-dot yellow"></span>
+                <span class="tactic-mockup-dot green"></span>
+                <div class="tactic-mockup-url">business.facebook.com</div>
+              </div>
+              <div class="tactic-mockup-body">
+                <span class="tactic-step-media-badge tactic-mockup-badge">Mockup</span>
+                <img src="/assets/kilby-historic-site-campground-mockups/media/t2-s8-boost.png" alt="Facebook boost set to 25 km around Harrison Mills, $7 a day for 5 days, with a UTM-tagged event link and ad preview" class="lightbox-trigger" onclick="openLightbox(this.src, this.alt)" loading="lazy">
+              </div>
+            </div>
           </div>
         </li>
       </ol>
@@ -7174,6 +7330,18 @@ button,
               <li data-editable-key="t3-bullet-3">Search Google for &quot;Kilby Historic Site&quot; and &quot;Kilby Historic Site hours,&quot; and list every page that shows incorrect or outdated information, such as old guides, blogs, and PDFs. Write down the address of each one.</li>
               <li data-editable-key="t3-bullet-4">Read your Wikipedia article and list anything that is wrong, out of date, or unsupported.</li>
             </ul>
+            <div class="tactic-mockup">
+              <div class="tactic-mockup-chrome">
+                <span class="tactic-mockup-dot red"></span>
+                <span class="tactic-mockup-dot yellow"></span>
+                <span class="tactic-mockup-dot green"></span>
+                <div class="tactic-mockup-url">Google Sheets</div>
+              </div>
+              <div class="tactic-mockup-body">
+                <span class="tactic-step-media-badge tactic-mockup-badge">Mockup</span>
+                <img src="/assets/kilby-historic-site-campground-mockups/media/t3-s1-prompt-audit.png" alt="AI visibility audit sheet with 12 prompts across four AI tools and columns for whether Kilby is named and correct" class="lightbox-trigger" onclick="openLightbox(this.src, this.alt)" loading="lazy">
+              </div>
+            </div>
           </div>
         </li>
         <li class="tactic-step-item" id="step-t3-2">
@@ -7221,6 +7389,18 @@ button,
               <li class="tactic-step-sub" data-editable-key="t3-bullet-21">&quot;Where is Kilby and where do I park?&quot; Kilby is in Harrison Mills, and parking details are on the visit page. [ADD DRIVING DIRECTIONS FROM HARRISON HOT SPRINGS]</li>
               <li data-editable-key="t3-bullet-22">If the page uses an accordion, switch to visible headings, so the text is easy for search engines and AI tools to read. Add a &quot;last updated&quot; date at the top, and link the page from the footer and the main menu if it is not already there.</li>
             </ul>
+            <div class="tactic-mockup">
+              <div class="tactic-mockup-chrome">
+                <span class="tactic-mockup-dot red"></span>
+                <span class="tactic-mockup-dot yellow"></span>
+                <span class="tactic-mockup-dot green"></span>
+                <div class="tactic-mockup-url">kilby.ca/visit/faq/</div>
+              </div>
+              <div class="tactic-mockup-body">
+                <span class="tactic-step-media-badge tactic-mockup-badge">Mockup</span>
+                <img src="/assets/kilby-historic-site-campground-mockups/media/t3-s3-faq-page.png" alt="Kilby FAQ page on desktop and mobile with questions as headings and the answer in the first sentence" class="lightbox-trigger" onclick="openLightbox(this.src, this.alt)" loading="lazy">
+              </div>
+            </div>
           </div>
         </li>
         <li class="tactic-step-item" id="step-t3-4">
@@ -7232,6 +7412,18 @@ button,
               <li data-editable-key="t3-bullet-24">Include a simple half-day and full-day itinerary: the animals, the store, the cafe, and the nearby sights. The assessment suggests pages such as &quot;Planning Your Harrison Mills Day Trip,&quot; &quot;Best Photo Spots at Kilby,&quot; and &quot;What to See Near Harrison Hot Springs&quot; because they capture long-tail local searches with less competition than broad terms.</li>
               <li data-editable-key="t3-bullet-25">End each section with a link to the matching pillar page and a button to the visit page. The hub grows as the clusters are published.</li>
             </ul>
+            <div class="tactic-mockup">
+              <div class="tactic-mockup-chrome">
+                <span class="tactic-mockup-dot red"></span>
+                <span class="tactic-mockup-dot yellow"></span>
+                <span class="tactic-mockup-dot green"></span>
+                <div class="tactic-mockup-url">kilby.ca/plan-your-harrison-mills-day-trip/</div>
+              </div>
+              <div class="tactic-mockup-body">
+                <span class="tactic-step-media-badge tactic-mockup-badge">Mockup</span>
+                <img src="/assets/kilby-historic-site-campground-mockups/media/t3-s4-day-trip-hub.png" alt="Plan Your Harrison Mills Day Trip hub with half-day and full-day itineraries and links to the five topic clusters" class="lightbox-trigger" onclick="openLightbox(this.src, this.alt)" loading="lazy">
+              </div>
+            </div>
           </div>
         </li>
       </ol>
@@ -7283,6 +7475,18 @@ button,
               <li data-editable-key="t3-bullet-34">Add one detail only you would know to every post, such as a story about an artifact or what a volunteer tells children at the store counter. That is what separates your answer from a generic summary.</li>
               <li data-editable-key="t3-bullet-35">Publish at about two pieces a week during the break, one question post and one pillar page, and let the new content feed your social posts.</li>
             </ul>
+            <div class="tactic-mockup">
+              <div class="tactic-mockup-chrome">
+                <span class="tactic-mockup-dot red"></span>
+                <span class="tactic-mockup-dot yellow"></span>
+                <span class="tactic-mockup-dot green"></span>
+                <div class="tactic-mockup-url">kilby.ca/can-you-touch-the-animals-at-kilby/</div>
+              </div>
+              <div class="tactic-mockup-body">
+                <span class="tactic-step-media-badge tactic-mockup-badge">Mockup</span>
+                <img src="/assets/kilby-historic-site-campground-mockups/media/t3-s7-question-post.png" alt="Question post titled Can you touch the animals at Kilby, with a first-sentence answer, real photo and links to the pillar and visit pages" class="lightbox-trigger" onclick="openLightbox(this.src, this.alt)" loading="lazy">
+              </div>
+            </div>
           </div>
         </li>
         <li class="tactic-step-item" id="step-t3-8">
@@ -7291,10 +7495,22 @@ button,
             <div class="tactic-step-title" data-editable-key="tactic-3-step-8-title">Add structured data and measure monthly.</div>
             <ul class="tactic-step-bullets">
               <li data-editable-key="t3-bullet-36">Use your SEO plugin, such as Rank Math or Yoast, to add structured data. Add Museum schema for the heritage site, CafeOrCoffeeShop for the cafe, Campground for the campground, and Event schema for confirmed workshops and dinner nights. If you do not have an SEO plugin, install the free version of one of them.</li>
-              <li data-editable-key="t3-bullet-37">Test each page with Google&#039;s Rich Results Test and fix any errors it reports.</li>
+              <li data-editable-key="t3-bullet-37">Test Museum, café and campground markup with the Schema Markup Validator (validator.schema.org), and event pages with Google&#039;s Rich Results Test, and fix any errors they report.</li>
               <li data-editable-key="t3-bullet-38">Link each new page from the hub and from at least two related pages. Internal links tell search engines and AI tools the pages belong together.</li>
               <li data-editable-key="t3-bullet-39">Rerun the 12 prompts in Weeks 4, 10, and 12, and compare the results with the baseline. Check Search Console each month for the questions bringing visitors to the new pages.</li>
             </ul>
+            <div class="tactic-mockup">
+              <div class="tactic-mockup-chrome">
+                <span class="tactic-mockup-dot red"></span>
+                <span class="tactic-mockup-dot yellow"></span>
+                <span class="tactic-mockup-dot green"></span>
+                <div class="tactic-mockup-url">validator.schema.org</div>
+              </div>
+              <div class="tactic-mockup-body">
+                <span class="tactic-step-media-badge tactic-mockup-badge">Mockup</span>
+                <img src="/assets/kilby-historic-site-campground-mockups/media/t3-s8-schema-validator.png" alt="Schema Markup Validator showing valid Museum markup for Kilby, with a Rich Results Test inset showing a valid Event" class="lightbox-trigger" onclick="openLightbox(this.src, this.alt)" loading="lazy">
+              </div>
+            </div>
           </div>
         </li>
       </ol>

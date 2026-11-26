@@ -305,7 +305,7 @@ AI tools do not rank pages, they assemble answers, and they favour sources that 
 
 8. **Add structured data and measure monthly.**
    - Use your SEO plugin, such as Rank Math or Yoast, to add structured data. Add Museum schema for the heritage site, CafeOrCoffeeShop for the cafe, Campground for the campground, and Event schema for confirmed workshops and dinner nights. If you do not have an SEO plugin, install the free version of one of them.
-   - Test each page with Google's Rich Results Test and fix any errors it reports.
+   - Test Museum, café and campground markup with the Schema Markup Validator (validator.schema.org), and event pages with Google's Rich Results Test, and fix any errors they report.
    - Link each new page from the hub and from at least two related pages. Internal links tell search engines and AI tools the pages belong together.
    - Rerun the 12 prompts in Weeks 4, 10, and 12, and compare the results with the baseline. Check Search Console each month for the questions bringing visitors to the new pages.
 
