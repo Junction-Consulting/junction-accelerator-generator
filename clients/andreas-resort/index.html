@@ -73,6 +73,7 @@
     <header class="dash-head">
       <h1 class="dash-h1" id="dash-greeting"></h1>
       <p class="dash-sub" id="dash-sub" hidden></p>
+      <p class="dash-sub phone-only" data-live="phone-status"></p>
     </header>
     <ol class="stage-strip" aria-label="Your program">
       <li class="stage-step" data-step="onboarding"><span class="stage-step-bar" aria-hidden="true"></span><span class="stage-step-label">Onboarding call</span><span class="stage-step-note" data-step-note></span></li>
@@ -133,9 +134,13 @@
           <div class="btn-row btn-row--end"><button type="button" class="btn" data-continue-reading onclick="continueReading()">Continue reading</button><button type="button" class="link-btn" onclick="printRoadmap()">Download the plan as a PDF</button></div>
         </section>
         <section class="dash-card dash-progress dash-progress--light">
-        <h2 class="dash-h3">Your progress</h2>
+        <h2 class="dash-h3 desktop-only">Your progress</h2>
         <div class="donut donut--lg donut--light" style="--pct:0" data-live-donut="plan" role="img" aria-label="Plan progress"><div class="donut-hole"><span class="donut-num" data-live="plan-pct">0%</span><span class="donut-sub">of your plan</span></div></div>
-        <p><strong><span data-live="plan-done">0</span> of 34</strong> tasks checked off</p>
+        <div class="dash-progress-text">
+          <h2 class="dash-h3 phone-only">Your progress</h2>
+          <p><strong><span data-live="plan-done">0</span> of 34</strong> tasks checked off</p>
+          <p class="phone-only dash-progress-phase" data-live="current-phase"></p>
+        </div>
         <div class="phase-bars">
           <div class="phase-bar"><span class="bar bar--light"><span class="bar-fill" data-live-bar="phase-1"></span></span><span class="phase-bar-name">Foundation</span><span class="phase-bar-weeks">Weeks 1 to 4</span></div>
           <div class="phase-bar"><span class="bar bar--light"><span class="bar-fill" data-live-bar="phase-2"></span></span><span class="phase-bar-name">Growth</span><span class="phase-bar-weeks">Weeks 5 to 8</span></div>
@@ -162,7 +167,6 @@
           <h3 class="dash-h3">Materials</h3>
           <button type="button" class="link-btn" onclick="downloadPDF()">Assessment report (PDF)</button>
           <button type="button" class="link-btn plan-ready-only" onclick="printRoadmap()">Your 90-day plan (PDF)</button>
-          <button type="button" class="link-btn" onclick="navigate('materials')">All materials</button>
         </section>
       </div>
     </div>
@@ -243,9 +247,13 @@
           </div>
         </section>
         <section class="dash-card dash-progress dash-progress--dark" id="goal-section">
-        <h2 class="dash-h3">Your progress</h2>
+        <h2 class="dash-h3 desktop-only">Your progress</h2>
         <div class="donut donut--lg donut--dark" style="--pct:0" data-live-donut="plan" role="img" aria-label="Plan progress"><div class="donut-hole"><span class="donut-num" data-live="plan-pct">0%</span><span class="donut-sub">of your plan</span></div></div>
-        <p><strong><span data-live="plan-done">0</span> of 34</strong> tasks checked off</p>
+        <div class="dash-progress-text">
+          <h2 class="dash-h3 phone-only">Your progress</h2>
+          <p><strong><span data-live="plan-done">0</span> of 34</strong> tasks checked off</p>
+          <p class="phone-only dash-progress-phase" data-live="current-phase"></p>
+        </div>
         <div class="phase-bars">
           <div class="phase-bar"><span class="bar bar--dark"><span class="bar-fill" data-live-bar="phase-1"></span></span><span class="phase-bar-name">Foundation</span><span class="phase-bar-weeks">Weeks 1 to 4</span></div>
           <div class="phase-bar"><span class="bar bar--dark"><span class="bar-fill" data-live-bar="phase-2"></span></span><span class="phase-bar-name">Growth</span><span class="phase-bar-weeks">Weeks 5 to 8</span></div>
@@ -277,7 +285,6 @@
           <h3 class="dash-h3">Materials</h3>
           <button type="button" class="link-btn" onclick="downloadPDF()">Assessment report (PDF)</button>
           <button type="button" class="link-btn plan-ready-only" onclick="printRoadmap()">Your 90-day plan (PDF)</button>
-          <button type="button" class="link-btn" onclick="navigate('materials')">All materials</button>
         </section>
       </div>
     </div>
@@ -340,9 +347,7 @@
         <div class="donut donut--lg donut--score-fair" style="--pct:74" role="img" aria-label="Overall score 74 out of 100, grade C"><div class="donut-hole"><span class="donut-num">74</span><span class="donut-sub">out of 100</span></div></div>
         <div class="as-summary-text">
           <h2 class="tp-h2">Overall grade C <span class="as-level as-level--fair">Fair</span></h2>
-          <p class="as-meta">High confidence</p>
           <p data-editable-key="assessment.executive_summary.headline">Andrea&#039;s Resort has excellent technical foundations, perfect Google ratings, and strong pre-arrival information, but is not fully using social media. Key opportunities include increasing posting frequency and adding operating hours to the website.</p>
-          
         </div>
       </div>
       <div class="as-columns">
@@ -370,29 +375,29 @@
             <span class="as-row-grade">B-<span class="sr-only"> Good</span></span>
             <span class="as-bar" aria-hidden="true"><span class="as-bar-fill as-bar-fill--good" style="--pct:78"></span></span>
             <span class="as-row-share">15%</span>
-            <span class="as-row-slot" data-slot="checkin" hidden></span>
-            <span class="as-row-slot" data-slot="review" hidden></span>
+            <span class="as-row-slot" data-slot="checkin" data-label="30 days" hidden></span>
+            <span class="as-row-slot" data-slot="review" data-label="90 days" hidden></span>
             <span class="chev" aria-hidden="true"></span>
           </button>
           <div class="as-area-body" id="area-website_technical-body" hidden>
             <p data-editable-key="assessment.categories.website_technical.summary">Strong technical foundation with SSL, mobile optimisation, and multi-language support, but hampered by performance issues, SEO weaknesses in meta tags and header structure, and poor link architecture</p>
             <div class="as-nums">
-              <div class="as-num as-num--good"><b>80/100</b><small>Desktop Speed</small><small class="as-num-source">Website Audit</small></div>
-              <div class="as-num as-num--good"><b>80/100</b><small>Mobile Speed</small><small class="as-num-source">Website Audit</small></div>
-              <div class="as-num as-num--good"><b>Secure</b><small>SSL Security</small><small class="as-num-source">Website Analysis</small></div>
+              <div class="as-num"><b>80/100</b><small>Desktop Speed</small></div>
+              <div class="as-num"><b>80/100</b><small>Mobile Speed</small></div>
+              <div class="as-num"><b>Secure</b><small>SSL Security</small></div>
             </div>
             <div class="as-columns">
-              <div><h3 class="tp-h3">What we found</h3><ul class="as-list as-list--findings">
-                <li><span class="as-finding as-finding--positive"><span class="sr-only">Strength: </span><span data-editable-key="assessment.categories.website_technical.findings.0">Clean website structure with proper SEO implementation supports search visibility</span> <span class="as-meta">High confidence</span></span></li>
-                <li><span class="as-finding as-finding--positive"><span class="sr-only">Strength: </span><span data-editable-key="assessment.categories.website_technical.findings.1">37 images on homepage with 100% alt text completion supports accessibility and SEO</span> <span class="as-meta">High confidence</span></span></li>
-                <li><span class="as-finding as-finding--positive"><span class="sr-only">Strength: </span><span data-editable-key="assessment.categories.website_technical.findings.2">Lightweight 45KB homepage with 2.6MB total assets shows good initial optimisation</span> <span class="as-meta">High confidence</span></span></li>
-                <li><span class="as-finding as-finding--positive"><span class="sr-only">Strength: </span><span data-editable-key="assessment.categories.website_technical.findings.3">Analytics properly configured (Google Analytics, Tag Manager, Facebook Pixel) enables conversion tracking</span> <span class="as-meta">High confidence</span></span></li>
-                <li data-more hidden><span class="as-finding as-finding--negative"><span class="sr-only">Gap: </span><span data-editable-key="assessment.categories.website_technical.findings.4">Title tag at 181 characters is over-optimised and will be truncated in search results - current: &#039;Andrea&#039;s Resort - Lakeside Cabin Rentals and Vacation Getaways...&#039; cuts off mid-sentence</span> <span class="as-meta">High confidence</span></span></li>
-                <li data-more hidden><span class="as-finding as-finding--negative"><span class="sr-only">Gap: </span><span data-editable-key="assessment.categories.website_technical.findings.5">Homepage has NO H2-H6 header tags - only single H1, limiting SEO structure and content hierarchy</span> <span class="as-meta">High confidence</span></span></li>
-                <li data-more hidden><span class="as-finding as-finding--negative"><span class="sr-only">Gap: </span><span data-editable-key="assessment.categories.website_technical.findings.6">Keyword consistency needs improvement - main keywords not appearing across title/description/headers simultaneously</span> <span class="as-meta">High confidence</span></span></li>
-                <li data-more hidden><span class="as-finding as-finding--negative"><span class="sr-only">Gap: </span><span data-editable-key="assessment.categories.website_technical.findings.7">Link architecture graded D - weak backlink profile (77 backlinks from 51 domains) and unfriendly URL structure</span> <span class="as-meta">High confidence</span></span></li>
-                <li data-more hidden><span class="as-finding as-finding--negative"><span class="sr-only">Gap: </span><span data-editable-key="assessment.categories.website_technical.findings.8">Multiple page redirects detected causing 0.63s mobile delay and 0.19s desktop delay</span> <span class="as-meta">High confidence</span></span></li>
-                <li data-more hidden><span class="as-finding as-finding--negative"><span class="sr-only">Gap: </span><span data-editable-key="assessment.categories.website_technical.findings.9">Deprecated HTML and inline CSS styles detected reducing code efficiency</span> <span class="as-meta">High confidence</span></span></li>
+              <div><h3 class="tp-h3">What we found</h3><ul class="as-list">
+                <li><span data-editable-key="assessment.categories.website_technical.findings.0">Clean website structure with proper SEO implementation supports search visibility</span></li>
+                <li><span data-editable-key="assessment.categories.website_technical.findings.1">37 images on homepage with 100% alt text completion supports accessibility and SEO</span></li>
+                <li><span data-editable-key="assessment.categories.website_technical.findings.2">Lightweight 45KB homepage with 2.6MB total assets shows good initial optimisation</span></li>
+                <li><span data-editable-key="assessment.categories.website_technical.findings.3">Analytics properly configured (Google Analytics, Tag Manager, Facebook Pixel) enables conversion tracking</span></li>
+                <li data-more hidden><span data-editable-key="assessment.categories.website_technical.findings.4">Title tag at 181 characters is over-optimised and will be truncated in search results - current: &#039;Andrea&#039;s Resort - Lakeside Cabin Rentals and Vacation Getaways...&#039; cuts off mid-sentence</span></li>
+                <li data-more hidden><span data-editable-key="assessment.categories.website_technical.findings.5">Homepage has NO H2-H6 header tags - only single H1, limiting SEO structure and content hierarchy</span></li>
+                <li data-more hidden><span data-editable-key="assessment.categories.website_technical.findings.6">Keyword consistency needs improvement - main keywords not appearing across title/description/headers simultaneously</span></li>
+                <li data-more hidden><span data-editable-key="assessment.categories.website_technical.findings.7">Link architecture graded D - weak backlink profile (77 backlinks from 51 domains) and unfriendly URL structure</span></li>
+                <li data-more hidden><span data-editable-key="assessment.categories.website_technical.findings.8">Multiple page redirects detected causing 0.63s mobile delay and 0.19s desktop delay</span></li>
+                <li data-more hidden><span data-editable-key="assessment.categories.website_technical.findings.9">Deprecated HTML and inline CSS styles detected reducing code efficiency</span></li>
               </ul><button type="button" class="link-btn show-all" onclick="showAll(this)">Show all 10 findings</button></div>
               <div><h3 class="tp-h3">What we recommend</h3><ol class="as-list">
                 <li><span data-editable-key="assessment.categories.website_technical.recommendations.0">Shorten title tag to 50-60 characters focusing on core value: &#039;Andrea&#039;s Resort | Wilderness Cabins on Clear Creek, Lakeside&#039; - currently truncated at 181 chars</span></li>
@@ -401,21 +406,8 @@
                 <li><span data-editable-key="assessment.categories.website_technical.recommendations.3">Remove page redirects causing load delays - implement direct routing to final URLs</span></li>
               </ol></div>
             </div>
-            <details class="as-breakdown"><summary>How this score was worked out</summary><div class="table-scroll">
-            <table class="plain-table as-breakdown-table">
-              <thead><tr><th scope="col">Measure</th><th scope="col">Value</th><th scope="col">Score</th><th scope="col">Source</th></tr></thead>
-              <tbody>
-                <tr><th scope="row">Desktop speed</th><td>80</td><td>80 B-</td><td>Website Audit</td></tr>
-                <tr><th scope="row">Mobile speed</th><td>80</td><td>80 B-</td><td>Website Audit</td></tr>
-                <tr><th scope="row">Ssl https</th><td>Yes</td><td>100</td><td>Website Analysis</td></tr>
-                <tr><th scope="row">Mobile viewport</th><td>Yes</td><td>100</td><td>Website Analysis</td></tr>
-                <tr><th scope="row">Meta tags</th><td></td><td>50</td><td>unavailable</td></tr>
-                <tr><th scope="row">Load time</th><td></td><td>50</td><td>unavailable</td></tr>
-              </tbody>
-            </table>
-          </div></details>
             <div class="as-area-foot">
-              <span class="as-meta">Sources: Website Audit, Website Analysis, Website Content Analysis. High confidence.</span>
+              <span class="as-meta">Sources: Website Audit, Website Analysis, Website Content Analysis.</span>
               <button type="button" class="link-btn" onclick="navigate('tactic3')">In your plan: Local Search Visibility and the Pages That Earn Search Traffic All Year</button>
             </div>
           </div>
@@ -427,26 +419,26 @@
             <span class="as-row-grade">C<span class="sr-only"> Fair</span></span>
             <span class="as-bar" aria-hidden="true"><span class="as-bar-fill as-bar-fill--fair" style="--pct:71"></span></span>
             <span class="as-row-share">25%</span>
-            <span class="as-row-slot" data-slot="checkin" hidden></span>
-            <span class="as-row-slot" data-slot="review" hidden></span>
+            <span class="as-row-slot" data-slot="checkin" data-label="30 days" hidden></span>
+            <span class="as-row-slot" data-slot="review" data-label="90 days" hidden></span>
             <span class="chev" aria-hidden="true"></span>
           </button>
           <div class="as-area-body" id="area-reviews_reputation-body" hidden>
             <p data-editable-key="assessment.categories.reviews_reputation.summary">Perfect 5.0-star rating demonstrates exceptional guest satisfaction, but below average review volume (only 20 reviews) and poor review recency (only 2 reviews in past 18 months) signal declining activity and may limit local search visibility</p>
             <div class="as-nums">
-              <div class="as-num as-num--good"><b>5.0 / 5.0</b><small>Google Rating</small><small class="as-num-source">Google Places API</small></div>
-              <div class="as-num as-num--critical"><b>20</b><small>Total Reviews</small><small class="as-num-source">Google Places API</small></div>
+              <div class="as-num"><b>5.0 / 5.0</b><small>Google Rating</small></div>
+              <div class="as-num"><b>20</b><small>Total Reviews</small></div>
             </div>
             <div class="as-columns">
-              <div><h3 class="tp-h3">What we found</h3><ul class="as-list as-list--findings">
-                <li><span class="as-finding as-finding--positive"><span class="sr-only">Strength: </span><span data-editable-key="assessment.categories.reviews_reputation.findings.0">Perfect 5.0 rating with 19 five-star reviews demonstrates exceptional guest satisfaction and service quality</span> <span class="as-meta">High confidence</span></span></li>
-                <li><span class="as-finding as-finding--positive"><span class="sr-only">Strength: </span><span data-editable-key="assessment.categories.reviews_reputation.findings.1">Reviews emphasize unique value props: &#039;stunning craftsmanship throughout entire place&#039;, &#039;modern comforts in rustic setting&#039;, &#039;surrounded by nature&#039;</span> <span class="as-meta">High confidence</span></span></li>
-                <li><span class="as-finding as-finding--positive"><span class="sr-only">Strength: </span><span data-editable-key="assessment.categories.reviews_reputation.findings.2">Guests frequently mention personal touches and warm hospitality from owners, showing authentic connection with visitors</span> <span class="as-meta">High confidence</span></span></li>
-                <li><span class="as-finding as-finding--positive"><span class="sr-only">Strength: </span><span data-editable-key="assessment.categories.reviews_reputation.findings.3">Reviews from work crews (&#039;essential service crew&#039;, &#039;guys want to make weekend trip&#039;) indicate word-of-mouth potential beyond leisure travellers</span> <span class="as-meta">High confidence</span></span></li>
-                <li data-more hidden><span class="as-finding as-finding--negative"><span class="sr-only">Gap: </span><span data-editable-key="assessment.categories.reviews_reputation.findings.4">Only 20 total reviews in Google - below average for a resort, limiting local pack visibility and trust signals</span> <span class="as-meta">High confidence</span></span></li>
-                <li data-more hidden><span class="as-finding as-finding--negative"><span class="sr-only">Gap: </span><span data-editable-key="assessment.categories.reviews_reputation.findings.5">Review recency issue: Only 2 reviews from past 18 months out of 5 sampled - suggests minimal recent guest activity or no review solicitation process</span> <span class="as-meta">High confidence</span></span></li>
-                <li data-more hidden><span class="as-finding as-finding--negative"><span class="sr-only">Gap: </span><span data-editable-key="assessment.categories.reviews_reputation.findings.6">No visible review response strategy - unable to confirm owner engages with reviewers</span> <span class="as-meta">Medium confidence</span></span></li>
-                <li data-more hidden><span class="as-finding as-finding--negative"><span class="sr-only">Gap: </span><span data-editable-key="assessment.categories.reviews_reputation.findings.7">Missing reviews on TripAdvisor, Yelp, Booking.com, Expedia - single-platform dependency risky</span> <span class="as-meta">Medium confidence</span></span></li>
+              <div><h3 class="tp-h3">What we found</h3><ul class="as-list">
+                <li><span data-editable-key="assessment.categories.reviews_reputation.findings.0">Perfect 5.0 rating with 19 five-star reviews demonstrates exceptional guest satisfaction and service quality</span></li>
+                <li><span data-editable-key="assessment.categories.reviews_reputation.findings.1">Reviews emphasize unique value props: &#039;stunning craftsmanship throughout entire place&#039;, &#039;modern comforts in rustic setting&#039;, &#039;surrounded by nature&#039;</span></li>
+                <li><span data-editable-key="assessment.categories.reviews_reputation.findings.2">Guests frequently mention personal touches and warm hospitality from owners, showing authentic connection with visitors</span></li>
+                <li><span data-editable-key="assessment.categories.reviews_reputation.findings.3">Reviews from work crews (&#039;essential service crew&#039;, &#039;guys want to make weekend trip&#039;) indicate word-of-mouth potential beyond leisure travellers</span></li>
+                <li data-more hidden><span data-editable-key="assessment.categories.reviews_reputation.findings.4">Only 20 total reviews in Google - below average for a resort, limiting local pack visibility and trust signals</span></li>
+                <li data-more hidden><span data-editable-key="assessment.categories.reviews_reputation.findings.5">Review recency issue: Only 2 reviews from past 18 months out of 5 sampled - suggests minimal recent guest activity or no review solicitation process</span></li>
+                <li data-more hidden><span data-editable-key="assessment.categories.reviews_reputation.findings.6">No visible review response strategy - unable to confirm owner engages with reviewers</span></li>
+                <li data-more hidden><span data-editable-key="assessment.categories.reviews_reputation.findings.7">Missing reviews on TripAdvisor, Yelp, Booking.com, Expedia - single-platform dependency risky</span></li>
               </ul><button type="button" class="link-btn show-all" onclick="showAll(this)">Show all 8 findings</button></div>
               <div><h3 class="tp-h3">What we recommend</h3><ol class="as-list">
                 <li><span data-editable-key="assessment.categories.reviews_reputation.recommendations.0">Implement systematic post-stay review request: Email guests 3-5 days after checkout with direct Google review link - aim for 3-5 new reviews monthly</span></li>
@@ -456,19 +448,8 @@
                 <li data-more hidden><span data-editable-key="assessment.categories.reviews_reputation.recommendations.4">Add review widget to website homepage displaying Google reviews with star rating - builds immediate trust for first-time visitors</span></li>
               </ol><button type="button" class="link-btn show-all" onclick="showAll(this)">Show all 5 recommendations</button></div>
             </div>
-            <details class="as-breakdown"><summary>How this score was worked out</summary><div class="table-scroll">
-            <table class="plain-table as-breakdown-table">
-              <thead><tr><th scope="col">Measure</th><th scope="col">Value</th><th scope="col">Score</th><th scope="col">Source</th></tr></thead>
-              <tbody>
-                <tr><th scope="row">Google rating</th><td>5</td><td>98</td><td>Google Places API</td></tr>
-                <tr><th scope="row">Review volume</th><td>20</td><td>38</td><td>Google Places API</td></tr>
-                <tr><th scope="row">Review recency</th><td>recent count 2, total provided 5, recent percent 40</td><td>70</td><td>Google Places API</td></tr>
-                <tr><th scope="row">Response rate</th><td></td><td>60</td><td>not available in API</td></tr>
-              </tbody>
-            </table>
-          </div></details>
             <div class="as-area-foot">
-              <span class="as-meta">Sources: Google Places API. High confidence.</span>
+              <span class="as-meta">Sources: Google Places API.</span>
               <button type="button" class="link-btn" onclick="navigate('tactic2')">In your plan: Review Generation</button>
             </div>
           </div>
@@ -480,26 +461,26 @@
             <span class="as-row-grade">B<span class="sr-only"> Good</span></span>
             <span class="as-bar" aria-hidden="true"><span class="as-bar-fill as-bar-fill--good" style="--pct:80"></span></span>
             <span class="as-row-share">20%</span>
-            <span class="as-row-slot" data-slot="checkin" hidden></span>
-            <span class="as-row-slot" data-slot="review" hidden></span>
+            <span class="as-row-slot" data-slot="checkin" data-label="30 days" hidden></span>
+            <span class="as-row-slot" data-slot="review" data-label="90 days" hidden></span>
             <span class="chev" aria-hidden="true"></span>
           </button>
           <div class="as-area-body" id="area-booking_conversion-body" hidden>
             <p data-editable-key="assessment.categories.booking_conversion.summary">Strong booking infrastructure with TripAdvisor and Cloudbeds integration, clear pricing visibility, and good functionality, but contact information available on Location page but could be more prominent which is essential for high-value wilderness resort bookings requiring direct inquiry</p>
             <div class="as-nums">
-              <div class="as-num as-num--good"><b>Available</b><small>Online Booking</small><small class="as-num-source">Website Analysis</small></div>
-              <div class="as-num as-num--good"><b>Yes (Location page)</b><small>Phone Visible</small><small class="as-num-source">Website Analysis</small></div>
+              <div class="as-num"><b>Available</b><small>Online Booking</small></div>
+              <div class="as-num"><b>Yes (Location page)</b><small>Phone Visible</small></div>
             </div>
             <div class="as-columns">
-              <div><h3 class="tp-h3">What we found</h3><ul class="as-list as-list--findings">
-                <li><span class="as-finding as-finding--positive"><span class="sr-only">Strength: </span><span data-editable-key="assessment.categories.booking_conversion.findings.0">Dual booking platform integration (TripAdvisor, Cloudbeds) provides visitor choice and reduces platform-specific abandonment</span> <span class="as-meta">High confidence</span></span></li>
-                <li><span class="as-finding as-finding--positive"><span class="sr-only">Strength: </span><span data-editable-key="assessment.categories.booking_conversion.findings.1">Pricing information visible on website pre-qualifies visitors and reduces low-intent inquiries</span> <span class="as-meta">High confidence</span></span></li>
-                <li><span class="as-finding as-finding--positive"><span class="sr-only">Strength: </span><span data-editable-key="assessment.categories.booking_conversion.findings.2">Clean, user-friendly booking flow enables direct reservations easily</span> <span class="as-meta">High confidence</span></span></li>
-                <li><span class="as-finding as-finding--positive"><span class="sr-only">Strength: </span><span data-editable-key="assessment.categories.booking_conversion.findings.3">Physical address visible (1234 Lakeshore Drive) helps with trip planning for Scenic Highway travellers</span> <span class="as-meta">High confidence</span></span></li>
-                <li data-more hidden><span class="as-finding as-finding--negative"><span class="sr-only">Gap: </span><span data-editable-key="assessment.categories.booking_conversion.findings.4">Phone number and email available on Location page; consider adding to homepage header/footer for easier visibility</span> <span class="as-meta">High confidence</span></span></li>
-                <li data-more hidden><span class="as-finding as-finding--negative"><span class="sr-only">Gap: </span><span data-editable-key="assessment.categories.booking_conversion.findings.5">Email contact available on Location page; adding to homepage would improve accessibility</span> <span class="as-meta">High confidence</span></span></li>
-                <li data-more hidden><span class="as-finding as-finding--negative"><span class="sr-only">Gap: </span><span data-editable-key="assessment.categories.booking_conversion.findings.6">No live chat or instant messaging option detected - misses opportunity for real-time inquiry conversion</span> <span class="as-meta">Medium confidence</span></span></li>
-                <li data-more hidden><span class="as-finding as-finding--negative"><span class="sr-only">Gap: </span><span data-editable-key="assessment.categories.booking_conversion.findings.7">Operating hours not displayed - visitors don&#039;t know when they can reach resort for questions</span> <span class="as-meta">High confidence</span></span></li>
+              <div><h3 class="tp-h3">What we found</h3><ul class="as-list">
+                <li><span data-editable-key="assessment.categories.booking_conversion.findings.0">Dual booking platform integration (TripAdvisor, Cloudbeds) provides visitor choice and reduces platform-specific abandonment</span></li>
+                <li><span data-editable-key="assessment.categories.booking_conversion.findings.1">Pricing information visible on website pre-qualifies visitors and reduces low-intent inquiries</span></li>
+                <li><span data-editable-key="assessment.categories.booking_conversion.findings.2">Clean, user-friendly booking flow enables direct reservations easily</span></li>
+                <li><span data-editable-key="assessment.categories.booking_conversion.findings.3">Physical address visible (1234 Lakeshore Drive) helps with trip planning for Scenic Highway travellers</span></li>
+                <li data-more hidden><span data-editable-key="assessment.categories.booking_conversion.findings.4">Phone number and email available on Location page; consider adding to homepage header/footer for easier visibility</span></li>
+                <li data-more hidden><span data-editable-key="assessment.categories.booking_conversion.findings.5">Email contact available on Location page; adding to homepage would improve accessibility</span></li>
+                <li data-more hidden><span data-editable-key="assessment.categories.booking_conversion.findings.6">No live chat or instant messaging option detected - misses opportunity for real-time inquiry conversion</span></li>
+                <li data-more hidden><span data-editable-key="assessment.categories.booking_conversion.findings.7">Operating hours not displayed - visitors don&#039;t know when they can reach resort for questions</span></li>
               </ul><button type="button" class="link-btn show-all" onclick="showAll(this)">Show all 8 findings</button></div>
               <div><h3 class="tp-h3">What we recommend</h3><ol class="as-list">
                 <li><span data-editable-key="assessment.categories.booking_conversion.recommendations.0">Add phone and email to website header and footer for easier access (currently on Location page)</span></li>
@@ -509,20 +490,8 @@
                 <li data-more hidden><span data-editable-key="assessment.categories.booking_conversion.recommendations.4">Add &#039;Check Availability&#039; calendar widget on homepage showing real-time availability - reduces inquiry volume for sold-out dates</span></li>
               </ol><button type="button" class="link-btn show-all" onclick="showAll(this)">Show all 5 recommendations</button></div>
             </div>
-            <details class="as-breakdown"><summary>How this score was worked out</summary><div class="table-scroll">
-            <table class="plain-table as-breakdown-table">
-              <thead><tr><th scope="col">Measure</th><th scope="col">Value</th><th scope="col">Score</th><th scope="col">Source</th></tr></thead>
-              <tbody>
-                <tr><th scope="row">Booking capability</th><td>Yes</td><td>100</td><td>Website Analysis</td></tr>
-                <tr><th scope="row">Platform integration</th><td>count 2, platforms TripAdvisor, Cloudbeds</td><td>85</td><td>Website Analysis</td></tr>
-                <tr><th scope="row">Phone visibility</th><td>Yes</td><td>80</td><td>Website Analysis</td></tr>
-                <tr><th scope="row">Pricing visibility</th><td>Yes</td><td>100</td><td>Website Analysis</td></tr>
-                <tr><th scope="row">Cta presence</th><td>Yes</td><td>90</td><td>Website Analysis</td></tr>
-              </tbody>
-            </table>
-          </div></details>
             <div class="as-area-foot">
-              <span class="as-meta">Sources: Website Analysis, Website Content Analysis. High confidence.</span>
+              <span class="as-meta">Sources: Website Analysis, Website Content Analysis.</span>
               <button type="button" class="link-btn" onclick="navigate('tactic4')">In your plan: Direct Booking and Guest Email</button>
             </div>
           </div>
@@ -534,30 +503,30 @@
             <span class="as-row-grade">D<span class="sr-only"> Needs work</span></span>
             <span class="as-bar" aria-hidden="true"><span class="as-bar-fill as-bar-fill--needs-work" style="--pct:62"></span></span>
             <span class="as-row-share">20%</span>
-            <span class="as-row-slot" data-slot="checkin" hidden></span>
-            <span class="as-row-slot" data-slot="review" hidden></span>
+            <span class="as-row-slot" data-slot="checkin" data-label="30 days" hidden></span>
+            <span class="as-row-slot" data-slot="review" data-label="90 days" hidden></span>
             <span class="chev" aria-hidden="true"></span>
           </button>
           <div class="as-area-body" id="area-social_media-body" hidden>
             <p data-editable-key="assessment.categories.social_media.summary">Below recommended levels with only 522 total followers across all platforms, minimal posting activity (0.1x per week on Instagram), and zero paid advertising - a critical gap for a visually stunning wilderness resort that should be leveraging user-generated content and outdoor adventure travel trends</p>
             <div class="as-nums">
-              <div class="as-num as-num--critical"><b>522</b><small>Total Followers</small><small class="as-num-source">SociaVault</small></div>
-              <div class="as-num as-num--good"><b>5.15%</b><small>Engagement Rate</small><small class="as-num-source">SociaVault (Instagram)</small></div>
-              <div class="as-num as-num--good"><b>3 platforms</b><small>Platforms Active</small><small class="as-num-source">SociaVault</small></div>
-              <div class="as-num as-num--critical"><b>0.1 posts/week</b><small>Posting Frequency</small><small class="as-num-source">SociaVault (Instagram)</small></div>
+              <div class="as-num"><b>522</b><small>Total Followers</small></div>
+              <div class="as-num"><b>5.15%</b><small>Engagement Rate</small></div>
+              <div class="as-num"><b>3 platforms</b><small>Platforms Active</small></div>
+              <div class="as-num"><b>0.1 posts/week</b><small>Posting Frequency</small></div>
             </div>
             <div class="as-columns">
-              <div><h3 class="tp-h3">What we found</h3><ul class="as-list as-list--findings">
-                <li><span class="as-finding as-finding--positive"><span class="sr-only">Strength: </span><span data-editable-key="assessment.categories.social_media.findings.0">5.15% Instagram engagement rate is excellent - above tourism industry average of 1-3% - shows content quality is strong</span> <span class="as-meta">High confidence</span></span></li>
-                <li><span class="as-finding as-finding--positive"><span class="sr-only">Strength: </span><span data-editable-key="assessment.categories.social_media.findings.1">Facebook Pixel properly installed enabling retargeting and conversion tracking once campaigns launched</span> <span class="as-meta">High confidence</span></span></li>
-                <li><span class="as-finding as-finding--positive"><span class="sr-only">Strength: </span><span data-editable-key="assessment.categories.social_media.findings.2">Multi-platform presence established (Instagram, Facebook, YouTube) - foundation exists, just needs activation</span> <span class="as-meta">High confidence</span></span></li>
-                <li><span class="as-finding as-finding--positive"><span class="sr-only">Strength: </span><span data-editable-key="assessment.categories.social_media.findings.3">Bio includes relevant hashtags and clear location identifiers helping discoverability</span> <span class="as-meta">High confidence</span></span></li>
-                <li data-more hidden><span class="as-finding as-finding--negative"><span class="sr-only">Gap: </span><span data-editable-key="assessment.categories.social_media.findings.4">Only 522 total followers across all platforms - below average for visual tourism business that should have 5,000+ given stunning location and perfect reviews</span> <span class="as-meta">High confidence</span></span></li>
-                <li data-more hidden><span class="as-finding as-finding--negative"><span class="sr-only">Gap: </span><span data-editable-key="assessment.categories.social_media.findings.5">Instagram posting frequency of 0.1x per week (essentially once every 10 weeks) = account has low visibility in algorithm</span> <span class="as-meta">High confidence</span></span></li>
-                <li data-more hidden><span class="as-finding as-finding--negative"><span class="sr-only">Gap: </span><span data-editable-key="assessment.categories.social_media.findings.6">Only 1 Reel out of 12 recent posts - missing Instagram&#039;s highest-reach format (Reels get 3-5x more reach than static posts)</span> <span class="as-meta">High confidence</span></span></li>
-                <li data-more hidden><span class="as-finding as-finding--negative"><span class="sr-only">Gap: </span><span data-editable-key="assessment.categories.social_media.findings.7">YouTube presence minimal with only 8 subscribers and 2 videos - missing evergreen SEO opportunity for &#039;Lakeside resort&#039; searches</span> <span class="as-meta">High confidence</span></span></li>
-                <li data-more hidden><span class="as-finding as-finding--negative"><span class="sr-only">Gap: </span><span data-editable-key="assessment.categories.social_media.findings.8">Zero paid advertising detected on Facebook/Instagram despite Pixel installation - missing acquisition opportunity for remote destination requiring awareness building</span> <span class="as-meta">High confidence</span></span></li>
-                <li data-more hidden><span class="as-finding as-finding--negative"><span class="sr-only">Gap: </span><span data-editable-key="assessment.categories.social_media.findings.9">No TikTok presence detected - missing younger outdoor adventure demographic (25-40 year olds driving wilderness tourism growth)</span> <span class="as-meta">Medium confidence</span></span></li>
+              <div><h3 class="tp-h3">What we found</h3><ul class="as-list">
+                <li><span data-editable-key="assessment.categories.social_media.findings.0">5.15% Instagram engagement rate is excellent - above tourism industry average of 1-3% - shows content quality is strong</span></li>
+                <li><span data-editable-key="assessment.categories.social_media.findings.1">Facebook Pixel properly installed enabling retargeting and conversion tracking once campaigns launched</span></li>
+                <li><span data-editable-key="assessment.categories.social_media.findings.2">Multi-platform presence established (Instagram, Facebook, YouTube) - foundation exists, just needs activation</span></li>
+                <li><span data-editable-key="assessment.categories.social_media.findings.3">Bio includes relevant hashtags and clear location identifiers helping discoverability</span></li>
+                <li data-more hidden><span data-editable-key="assessment.categories.social_media.findings.4">Only 522 total followers across all platforms - below average for visual tourism business that should have 5,000+ given stunning location and perfect reviews</span></li>
+                <li data-more hidden><span data-editable-key="assessment.categories.social_media.findings.5">Instagram posting frequency of 0.1x per week (essentially once every 10 weeks) = account has low visibility in algorithm</span></li>
+                <li data-more hidden><span data-editable-key="assessment.categories.social_media.findings.6">Only 1 Reel out of 12 recent posts - missing Instagram&#039;s highest-reach format (Reels get 3-5x more reach than static posts)</span></li>
+                <li data-more hidden><span data-editable-key="assessment.categories.social_media.findings.7">YouTube presence minimal with only 8 subscribers and 2 videos - missing evergreen SEO opportunity for &#039;Lakeside resort&#039; searches</span></li>
+                <li data-more hidden><span data-editable-key="assessment.categories.social_media.findings.8">Zero paid advertising detected on Facebook/Instagram despite Pixel installation - missing acquisition opportunity for remote destination requiring awareness building</span></li>
+                <li data-more hidden><span data-editable-key="assessment.categories.social_media.findings.9">No TikTok presence detected - missing younger outdoor adventure demographic (25-40 year olds driving wilderness tourism growth)</span></li>
               </ul><button type="button" class="link-btn show-all" onclick="showAll(this)">Show all 10 findings</button></div>
               <div><h3 class="tp-h3">What we recommend</h3><ol class="as-list">
                 <li><span data-editable-key="assessment.categories.social_media.recommendations.0">Immediately increase Instagram posting to 3x per week using existing website photos (37 images detected) - no new photo shoots needed, just consistent scheduling</span></li>
@@ -567,20 +536,8 @@
                 <li data-more hidden><span data-editable-key="assessment.categories.social_media.recommendations.4">Implement guest content collection process: Email template 3 days post-checkout requesting photo/video shares, create #AndreasResortGetaway branded hashtag, reward shares with 10% off return visit</span></li>
               </ol><button type="button" class="link-btn show-all" onclick="showAll(this)">Show all 5 recommendations</button></div>
             </div>
-            <details class="as-breakdown"><summary>How this score was worked out</summary><div class="table-scroll">
-            <table class="plain-table as-breakdown-table">
-              <thead><tr><th scope="col">Measure</th><th scope="col">Value</th><th scope="col">Score</th><th scope="col">Source</th></tr></thead>
-              <tbody>
-                <tr><th scope="row">Total followers</th><td>522</td><td>45</td><td>SociaVault</td></tr>
-                <tr><th scope="row">Engagement rate</th><td>5.15</td><td>90</td><td>SociaVault (Instagram)</td></tr>
-                <tr><th scope="row">Posting frequency</th><td>0.1</td><td>25</td><td>SociaVault (Instagram)</td></tr>
-                <tr><th scope="row">Platform presence</th><td>count 3, platforms youtube, facebook, instagram</td><td>85</td><td>SociaVault</td></tr>
-                <tr><th scope="row">Content quality</th><td>images 5, carousels 6, reels 1, reel percent 8</td><td>55</td><td>SociaVault</td></tr>
-              </tbody>
-            </table>
-          </div></details>
             <div class="as-area-foot">
-              <span class="as-meta">Sources: SociaVault API, Facebook Ad Library. High confidence.</span>
+              <span class="as-meta">Sources: SociaVault API, Facebook Ad Library.</span>
               <button type="button" class="link-btn" onclick="navigate('tactic1')">In your plan: Social Media Activation</button>
             </div>
           </div>
@@ -592,32 +549,32 @@
             <span class="as-row-grade">B<span class="sr-only"> Good</span></span>
             <span class="as-bar" aria-hidden="true"><span class="as-bar-fill as-bar-fill--good" style="--pct:84"></span></span>
             <span class="as-row-share">10%</span>
-            <span class="as-row-slot" data-slot="checkin" hidden></span>
-            <span class="as-row-slot" data-slot="review" hidden></span>
+            <span class="as-row-slot" data-slot="checkin" data-label="30 days" hidden></span>
+            <span class="as-row-slot" data-slot="review" data-label="90 days" hidden></span>
             <span class="chev" aria-hidden="true"></span>
           </button>
           <div class="as-area-body" id="area-guest_experience-body" hidden>
             <p data-editable-key="assessment.categories.guest_experience.summary">Strong pre-arrival information with comprehensive directions, GPS coordinates, parking details, accessibility transparency, and downloadable arrival sheets. Only remaining gap is no visible operating hours/seasonal schedule</p>
             <div class="as-nums">
-              <div class="as-num as-num--critical"><b>NO - Hours not visible on website</b><small>Operating Hours Displayed</small><small class="as-num-source">Website Content Analysis</small></div>
-              <div class="as-num as-num--good"><b>YES - Comprehensive Location page with GPS, maps, and arrival info</b><small>Directions/Maps Available</small><small class="as-num-source">Website Content Analysis</small></div>
-              <div class="as-num as-num--good"><b>YES - Free parking for vehicles, trailers, quads, snowmobiles</b><small>Parking Information</small><small class="as-num-source">Website Content Analysis</small></div>
-              <div class="as-num as-num--good"><b>YES - Dedicated page with transparent limitations and accommodations</b><small>Accessibility Information</small><small class="as-num-source">Website Content Analysis</small></div>
-              <div class="as-num as-num--none"><b>Manual verification recommended</b><small>Check-in/Check-out Info</small><small class="as-num-source">Website Content Analysis</small></div>
-              <div class="as-num as-num--none"><b>Manual verification recommended</b><small>What to Bring/Pack List</small><small class="as-num-source">Website Content Analysis</small></div>
+              <div class="as-num"><b>NO - Hours not visible on website</b><small>Operating Hours Displayed</small></div>
+              <div class="as-num"><b>YES - Comprehensive Location page with GPS, maps, and arrival info</b><small>Directions/Maps Available</small></div>
+              <div class="as-num"><b>YES - Free parking for vehicles, trailers, quads, snowmobiles</b><small>Parking Information</small></div>
+              <div class="as-num"><b>YES - Dedicated page with transparent limitations and accommodations</b><small>Accessibility Information</small></div>
+              <div class="as-num"><b>Manual verification recommended</b><small>Check-in/Check-out Info</small></div>
+              <div class="as-num"><b>Manual verification recommended</b><small>What to Bring/Pack List</small></div>
             </div>
             <div class="as-columns">
-              <div><h3 class="tp-h3">What we found</h3><ul class="as-list as-list--findings">
-                <li><span class="as-finding as-finding--positive"><span class="sr-only">Strength: </span><span data-editable-key="assessment.categories.guest_experience.findings.0">Pricing information is visible reducing one friction point in decision-making</span> <span class="as-meta">High confidence</span></span></li>
-                <li><span class="as-finding as-finding--positive"><span class="sr-only">Strength: </span><span data-editable-key="assessment.categories.guest_experience.findings.1">Physical address displayed (1234 Lakeshore Drive) provides basic location reference</span> <span class="as-meta">High confidence</span></span></li>
-                <li><span class="as-finding as-finding--positive"><span class="sr-only">Strength: </span><span data-editable-key="assessment.categories.guest_experience.findings.2">Comprehensive Location page with GPS coordinates in multiple formats (decimal, DMS, Plus Code), Scenic Highway access details, and driveway condition warnings</span> <span class="as-meta">High confidence</span></span></li>
-                <li><span class="as-finding as-finding--positive"><span class="sr-only">Strength: </span><span data-editable-key="assessment.categories.guest_experience.findings.3">Free parking clearly stated for personal vehicles, trailers, quads, and snowmobiles - addresses needs of outdoor adventure guests</span> <span class="as-meta">High confidence</span></span></li>
-                <li data-more hidden><span class="as-finding as-finding--positive"><span class="sr-only">Strength: </span><span data-editable-key="assessment.categories.guest_experience.findings.4">Downloadable arrival information sheets and map available for trip planning</span> <span class="as-meta">High confidence</span></span></li>
-                <li data-more hidden><span class="as-finding as-finding--positive"><span class="sr-only">Strength: </span><span data-editable-key="assessment.categories.guest_experience.findings.5">Free shuttle service from regional airport offered with advance notice</span> <span class="as-meta">High confidence</span></span></li>
-                <li data-more hidden><span class="as-finding as-finding--negative"><span class="sr-only">Gap: </span><span data-editable-key="assessment.categories.guest_experience.findings.6">No operating hours/seasonal schedule displayed - visitors don&#039;t know if resort is open during their planned travel dates</span> <span class="as-meta">High confidence</span></span></li>
-                <li data-more hidden><span class="as-finding as-finding--positive"><span class="sr-only">Strength: </span><span data-editable-key="assessment.categories.guest_experience.findings.7">Dedicated accessibility page transparently addresses limitations (no ramps, steps required, terrain conditions) and accommodations (service dogs welcome, staff assistance) - helps guests self-qualify before booking</span> <span class="as-meta">High confidence</span></span></li>
-                <li data-more hidden><span class="as-finding as-finding--negative"><span class="sr-only">Gap: </span><span data-editable-key="assessment.categories.guest_experience.findings.8">No FAQ section detected to answer common pre-arrival questions about weather, activities, what&#039;s included, road conditions</span> <span class="as-meta">High confidence</span></span></li>
-                <li data-more hidden><span class="as-finding as-finding--negative"><span class="sr-only">Gap: </span><span data-editable-key="assessment.categories.guest_experience.findings.9">Missing &#039;What to Bring&#039; or packing list guidance - valuable for first-time Mountain Valley visitors unfamiliar with remote wilderness preparation</span> <span class="as-meta">Medium confidence</span></span></li>
+              <div><h3 class="tp-h3">What we found</h3><ul class="as-list">
+                <li><span data-editable-key="assessment.categories.guest_experience.findings.0">Pricing information is visible reducing one friction point in decision-making</span></li>
+                <li><span data-editable-key="assessment.categories.guest_experience.findings.1">Physical address displayed (1234 Lakeshore Drive) provides basic location reference</span></li>
+                <li><span data-editable-key="assessment.categories.guest_experience.findings.2">Comprehensive Location page with GPS coordinates in multiple formats (decimal, DMS, Plus Code), Scenic Highway access details, and driveway condition warnings</span></li>
+                <li><span data-editable-key="assessment.categories.guest_experience.findings.3">Free parking clearly stated for personal vehicles, trailers, quads, and snowmobiles - addresses needs of outdoor adventure guests</span></li>
+                <li data-more hidden><span data-editable-key="assessment.categories.guest_experience.findings.4">Downloadable arrival information sheets and map available for trip planning</span></li>
+                <li data-more hidden><span data-editable-key="assessment.categories.guest_experience.findings.5">Free shuttle service from regional airport offered with advance notice</span></li>
+                <li data-more hidden><span data-editable-key="assessment.categories.guest_experience.findings.6">No operating hours/seasonal schedule displayed - visitors don&#039;t know if resort is open during their planned travel dates</span></li>
+                <li data-more hidden><span data-editable-key="assessment.categories.guest_experience.findings.7">Dedicated accessibility page transparently addresses limitations (no ramps, steps required, terrain conditions) and accommodations (service dogs welcome, staff assistance) - helps guests self-qualify before booking</span></li>
+                <li data-more hidden><span data-editable-key="assessment.categories.guest_experience.findings.8">No FAQ section detected to answer common pre-arrival questions about weather, activities, what&#039;s included, road conditions</span></li>
+                <li data-more hidden><span data-editable-key="assessment.categories.guest_experience.findings.9">Missing &#039;What to Bring&#039; or packing list guidance - valuable for first-time Mountain Valley visitors unfamiliar with remote wilderness preparation</span></li>
               </ul><button type="button" class="link-btn show-all" onclick="showAll(this)">Show all 10 findings</button></div>
               <div><h3 class="tp-h3">What we recommend</h3><ol class="as-list">
                 <li><span data-editable-key="assessment.categories.guest_experience.recommendations.0">Add prominent &#039;Hours &amp; Seasons&#039; section to homepage and contact page stating operating dates (e.g., &#039;Open May 15 - October 15, 2025&#039;) and daily check-in hours</span></li>
@@ -625,20 +582,8 @@
                 <li><span data-editable-key="assessment.categories.guest_experience.recommendations.2">Develop &#039;Packing List&#039; page for Mountain Valley wilderness: layered clothing for temperature swings, fishing gear (if not provided), bear safety, first aid, photography equipment recommendations</span></li>
               </ol></div>
             </div>
-            <details class="as-breakdown"><summary>How this score was worked out</summary><div class="table-scroll">
-            <table class="plain-table as-breakdown-table">
-              <thead><tr><th scope="col">Measure</th><th scope="col">Value</th><th scope="col">Score</th><th scope="col">Source</th></tr></thead>
-              <tbody>
-                <tr><th scope="row">Hours displayed</th><td>No</td><td>40</td><td>Website Analysis</td></tr>
-                <tr><th scope="row">Directions map</th><td>Yes</td><td>95</td><td>Website Analysis</td></tr>
-                <tr><th scope="row">Parking info</th><td>Yes</td><td>95</td><td>Website Analysis</td></tr>
-                <tr><th scope="row">Accessibility info</th><td>Yes</td><td>90</td><td>Website Analysis</td></tr>
-                <tr><th scope="row">Multi language</th><td>Yes</td><td>100</td><td>Website Analysis</td></tr>
-              </tbody>
-            </table>
-          </div></details>
             <div class="as-area-foot">
-              <span class="as-meta">Sources: Website Analysis, Website Content Analysis. High confidence.</span>
+              <span class="as-meta">Sources: Website Analysis, Website Content Analysis.</span>
               <button type="button" class="link-btn" onclick="navigate('tactic4')">In your plan: Direct Booking and Guest Email</button>
             </div>
           </div>
@@ -650,46 +595,36 @@
             <span class="as-row-grade">B<span class="sr-only"> Good</span></span>
             <span class="as-bar" aria-hidden="true"><span class="as-bar-fill as-bar-fill--good" style="--pct:81"></span></span>
             <span class="as-row-share">10%</span>
-            <span class="as-row-slot" data-slot="checkin" hidden></span>
-            <span class="as-row-slot" data-slot="review" hidden></span>
+            <span class="as-row-slot" data-slot="checkin" data-label="30 days" hidden></span>
+            <span class="as-row-slot" data-slot="review" data-label="90 days" hidden></span>
             <span class="chev" aria-hidden="true"></span>
           </button>
           <div class="as-area-body" id="area-local_visibility-body" hidden>
             <p data-editable-key="assessment.categories.local_visibility.summary">Strong Google Business Profile presence with verified listing and NAP consistency, but missing critical Local Business Schema markup and limited backlink profile constrains local search dominance for &#039;Lakeside resort&#039; and regional tourism queries</p>
             <div class="as-nums">
-              <div class="as-num as-num--good"><b>Verified and active with complete business details</b><small>Google Business Profile Status</small><small class="as-num-source">Google Places API</small></div>
-              <div class="as-num as-num--warning"><b>NO - Local Business Schema missing from website</b><small>Local Business Schema</small><small class="as-num-source">Website Audit</small></div>
-              <div class="as-num as-num--good"><b>Consistent across Google Business Profile and website</b><small>NAP Consistency</small><small class="as-num-source">Google Places API + Website Analysis</small></div>
-              <div class="as-num as-num--warning"><b>77 backlinks from 51 domains including TravelRegion, tourism portal, Roadtrippers</b><small>Local Backlinks</small><small class="as-num-source">Website Audit</small></div>
-              <div class="as-num as-num--good"><b>Listed on TravelRegion, tourism portal, Roadtrippers, Ourbis, Loc8NearMe</b><small>Local Directory Presence</small><small class="as-num-source">SEOptimer backlinks analysis</small></div>
-              <div class="as-num as-num--good"><b>Proper local SEO implementation</b><small>Geo-Targeting</small><small class="as-num-source">Website Audit</small></div>
+              <div class="as-num"><b>Verified and active with complete business details</b><small>Google Business Profile Status</small></div>
+              <div class="as-num"><b>NO - Local Business Schema missing from website</b><small>Local Business Schema</small></div>
+              <div class="as-num"><b>Consistent across Google Business Profile and website</b><small>NAP Consistency</small></div>
+              <div class="as-num"><b>77 backlinks from 51 domains including TravelRegion, tourism portal, Roadtrippers</b><small>Local Backlinks</small></div>
+              <div class="as-num"><b>Listed on TravelRegion, tourism portal, Roadtrippers, Ourbis, Loc8NearMe</b><small>Local Directory Presence</small></div>
+              <div class="as-num"><b>Proper local SEO implementation</b><small>Geo-Targeting</small></div>
             </div>
             <div class="as-columns">
-              <div><h3 class="tp-h3">What we found</h3><ul class="as-list as-list--findings">
-                <li><span class="as-finding as-finding--positive"><span class="sr-only">Strength: </span><span data-editable-key="assessment.categories.local_visibility.findings.0">Google Business Profile fully verified with complete details including address, phone, website, business category (lodging, establishment)</span> <span class="as-meta">High confidence</span></span></li>
-                <li><span class="as-finding as-finding--positive"><span class="sr-only">Strength: </span><span data-editable-key="assessment.categories.local_visibility.findings.1">Listed in premium tourism directories: TravelRegion (official tourism site), Regional Tourism Board (Mountain Valley regional marketing)</span> <span class="as-meta">High confidence</span></span></li>
-                <li><span class="as-finding as-finding--positive"><span class="sr-only">Strength: </span><span data-editable-key="assessment.categories.local_visibility.findings.2">NAP consistency between Google Business Profile and website address strengthens local SEO signals</span> <span class="as-meta">High confidence</span></span></li>
-                <li><span class="as-finding as-finding--positive"><span class="sr-only">Strength: </span><span data-editable-key="assessment.categories.local_visibility.findings.3">Proper geo-targeting implementation helps visitors find the business from regional searches</span> <span class="as-meta">High confidence</span></span></li>
-                <li data-more hidden><span class="as-finding as-finding--positive"><span class="sr-only">Strength: </span><span data-editable-key="assessment.categories.local_visibility.findings.4">Backlinks from high-authority travel sites: Roadtrippers (DA 87), tourism industry portal (DA 76), TravelRegion (DA 69)</span> <span class="as-meta">High confidence</span></span></li>
-                <li data-more hidden><span class="as-finding as-finding--negative"><span class="sr-only">Gap: </span><span data-editable-key="assessment.categories.local_visibility.findings.5">Missing Local Business Schema markup on website - reduces rich snippet eligibility and local search understanding</span> <span class="as-meta">High confidence</span></span></li>
-                <li data-more hidden><span class="as-finding as-finding--negative"><span class="sr-only">Gap: </span><span data-editable-key="assessment.categories.local_visibility.findings.6">Only 77 total backlinks from 51 domains - moderate for wilderness resort competing for &#039;Lakeside accommodations&#039;, &#039;Mountain Valley resort&#039; searches</span> <span class="as-meta">High confidence</span></span></li>
-                <li data-more hidden><span class="as-finding as-finding--negative"><span class="sr-only">Gap: </span><span data-editable-key="assessment.categories.local_visibility.findings.7">Limited content targeting local search queries - no visible blog posts about &#039;Things to do in Lakeside&#039;, &#039;Mountain Valley travel guide&#039;, etc.</span> <span class="as-meta">Medium confidence</span></span></li>
-                <li data-more hidden><span class="as-finding as-finding--negative"><span class="sr-only">Gap: </span><span data-editable-key="assessment.categories.local_visibility.findings.8">No visible Google Posts activity on Google Business Profile - missed opportunity for event/offer/update visibility in local pack</span> <span class="as-meta">Medium confidence</span></span></li>
+              <div><h3 class="tp-h3">What we found</h3><ul class="as-list">
+                <li><span data-editable-key="assessment.categories.local_visibility.findings.0">Google Business Profile fully verified with complete details including address, phone, website, business category (lodging, establishment)</span></li>
+                <li><span data-editable-key="assessment.categories.local_visibility.findings.1">Listed in premium tourism directories: TravelRegion (official tourism site), Regional Tourism Board (Mountain Valley regional marketing)</span></li>
+                <li><span data-editable-key="assessment.categories.local_visibility.findings.2">NAP consistency between Google Business Profile and website address strengthens local SEO signals</span></li>
+                <li><span data-editable-key="assessment.categories.local_visibility.findings.3">Proper geo-targeting implementation helps visitors find the business from regional searches</span></li>
+                <li data-more hidden><span data-editable-key="assessment.categories.local_visibility.findings.4">Backlinks from high-authority travel sites: Roadtrippers (DA 87), tourism industry portal (DA 76), TravelRegion (DA 69)</span></li>
+                <li data-more hidden><span data-editable-key="assessment.categories.local_visibility.findings.5">Missing Local Business Schema markup on website - reduces rich snippet eligibility and local search understanding</span></li>
+                <li data-more hidden><span data-editable-key="assessment.categories.local_visibility.findings.6">Only 77 total backlinks from 51 domains - moderate for wilderness resort competing for &#039;Lakeside accommodations&#039;, &#039;Mountain Valley resort&#039; searches</span></li>
+                <li data-more hidden><span data-editable-key="assessment.categories.local_visibility.findings.7">Limited content targeting local search queries - no visible blog posts about &#039;Things to do in Lakeside&#039;, &#039;Mountain Valley travel guide&#039;, etc.</span></li>
+                <li data-more hidden><span data-editable-key="assessment.categories.local_visibility.findings.8">No visible Google Posts activity on Google Business Profile - missed opportunity for event/offer/update visibility in local pack</span></li>
               </ul><button type="button" class="link-btn show-all" onclick="showAll(this)">Show all 9 findings</button></div>
               
             </div>
-            <details class="as-breakdown"><summary>How this score was worked out</summary><div class="table-scroll">
-            <table class="plain-table as-breakdown-table">
-              <thead><tr><th scope="col">Measure</th><th scope="col">Value</th><th scope="col">Score</th><th scope="col">Source</th></tr></thead>
-              <tbody>
-                <tr><th scope="row">Gbp claimed</th><td>Yes</td><td>100</td><td>Google Places API</td></tr>
-                <tr><th scope="row">Nap consistency</th><td>has address Yes, has phone Yes</td><td>60</td><td>Website Analysis</td></tr>
-                <tr><th scope="row">Local keywords</th><td>Yes</td><td>75</td><td>combined</td></tr>
-              </tbody>
-            </table>
-          </div></details>
             <div class="as-area-foot">
-              <span class="as-meta">Sources: Website Audit, Google Places, Website Analysis, Google Places API, Website Content Analysis. High confidence.</span>
+              <span class="as-meta">Sources: Website Audit, Google Places, Website Analysis, Google Places API, Website Content Analysis.</span>
               <button type="button" class="link-btn" onclick="navigate('tactic3')">In your plan: Local Search Visibility and the Pages That Earn Search Traffic All Year</button>
             </div>
           </div>
@@ -706,22 +641,22 @@
         <div><h2 class="tp-h2">Quick wins</h2><p>Immediate actions you can complete today.</p></div>
         <div><strong><span data-live="wins-done">0</span> of 4</strong> done</div>
       </div>
-      <div class="task-row task-row--win"><input type="checkbox" class="tick" id="aqw-p-1" data-qw="aqw-1" onchange="onQuickWinTick(this)"><div class="task-body"><label class="task-label task-label--strong" for="aqw-p-1" data-editable-key="assessment.quick_wins.0.task">Make phone and email more prominent in website header/footer (currently available on Location page)</label><div class="task-sub" data-editable-key="assessment.quick_wins.0.impact">Visitors to remote wilderness resorts need direct contact for questions about access, weather, activities - expect 20-30% increase in booking inquiries</div></div><span class="task-time">30 minutes · High confidence</span></div>
-      <div class="task-row task-row--win"><input type="checkbox" class="tick" id="aqw-p-2" data-qw="aqw-2" onchange="onQuickWinTick(this)"><div class="task-body"><label class="task-label task-label--strong" for="aqw-p-2" data-editable-key="assessment.quick_wins.1.task">Create simple FAQ page answering &#039;How do I get here?&#039;, &#039;What&#039;s included?&#039;, &#039;Best time to visit?&#039; - currently no Q&amp;A content detected</label><div class="task-sub" data-editable-key="assessment.quick_wins.1.impact">Reduces repetitive inquiry emails, improves SEO for long-tail searches, better GEO/AI visibility</div></div><span class="task-time">2 hours · High confidence</span></div>
-      <div class="task-row task-row--win"><input type="checkbox" class="tick" id="aqw-p-3" data-qw="aqw-3" onchange="onQuickWinTick(this)"><div class="task-body"><label class="task-label task-label--strong" for="aqw-p-3" data-editable-key="assessment.quick_wins.2.task">Post to Instagram 3x per week using existing gorgeous wilderness/cabin photos from website (37 images detected) - currently posting 0.1x per week</label><div class="task-sub" data-editable-key="assessment.quick_wins.2.impact">At 3x weekly posting, expect follower growth from 194 to 400-500 within 6 months, improving brand awareness in outdoor/adventure travel community</div></div><span class="task-time">15 minutes per post · High confidence</span></div>
-      <div class="task-row task-row--win"><input type="checkbox" class="tick" id="aqw-p-4" data-qw="aqw-4" onchange="onQuickWinTick(this)"><div class="task-body"><label class="task-label task-label--strong" for="aqw-p-4" data-editable-key="assessment.quick_wins.3.task">Add Local Business Schema markup to homepage with proper NAP data - currently missing despite having Google Business Profile</label><div class="task-sub" data-editable-key="assessment.quick_wins.3.impact">Improves local search visibility and rich snippet appearance in Google results for &#039;Lakeside resort&#039; searches</div></div><span class="task-time">45 minutes · High confidence</span></div>
+      <div class="task-row task-row--win"><input type="checkbox" class="tick" id="aqw-p-1" data-qw="aqw-1" onchange="onQuickWinTick(this)"><div class="task-body"><label class="task-label task-label--strong" for="aqw-p-1" data-editable-key="assessment.quick_wins.0.task">Make phone and email more prominent in website header/footer (currently available on Location page)</label><div class="task-sub" data-editable-key="assessment.quick_wins.0.impact">Visitors to remote wilderness resorts need direct contact for questions about access, weather, activities - expect 20-30% increase in booking inquiries</div></div><span class="task-time">30 minutes</span></div>
+      <div class="task-row task-row--win"><input type="checkbox" class="tick" id="aqw-p-2" data-qw="aqw-2" onchange="onQuickWinTick(this)"><div class="task-body"><label class="task-label task-label--strong" for="aqw-p-2" data-editable-key="assessment.quick_wins.1.task">Create simple FAQ page answering &#039;How do I get here?&#039;, &#039;What&#039;s included?&#039;, &#039;Best time to visit?&#039; - currently no Q&amp;A content detected</label><div class="task-sub" data-editable-key="assessment.quick_wins.1.impact">Reduces repetitive inquiry emails, improves SEO for long-tail searches, better GEO/AI visibility</div></div><span class="task-time">2 hours</span></div>
+      <div class="task-row task-row--win"><input type="checkbox" class="tick" id="aqw-p-3" data-qw="aqw-3" onchange="onQuickWinTick(this)"><div class="task-body"><label class="task-label task-label--strong" for="aqw-p-3" data-editable-key="assessment.quick_wins.2.task">Post to Instagram 3x per week using existing gorgeous wilderness/cabin photos from website (37 images detected) - currently posting 0.1x per week</label><div class="task-sub" data-editable-key="assessment.quick_wins.2.impact">At 3x weekly posting, expect follower growth from 194 to 400-500 within 6 months, improving brand awareness in outdoor/adventure travel community</div></div><span class="task-time">15 minutes per post</span></div>
+      <div class="task-row task-row--win"><input type="checkbox" class="tick" id="aqw-p-4" data-qw="aqw-4" onchange="onQuickWinTick(this)"><div class="task-body"><label class="task-label task-label--strong" for="aqw-p-4" data-editable-key="assessment.quick_wins.3.task">Add Local Business Schema markup to homepage with proper NAP data - currently missing despite having Google Business Profile</label><div class="task-sub" data-editable-key="assessment.quick_wins.3.impact">Improves local search visibility and rich snippet appearance in Google results for &#039;Lakeside resort&#039; searches</div></div><span class="task-time">45 minutes</span></div>
     </section>
     <section class="as-section" id="as-priority">
       <div class="as-divider"><h2 class="tp-h2">Priority recommendations</h2><span class="as-meta">The changes that will make the biggest difference, in order.</span></div>
       <div class="as-card as-card--table">
         <div class="table-scroll">
           <table class="plain-table as-priority">
-            <thead><tr><th scope="col">Recommendation</th><th scope="col">Area</th><th scope="col">Time</th><th scope="col">Impact</th><th scope="col">Expected result</th><th scope="col">Confidence</th></tr></thead>
+            <thead><tr><th scope="col">Recommendation</th><th scope="col">Area</th><th scope="col">Time</th><th scope="col">Impact</th><th scope="col">Expected result</th></tr></thead>
             <tbody>
-            <tr><th scope="row" data-editable-key="assessment.priority_recommendations.0.text">1. Increase posting frequency to 2-3 times per week with wilderness imagery</th><td>Social Media &amp; Content</td><td>1 hour setup, 30 minutes per post</td><td class="as-impact">High</td><td data-editable-key="assessment.priority_recommendations.0.expected_result">Improved social visibility and engagement</td><td class="as-meta">High</td></tr>
-            <tr><th scope="row" data-editable-key="assessment.priority_recommendations.1.text">2. Implement a post-stay review request process for guests</th><td>Reviews &amp; Reputation</td><td>30 minutes setup</td><td class="as-impact">High</td><td data-editable-key="assessment.priority_recommendations.1.expected_result">Gradual increase in review volume</td><td class="as-meta">High</td></tr>
-            <tr><th scope="row" data-editable-key="assessment.priority_recommendations.2.text">3. Add phone number and email to website header/footer for easier access</th><td>Online Booking &amp; Conversion</td><td>15 minutes</td><td class="as-impact">Medium</td><td data-editable-key="assessment.priority_recommendations.2.expected_result">Improved contact accessibility</td><td class="as-meta">High</td></tr>
-            <tr><th scope="row" data-editable-key="assessment.priority_recommendations.3.text">4. Add seasonal hours/operating dates to website</th><td>Digital Guest Experience</td><td>30 minutes</td><td class="as-impact">Medium</td><td data-editable-key="assessment.priority_recommendations.3.expected_result">Reduced booking uncertainty and pre-arrival inquiries</td><td class="as-meta">High</td></tr>
+            <tr><th scope="row" data-editable-key="assessment.priority_recommendations.0.text">1. Increase posting frequency to 2-3 times per week with wilderness imagery</th><td>Social Media &amp; Content</td><td>1 hour setup, 30 minutes per post</td><td class="as-impact">High</td><td data-editable-key="assessment.priority_recommendations.0.expected_result">Improved social visibility and engagement</td></tr>
+            <tr><th scope="row" data-editable-key="assessment.priority_recommendations.1.text">2. Implement a post-stay review request process for guests</th><td>Reviews &amp; Reputation</td><td>30 minutes setup</td><td class="as-impact">High</td><td data-editable-key="assessment.priority_recommendations.1.expected_result">Gradual increase in review volume</td></tr>
+            <tr><th scope="row" data-editable-key="assessment.priority_recommendations.2.text">3. Add phone number and email to website header/footer for easier access</th><td>Online Booking &amp; Conversion</td><td>15 minutes</td><td class="as-impact">Medium</td><td data-editable-key="assessment.priority_recommendations.2.expected_result">Improved contact accessibility</td></tr>
+            <tr><th scope="row" data-editable-key="assessment.priority_recommendations.3.text">4. Add seasonal hours/operating dates to website</th><td>Digital Guest Experience</td><td>30 minutes</td><td class="as-impact">Medium</td><td data-editable-key="assessment.priority_recommendations.3.expected_result">Reduced booking uncertainty and pre-arrival inquiries</td></tr>
             </tbody>
           </table>
         </div>
@@ -830,7 +765,7 @@
         <section class="tp-card">
           <h2 class="tp-h3">Resources</h2>
           <ul class="tp-links">
-            <li><a href="https://business.facebook.com/" data-editable-link="tac_epjtr3.resources.0" target="_blank" rel="noopener">Meta Business Suite</a><span class="tp-link-note">free scheduling for both accounts</span></li>
+            <li><a href="https://business.facebook.com/" data-editable-link="tac_epjtr3.resources.0" target="_blank" rel="noopener">Meta Business Suite</a></li>
             <li><a href="https://business.instagram.com/" data-editable-link="tac_epjtr3.resources.1" target="_blank" rel="noopener">Instagram for Business</a></li>
             <li><a href="https://help.instagram.com/813938898787367" data-editable-link="tac_epjtr3.resources.2" target="_blank" rel="noopener">About Instagram story highlights</a></li>
           </ul>
@@ -1196,7 +1131,7 @@
           <h2 class="tp-h3">Resources</h2>
           <ul class="tp-links">
             <li><a href="https://support.google.com/business/" data-editable-link="tac_1e8c92.resources.0" target="_blank" rel="noopener">Google Business Profile Help</a></li>
-            <li><a href="https://search.google.com/test/rich-results" data-editable-link="tac_1e8c92.resources.1" target="_blank" rel="noopener">Rich Results Test</a><span class="tp-link-note">checks that your structured data is detected</span></li>
+            <li><a href="https://search.google.com/test/rich-results" data-editable-link="tac_1e8c92.resources.1" target="_blank" rel="noopener">Rich Results Test</a></li>
             <li><a href="https://search.google.com/search-console/about" data-editable-link="tac_1e8c92.resources.2" target="_blank" rel="noopener">Google Search Console</a></li>
             <li><a href="https://www.bingplaces.com/" data-editable-link="tac_1e8c92.resources.3" target="_blank" rel="noopener">Bing Places for Business</a></li>
           </ul>
@@ -1509,7 +1444,7 @@
         <section class="tp-card">
           <h2 class="tp-h3">Resources</h2>
           <ul class="tp-links">
-            <li><a href="https://fightspam.gc.ca/" data-editable-link="tac_1ar79b.resources.0" target="_blank" rel="noopener">Canada&#039;s anti-spam legislation</a><span class="tp-link-note">consent rules for commercial email</span></li>
+            <li><a href="https://fightspam.gc.ca/" data-editable-link="tac_1ar79b.resources.0" target="_blank" rel="noopener">Canada&#039;s anti-spam legislation</a></li>
             <li><a href="https://mailchimp.com/help/about-double-opt-in/" data-editable-link="tac_1ar79b.resources.1" target="_blank" rel="noopener">Mailchimp: about double opt-in</a></li>
           </ul>
         </section>
@@ -2381,14 +2316,11 @@
 </div>
     </section>
 
-    
-
     <section class="rm-gbp" id="gbp-wins">
       <div class="rm-divider">
         <h2 class="rm-h2">Google profile and website wins</h2>
         <span class="rm-divider-count"><span data-live="gbp-done">0</span> of 5 done</span>
       </div>
-      <p class="rm-gbp-intro" data-editable-key="quick_wins.intro">Each of these takes less than an hour, and you can start any of them today without waiting on the rest of the plan.</p>
       <div class="rm-gbp-panel">
       <div class="rm-gbp-group">
       <h3 class="tp-h3">On the Google Business Profile</h3>

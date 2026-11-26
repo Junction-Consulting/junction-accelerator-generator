@@ -345,6 +345,10 @@ function updateProgress() {
   const pct = MODEL.percent(done, total);
 
   setLive('plan-done', done);
+  // The phase of the current week, for the phone's progress card
+  const nowWeek = MODEL.currentWeek(PAGE.weekList, isTicked);
+  const phase = PAGE.phases.find(p => p.weeks.indexOf(nowWeek) !== -1);
+  setLive('current-phase', phase ? phase.name + ' · weeks ' + phase.weeks[0] + ' to ' + phase.weeks[phase.weeks.length - 1] : '');
   setLive('plan-pct', pct + '%');
   setPct('[data-live-donut="plan"]', pct);
 
@@ -496,7 +500,13 @@ function renderDashboard() {
   sub.hidden = !heads[1];
 
   const scores = checkinScores();
-  MODEL.stageSteps(stage, { checkin: !!(scores && scores.checkin), review: !!(scores && scores.review) }).forEach(step => {
+  const steps = MODEL.stageSteps(stage, { checkin: !!(scores && scores.checkin), review: !!(scores && scores.review) });
+  // On the phone one line stands in for the strip: "90-day plan · next up is your 30-day check-in"
+  const labelOf = key => { const li = root.querySelector(`[data-step="${key}"] .stage-step-label`); return li ? li.textContent : ''; };
+  const cur = steps.find(st => st.state === 'current');
+  const nxt = steps.find(st => st.state === 'later');
+  setLive('phone-status', cur ? labelOf(cur.key) + (nxt ? ' · next up is your ' + labelOf(nxt.key) : '') : '');
+  steps.forEach(step => {
     const li = root.querySelector(`[data-step="${step.key}"]`);
     if (!li) return;
     li.setAttribute('data-state', step.state);

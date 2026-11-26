@@ -485,14 +485,16 @@ describe('missing means hidden', () => {
     c.roadmap.weeks[0].next_step = { time_needed: '1 to 2 hours', who: 'You' };
     c.roadmap.closing = 'Keep going.';
     c.quick_wins.note = { title: 'One Thing Worth Watching', text: 'Watch this.' };
+    c.quick_wins.intro = 'Zqx intro.';
+    c.tactics[0].resources[0].description = 'Zqx resource note';
     const r = render(c);
-    expect(r.html).toContain('<span class="tactic-time-value">2 hrs</span>');
+    // Not in the brief or mockups, so never shown (kept in content.json)
+    ['2 hrs', 'Keep going.', 'Zqx intro.', 'Zqx resource note'].forEach(t => expect(r.html).not.toContain(t));
     // Part cards were "What this breaks into", which the redesign removes
     expect(r.html).not.toContain('Zqx');
     // Kept in content.json, but the redesigned dashboard does not show them
     expect(r.html).not.toContain('Profiles and first content');
     expect(r.html).not.toContain('1 to 2 hours');
-    expect(r.html).toContain('<div class="rm-closing" data-editable-key="roadmap.closing">Keep going.</div>');
     expect(r.html).toContain('<strong>One Thing Worth Watching.</strong> Watch this.');
   });
 
@@ -610,11 +612,10 @@ describe('the Assessment page', () => {
     expect(html).toContain('Assessed on October 15, 2026');
   });
 
-  test('summary: score donut coloured by grade, grade and level, headline, strengths, gaps, bottom line, confidence', () => {
+  test('summary: score donut coloured by grade, grade and level, headline, strengths, gaps, bottom line', () => {
     const html = asPage();
     expect(html).toContain(`class="donut donut--lg donut--score-fair" style="--pct:${data.overall.score}"`);
     expect(html).toContain('Overall grade C <span class="as-level as-level--fair">Fair</span>');
-    expect(html).toContain('High confidence');
     expect(html).toContain(plainText(data.executive_summary.headline));
     expect(html).toContain(plainText(data.executive_summary.bottom_line));
     data.executive_summary.key_strengths.forEach((t, i) => expect(html).toContain(`data-editable-key="assessment.executive_summary.key_strengths.${i}">${plainText(t)}`));
@@ -633,19 +634,28 @@ describe('the Assessment page', () => {
     expect(html).toContain('as-bar-fill as-bar-fill--needs-work" style="--pct:62"');
   });
 
-  test('nothing from the record is left out: every metric, finding, recommendation, breakdown measure and source', () => {
+  test('everything the mockups show: every metric, finding, recommendation and source, the quick wins, priorities and market notes', () => {
     const html = asPage();
     Object.entries(data.categories).forEach(([key, cat]) => {
       if (cat.summary) expect(html).toContain(plainText(cat.summary));
       (cat.metrics || []).forEach(m => { expect(html).toContain(`<b>${plainText(m.value)}</b><small>${plainText(m.label)}</small>`); });
       (cat.findings || []).forEach(f => expect(html).toContain(plainText(f.text)));
       (cat.recommendations || []).forEach(r => expect(html).toContain(plainText(typeof r === 'string' ? r : r.text)));
-      Object.keys(cat.breakdown || {}).forEach(k => expect(html).toContain(`<th scope="row">${C.valueText ? k.replace(/_/g, ' ').replace(/^./, c => c.toUpperCase()) : k}</th>`));
       [...(cat.dataSources || []), ...(cat.data_sources || [])].forEach(src => expect(html).toContain(plainText(src)));
     });
     data.quick_wins.forEach(w => { expect(html).toContain(plainText(w.task)); expect(html).toContain(plainText(w.impact)); });
     data.priority_recommendations.forEach(r => { expect(html).toContain(plainText(r.text)); expect(html).toContain(plainText(r.expected_result)); });
-    Object.values(data.tourism_context).forEach(t => expect(html).toContain(plainText(t)));
+    ['visitor_profile', 'discovery_journey', 'seasonal_considerations', 'trip_integration'].forEach(k => expect(html).toContain(plainText(data.tourism_context[k])));
+  });
+
+  test('nothing the mockups do not show: no confidence, no score breakdown, no metric sources', () => {
+    const html = asPage();
+    expect(html).not.toMatch(/confidence/i);
+    expect(html).not.toContain('How this score was worked out');
+    expect(html).not.toContain('as-breakdown');
+    expect(html).not.toContain('<th scope="col">Confidence</th>');
+    // The breakdown measures (for example "Total followers" as a sub-score) are not listed
+    expect(html).not.toContain('<th scope="row">Posting frequency</th>');
   });
 
   test('long lists show the first four and "Show all N"', () => {
@@ -679,7 +689,8 @@ describe('the Assessment page', () => {
     expect(html).toContain('data-slot-note="checkin"');
     expect(html).toContain('data-slot-note="review"');
     Object.keys(data.categories).forEach(() => {});
-    expect((html.match(/<span class="as-row-slot" data-slot="checkin" hidden><\/span>/g) || []).length).toBe(6);
+    expect((html.match(/<span class="as-row-slot" data-slot="checkin" data-label="30 days" hidden><\/span>/g) || []).length).toBe(6);
+    expect((html.match(/<span class="as-row-slot" data-slot="review" data-label="90 days" hidden><\/span>/g) || []).length).toBe(6);
   });
 
   test('missing parts are hidden, not filled', () => {

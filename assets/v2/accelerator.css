@@ -6706,3 +6706,99 @@ button.as-row:hover .as-row-name{color:var(--link-hover)}
   .st-goal{padding:var(--card-pad-phone) var(--page-pad-phone)}
   .st-goal-text{font-size:var(--type-h3)}
 }
+
+/* ══════════════════════════════════════════════
+   PHONE PASS (DESIGN-BRIEF.md section 9)
+   Two things designed for the phone: the to-do list (this week's actions,
+   then the progress card) and the scorecard (overall score and the six
+   areas). Everything else is a plain single column. Touch targets are at
+   least 44px and nothing scrolls sideways at 390px.
+   ══════════════════════════════════════════════ */
+.phone-only{display:none}
+@media(max-width:768px){
+  .phone-only{display:block}
+  .desktop-only{display:none}
+  html,body,#main{overflow-x:hidden}
+  #main{min-width:0}
+  .dash,.tp,.rm,.as,.mat{max-width:100vw;min-width:0}
+  .dash p,.tp p,.rm p,.as p,.mat p,.task-label,.step-body li,.as-list li{overflow-wrap:anywhere}
+
+  /* Dashboard: one status line in place of the six-step strip */
+  .stage-strip{display:none}
+
+  /* 1. The to-do list */
+  .dash-week{gap:var(--gap-lg)}
+  .dash-week .dash-h2{font-size:var(--type-step-title)}
+  .dash-week .task-row{flex-wrap:wrap;column-gap:var(--gap-md);row-gap:0}
+  .dash-week .task-label{flex:1 1 calc(100% - var(--tick-size-phone) - var(--gap-md))}
+  .dash-week .task-row .link-btn{margin-left:calc(var(--tick-size-phone) + var(--gap-md))}
+  .dash-week-foot{flex-direction:column;align-items:stretch;gap:var(--gap-xs)}
+  .dash-week-foot .btn{width:100%;text-align:center}
+  .dash-week-foot .link-btn{white-space:normal}
+
+  /* ...then the progress card, side by side */
+  .dash-progress{flex-direction:row;align-items:center;text-align:left;gap:var(--gap-xl)}
+  .dash-progress .donut{width:var(--donut-phone);height:var(--donut-phone)}
+  .dash-progress .donut-hole{width:var(--donut-phone-hole);height:var(--donut-phone-hole)}
+  .dash-progress .donut-num{font-size:var(--type-donut-phone)}
+  .dash-progress .donut-sub,.dash-progress .phase-bars{display:none}
+  .dash-progress-text{display:flex;flex-direction:column;gap:var(--space-2);min-width:0}
+  .dash-progress-phase{font-size:var(--type-meta);color:var(--text-muted)}
+  .dash-progress--dark .dash-progress-phase{color:var(--text-muted-on-dark)}
+
+  /* Tick rows: the box and its sentence make one target of at least 44px */
+  .tick{width:var(--tick-size-phone);height:var(--tick-size-phone);margin-top:var(--gap-sm)}
+  .task-label,.task-body{padding:var(--gap-sm) 0}
+  .task-body .task-label{padding:0}
+  .task-time{padding-top:var(--gap-sm)}
+
+  /* 2. The scorecard */
+  .as-summary-top{gap:var(--gap-lg)}
+  .as-summary .donut{width:var(--donut-md);height:var(--donut-md)}
+  .as-summary .donut-hole{width:var(--donut-md-hole);height:var(--donut-md-hole)}
+  .as-summary .donut-num{font-size:var(--type-donut-md)}
+  .as-row{padding:var(--gap-md) var(--gap-sm)}
+  /* Later scores stack under each area instead of adding columns */
+  .has-checkin .as-row,.has-review .as-row,.has-checkin.has-review .as-row{
+    grid-template-areas:"name name name chev" "score grade bar bar" "ck ck ck ck" "rv rv rv rv";
+  }
+  .as-row .as-row-slot:not([hidden]){display:flex;gap:var(--gap-sm);align-items:baseline;font-size:var(--type-small)}
+  .as-row-slot[data-slot="checkin"]{grid-area:ck}
+  .as-row-slot[data-slot="review"]{grid-area:rv}
+  .as-row-slot::before{content:attr(data-label);flex:none;width:var(--slot-label-col);color:var(--text-muted)}
+  .as-area-body{padding:var(--gap-xs) var(--gap-sm) var(--gap-lg)}
+  .as-nums{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .as-num b{font-size:var(--type-h3)}
+
+  /* Wide tables scroll inside their own box */
+  .table-scroll{max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}
+
+  /* Touch targets */
+  .btn,.link-btn,.tp-tab,.as-jumps a,.read-row,.tactic-tile,.step-head,.rm-week-head,.as-row,.nav-item,.note-btn,.show-all,.stage-switcher-btn,.nav-coach,.restart-tour-btn,.step-resource,.tp-links a,.st-obj--link,.hamburger,.media-link{min-height:var(--touch-target)}
+  .link-btn,.as-jumps a,.nav-coach,.restart-tour-btn,.step-resource,.tp-links a{display:inline-flex;align-items:center}
+  .as-row--head{min-height:0}
+  .as-jumps{gap:0 var(--gap-xl)}
+  .media{max-width:100%}
+  .media-frame,.media-body img{max-width:100%}
+}
+@media(max-width:768px){
+  .link-btn{min-width:var(--touch-target)}
+  .nav-wordmark{display:flex;align-items:center;min-height:var(--touch-target);margin-top:0}
+}
+@media(max-width:768px){
+  /* Jumps land below the fixed header */
+  .step-card,.rm-week,.as-section,.as-card,.rm-gbp,.as-area{scroll-margin-top:calc(var(--touch-target) + var(--gap-2xl))}
+  /* The to-do list: "How to" sits right under its sentence */
+  .dash-week .task-label{padding-bottom:0}
+  /* The sandbox switcher: one row that scrolls inside itself */
+  .stage-switcher{flex-wrap:nowrap;justify-content:flex-start;overflow-x:auto;gap:var(--space-2)}
+  .stage-switcher-btn{flex:none;white-space:nowrap}
+  .stage-switcher-label{flex:none}
+  body:has(.stage-switcher) #main{padding-bottom:var(--switcher-room)}
+}
+@media(max-width:768px){
+  .rm .rm-action-row .check-label{flex:1 1 calc(100% - var(--tick-size-phone) - var(--gap-md))}
+  .rm-action-row .link-btn{margin-left:calc(var(--tick-size-phone) + var(--gap-md))}
+  .rm-action-row .note-btn{margin-left:0}
+}
+@media(max-width:768px){.rm .task-label{padding-bottom:0}}

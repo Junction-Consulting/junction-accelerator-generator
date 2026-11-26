@@ -232,7 +232,7 @@ export function renderDashboard(content, options = {}) {
     NAV_COACH: C.navCoach(client.coach_email),
     NAV_ASSESSMENT: C.hasAssessment(options.assessment) ? C.navAssessment() : '',
     MATERIALS_PAGE: C.materialsPage({ hasAssessmentPdf: C.hasAssessment(options.assessment), date: formatDate(client.cohort_start), days, checkinWeek: phases.length ? phases[0].weeks[1] : null }),
-    ASSESSMENT_PAGE: C.assessmentPage(options.assessment, { date: formatDate(client.cohort_start), areaTactics: Object.fromEntries(tactics.flatMap((t, i) => (t.assessment_areas || []).map(k => [k, { n: i + 1, title: t.title }])).reverse()) }),
+    ASSESSMENT_PAGE: C.assessmentPage(options.assessment, { days, date: formatDate(client.cohort_start), areaTactics: Object.fromEntries(tactics.flatMap((t, i) => (t.assessment_areas || []).map(k => [k, { n: i + 1, title: t.title }])).reverse()) }),
     PHASE_COUNT_WORD: NUMBER_WORDS[phases.length] || String(phases.length),
     TACTIC_COUNT: String(tactics.length),
     GOAL: goal,
@@ -244,7 +244,6 @@ export function renderDashboard(content, options = {}) {
     PRINT_COHORT_START: client.cohort_start ? `<strong>Cohort Start:</strong> ${formatDate(client.cohort_start)}<br>\n          ` : '',
     PRINT_PHASES: printPhaseText,
     ROADMAP_PHASES: roadmapPhases,
-    ROADMAP_CLOSING: has(roadmap.closing) ? `<div class="rm-closing" data-editable-key="roadmap.closing">${C.md(roadmap.closing)}</div>` : '',
     GBP_WINS: C.gbpWins(qw),
     PRINT_FOOTER: has(client.coach_email) ? `<div class="print-only print-footer">
       <div class="print-footer-brand">Junction</div>

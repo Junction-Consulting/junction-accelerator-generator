@@ -10,6 +10,7 @@ This brief turns the approved mockups into a build spec for the v2 template, com
 - Everything is generated from `content.json` (and the assessment record). No client copy in templates, no layout in content.
 - Every colour, size, radius and spacing value comes from `assets/v2/tokens.css`. No raw values in components.
 - Empty optional content is hidden, never replaced with default text.
+- Show no content, field or feature that is not in this brief or the mockups. If the data holds something the mockups do not show, list it and ask. Do not add it.
 - If something here needs a change outside the v2 paths, stop and list it. Do not make it.
 
 ## 2. The reference mockups
@@ -129,11 +130,11 @@ Notes:
 - Bottom row: Coming up (Sage), 30-day check-in (Sage-25), Materials.
 - A "Pick up where you left off" link to the last step the client opened.
 
-**Assessment.** Nothing from the report is removed.
+**Assessment.** Everything the approved mockups show is kept. Fields in the assessment record that the mockups do not show (confidence levels, the per-measure score breakdowns, metric sources and statuses, internal scoring fields) are not shown.
 
 - Jump links: Summary, Your six areas, Quick wins, Priority recommendations, Your visitors and market.
 - Summary: overall score donut, grade, headline, key strengths, critical gaps, bottom line.
-- Your six areas: one list. Each row shows area, score, grade, bar and share of total, with a chevron, and opens in place to show the summary, the numbers, findings, recommendations, sources and confidence, plus a link to the tactic that covers it when there is one. Which tactic covers which area is stated in the plan, never guessed: an optional `Assessment Areas:` line on each tactic. Long lists show the first few with "Show all N".
+- Your six areas: one list. Each row shows area, score, grade, bar and share of total, with a chevron, and opens in place to show the summary, the numbers, findings, recommendations and sources, plus a link to the tactic that covers it when there is one. Which tactic covers which area is stated in the plan, never guessed: an optional `Assessment Areas:` line on each tactic. Long lists show the first few with "Show all N".
 - Slots for the 30-day check-in and 90-day review: later scores become extra columns in the same list.
 - Quick wins on Sage, tickable, with time and impact.
 - Priority recommendations as a plain table: recommendation, area, time, impact, expected result.
@@ -185,8 +186,8 @@ Two documents, generated per client from the same content and tokens as the dash
 
 The phone view is deliberately limited. Design two things well:
 
-1. **The to-do list**: this week's actions with ticks. "How to" opens that one step.
-2. **The scorecard**: overall score and the six areas, each opening in place.
+1. **The to-do list**: this week's actions with ticks, then the progress card. "How to" opens that one step.
+2. **The scorecard**: overall score and the six areas, each opening in place. When check-in scores exist, they stack under each area rather than adding columns.
 
 Everything else stays reachable from a menu in a plain single-column layout, with no extra design work. Wide tables scroll inside their own box. Touch targets are at least 44px.
 

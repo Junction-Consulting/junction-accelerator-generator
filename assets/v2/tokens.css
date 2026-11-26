@@ -190,6 +190,13 @@
   --finding-dot-top: .55em;
   --materials-max: 900px;
 
+  /* Phone (DESIGN-BRIEF.md section 9) */
+  --donut-phone: 116px;
+  --donut-phone-hole: 84px;
+  --type-donut-phone: 36px;
+  --tick-size-phone: 26px;
+  --slot-label-col: 72px;
+
   /* ── v1 names, re-pointed to the Junction roles ─────────────────────
      The pages not yet rebuilt (phases 2 to 4) still use these. Each one
      goes when the last component using it is rebuilt. */

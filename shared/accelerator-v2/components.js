@@ -116,9 +116,13 @@ function phaseBars(phases, tone) {
 export function progressCard(phases, total, { dark = true, id = '' } = {}) {
   const tone = dark ? 'dark' : 'light';
   return `<section class="dash-card dash-progress dash-progress--${tone}"${id ? ` id="${id}"` : ''}>
-        <h2 class="dash-h3">Your progress</h2>
+        <h2 class="dash-h3 desktop-only">Your progress</h2>
         ${donut({ tone, number: '0%', sub: 'of your plan', live: 'plan', label: 'Plan progress' })}
-        <p><strong><span data-live="plan-done">0</span> of ${total}</strong> tasks checked off</p>
+        <div class="dash-progress-text">
+          <h2 class="dash-h3 phone-only">Your progress</h2>
+          <p><strong><span data-live="plan-done">0</span> of ${total}</strong> tasks checked off</p>
+          <p class="phone-only dash-progress-phase" data-live="current-phase"></p>
+        </div>
         ${phaseBars(phases, tone)}
       </section>`;
 }
@@ -176,7 +180,6 @@ function materialsCard(hasAssessmentPdf, days) {
           <h3 class="dash-h3">Materials</h3>
           ${hasAssessmentPdf ? '<button type="button" class="link-btn" onclick="downloadPDF()">Assessment report (PDF)</button>' : ''}
           <button type="button" class="link-btn plan-ready-only" onclick="printRoadmap()">Your ${days}-day plan (PDF)</button>
-          <button type="button" class="link-btn" onclick="navigate('materials')">All materials</button>
         </section>`;
 }
 
@@ -349,6 +352,7 @@ export function dashboard(ctx) {
     <header class="dash-head">
       <h1 class="dash-h1" id="dash-greeting"></h1>
       <p class="dash-sub" id="dash-sub" hidden></p>
+      <p class="dash-sub phone-only" data-live="phone-status"></p>
     </header>
     ${stageStrip(days)}
     ${before}
@@ -498,16 +502,13 @@ export function resources(tactic) {
   return `<section class="tp-card">
           <h2 class="tp-h3">Resources</h2>
           <ul class="tp-links">
-            ${tactic.resources.map((r, i) => `<li><a href="${attr(r.url)}" data-editable-link="${attr(`${tactic.id}.resources.${i}`)}" target="_blank" rel="noopener">${plain(r.title)}</a>${has(r.description) ? `<span class="tp-link-note">${md(r.description)}</span>` : ''}</li>`).join('\n            ')}
+            ${tactic.resources.map((r, i) => `<li><a href="${attr(r.url)}" data-editable-link="${attr(`${tactic.id}.resources.${i}`)}" target="_blank" rel="noopener">${plain(r.title)}</a></li>`).join('\n            ')}
           </ul>
         </section>`;
 }
 
 export function tacticOverview(tactic, n) {
-  const tc = tactic.time_commitment;
-  const time = tc && has(tc.amount)
-    ? `<p class="tp-time"><strong>Time commitment:</strong> <span class="tactic-time-value">${plain(tc.amount)}</span>${has(tc.detail) ? ` <span class="tactic-time-context">${plain(tc.detail)}</span>` : ''}</p>` : '';
-  const main = proseBlock(tactic, 'what_this_is', 'What this is') + proseBlock(tactic, 'why_it_matters', 'Why it matters') + time;
+  const main = proseBlock(tactic, 'what_this_is', 'What this is') + proseBlock(tactic, 'why_it_matters', 'Why it matters');
   const heard = (tactic.what_we_heard || []).length
     ? `<section class="tp-card tp-card--sage tp-heard">
           <h2 class="tp-h3">What we heard from you</h2>
@@ -871,7 +872,6 @@ export function gbpWins(qw) {
         <h2 class="rm-h2">Google profile and website wins</h2>
         <span class="rm-divider-count"><span data-live="gbp-done">0</span> of ${total} done</span>
       </div>
-      ${has(qw.intro) ? `<p class="rm-gbp-intro" data-editable-key="quick_wins.intro">${md(qw.intro)}</p>` : ''}
       <div class="rm-gbp-panel">
       ${groups.map(quickWinGroup).join('\n      ')}
       </div>
@@ -903,24 +903,14 @@ export function hasAssessment(data) {
 }
 
 // ── Assessment page (DESIGN-BRIEF.md section 6, "Assessment") ─────────────
-// Everything in the record is shown: the summary, every area with all of its
-// metrics, findings, recommendations, score breakdown, sources and
-// confidence, every quick win, every priority recommendation and the
-// visitor and market context. Long lists show the first few and "Show all N".
+// Shows what the approved mockups show, nothing more: the summary, each area
+// with its summary, numbers, findings, recommendations and sources, the quick
+// wins, the priority recommendations, and the four visitor and market notes.
+// Long lists show the first few and "Show all N".
 
 const LIST_FIRST = 4;
 const levelOf = grade => { const l = scoreLevel(grade); return l ? l.key : 'none'; };
 const words = key => String(key || '').replace(/([a-z])([A-Z])/g, (m, a, b) => `${a} ${b}`).replace(/_/g, ' ').replace(/^./, c => c.toUpperCase());
-const confidenceWord = c => (has(c) ? `${words(c)} confidence` : '');
-
-/** A value from the record as text: lists joined, objects as "key value" pairs, true and false as Yes and No. */
-export function valueText(value) {
-  if (value == null || value === '') return '';
-  if (typeof value === 'boolean') return value ? 'Yes' : 'No';
-  if (Array.isArray(value)) return value.map(valueText).filter(Boolean).join(', ');
-  if (typeof value === 'object') return Object.entries(value).map(([k, v]) => `${words(k).toLowerCase()} ${valueText(v)}`).join(', ');
-  return String(value);
-}
 
 /** A list that shows the first few items and a "Show all N" button. */
 function longList(tag, items, label, extraClass = '') {
@@ -941,9 +931,7 @@ export function assessmentSummary(data, { level }) {
         ${donut({ pct: o.score, tone: `score-${level ? level.key : 'none'}`, number: score(o.score), sub: 'out of 100', label: `Overall score ${score(o.score)} out of 100, grade ${o.grade}` })}
         <div class="as-summary-text">
           <h2 class="tp-h2">Overall grade ${text(o.grade || '')}${level ? ` <span class="as-level as-level--${level.key}">${level.word}</span>` : ''}</h2>
-          ${has(o.confidence) ? `<p class="as-meta">${confidenceWord(o.confidence)}</p>` : ''}
           ${has(s.headline) ? `<p${editKey('assessment.executive_summary.headline')}>${text(s.headline)}</p>` : ''}
-          ${has(o.summary) ? `<p${editKey('assessment.overall.summary')}>${text(o.summary)}</p>` : ''}
         </div>
       </div>
       ${(s.key_strengths || []).length || (s.critical_gaps || []).length ? `<div class="as-columns">
@@ -959,16 +947,15 @@ export function assessmentSummary(data, { level }) {
 }
 
 /** One area as a row that opens in place. tactic: { n, title } or null */
-export function areaRow(category, cat, tactic) {
+export function areaRow(category, cat, tactic, reviewLabel = 'Final review') {
   const key = category.key;
   const level = scoreLevel(cat.grade);
   const share = typeof cat.weight === 'number' ? `${Math.round(cat.weight * 100)}%` : '';
-  const metrics = (cat.metrics || []).map(m => `<div class="as-num as-num--${['good', 'warning', 'critical'].includes(m.status) ? m.status : 'none'}"><b>${text(m.value)}</b><small>${text(m.label)}</small>${has(m.source) ? `<small class="as-num-source">${text(m.source)}</small>` : ''}</div>`).join('\n              ');
-  const findings = (cat.findings || []).map((f, i) => `<span class="as-finding as-finding--${f.type === 'positive' ? 'positive' : 'negative'}"><span class="sr-only">${f.type === 'positive' ? 'Strength: ' : 'Gap: '}</span><span${editKey(`assessment.categories.${key}.findings.${i}`)}>${text(f.text)}</span>${has(f.confidence) ? ` <span class="as-meta">${confidenceWord(f.confidence)}</span>` : ''}</span>`);
-  const recs = (cat.recommendations || []).map((r, i) => `<span${editKey(`assessment.categories.${key}.recommendations.${i}`)}>${text(typeof r === 'string' ? r : r.text)}</span>${typeof r === 'object' && has(r.confidence) ? ` <span class="as-meta">${confidenceWord(r.confidence)}</span>` : ''}`);
-  const breakdown = Object.entries(cat.breakdown || {}).map(([k, b]) => [words(k), valueText(b && b.value), b && b.score != null ? `${score(b.score)}${has(b.grade) ? ` ${b.grade}` : ''}` : '', b && has(b.source) ? b.source : '']);
+  const metrics = (cat.metrics || []).map(m => `<div class="as-num"><b>${text(m.value)}</b><small>${text(m.label)}</small></div>`).join('\n              ');
+  const findings = (cat.findings || []).map((f, i) => `<span${editKey(`assessment.categories.${key}.findings.${i}`)}>${text(f.text)}</span>`);
+  const recs = (cat.recommendations || []).map((r, i) => `<span${editKey(`assessment.categories.${key}.recommendations.${i}`)}>${text(typeof r === 'string' ? r : r.text)}</span>`);
   const sources = [...new Set([...(cat.dataSources || []), ...(cat.data_sources || [])])];
-  const sourceLine = [sources.length ? `Sources: ${sources.join(', ')}.` : '', confidenceWord(cat.confidence) ? `${confidenceWord(cat.confidence)}.` : ''].filter(Boolean).join(' ');
+  const sourceLine = sources.length ? `Sources: ${sources.join(', ')}.` : '';
   return `<div class="as-area" data-area="${key}" id="area-${key}">
           <button type="button" class="as-row" aria-expanded="false" aria-controls="area-${key}-body" onclick="toggleArea(this)">
             <span class="as-row-name">${text(category.title)}</span>
@@ -976,8 +963,8 @@ export function areaRow(category, cat, tactic) {
             <span class="as-row-grade">${text(cat.grade || '')}${level ? `<span class="sr-only"> ${level.word}</span>` : ''}</span>
             <span class="as-bar" aria-hidden="true"><span class="as-bar-fill as-bar-fill--${levelOf(cat.grade)}" style="--pct:${Number(cat.score) || 0}"></span></span>
             <span class="as-row-share">${share}</span>
-            <span class="as-row-slot" data-slot="checkin" hidden></span>
-            <span class="as-row-slot" data-slot="review" hidden></span>
+            <span class="as-row-slot" data-slot="checkin" data-label="30 days" hidden></span>
+            <span class="as-row-slot" data-slot="review" data-label="${attr(reviewLabel)}" hidden></span>
             <span class="chev" aria-hidden="true"></span>
           </button>
           <div class="as-area-body" id="area-${key}-body" hidden>
@@ -986,10 +973,9 @@ export function areaRow(category, cat, tactic) {
               ${metrics}
             </div>` : ''}
             ${findings.length || recs.length ? `<div class="as-columns">
-              ${findings.length ? `<div><h3 class="tp-h3">What we found</h3>${longList('ul', findings, 'findings', ' as-list--findings')}</div>` : ''}
+              ${findings.length ? `<div><h3 class="tp-h3">What we found</h3>${longList('ul', findings, 'findings')}</div>` : ''}
               ${recs.length ? `<div><h3 class="tp-h3">What we recommend</h3>${longList('ol', recs, 'recommendations')}</div>` : ''}
             </div>` : ''}
-            ${breakdown.length ? `<details class="as-breakdown"><summary>How this score was worked out</summary>${plainTable(['Measure', 'Value', 'Score', 'Source'], breakdown, ' as-breakdown-table', text)}</details>` : ''}
             <div class="as-area-foot">
               ${sourceLine ? `<span class="as-meta">${text(sourceLine)}</span>` : '<span></span>'}
               ${tactic ? `<button type="button" class="link-btn" onclick="navigate('tactic${tactic.n}')">In your plan: ${plain(tactic.title)}</button>` : ''}
@@ -1002,7 +988,7 @@ export function assessmentQuickWins2(wins) {
   if (!wins.length) return '';
   const rows = wins.map((w, i) => {
     const id = `aqw-p-${i + 1}`;
-    const meta = [w.time_estimate, confidenceWord(w.confidence)].filter(has).map(text).join(' · ');
+    const meta = has(w.time_estimate) ? text(w.time_estimate) : '';
     return `<div class="task-row task-row--win"><input type="checkbox" class="tick" id="${id}" data-qw="aqw-${i + 1}" onchange="onQuickWinTick(this)"><div class="task-body"><label class="task-label task-label--strong" for="${id}"${editKey(`assessment.quick_wins.${i}.task`)}>${text(w.task)}</label>${has(w.impact) ? `<div class="task-sub"${editKey(`assessment.quick_wins.${i}.impact`)}>${text(w.impact)}</div>` : ''}</div>${meta ? `<span class="task-time">${meta}</span>` : ''}</div>`;
   });
   return `<section class="as-card as-card--sage" id="as-quick">
@@ -1016,13 +1002,13 @@ export function assessmentQuickWins2(wins) {
 
 export function priorityTable(recs) {
   if (!recs.length) return '';
-  const rows = recs.map((r, i) => `<tr><th scope="row"${editKey(`assessment.priority_recommendations.${i}.text`)}>${i + 1}. ${text(r.text || r.title)}</th><td>${text(r.category || '')}</td><td>${text(r.time_estimate || '')}</td><td class="as-impact">${text(has(r.impact) ? words(r.impact) : '')}</td><td${editKey(`assessment.priority_recommendations.${i}.expected_result`)}>${text(r.expected_result || '')}</td><td class="as-meta">${text(has(r.confidence) ? words(r.confidence) : '')}</td></tr>`).join('\n            ');
+  const rows = recs.map((r, i) => `<tr><th scope="row"${editKey(`assessment.priority_recommendations.${i}.text`)}>${i + 1}. ${text(r.text || r.title)}</th><td>${text(r.category || '')}</td><td>${text(r.time_estimate || '')}</td><td class="as-impact">${text(has(r.impact) ? words(r.impact) : '')}</td><td${editKey(`assessment.priority_recommendations.${i}.expected_result`)}>${text(r.expected_result || '')}</td></tr>`).join('\n            ');
   return `<section class="as-section" id="as-priority">
       <div class="as-divider"><h2 class="tp-h2">Priority recommendations</h2><span class="as-meta">The changes that will make the biggest difference, in order.</span></div>
       <div class="as-card as-card--table">
         <div class="table-scroll">
           <table class="plain-table as-priority">
-            <thead><tr><th scope="col">Recommendation</th><th scope="col">Area</th><th scope="col">Time</th><th scope="col">Impact</th><th scope="col">Expected result</th><th scope="col">Confidence</th></tr></thead>
+            <thead><tr><th scope="col">Recommendation</th><th scope="col">Area</th><th scope="col">Time</th><th scope="col">Impact</th><th scope="col">Expected result</th></tr></thead>
             <tbody>
             ${rows}
             </tbody>
@@ -1035,14 +1021,12 @@ export function priorityTable(recs) {
 const MARKET_TITLES = { visitor_profile: 'Who visits', discovery_journey: 'How they find you', seasonal_considerations: 'Your seasons', trip_integration: 'Where you fit in a trip' };
 
 export function visitorsAndMarket(ctx) {
-  const entries = Object.entries(ctx || {}).filter(([, v]) => has(typeof v === 'string' ? v : valueText(v)));
+  const entries = Object.keys(MARKET_TITLES).filter(k => has((ctx || {})[k])).map(k => [k, ctx[k]]);
   if (!entries.length) return '';
-  const order = Object.keys(MARKET_TITLES);
-  entries.sort((a, b) => (order.indexOf(a[0]) + 1 || 99) - (order.indexOf(b[0]) + 1 || 99));
   return `<section class="as-section" id="as-market">
       <div class="as-divider"><h2 class="tp-h2">Your visitors and market</h2></div>
       <div class="as-market">
-        ${entries.map(([k, v]) => `<div class="as-card as-card--tile"><h3 class="tp-h3">${MARKET_TITLES[k] || text(words(k))}</h3><p${editKey(`assessment.tourism_context.${k}`)}>${text(typeof v === 'string' ? v : valueText(v))}</p></div>`).join('\n        ')}
+        ${entries.map(([k, v]) => `<div class="as-card as-card--tile"><h3 class="tp-h3">${MARKET_TITLES[k]}</h3><p${editKey(`assessment.tourism_context.${k}`)}>${text(v)}</p></div>`).join('\n        ')}
       </div>
     </section>`;
 }
@@ -1051,13 +1035,13 @@ export function visitorsAndMarket(ctx) {
  * The whole Assessment page, or '' when there is no assessment.
  * options: { date, areaTactics: { areaKey: { n, title } } }
  */
-export function assessmentPage(data, { date, areaTactics = {} } = {}) {
+export function assessmentPage(data, { date, areaTactics = {}, days = 90 } = {}) {
   if (!hasAssessment(data)) return '';
   const categories = ASSESSMENT_CATEGORIES.filter(c => data.categories[c.key]);
   const wins = data.quick_wins || [];
   const recs = data.priority_recommendations || [];
   const level = scoreLevel(data.overall.grade);
-  const hasMarket = Object.values(data.tourism_context || {}).some(v => has(typeof v === 'string' ? v : valueText(v)));
+  const hasMarket = Object.keys(MARKET_TITLES).some(k => has((data.tourism_context || {})[k]));
   const jumps = [['as-summary', 'Summary'], ['as-areas', `Your ${categories.length === 6 ? 'six' : categories.length} areas`], wins.length && ['as-quick', 'Quick wins'], recs.length && ['as-priority', 'Priority recommendations'], hasMarket && ['as-market', 'Your visitors and market']].filter(Boolean);
   return `<section id="page-assessment" class="page">
   <div class="as">
@@ -1075,8 +1059,8 @@ export function assessmentPage(data, { date, areaTactics = {} } = {}) {
     <section class="as-section" id="as-areas">
       <div class="as-divider"><h2 class="tp-h2">${jumps[1][1]}</h2><span class="as-meta">Open an area to see what we found and what we recommend.</span></div>
       <div class="as-card as-card--list" data-areas>
-        <div class="as-row as-row--head" aria-hidden="true"><span>Area</span><span>Score</span><span>Grade</span><span>Where it sits</span><span>Share of total</span><span data-slot="checkin" hidden>30 days</span><span data-slot="review" hidden>90 days</span><span></span></div>
-        ${categories.map(c => areaRow(c, data.categories[c.key], areaTactics[c.key] || null)).join('\n        ')}
+        <div class="as-row as-row--head" aria-hidden="true"><span>Area</span><span>Score</span><span>Grade</span><span>Where it sits</span><span>Share of total</span><span data-slot="checkin" hidden>30 days</span><span data-slot="review" hidden>${days} days</span><span></span></div>
+        ${categories.map(c => areaRow(c, data.categories[c.key], areaTactics[c.key] || null, `${days} days`)).join('\n        ')}
       </div>
       <span class="sample-badge" data-sample-only hidden>Sample scores for review</span>
       <div class="as-slots" data-checkin-slots>
