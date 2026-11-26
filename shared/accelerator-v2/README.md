@@ -1,5 +1,7 @@
 # Accelerator v2
 
+The approved redesign is `DESIGN-BRIEF.md`, with the reference screens in `mockups/` (design canvas files: a visual reference only, never copied into the product).
+
 Code for v2 of the accelerator dashboard, as defined in `SCHEMA.md`. Nothing in the live system uses it yet. See "Accelerator v2 (in development)" in the repository's `CLAUDE.md` for the rules that apply to v2 work.
 
 ## Modules

@@ -62,6 +62,20 @@ Items are grouped by what breaks if they are skipped.
 - **Why:** server-side accelerator PDFs are not implemented (`generateAcceleratorHTML` throws "not yet available"); the roadmap prints from the browser, as in v1. SCHEMA.md builds the dashboard and the PDFs from the same `content.json` and tokens.
 - **Change:** build the accelerator PDF HTML from `content.json` with the v2 components and `assets/v2/tokens.css`, including Edit Mode edits (item 8).
 
+## Added by the v2 redesign (DESIGN-BRIEF.md)
+
+### 11. The Junction brand outside the dashboard
+- **Files:** `shared/accelerator-v2/plan-json.js` (`DASHBOARD_ORIGIN`, inside v2 but tied to the live domain), `shared/user-menu.js`, `shared/auth.js`, the login pages (`login/`, `auth/`), the email templates in `supabase/functions/`, and the `coach_email` on each client record
+- **Why:** the v2 page no longer names eLearningU, but the weekly emails link to `accelerator.elearningu.com`, the coach email is an `@elearningu.com` address, and the login and account pages still use the old brand. `user-menu.js` and the Edit Mode switch in `auth.js` draw themselves for the old dark sidebar; `assets/v2/accelerator.css` redraws them for the light page ground, which works but depends on their class names.
+- **Change:** decide the dashboard domain and coach addresses, then rebrand the shared pages and emails. Give `user-menu.js` and the Edit Mode switch a light variant so v2 no longer needs to override them.
+
+### 12. Browser-only state added by the redesign
+- **Why:** the brief keeps the plan's read state (stage 2a) and the last step opened in the browser for now. Like item 7, they are lost on a new device and invisible to the coach.
+- **Change:** move them to the account with notes and Quick Wins ticks (item 7).
+
+### 13. Web fonts from Google
+- **Why:** v2 loads Epilogue, DM Sans, Bebas Neue and Fraunces from Google Fonts. The Content Security Policy in `netlify.toml` already allows `fonts.googleapis.com` and `fonts.gstatic.com`, so nothing is blocked today. Keep them allowed if the policy changes, or self-host the four fonts in `assets/v2/`.
+
 ## Already handled inside v2
 
 For reference, these do not need changes outside v2:

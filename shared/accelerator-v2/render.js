@@ -52,9 +52,9 @@ export const PROGRESS_HEADLINES = [
 ];
 
 export function tourSteps(days, hasQuickWins) {
-  const sections = hasQuickWins ? `tactics, your ${days}-day roadmap, and quick wins` : `tactics and your ${days}-day roadmap`;
+  const sections = `your tactics, your ${days}-day roadmap and your materials`;
   return [
-    { targetId: 'sidebar', mobileTargetId: 'nav-hamburger', page: 'dashboard', title: 'Navigate Your Plan', desc: `Use the sidebar to move between sections: ${sections}. Your progress is always visible at the top.`, mobileDesc: `Tap the menu icon to move between sections: ${sections}.`, pos: 'right', pad: 0, mobilePos: 'below' },
+    { targetId: 'sidebar', mobileTargetId: 'nav-hamburger', page: 'dashboard', title: 'Find your way around', desc: `Use the menu on the left to move between sections: ${sections}. The small ring beside each tactic fills as you tick off its tasks.`, mobileDesc: `Tap the menu icon to move between sections: ${sections}.`, pos: 'right', pad: 0, mobilePos: 'below' },
     { targetId: 'goal-section', page: 'dashboard', title: 'Your Progress Overview', desc: `This shows your overall completion and which phase of the ${days}-day plan you are in. The ring fills as you check off tasks.`, pos: 'below', pad: 8 },
     { targetId: 'objectives-section', mobileTargetId: 'next-step-main', page: 'dashboard', title: 'Your Next Step', desc: 'This card shows exactly what to focus on right now. It updates automatically as you complete tasks in the roadmap.', pos: 'below', pad: 8 },
     { targetId: 'tactic-cards-section', page: 'dashboard', title: 'Track Each Tactic', desc: 'These cards show progress on each of your tactics. Click a card to open its detailed guide and implementation steps.', mobileDesc: 'These cards show progress on each of your tactics. Tap a card to open its detailed guide and implementation steps.', pos: 'below', pad: 8 },
@@ -189,11 +189,6 @@ export function renderDashboard(content, options = {}) {
   </div>
 </section>` : '';
 
-  const navQuickWins = hasQuickWins ? `<div class="nav-item" data-page="gbp" onclick="navigate('gbp')">
-      <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd"/></svg>
-      Quick Wins
-    </div>` : '';
-
   const printPhases = phases.map(p => `${C.plain(p.name)} (Weeks ${p.weeks[0]}-${p.weeks[1]})`);
   const printPhaseText = printPhases.length > 1 ? `${printPhases.slice(0, -1).join(', ')}, and ${printPhases[printPhases.length - 1]}` : printPhases.join('');
   const pageDataJson = JSON.stringify(data).replace(/</g, '\\u003c');
@@ -227,9 +222,13 @@ export function renderDashboard(content, options = {}) {
     TOTAL_TASKS: String(data.checks.all.length),
     FIRST_HEADLINE: C.attr(data.headlines[0].headline),
     FIRST_SUBCOPY: C.attr(data.headlines[0].subcopy),
-    NAV_TACTICS: tactics.map((t, i) => C.navTactic(t, i + 1)).join('\n    '),
-    NAV_QUICK_WINS: navQuickWins,
+    NAV_TACTICS: tactics.map((t, i) => C.navTactic(t, i + 1, data.checks.byTactic[i + 1].length)).join('\n      '),
+    NAV_COACH: C.navCoach(client.coach_email),
     NAV_ASSESSMENT: C.hasAssessment(options.assessment) ? C.navAssessment() : '',
+    MATERIALS_ASSESSMENT: C.hasAssessment(options.assessment) ? `<div class="materials-item">
+      <div><h2>Assessment report</h2><p>Your digital marketing assessment as a document to print or save as a PDF.</p></div>
+      <button type="button" class="materials-btn" onclick="downloadPDF()">Download PDF</button>
+    </div>` : '',
     ASSESSMENT_PAGE: C.assessmentPage(options.assessment, { date: formatDate(client.cohort_start) }),
     PHASE_COUNT: String(phases.length),
     PHASE_COUNT_WORD: NUMBER_WORDS[phases.length] || String(phases.length),
@@ -246,7 +245,7 @@ export function renderDashboard(content, options = {}) {
     ROADMAP_PHASES: roadmapPhases,
     ROADMAP_CLOSING: has(roadmap.closing) ? `<div class="callout callout-roadmap" data-editable-key="roadmap.closing">${C.md(roadmap.closing)}</div>` : '',
     PRINT_FOOTER: has(client.coach_email) ? `<div class="print-only print-footer">
-      <div class="print-footer-brand">e<span>Learning</span>U</div>
+      <div class="print-footer-brand">Junction</div>
       <div class="print-footer-contact">
         <strong>Questions?</strong> Contact your coach at ${C.attr(client.coach_email)}
       </div>

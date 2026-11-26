@@ -3,102 +3,64 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>90-Day Accelerator: Andrea&#039;s Resort</title>
+<title>90-day Accelerator: Andrea&#039;s Resort</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&amp;family=DM+Sans:wght@400;500&amp;family=Epilogue:wght@600;900&amp;family=Fraunces:ital,wght@1,900&amp;display=swap">
 <link rel="stylesheet" href="/assets/v2/tokens.css">
 <link rel="stylesheet" href="/assets/v2/accelerator.css">
 </head>
-<body data-client-slug="andreas-resort" data-client-name="Andrea&#039;s Resort" data-cohort-start="2026-10-15" data-total-days="90" data-total-weeks="12" data-template-version="v2">
+<body data-client-slug="andreas-resort" data-client-name="Andrea&#039;s Resort" data-cohort-start="2026-10-15" data-total-days="90" data-total-weeks="12" data-template-version="v2" data-plan="ready">
 <a href="#main" class="skip-link">Skip to main content</a>
 
-<!-- ── Sidebar ──────────────────────────────────────────────── -->
-<aside id="sidebar">
-  <div class="sidebar-logo">
-    <img id="sidebar-logo-img" src="/assets/v2/elearningu-logo-white.png" alt="eLearningU">
-  </div>
-  <div class="sidebar-progress-wrap">
-    <div class="sidebar-ring-wrap">
-      <svg class="sidebar-ring-svg" viewBox="0 0 56 56">
-        <circle class="sidebar-ring-bg" cx="28" cy="28" r="23"/>
-        <circle class="sidebar-ring-progress" id="sidebar-ring" cx="28" cy="28" r="23" stroke-dasharray="144.51" stroke-dashoffset="144.51"/>
-      </svg>
+<!-- ── Navigation (DESIGN-BRIEF.md section 4) ─────────────────── -->
+<aside id="sidebar" aria-label="Navigation">
+  <a class="nav-wordmark" href="#main" onclick="navigate('dashboard');return false;"><img src="/assets/v2/junction-wordmark-solid.png" alt="Junction" width="140" height="20"></a>
+  <nav class="nav-panel" aria-label="Main">
+    <div class="nav-group">
+      <button type="button" class="nav-item active" data-page="dashboard" onclick="navigate('dashboard')" aria-current="page">Dashboard</button>
+      <button type="button" class="nav-item" data-page="assessment" onclick="navigate('assessment')">Assessment</button>
+      <button type="button" class="nav-item plan-ready-only" data-page="strategy" onclick="navigate('strategy')">Strategy</button>
+      <button type="button" class="nav-item plan-coming-only" data-page="materials" onclick="navigate('materials')">Materials</button>
     </div>
-    <div class="sidebar-progress-text">
-      <div class="sidebar-progress-main">
-        <span class="sidebar-progress-count-big" id="sidebar-done">0</span>
-        <span class="sidebar-progress-of">of <span id="sidebar-total">33</span></span>
-      </div>
-      <div class="sidebar-progress-label">tasks checked off</div>
+    <div class="nav-group plan-ready-only">
+      <div class="nav-section-label">Tactics</div>
+      <button type="button" class="nav-item" data-page="tactic1" onclick="navigate('tactic1')"><span class="nav-ring" id="nav-ring-1" aria-hidden="true"></span><span class="nav-label">Social Media</span><span class="sr-only" id="nav-ring-1-text">, 0 of 8 done</span></button>
+      <button type="button" class="nav-item" data-page="tactic2" onclick="navigate('tactic2')"><span class="nav-ring" id="nav-ring-2" aria-hidden="true"></span><span class="nav-label">Reviews</span><span class="sr-only" id="nav-ring-2-text">, 0 of 5 done</span></button>
+      <button type="button" class="nav-item" data-page="tactic3" onclick="navigate('tactic3')"><span class="nav-ring" id="nav-ring-3" aria-hidden="true"></span><span class="nav-label">Local Search</span><span class="sr-only" id="nav-ring-3-text">, 0 of 14 done</span></button>
+      <button type="button" class="nav-item" data-page="tactic4" onclick="navigate('tactic4')"><span class="nav-ring" id="nav-ring-4" aria-hidden="true"></span><span class="nav-label">Booking and Email</span><span class="sr-only" id="nav-ring-4-text">, 0 of 6 done</span></button>
     </div>
-  </div>
-  <nav>
-    <div class="nav-item active" data-page="dashboard" onclick="navigate('dashboard')">
-      <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"/></svg>
-      Dashboard
+    <div class="nav-group plan-ready-only">
+      <div class="nav-section-label">Your plan</div>
+      <button type="button" class="nav-item" id="nav-roadmap" data-page="roadmap" onclick="navigate('roadmap')">90-day roadmap</button>
+      <button type="button" class="nav-item" data-page="materials" onclick="navigate('materials')">Materials</button>
     </div>
-    <div class="nav-section-label">Your Assessment</div>
-    <div class="nav-item" data-page="assessment" onclick="navigate('assessment')">
-      <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm2 10a1 1 0 10-2 0v3a1 1 0 102 0v-3zm2-3a1 1 0 011 1v5a1 1 0 11-2 0v-5a1 1 0 011-1zm4-1a1 1 0 10-2 0v7a1 1 0 102 0V8z" clip-rule="evenodd"/></svg>
-      Assessment
+    <div class="nav-group plan-coming-only">
+      <div class="nav-section-label">Coming with your plan</div>
+      <span class="nav-item nav-item--coming" aria-disabled="true">Strategy</span>
+      <span class="nav-item nav-item--coming" aria-disabled="true">Tactics</span>
+      <span class="nav-item nav-item--coming" aria-disabled="true">90-day roadmap</span>
     </div>
-    <div class="nav-section-label">Your Strategy</div>
-    <div class="nav-item" data-page="strategy" onclick="navigate('strategy')">
-      <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 6a3 3 0 013-3h10a1 1 0 01.8 1.6L14.25 8l2.55 3.4A1 1 0 0116 13H6a1 1 0 00-1 1v3a1 1 0 11-2 0V6z" clip-rule="evenodd"/></svg>
-      Strategy
-    </div>
-    <div class="nav-section-label">The Tactics</div>
-    <div class="nav-item" data-page="tactic1" onclick="navigate('tactic1')">
-      <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zm6-4a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zm6-3a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"/></svg>
-      Social Media
-    </div>
-    <div class="nav-item" data-page="tactic2" onclick="navigate('tactic2')">
-      <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"/></svg>
-      Reviews
-    </div>
-    <div class="nav-item" data-page="tactic3" onclick="navigate('tactic3')">
-      <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path d="M15 8a3 3 0 10-2.977-2.63l-4.94 2.47a3 3 0 100 4.319l4.94 2.47a3 3 0 10.895-1.789l-4.94-2.47a3.027 3.027 0 000-.74l4.94-2.47C13.456 7.68 14.19 8 15 8z"/></svg>
-      Local Search
-    </div>
-    <div class="nav-item" data-page="tactic4" onclick="navigate('tactic4')">
-      <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/><path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/></svg>
-      Booking and Email
-    </div>
-    <div class="nav-section-label">Your Plan</div>
-    <div class="nav-item" id="nav-roadmap" data-page="roadmap" onclick="navigate('roadmap')">
-      <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"/></svg>
-      90-Day Roadmap
-      <span class="nav-badge" id="roadmap-badge">0%</span>
-    </div>
-    <div class="nav-item" data-page="gbp" onclick="navigate('gbp')">
-      <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd"/></svg>
-      Quick Wins
-    </div>
-
-    <!-- Activity Nav (Admin/PSM/Coach only) -->
-    <div class="nav-section-label" id="nav-activity-label" hidden>Insights</div>
-    <div class="nav-item" id="nav-activity" onclick="navigate('activity')" hidden>
-      <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zm6-4a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zm6-3a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"/></svg>
-      Activity
+    <div class="nav-group" id="nav-activity-group" hidden>
+      <div class="nav-section-label" id="nav-activity-label">Insights</div>
+      <button type="button" class="nav-item" id="nav-activity" data-page="activity" onclick="navigate('activity')">Activity</button>
     </div>
   </nav>
+  <a class="nav-coach" href="mailto:conner@elearningu.com">Email your coach</a>
   <div class="sidebar-footer">
-    <button id="replayTour" class="restart-tour-btn" onclick="startWelcome()">
-      <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>
-      Replay welcome tour
-    </button>
+    <button id="replayTour" class="restart-tour-btn" onclick="startWelcome()">Replay welcome tour</button>
   </div>
   <div class="sidebar-user">
     <div class="user-menu-container" id="sidebarUserMenu"></div>
   </div>
 </aside>
 
-<!-- ── Mobile header ────────────────────────────────────────── -->
+<!-- ── Phone header ─────────────────────────────────────────── -->
 <header class="mobile-header">
-  <img id="mobile-logo-img" src="/assets/v2/elearningu-logo-white.png" alt="eLearningU">
+  <img id="mobile-logo-img" src="/assets/v2/junction-wordmark-solid.png" alt="Junction" width="118" height="17">
   <div class="user-menu-container" id="mobileUserMenu"></div>
-  <button class="hamburger" id="nav-hamburger" onclick="toggleMobileDrawer()" aria-label="Menu">
-    <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"/></svg>
-  </button>
+  <button class="hamburger" id="nav-hamburger" onclick="toggleMobileDrawer()" aria-label="Open menu" aria-controls="sidebar" aria-expanded="false"><span></span><span></span><span></span></button>
 </header>
 <div id="drawerOverlay" onclick="closeMobileDrawer()"></div>
 
@@ -1961,7 +1923,7 @@
 
     <div class="print-only">
       <div class="print-cover">
-        <div class="print-cover-logo">e<span>Learning</span>U</div>
+        <img class="print-cover-logo" src="/assets/v2/junction-wordmark-solid.png" alt="Junction" width="140" height="20">
         <div class="print-cover-badge">Tourism Digital Marketing Accelerator</div>
         <h1 class="print-cover-title">90-Day Roadmap</h1>
         <p class="print-cover-client">Andrea&#039;s Resort</p>
@@ -1971,14 +1933,14 @@
           <strong>Program Duration:</strong> 12 Weeks
         </p>
         <div class="print-cover-footer">
-          <p>Prepared by eLearningU Accelerator Program</p>
+          <p>Prepared by the Junction Accelerator</p>
         </div>
       </div>
 
       <div class="print-overview">
         <div class="print-section">
           <h2>About This Document</h2>
-          <p>This roadmap was created as part of the eLearningU Tourism Digital Marketing Accelerator program. It is a customised 90-day action plan designed specifically for Andrea&#039;s Resort based on a comprehensive digital assessment and strategy session with your coach.</p>
+          <p>This roadmap was created as part of the Junction Accelerator. It is a customised 90-day action plan designed specifically for Andrea&#039;s Resort based on a comprehensive digital assessment and strategy session with your coach.</p>
           <p>The plan is structured as 12 weekly sprints across three phases: Foundation (Weeks 1-4), Growth (Weeks 5-8), and Scale (Weeks 9-12).</p>
         </div>
         <div class="print-section">
@@ -2697,10 +2659,28 @@
     
 
     <div class="print-only print-footer">
-      <div class="print-footer-brand">e<span>Learning</span>U</div>
+      <div class="print-footer-brand">Junction</div>
       <div class="print-footer-contact">
         <strong>Questions?</strong> Contact your coach at conner@elearningu.com
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- MATERIALS (interim: Phase 4 builds the full page) -->
+<section id="page-materials" class="page">
+  <div class="materials">
+    <div class="materials-header">
+      <h1>Materials</h1>
+      <p>Everything from your program, in one place.</p>
+    </div>
+    <div class="materials-item">
+      <div><h2>Assessment report</h2><p>Your digital marketing assessment as a document to print or save as a PDF.</p></div>
+      <button type="button" class="materials-btn" onclick="downloadPDF()">Download PDF</button>
+    </div>
+    <div class="materials-item plan-ready-only">
+      <div><h2>Your 90-day plan</h2><p>Your roadmap as a document to print or save as a PDF.</p></div>
+      <button type="button" class="materials-btn" onclick="printRoadmap()">Download PDF</button>
     </div>
   </div>
 </section>
@@ -2792,8 +2772,8 @@
     <div class="wm-header">
       <div class="wm-header-glow-a"></div>
       <div class="wm-header-glow-b"></div>
-      <img class="wm-logo-img" src="/assets/v2/elearningu-logo-white.png" alt="eLearningU">
-      <div class="wm-eyebrow">eLearningU · Accelerator Program</div>
+      <img class="wm-logo-img" src="/assets/v2/junction-wordmark-reverse.png" alt="Junction" width="140" height="20">
+      <div class="wm-eyebrow">Accelerator</div>
       <div class="wm-headline">Welcome to your<br>Implementation Plan.</div>
       <p class="wm-subline">You already deliver a five-star stay. This plan is about making sure the people planning their next trip can see that before they book somewhere else.</p>
     </div>
@@ -2888,7 +2868,7 @@
   <img id="lightbox-img" src="" alt="">
 </div>
 
-<script type="application/json" id="accelerator-data">{"slug":"andreas-resort","totalWeeks":12,"totalDays":90,"checks":{"all":["chk_ufgw6d","chk_iwcfe9","chk_h4fm6g","chk_mtz30d","chk_0itnz2","chk_v9z5bn","chk_fon2vi","chk_9dcuqw","chk_gqpumh","chk_2awi16","chk_hift62","chk_l9oowu","chk_9k5vv8","chk_bav8kl","chk_duris1","chk_dfrglv","chk_yxj4xx","chk_cvlzr8","chk_ttpjqu","chk_onueeu","chk_78juin","chk_h9xvqb","chk_buyhyb","chk_xz8jd0","chk_gnvc5y","chk_cvu7u2","chk_4os2y5","chk_udta4i","chk_kkmhgj","chk_knq63c","chk_98rr04","chk_pa9juj","chk_ihak5d"],"byWeek":{"1":["chk_ufgw6d","chk_iwcfe9","chk_h4fm6g","chk_mtz30d"],"2":["chk_0itnz2","chk_v9z5bn"],"3":["chk_fon2vi","chk_9dcuqw","chk_gqpumh"],"4":["chk_2awi16","chk_hift62","chk_l9oowu"],"5":["chk_9k5vv8","chk_bav8kl","chk_duris1"],"6":["chk_dfrglv","chk_yxj4xx","chk_cvlzr8"],"7":["chk_ttpjqu","chk_onueeu","chk_78juin"],"8":["chk_h9xvqb","chk_buyhyb"],"9":["chk_xz8jd0","chk_gnvc5y","chk_cvu7u2"],"10":["chk_4os2y5","chk_udta4i"],"11":["chk_kkmhgj","chk_knq63c","chk_98rr04"],"12":["chk_pa9juj","chk_ihak5d"]},"byPhase":{"1":["chk_ufgw6d","chk_iwcfe9","chk_h4fm6g","chk_mtz30d","chk_0itnz2","chk_v9z5bn","chk_fon2vi","chk_9dcuqw","chk_gqpumh","chk_2awi16","chk_hift62","chk_l9oowu"],"2":["chk_9k5vv8","chk_bav8kl","chk_duris1","chk_dfrglv","chk_yxj4xx","chk_cvlzr8","chk_ttpjqu","chk_onueeu","chk_78juin","chk_h9xvqb","chk_buyhyb"],"3":["chk_xz8jd0","chk_gnvc5y","chk_cvu7u2","chk_4os2y5","chk_udta4i","chk_kkmhgj","chk_knq63c","chk_98rr04","chk_pa9juj","chk_ihak5d"]},"byTactic":{"1":["chk_ufgw6d","chk_iwcfe9","chk_h4fm6g","chk_0itnz2","chk_v9z5bn","chk_fon2vi","chk_9dcuqw","chk_98rr04"],"2":["chk_mtz30d","chk_gqpumh","chk_2awi16","chk_hift62","chk_l9oowu"],"3":["chk_9k5vv8","chk_bav8kl","chk_duris1","chk_dfrglv","chk_yxj4xx","chk_cvlzr8","chk_ttpjqu","chk_onueeu","chk_buyhyb","chk_cvu7u2","chk_udta4i","chk_knq63c","chk_pa9juj","chk_ihak5d"],"4":["chk_78juin","chk_h9xvqb","chk_xz8jd0","chk_gnvc5y","chk_4os2y5","chk_kkmhgj"]}},"weeks":{"1":{"id":"wk_ttofa1","title":"Profiles and Pattern","tactic":1,"timeNeeded":null,"who":null},"2":{"id":"wk_wc90vw","title":"A Month of Content","tactic":1,"timeNeeded":null,"who":null},"3":{"id":"wk_2lrnhl","title":"First Reels and Review Link","tactic":1,"timeNeeded":null,"who":null},"4":{"id":"wk_dtmxj4","title":"Review Requests Go Live","tactic":2,"timeNeeded":null,"who":null},"5":{"id":"wk_zkohrc","title":"Google Profile","tactic":3,"timeNeeded":null,"who":null},"6":{"id":"wk_mfu8sf","title":"Technical Basics","tactic":3,"timeNeeded":null,"who":null},"7":{"id":"wk_3t7ry6","title":"Listings and Book Now","tactic":3,"timeNeeded":null,"who":null},"8":{"id":"wk_avsrb8","title":"Booking Page","tactic":4,"timeNeeded":null,"who":null},"9":{"id":"wk_89b2uc","title":"Guest List","tactic":4,"timeNeeded":null,"who":null},"10":{"id":"wk_pgi1vu","title":"Pre-arrival Email","tactic":4,"timeNeeded":null,"who":null},"11":{"id":"wk_9avvdn","title":"Seasonal Email","tactic":4,"timeNeeded":null,"who":null},"12":{"id":"wk_ypo1fi","title":"Review and Plan Ahead","tactic":4,"timeNeeded":null,"who":null}},"tactics":[{"num":1,"id":"tac_epjtr3","name":"Social Media"},{"num":2,"id":"tac_yvx418","name":"Reviews"},{"num":3,"id":"tac_1e8c92","name":"Local Search"},{"num":4,"id":"tac_1ar79b","name":"Booking and Email"}],"phases":[{"num":1,"name":"Foundation","weeks":[1,2,3,4]},{"num":2,"name":"Growth","weeks":[5,6,7,8]},{"num":3,"name":"Scale","weeks":[9,10,11,12]}],"steps":{"stp_vucz24":1,"stp_osaub2":1,"stp_7clf9y":1,"stp_k6gy5q":1,"stp_7v8nsi":1,"stp_hky03f":1,"stp_abuzpq":2,"stp_6sh853":2,"stp_stx85v":2,"stp_1x7cm0":2,"stp_7zsjl9":3,"stp_1t63jy":3,"stp_nirjva":3,"stp_vns9eq":3,"stp_usobs9":3,"stp_nsxfk6":3,"stp_sgvdaa":3,"stp_9yv5z9":3,"stp_t68zdj":3,"stp_blf1ij":3,"stp_pywh56":4,"stp_zgdzxg":4,"stp_h87vst":4,"stp_hrs4ys":4,"stp_77peyg":4,"stp_wd1l3v":4},"headlines":[{"max":10,"headline":"Getting started","subcopy":"You're in the first phase of your accelerator. Keep checking items off your roadmap to move forward."},{"max":25,"headline":"Building momentum","subcopy":"You've made solid progress on the early weeks. Keep the pace going."},{"max":50,"headline":"Halfway there","subcopy":"You're closing in on the halfway mark. The work you've done so far is the base for everything that follows."},{"max":75,"headline":"The home stretch","subcopy":"Impressive progress. Most of the plan is behind you. Keep working through the remaining weeks."},{"max":99,"headline":"Almost there","subcopy":"Just a few more items to check off. Finish strong."},{"max":100,"headline":"You did it","subcopy":"Every week is complete. Take a moment to look back at how much you've put in place."}],"tour":[{"targetId":"sidebar","mobileTargetId":"nav-hamburger","page":"dashboard","title":"Navigate Your Plan","desc":"Use the sidebar to move between sections: tactics, your 90-day roadmap, and quick wins. Your progress is always visible at the top.","mobileDesc":"Tap the menu icon to move between sections: tactics, your 90-day roadmap, and quick wins.","pos":"right","pad":0,"mobilePos":"below"},{"targetId":"goal-section","page":"dashboard","title":"Your Progress Overview","desc":"This shows your overall completion and which phase of the 90-day plan you are in. The ring fills as you check off tasks.","pos":"below","pad":8},{"targetId":"objectives-section","mobileTargetId":"next-step-main","page":"dashboard","title":"Your Next Step","desc":"This card shows exactly what to focus on right now. It updates automatically as you complete tasks in the roadmap.","pos":"below","pad":8},{"targetId":"tactic-cards-section","page":"dashboard","title":"Track Each Tactic","desc":"These cards show progress on each of your tactics. Click a card to open its detailed guide and implementation steps.","mobileDesc":"These cards show progress on each of your tactics. Tap a card to open its detailed guide and implementation steps.","pos":"below","pad":8},{"targetId":"nav-roadmap","mobileTargetId":"roadmap-page-header","page":"dashboard","mobilePage":"roadmap","title":"Your Week-by-Week Action Plan","desc":"The 90-Day Roadmap is your primary tracker. Each week shows exactly what to do and how to confirm it's done.","pos":"right","pad":8,"mobilePos":"below"},{"targetId":"wc-1","mobileTargetId":"w1-checklist","page":"roadmap","weekToOpen":1,"title":"Check Off Tasks as You Go","desc":"Each week has a completion checklist on the right. Check off each item as you finish it. Your progress saves automatically.","pos":"below","pad":8},{"targetId":"w1-howto-example","page":"roadmap","weekToOpen":1,"title":"\"How To\" Links","desc":"Tap \"how to\" next to any action to jump straight to the step-by-step guide in the tactics section: exactly what to click, type, and verify.","pos":"below","pad":8},{"targetId":"w1-note-example","page":"roadmap","weekToOpen":1,"title":"Notes on Every Task","desc":"Tap the pencil icon on any checklist item to add a personal note: a reminder, a date, a decision. Notes save automatically and are here every time you return.","pos":"below","pad":8}]}</script>
+<script type="application/json" id="accelerator-data">{"slug":"andreas-resort","totalWeeks":12,"totalDays":90,"checks":{"all":["chk_ufgw6d","chk_iwcfe9","chk_h4fm6g","chk_mtz30d","chk_0itnz2","chk_v9z5bn","chk_fon2vi","chk_9dcuqw","chk_gqpumh","chk_2awi16","chk_hift62","chk_l9oowu","chk_9k5vv8","chk_bav8kl","chk_duris1","chk_dfrglv","chk_yxj4xx","chk_cvlzr8","chk_ttpjqu","chk_onueeu","chk_78juin","chk_h9xvqb","chk_buyhyb","chk_xz8jd0","chk_gnvc5y","chk_cvu7u2","chk_4os2y5","chk_udta4i","chk_kkmhgj","chk_knq63c","chk_98rr04","chk_pa9juj","chk_ihak5d"],"byWeek":{"1":["chk_ufgw6d","chk_iwcfe9","chk_h4fm6g","chk_mtz30d"],"2":["chk_0itnz2","chk_v9z5bn"],"3":["chk_fon2vi","chk_9dcuqw","chk_gqpumh"],"4":["chk_2awi16","chk_hift62","chk_l9oowu"],"5":["chk_9k5vv8","chk_bav8kl","chk_duris1"],"6":["chk_dfrglv","chk_yxj4xx","chk_cvlzr8"],"7":["chk_ttpjqu","chk_onueeu","chk_78juin"],"8":["chk_h9xvqb","chk_buyhyb"],"9":["chk_xz8jd0","chk_gnvc5y","chk_cvu7u2"],"10":["chk_4os2y5","chk_udta4i"],"11":["chk_kkmhgj","chk_knq63c","chk_98rr04"],"12":["chk_pa9juj","chk_ihak5d"]},"byPhase":{"1":["chk_ufgw6d","chk_iwcfe9","chk_h4fm6g","chk_mtz30d","chk_0itnz2","chk_v9z5bn","chk_fon2vi","chk_9dcuqw","chk_gqpumh","chk_2awi16","chk_hift62","chk_l9oowu"],"2":["chk_9k5vv8","chk_bav8kl","chk_duris1","chk_dfrglv","chk_yxj4xx","chk_cvlzr8","chk_ttpjqu","chk_onueeu","chk_78juin","chk_h9xvqb","chk_buyhyb"],"3":["chk_xz8jd0","chk_gnvc5y","chk_cvu7u2","chk_4os2y5","chk_udta4i","chk_kkmhgj","chk_knq63c","chk_98rr04","chk_pa9juj","chk_ihak5d"]},"byTactic":{"1":["chk_ufgw6d","chk_iwcfe9","chk_h4fm6g","chk_0itnz2","chk_v9z5bn","chk_fon2vi","chk_9dcuqw","chk_98rr04"],"2":["chk_mtz30d","chk_gqpumh","chk_2awi16","chk_hift62","chk_l9oowu"],"3":["chk_9k5vv8","chk_bav8kl","chk_duris1","chk_dfrglv","chk_yxj4xx","chk_cvlzr8","chk_ttpjqu","chk_onueeu","chk_buyhyb","chk_cvu7u2","chk_udta4i","chk_knq63c","chk_pa9juj","chk_ihak5d"],"4":["chk_78juin","chk_h9xvqb","chk_xz8jd0","chk_gnvc5y","chk_4os2y5","chk_kkmhgj"]}},"weeks":{"1":{"id":"wk_ttofa1","title":"Profiles and Pattern","tactic":1,"timeNeeded":null,"who":null},"2":{"id":"wk_wc90vw","title":"A Month of Content","tactic":1,"timeNeeded":null,"who":null},"3":{"id":"wk_2lrnhl","title":"First Reels and Review Link","tactic":1,"timeNeeded":null,"who":null},"4":{"id":"wk_dtmxj4","title":"Review Requests Go Live","tactic":2,"timeNeeded":null,"who":null},"5":{"id":"wk_zkohrc","title":"Google Profile","tactic":3,"timeNeeded":null,"who":null},"6":{"id":"wk_mfu8sf","title":"Technical Basics","tactic":3,"timeNeeded":null,"who":null},"7":{"id":"wk_3t7ry6","title":"Listings and Book Now","tactic":3,"timeNeeded":null,"who":null},"8":{"id":"wk_avsrb8","title":"Booking Page","tactic":4,"timeNeeded":null,"who":null},"9":{"id":"wk_89b2uc","title":"Guest List","tactic":4,"timeNeeded":null,"who":null},"10":{"id":"wk_pgi1vu","title":"Pre-arrival Email","tactic":4,"timeNeeded":null,"who":null},"11":{"id":"wk_9avvdn","title":"Seasonal Email","tactic":4,"timeNeeded":null,"who":null},"12":{"id":"wk_ypo1fi","title":"Review and Plan Ahead","tactic":4,"timeNeeded":null,"who":null}},"tactics":[{"num":1,"id":"tac_epjtr3","name":"Social Media"},{"num":2,"id":"tac_yvx418","name":"Reviews"},{"num":3,"id":"tac_1e8c92","name":"Local Search"},{"num":4,"id":"tac_1ar79b","name":"Booking and Email"}],"phases":[{"num":1,"name":"Foundation","weeks":[1,2,3,4]},{"num":2,"name":"Growth","weeks":[5,6,7,8]},{"num":3,"name":"Scale","weeks":[9,10,11,12]}],"steps":{"stp_vucz24":1,"stp_osaub2":1,"stp_7clf9y":1,"stp_k6gy5q":1,"stp_7v8nsi":1,"stp_hky03f":1,"stp_abuzpq":2,"stp_6sh853":2,"stp_stx85v":2,"stp_1x7cm0":2,"stp_7zsjl9":3,"stp_1t63jy":3,"stp_nirjva":3,"stp_vns9eq":3,"stp_usobs9":3,"stp_nsxfk6":3,"stp_sgvdaa":3,"stp_9yv5z9":3,"stp_t68zdj":3,"stp_blf1ij":3,"stp_pywh56":4,"stp_zgdzxg":4,"stp_h87vst":4,"stp_hrs4ys":4,"stp_77peyg":4,"stp_wd1l3v":4},"headlines":[{"max":10,"headline":"Getting started","subcopy":"You're in the first phase of your accelerator. Keep checking items off your roadmap to move forward."},{"max":25,"headline":"Building momentum","subcopy":"You've made solid progress on the early weeks. Keep the pace going."},{"max":50,"headline":"Halfway there","subcopy":"You're closing in on the halfway mark. The work you've done so far is the base for everything that follows."},{"max":75,"headline":"The home stretch","subcopy":"Impressive progress. Most of the plan is behind you. Keep working through the remaining weeks."},{"max":99,"headline":"Almost there","subcopy":"Just a few more items to check off. Finish strong."},{"max":100,"headline":"You did it","subcopy":"Every week is complete. Take a moment to look back at how much you've put in place."}],"tour":[{"targetId":"sidebar","mobileTargetId":"nav-hamburger","page":"dashboard","title":"Find your way around","desc":"Use the menu on the left to move between sections: your tactics, your 90-day roadmap and your materials. The small ring beside each tactic fills as you tick off its tasks.","mobileDesc":"Tap the menu icon to move between sections: your tactics, your 90-day roadmap and your materials.","pos":"right","pad":0,"mobilePos":"below"},{"targetId":"goal-section","page":"dashboard","title":"Your Progress Overview","desc":"This shows your overall completion and which phase of the 90-day plan you are in. The ring fills as you check off tasks.","pos":"below","pad":8},{"targetId":"objectives-section","mobileTargetId":"next-step-main","page":"dashboard","title":"Your Next Step","desc":"This card shows exactly what to focus on right now. It updates automatically as you complete tasks in the roadmap.","pos":"below","pad":8},{"targetId":"tactic-cards-section","page":"dashboard","title":"Track Each Tactic","desc":"These cards show progress on each of your tactics. Click a card to open its detailed guide and implementation steps.","mobileDesc":"These cards show progress on each of your tactics. Tap a card to open its detailed guide and implementation steps.","pos":"below","pad":8},{"targetId":"nav-roadmap","mobileTargetId":"roadmap-page-header","page":"dashboard","mobilePage":"roadmap","title":"Your Week-by-Week Action Plan","desc":"The 90-Day Roadmap is your primary tracker. Each week shows exactly what to do and how to confirm it's done.","pos":"right","pad":8,"mobilePos":"below"},{"targetId":"wc-1","mobileTargetId":"w1-checklist","page":"roadmap","weekToOpen":1,"title":"Check Off Tasks as You Go","desc":"Each week has a completion checklist on the right. Check off each item as you finish it. Your progress saves automatically.","pos":"below","pad":8},{"targetId":"w1-howto-example","page":"roadmap","weekToOpen":1,"title":"\"How To\" Links","desc":"Tap \"how to\" next to any action to jump straight to the step-by-step guide in the tactics section: exactly what to click, type, and verify.","pos":"below","pad":8},{"targetId":"w1-note-example","page":"roadmap","weekToOpen":1,"title":"Notes on Every Task","desc":"Tap the pencil icon on any checklist item to add a personal note: a reminder, a date, a decision. Notes save automatically and are here every time you return.","pos":"below","pad":8}]}</script>
 <script src="/assets/v2/accelerator.js"></script>
 
 <!-- Shared scripts: login, progress, Edit Mode, analytics, sharing (unchanged from v1) -->

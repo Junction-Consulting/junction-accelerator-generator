@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Materials</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500&family=Epilogue:wght@600;900&display=swap">
+<style>
+body{margin:0}
+a{color:#2B764A}a:hover{color:#CD1561}
+.nv a{display:flex;align-items:center;gap:10px;color:#1C1C1A;text-decoration:none;padding:9px 12px;border-radius:8px}
+.nv a.on{background:#1C1C1A;color:#F4F0E8;font-weight:500}
+.nv .lb{font-size:12px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:#6A6862;padding:0 12px 6px}
+.nv i{width:16px;height:16px;border-radius:50%;background:#DDD5C6;flex:none}
+.t1{margin:0;font-family:'Epilogue',sans-serif;font-weight:900;font-size:40px;line-height:1.05;letter-spacing:-.01em}
+.t3{margin:0;font-family:'Epilogue',sans-serif;font-weight:600;font-size:19px}
+.it{display:flex;flex-wrap:wrap;gap:12px 24px;align-items:center;background:#FFFFFF;border-radius:14px;padding:22px 26px}
+.it>div{flex:1 1 360px;min-width:0}
+.it p{margin:2px 0 0;font-size:15px;color:#6A6862}
+.btn{background:#2B764A;color:#F4F0E8;text-decoration:none;font-weight:500;font-size:15px;padding:10px 18px;border-radius:8px}
+</style>
+</helmet>
+<div style="display: flex; flex-wrap: wrap; gap: 36px; min-height: 900px; box-sizing: border-box; padding: 28px 40px 56px 28px; background: #F4F0E8; color: #1C1C1A; font-family: 'DM Sans', system-ui, sans-serif; font-size: 16px; line-height: 1.5">
+
+<aside style="flex: 1 0 232px; max-width: 256px; align-self: flex-start; display: flex; flex-direction: column; gap: 22px">
+<img src="/_blob/76b99816b510c96d0f3e5ae8ff2b1bf3" alt="Junction" style="width: 140px; height: auto; display: block; margin: 8px 0 0 12px">
+<nav aria-label="Main" class="nv" style="background: #FFFFFF; border-radius: 16px; padding: 14px; display: flex; flex-direction: column; gap: 18px; font-size: 15px">
+<div><a href="R3-Dashboard.dc.html">Dashboard</a><a href="R3-Assessment.dc.html">Assessment</a><a href="R3-Strategy.dc.html">Strategy</a></div>
+<div><div class="lb">Tactics</div><a href="R3-TacticOverview.dc.html"><i style="background: conic-gradient(#2E7D4F 67%, #DDD5C6 0)"></i>Social Media</a><a href="#"><i></i>Reviews</a><a href="#"><i></i>Local Search</a><a href="#"><i></i>Booking and Email</a></div>
+<div><div class="lb">Your plan</div><a href="R3-Roadmap.dc.html">90-day roadmap</a><a href="#" class="on">Materials</a></div>
+</nav>
+<a href="#" style="margin-left: 12px; font-weight: 500; font-size: 15px">Email your coach</a>
+</aside>
+
+<main style="flex: 999 1 560px; min-width: 0; max-width: 900px; padding-top: 8px; display: flex; flex-direction: column; gap: 10px">
+
+<div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 18px">
+<h1 class="t1">Materials</h1>
+<p style="margin: 0; color: #6A6862">Everything from your program, in one place.</p>
+</div>
+
+<div class="it"><div><h2 class="t3">Assessment report</h2><p>Your full digital marketing assessment as a PDF. October 15, 2026.</p></div><a href="#" class="btn">Download PDF</a></div>
+<div class="it"><div><h2 class="t3">Onboarding call notes</h2><p>What you told us about the resort, your guests and your goals.</p></div><a href="#" class="btn">Read the notes</a></div>
+<div class="it"><div><h2 class="t3">Coaching call summary</h2><p>What we decided together, and why these four tactics.</p></div><a href="#" class="btn">Read the summary</a></div>
+<div class="it"><div><h2 class="t3">Your 90-day plan</h2><p>Strategy, tactics and roadmap as one PDF to print or share with your team.</p></div><a href="#" class="btn">Download PDF</a></div>
+<div class="it" style="background: #EDE6DA"><div><h2 class="t3">30-day check-in report</h2><p>Arrives after your check-in, once week 4 is done.</p></div></div>
+<div class="it" style="background: #EDE6DA"><div><h2 class="t3">90-day review</h2><p>Arrives when your plan is done.</p></div></div>
+
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1320,"height":900}}'>
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+</body>
+</html>

@@ -64,11 +64,14 @@ const cycle = (n, size = 4) => ((n - 1) % size) + 1;
 
 // ── Navigation ─────────────────────────────────────────────────────────────
 
-export function navTactic(tactic, n) {
-  return `<div class="nav-item" data-page="tactic${n}" onclick="navigate('tactic${n}')">
-      <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor">${ICONS.tactics[cycle(n) - 1]}</svg>
-      ${plain(tactic.short_label || tactic.title)}
-    </div>`;
+export function navTactic(tactic, n, total) {
+  return `<button type="button" class="nav-item" data-page="tactic${n}" onclick="navigate('tactic${n}')"><span class="nav-ring" id="nav-ring-${n}" aria-hidden="true"></span><span class="nav-label">${plain(tactic.short_label || tactic.title)}</span><span class="sr-only" id="nav-ring-${n}-text">, 0 of ${total} done</span></button>`;
+}
+
+/** "Email your coach" under the navigation panel. Left out when there is no coach email. */
+export function navCoach(email) {
+  if (!has(email)) return '';
+  return `<a class="nav-coach" href="mailto:${attr(email)}">Email your coach</a>`;
 }
 
 // ── Dashboard ──────────────────────────────────────────────────────────────
@@ -793,9 +796,5 @@ export function assessmentPage(data, { date } = {}) {
 }
 
 export function navAssessment() {
-  return `<div class="nav-section-label">Your Assessment</div>
-    <div class="nav-item" data-page="assessment" onclick="navigate('assessment')">
-      <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm2 10a1 1 0 10-2 0v3a1 1 0 102 0v-3zm2-3a1 1 0 011 1v5a1 1 0 11-2 0v-5a1 1 0 011-1zm4-1a1 1 0 10-2 0v7a1 1 0 102 0V8z" clip-rule="evenodd"/></svg>
-      Assessment
-    </div>`;
+  return `<button type="button" class="nav-item" data-page="assessment" onclick="navigate('assessment')">Assessment</button>`;
 }

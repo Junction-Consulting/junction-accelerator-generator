@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Assessment</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500&family=Epilogue:wght@600;900&display=swap">
+<style>
+body{margin:0}
+a{color:#2B764A}a:hover{color:#CD1561}
+.nv a{display:flex;align-items:center;gap:10px;color:#1C1C1A;text-decoration:none;padding:9px 12px;border-radius:8px}
+.nv a.on{background:#1C1C1A;color:#F4F0E8;font-weight:500}
+.nv .lb{font-size:12px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:#6A6862;padding:0 12px 6px}
+.nv i{width:16px;height:16px;border-radius:50%;background:#DDD5C6;flex:none}
+.t1{margin:0;font-family:'Epilogue',sans-serif;font-weight:900;font-size:40px;line-height:1.05;letter-spacing:-.01em}
+.t2{margin:0;font-family:'Epilogue',sans-serif;font-weight:900;font-size:26px;line-height:1.15}
+.t3{margin:0 0 8px;font-family:'Epilogue',sans-serif;font-weight:600;font-size:18px}
+.sec{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:12px;border-bottom:2px solid #2E7D4F;padding-bottom:10px}
+.row{display:grid;grid-template-columns:minmax(0,2.2fr) 56px 56px minmax(0,2fr) 90px 24px;gap:14px;align-items:center;padding:16px 14px;color:#1C1C1A;text-decoration:none}
+.row b{font-weight:500}
+.bar{height:10px;border-radius:5px;background:#EDE6DA;display:block}
+.bar u{display:block;height:10px;border-radius:5px;background:#2E7D4F}
+.chev{display:inline-block;width:10px;height:10px;border-right:2.5px solid #1C1C1A;border-bottom:2.5px solid #1C1C1A;transform:rotate(45deg);margin-bottom:4px}
+.chev.up{transform:rotate(-135deg);margin:4px 0 0}
+.cb{width:24px;height:24px;margin:0;accent-color:#1A4D2E;flex:none}
+.num{background:#FFFFFF;border-radius:10px;padding:14px 16px}
+.num b{display:block;font-weight:500;font-size:22px}
+.num small{font-size:14px;color:#6A6862}
+th,td{text-align:left;padding:14px}
+thead th{font-weight:500;color:#6A6862;font-size:14px;padding:10px 14px}
+tbody th{font-weight:500}
+.mk{background:#FFFFFF;border-radius:14px;padding:22px 24px}
+.mk p{margin:0;font-size:15px}
+</style>
+</helmet>
+<div style="display: flex; flex-wrap: wrap; gap: 36px; min-height: 2560px; box-sizing: border-box; padding: 28px 40px 56px 28px; background: #F4F0E8; color: #1C1C1A; font-family: 'DM Sans', system-ui, sans-serif; font-size: 16px; line-height: 1.5">
+
+<aside style="flex: 1 0 232px; max-width: 256px; align-self: flex-start; display: flex; flex-direction: column; gap: 22px">
+<img src="/_blob/76b99816b510c96d0f3e5ae8ff2b1bf3" alt="Junction" style="width: 140px; height: auto; display: block; margin: 8px 0 0 12px">
+<nav aria-label="Main" class="nv" style="background: #FFFFFF; border-radius: 16px; padding: 14px; display: flex; flex-direction: column; gap: 18px; font-size: 15px">
+<div><a href="R3-Dashboard.dc.html">Dashboard</a><a href="#" class="on">Assessment</a><a href="R3-Strategy.dc.html">Strategy</a></div>
+<div><div class="lb">Tactics</div><a href="R3-TacticOverview.dc.html"><i style="background: conic-gradient(#2E7D4F 67%, #DDD5C6 0)"></i>Social Media</a><a href="#"><i></i>Reviews</a><a href="#"><i></i>Local Search</a><a href="#"><i></i>Booking and Email</a></div>
+<div><div class="lb">Your plan</div><a href="R3-Roadmap.dc.html">90-day roadmap</a><a href="R3-Materials.dc.html">Materials</a></div>
+</nav>
+<a href="#" style="margin-left: 12px; font-weight: 500; font-size: 15px">Email your coach</a>
+</aside>
+
+<main style="flex: 999 1 560px; min-width: 0; padding-top: 8px; display: flex; flex-direction: column; gap: 36px">
+
+<div style="display: flex; flex-direction: column; gap: 16px">
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 16px">
+<div style="display: flex; flex-direction: column; gap: 8px">
+<h1 class="t1">Your digital marketing assessment</h1>
+<p style="margin: 0; color: #6A6862">Assessed on October 15, 2026</p>
+</div>
+<a href="#" style="color: #1C1C1A; border: 2px solid #1C1C1A; text-decoration: none; font-weight: 500; font-size: 15px; padding: 10px 18px; border-radius: 8px">Download as PDF</a>
+</div>
+<nav aria-label="On this page" style="display: flex; flex-wrap: wrap; gap: 6px 26px; font-size: 15px; font-weight: 500">
+<a href="#summary">Summary</a><a href="#areas">Your six areas</a><a href="#quick">Quick wins</a><a href="#priority">Priority recommendations</a><a href="#market">Your visitors and market</a>
+</nav>
+</div>
+
+<section id="summary" style="background: #FFFFFF; border-radius: 16px; padding: 32px; display: flex; flex-direction: column; gap: 26px">
+<div style="display: flex; flex-wrap: wrap; gap: 32px; align-items: center">
+<div role="img" aria-label="Overall score 74 out of 100" style="width: 180px; height: 180px; border-radius: 50%; flex: none; background: conic-gradient(#C4963A 74%, #EDE6DA 0); display: flex; align-items: center; justify-content: center"><div style="width: 132px; height: 132px; border-radius: 50%; background: #FFFFFF; display: flex; flex-direction: column; align-items: center; justify-content: center"><div style="font-family: 'Bebas Neue', sans-serif; font-size: 64px; line-height: 0.9">74</div><div style="font-size: 14px; color: #6A6862">out of 100</div></div></div>
+<div style="flex: 1 1 380px; min-width: 0; display: flex; flex-direction: column; gap: 8px">
+<h2 class="t2">Overall grade C</h2>
+<p style="margin: 0">Andrea's Resort has excellent technical foundations, perfect Google ratings, and strong pre-arrival information, but is not fully using social media. Key opportunities include increasing posting frequency and adding operating hours to the website.</p>
+</div>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 32px">
+<div style="flex: 1 1 300px; min-width: 0"><h3 class="t3">Key strengths</h3><ul style="margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 8px"><li>Perfect 5.0 Google rating with 20 reviews demonstrates exceptional guest satisfaction.</li><li>Strong technical website foundation with SSL and mobile optimisation.</li><li>Integrated booking system makes reservations straightforward.</li></ul></div>
+<div style="flex: 1 1 300px; min-width: 0"><h3 class="t3">Critical gaps</h3><ul style="margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 8px"><li>Social media is below recommended levels: 522 total followers and posting 0.1 times a week.</li><li>Operating hours and the seasonal schedule are missing from the website.</li><li>Contact information could be more prominent on the homepage.</li></ul></div>
+</div>
+<div style="background: #1C1C1A; color: #F4F0E8; border-radius: 12px; padding: 20px 24px"><span style="font-weight: 500; color: #C4963A">Bottom line.</span> Andrea's Resort delivers an exceptional on-property experience and strong pre-arrival information. The main opportunities are a limited social media presence and adding operating hours. Consistent posting and contact visibility improvements could increase direct inquiries by 40 to 60% within three months.</div>
+</section>
+
+<section id="areas" style="display: flex; flex-direction: column; gap: 14px">
+<div class="sec"><h2 class="t2">Your six areas</h2><div style="font-size: 15px; color: #6A6862">Open an area to see what we found and what we recommend.</div></div>
+
+<div style="background: #FFFFFF; border-radius: 16px; padding: 10px 14px">
+<div class="row" style="padding: 10px 14px; font-size: 14px; font-weight: 500; color: #6A6862"><span>Area</span><span>Score</span><span>Grade</span><span>Where it sits</span><span>Share of total</span><span></span></div>
+
+<div style="background: #F4F0E8; border-radius: 12px">
+<a href="#" class="row" aria-expanded="true"><b>Social media and content</b><b>62</b><span>D</span><span class="bar" style="background: #DDD5C6"><u style="width: 62%; background: #A63A32"></u></span><span>20%</span><span class="chev up" aria-hidden="true"></span></a>
+<div style="padding: 6px 14px 24px; display: flex; flex-direction: column; gap: 22px">
+<p style="margin: 0">Below recommended levels with only 522 total followers across all platforms, and a post roughly once every ten weeks.</p>
+<div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px">
+<div class="num"><b>522</b><small>Total followers</small></div>
+<div class="num"><b>194</b><small>Instagram followers</small></div>
+<div class="num"><b>0.1</b><small>Posts per week</small></div>
+<div class="num"><b>5.15%</b><small>Instagram engagement</small></div>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 36px">
+<div style="flex: 1 1 300px; min-width: 0"><h3 class="t3" style="font-size: 17px">What we found</h3><ul style="margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 6px; font-size: 15px"><li>Instagram has 194 followers and Facebook has 328.</li><li>Posting averages 0.1 times a week.</li><li>Instagram engagement is 5.15%, which is healthy.</li><li>37 strong website photos have not been used on social.</li></ul><a href="#" style="display: inline-block; margin-top: 8px; font-weight: 500; font-size: 14px">Show all 10 findings</a></div>
+<div style="flex: 1 1 300px; min-width: 0"><h3 class="t3" style="font-size: 17px">What we recommend</h3><ol style="margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 6px; font-size: 15px"><li>Post two to three times a week with photos of the property.</li><li>Turn the existing website photos into a first month of posts.</li><li>Reply to every comment and follow local tourism accounts.</li></ol><a href="#" style="display: inline-block; margin-top: 8px; font-weight: 500; font-size: 14px">Show all 5 recommendations</a></div>
+</div>
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; font-size: 14px; color: #6A6862"><span>Sources: your public Instagram and Facebook profiles. High confidence.</span><a href="R3-TacticOverview.dc.html" style="font-weight: 500">In your plan: Social Media Activation</a></div>
+</div>
+</div>
+
+<a href="#" class="row" aria-expanded="false"><b>Reviews and reputation</b><b>71</b><span>C</span><span class="bar"><u style="width: 71%; background: #C4963A"></u></span><span>25%</span><span class="chev" aria-hidden="true"></span></a>
+<a href="#" class="row" aria-expanded="false"><b>Website and technical foundation</b><b>78</b><span>B-</span><span class="bar"><u style="width: 78%"></u></span><span>15%</span><span class="chev" aria-hidden="true"></span></a>
+<a href="#" class="row" aria-expanded="false"><b>Online booking and conversion</b><b>80</b><span>B</span><span class="bar"><u style="width: 80%"></u></span><span>20%</span><span class="chev" aria-hidden="true"></span></a>
+<a href="#" class="row" aria-expanded="false"><b>Local visibility</b><b>81</b><span>B</span><span class="bar"><u style="width: 81%"></u></span><span>10%</span><span class="chev" aria-hidden="true"></span></a>
+<a href="#" class="row" aria-expanded="false"><b>Digital guest experience</b><b>84</b><span>B</span><span class="bar"><u style="width: 84%"></u></span><span>10%</span><span class="chev" aria-hidden="true"></span></a>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px">
+<div style="background: #EDE6DA; border-radius: 12px; padding: 16px 20px"><div style="font-weight: 500">30-day check-in</div><div style="font-size: 15px; color: #6A6862">Your new scores will appear as a second column beside these.</div></div>
+<div style="background: #EDE6DA; border-radius: 12px; padding: 16px 20px"><div style="font-weight: 500">90-day review</div><div style="font-size: 15px; color: #6A6862">Your final scores will appear as a third column.</div></div>
+</div>
+</section>
+
+<section id="quick" style="background: #C8E8D4; color: #1A4D2E; border-radius: 16px; padding: 32px; display: flex; flex-direction: column; gap: 22px">
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 12px">
+<div><h2 class="t2">Quick wins</h2><p style="margin: 4px 0 0">Immediate actions you can complete today.</p></div>
+<div><span style="font-weight: 500">{{qwDone}} of 4</span> done</div>
+</div>
+<div style="display: flex; gap: 14px; align-items: flex-start"><input type="checkbox" class="cb" id="q1" checked="{{ q1 }}" onChange="{{ t1 }}"><div style="flex: 1; min-width: 0; opacity: {{o1}}"><label for="q1" style="font-weight: 500; display: block">Make the phone number and email more prominent in the website header and footer</label><div style="font-size: 15px">Visitors to remote resorts need direct contact for questions about access and weather. Expect 20 to 30% more booking inquiries.</div></div><div style="font-size: 14px; white-space: nowrap">30 minutes</div></div>
+<div style="display: flex; gap: 14px; align-items: flex-start"><input type="checkbox" class="cb" id="q2" checked="{{ q2 }}" onChange="{{ t2 }}"><div style="flex: 1; min-width: 0; opacity: {{o2}}"><label for="q2" style="font-weight: 500; display: block">Create a simple FAQ page answering "How do I get here?", "What's included?" and "Best time to visit?"</label><div style="font-size: 15px">Reduces repetitive inquiry emails and improves visibility in search and AI answers.</div></div><div style="font-size: 14px; white-space: nowrap">2 hours</div></div>
+<div style="display: flex; gap: 14px; align-items: flex-start"><input type="checkbox" class="cb" id="q3" checked="{{ q3 }}" onChange="{{ t3 }}"><div style="flex: 1; min-width: 0; opacity: {{o3}}"><label for="q3" style="font-weight: 500; display: block">Post to Instagram three times a week using the cabin photos already on the website</label><div style="font-size: 15px">37 images detected. Expect follower growth from 194 to 400 or 500 within six months.</div></div><div style="font-size: 14px; white-space: nowrap">15 minutes per post</div></div>
+<div style="display: flex; gap: 14px; align-items: flex-start"><input type="checkbox" class="cb" id="q4" checked="{{ q4 }}" onChange="{{ t4 }}"><div style="flex: 1; min-width: 0; opacity: {{o4}}"><label for="q4" style="font-weight: 500; display: block">Add Local Business Schema markup to the homepage with the correct name, address and phone number</label><div style="font-size: 15px">Improves local search visibility and how the listing appears in Google results.</div></div><div style="font-size: 14px; white-space: nowrap">45 minutes</div></div>
+</section>
+
+<section id="priority" style="display: flex; flex-direction: column; gap: 14px">
+<div class="sec"><h2 class="t2">Priority recommendations</h2><div style="font-size: 15px; color: #6A6862">The changes that will make the biggest difference, in order.</div></div>
+<div style="background: #FFFFFF; border-radius: 16px; padding: 14px 18px; overflow-x: auto">
+<table style="width: 100%; border-collapse: collapse; min-width: 700px; font-size: 15px">
+<thead><tr><th scope="col">Recommendation</th><th scope="col">Area</th><th scope="col">Time</th><th scope="col">Impact</th><th scope="col">Expected result</th></tr></thead>
+<tbody>
+<tr style="background: #F4F0E8"><th scope="row" style="border-radius: 8px 0 0 8px">1. Increase posting to two or three times a week</th><td>Social media and content</td><td>1 hour setup, 30 minutes a post</td><td style="font-weight: 500">High</td><td style="border-radius: 0 8px 8px 0">Improved social visibility and engagement</td></tr>
+<tr><th scope="row">2. Set up a post-stay review request for guests</th><td>Reviews and reputation</td><td>30 minutes setup</td><td style="font-weight: 500">High</td><td>Gradual increase in review volume</td></tr>
+<tr style="background: #F4F0E8"><th scope="row" style="border-radius: 8px 0 0 8px">3. Add phone number and email to the website header and footer</th><td>Online booking and conversion</td><td>15 minutes</td><td>Medium</td><td style="border-radius: 0 8px 8px 0">Improved contact accessibility</td></tr>
+<tr><th scope="row">4. Add seasonal hours and operating dates to the website</th><td>Digital guest experience</td><td>30 minutes</td><td>Medium</td><td>Fewer inquiry emails about dates</td></tr>
+</tbody>
+</table>
+</div>
+</section>
+
+<section id="market" style="display: flex; flex-direction: column; gap: 14px">
+<div class="sec"><h2 class="t2">Your visitors and market</h2></div>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px">
+<div class="mk"><h3 class="t3">Who visits</h3><p>Andrea's Resort attracts outdoor adventure travellers, couples and families looking for a quiet stay close to nature.</p></div>
+<div class="mk"><h3 class="t3">How they find you</h3><p>Visitors discover lakeside resorts through Google searches, review sites and social media, usually in that order.</p></div>
+<div class="mk"><h3 class="t3">Your seasons</h3><p>Peak season runs June to September for fishing, hiking and wildlife viewing, with quieter shoulder months either side.</p></div>
+<div class="mk"><h3 class="t3">Where you fit in a trip</h3><p>The resort is a destination anchor in multi-day regional itineraries, not a one-night stop.</p></div>
+</div>
+</section>
+
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1320,"height":2560}}'>
+class Component extends DCLogic {
+renderVals() {
+var s = this.state || {};
+var self = this;
+var q1 = s.q1 === undefined ? true : !!s.q1;
+var q2 = !!s.q2;
+var q3 = s.q3 === undefined ? true : !!s.q3;
+var q4 = !!s.q4;
+var n = (q1 ? 1 : 0) + (q2 ? 1 : 0) + (q3 ? 1 : 0) + (q4 ? 1 : 0);
+return {
+q1: q1, q2: q2, q3: q3, q4: q4,
+o1: q1 ? 0.7 : 1, o2: q2 ? 0.7 : 1, o3: q3 ? 0.7 : 1, o4: q4 ? 0.7 : 1,
+t1: function () { self.setState({ q1: !q1 }); },
+t2: function () { self.setState({ q2: !q2 }); },
+t3: function () { self.setState({ q3: !q3 }); },
+t4: function () { self.setState({ q4: !q4 }); },
+qwDone: n
+};
+}
+}
+</script>
+</body>
+</html>

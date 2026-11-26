@@ -42,10 +42,10 @@ function saveState() {
 // ── Navigation ─────────────────────────────────────────────
 function navigate(pageId) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => { n.classList.remove('active'); n.removeAttribute('aria-current'); });
   const page = document.getElementById('page-' + pageId);
   if (page) page.classList.add('active');
-  document.querySelectorAll(`[data-page="${pageId}"]`).forEach(n => n.classList.add('active'));
+  document.querySelectorAll(`.nav-item[data-page="${pageId}"]`).forEach(n => { n.classList.add('active'); n.setAttribute('aria-current', 'page'); });
   document.getElementById('main').scrollTop = 0;
   if (window.innerWidth <= 768) closeMobileDrawer();
 }
@@ -66,11 +66,19 @@ function openMobileDrawer() {
   document.getElementById('sidebar').classList.add('open');
   document.getElementById('drawerOverlay').classList.add('open');
   document.body.classList.add('drawer-open');
+  setHamburger(true);
 }
 function closeMobileDrawer() {
   document.getElementById('sidebar').classList.remove('open');
   document.getElementById('drawerOverlay').classList.remove('open');
   document.body.classList.remove('drawer-open');
+  setHamburger(false);
+}
+function setHamburger(open) {
+  const btn = document.getElementById('nav-hamburger');
+  if (!btn) return;
+  btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  btn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
 }
 function toggleMobileDrawer() {
   if (document.getElementById('sidebar').classList.contains('open')) closeMobileDrawer();
@@ -201,11 +209,6 @@ function updateProgress() {
   const total = ALL_CHECK_IDS.length;
   const pct = total > 0 ? Math.round(done / total * 100) : 0;
 
-  setRing(document.getElementById('sidebar-ring'), 23, pct);
-  document.getElementById('sidebar-done').textContent = done;
-  document.getElementById('sidebar-total').textContent = total;
-  document.getElementById('roadmap-badge').textContent = pct + '%';
-
   setRing(document.getElementById('dash-ring'), 85, pct);
   const dashPct = document.getElementById('dash-pct');
   if (dashPct) dashPct.textContent = pct + '%';
@@ -220,6 +223,11 @@ function updateProgress() {
     const tot = ids.length;
     const p = tot > 0 ? Math.round(d / tot * 100) : 0;
     setRing(document.getElementById('tactic' + t + '-ring'), 18, p);
+    // Navigation ring: a pie filled to this tactic's share of ticked tasks
+    const navRing = document.getElementById('nav-ring-' + t);
+    if (navRing) navRing.style.setProperty('--pct', p + '%');
+    const navText = document.getElementById('nav-ring-' + t + '-text');
+    if (navText) navText.textContent = ', ' + d + ' of ' + tot + ' done';
     const stat = document.getElementById('tc' + t + '-stat');
     if (stat) stat.textContent = d + ' of ' + tot + ' done';
     setRing(document.getElementById('t' + t + '-ring'), 31, p);

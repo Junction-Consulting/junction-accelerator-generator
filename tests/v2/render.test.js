@@ -132,11 +132,61 @@ describe('what the shared scripts need', () => {
   });
 });
 
+describe('navigation (DESIGN-BRIEF.md section 4)', () => {
+  const navOf = html => html.slice(html.indexOf('<nav class="nav-panel"'), html.indexOf('</nav>', html.indexOf('<nav class="nav-panel"')));
+  const labels = (html, cls) => [...navOf(html).matchAll(new RegExp(`<div class="nav-group${cls}"[^>]*>([\\s\\S]*?)\\n    </div>`, 'g'))]
+    .map(m => [...m[1].matchAll(/<(?:button|span) type="button" class="nav-item[^"]*"[^>]*>(?:<span class="nav-ring"[^>]*><\/span><span class="nav-label">)?([^<]+)|<span class="nav-item nav-item--coming"[^>]*>([^<]+)/g)].map(x => x[1] || x[2]));
+
+  test('once the plan exists: Dashboard, Assessment, Strategy; Tactics; Your plan', () => {
+    const nav = navOf(page.html);
+    const order = ['data-page="dashboard"', 'data-page="assessment"', 'data-page="strategy"', '>Tactics<', 'data-page="tactic1"', '>Your plan<', 'data-page="roadmap"', 'class="nav-item" data-page="materials"'];
+    const at = order.map(s => nav.indexOf(s));
+    at.forEach((i, k) => { expect(i).toBeGreaterThan(-1); if (k) expect(i).toBeGreaterThan(at[k - 1]); });
+    expect(nav).toContain('>90-day roadmap</button>');
+  });
+
+  test('one link per tactic, each with a progress ring and no status words', () => {
+    const items = [...navOf(page.html).matchAll(/<button type="button" class="nav-item" data-page="tactic(\d)"[\s\S]*?<\/button>/g)];
+    expect(items.map(m => Number(m[1]))).toEqual(CONTENT.tactics.map((_, i) => i + 1));
+    items.forEach((m, i) => {
+      expect(m[0]).toContain(`<span class="nav-ring" id="nav-ring-${i + 1}" aria-hidden="true"></span>`);
+      expect(m[0]).toContain(`<span class="nav-label">${C.plain(CONTENT.tactics[i].short_label || CONTENT.tactics[i].title)}</span>`);
+      expect(m[0]).not.toMatch(/Not Started|In Progress|Complete/);
+    });
+  });
+
+  test('there is no Quick wins item, even when the plan has quick wins', () => {
+    expect(CONTENT.quick_wins.groups.length).toBeGreaterThan(0);
+    expect(navOf(page.html)).not.toMatch(/data-page="gbp"|Quick wins/i);
+  });
+
+  test('before the plan, Strategy, Tactics and the roadmap are listed under "Coming with your plan", not clickable', () => {
+    const nav = navOf(page.html);
+    const coming = nav.slice(nav.indexOf('<div class="nav-group plan-coming-only">'));
+    expect(coming).toContain('Coming with your plan');
+    ['Strategy', 'Tactics', '90-day roadmap'].forEach(l => expect(coming).toContain(`<span class="nav-item nav-item--coming" aria-disabled="true">${l}</span>`));
+    expect(coming.slice(0, coming.indexOf('nav-activity-group'))).not.toContain('onclick');
+    // Which set shows is decided by body[data-plan]
+    expect(page.html).toContain('data-template-version="v2" data-plan="ready">');
+    expect(nav).toContain('<button type="button" class="nav-item plan-coming-only" data-page="materials"');
+  });
+
+  test('wordmark above the panel, "Email your coach" below it', () => {
+    const aside = page.html.slice(page.html.indexOf('<aside id="sidebar"'), page.html.indexOf('</aside>'));
+    expect(aside.indexOf('junction-wordmark-solid.png')).toBeLessThan(aside.indexOf('<nav class="nav-panel"'));
+    expect(aside.indexOf(`<a class="nav-coach" href="mailto:${CONTENT.client.coach_email}">Email your coach</a>`)).toBeGreaterThan(aside.indexOf('</nav>'));
+  });
+
+  test('no eLearningU reference is left in the page (the coach email is content, not design)', () => {
+    expect(page.html.split(CONTENT.client.coach_email).join('')).not.toMatch(/e-?learning\s*-?u|elearningu/i);
+  });
+});
+
 describe('computed, not typed', () => {
   test('totals and counts come from the content', () => {
     const total = CONTENT.roadmap.weeks.reduce((n, w) => n + w.checklist.length, 0);
     expect(page.data.checks.all).toHaveLength(total);
-    expect(page.html).toContain(`<span id="sidebar-total">${total}</span>`);
+    expect(page.html).toContain(`<span id="dash-total-count">${total}</span>`);
     expect(page.html).toContain(`<div class="wm-step-lbl">${CONTENT.tactics.length} Tactics</div>`);
     expect(page.html).toContain(`id="tactic-cards-section" data-columns="${CONTENT.tactics.length}"`);
     // Every tactic card grid uses the shared rule, sized by the number of tactics
@@ -144,6 +194,8 @@ describe('computed, not typed', () => {
     expect(page.html).toContain(`<div class="tactics-overview-grid tactic-grid" data-columns="${CONTENT.tactics.length}">`);
     expect(page.html).toContain(`style="--columns:${CONTENT.phases.length}"`);
     expect((page.html.match(/class="nav-item" data-page="tactic\d"/g) || []).length).toBe(CONTENT.tactics.length);
+    // Each tactic's navigation ring states its own total for screen readers
+    Object.entries(page.data.checks.byTactic).forEach(([n, ids]) => expect(page.html).toContain(`<span class="sr-only" id="nav-ring-${n}-text">, 0 of ${ids.length} done</span>`));
     expect((page.html.match(/<section id="page-tactic\d"/g) || []).length).toBe(CONTENT.tactics.length);
   });
 
@@ -234,6 +286,7 @@ describe('missing means hidden', () => {
     expect(html).not.toContain('page-gbp');
     expect(html).not.toContain('data-page="gbp"');
     expect(html).not.toContain('print-footer-contact');
+    expect(html).not.toContain('Email your coach');
     expect(render(c).data.tour[0].desc).not.toContain('quick wins');
   });
 
