@@ -433,7 +433,7 @@ Month 3 Name: Publish and Prepare to Reopen
 **Actions:**
 - Post your Wikipedia edit request on the Talk page with your connection disclosed and sources attached → links to: Tactic 3 / Step 2
 - Contact the owners of outdated pages and update your Tourism Harrison, FVRD, Destination BC, TripAdvisor, and Google listings → links to: Tactic 3 / Step 2
-- Build the FAQ page with direct first-sentence answers → links to: Tactic 3 / Step 3
+- Update the FAQ page with direct first-sentence answers → links to: Tactic 3 / Step 3
 - Add a "last updated" date to the hours and admission section of your visit page → links to: Tactic 1 / Step 5
 
 **Checklist:**
