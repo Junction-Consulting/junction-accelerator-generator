@@ -429,7 +429,7 @@ Month 3 Name: Publish and Prepare to Reopen
 - [ ] Five clusters and their questions are saved in a sheet
 - [ ] Posts are scheduled through the first week of January
 
-### Week 6: Correct the Record and Build the FAQ
+### Week 6: Correct the Record and Update the FAQ
 **Actions:**
 - Post your Wikipedia edit request on the Talk page with your connection disclosed and sources attached → links to: Tactic 3 / Step 2
 - Contact the owners of outdated pages and update your Tourism Harrison, FVRD, Destination BC, TripAdvisor, and Google listings → links to: Tactic 3 / Step 2
