@@ -106,6 +106,10 @@
       "what_we_heard": [
         "You have beautiful cabin photography and guests who love their stay, but your social accounts do not show it. With 194 followers on Instagram, 328 on Facebook and one post every ten weeks, the accounts look closed. You told us the blocker is time, not ideas."
       ],
+      "heard_quote": "The blocker is time, not ideas.",
+      "assessment_areas": [
+        "social_media"
+      ],
       "what_this_is": [
         "A four-week sprint that takes your social media from dormant to active. You will set a posting rhythm, turn the photos you already own into a month of posts in one sitting, start publishing short video, and build the small daily habits that grow an audience."
       ],
@@ -474,6 +478,10 @@
       "what_we_heard": [
         "You have a perfect 5.0 on Google, but only 20 reviews, and almost none from this year. You have never asked guests for one because it felt awkward."
       ],
+      "heard_quote": "Asking for a review has always felt awkward.",
+      "assessment_areas": [
+        "reviews_reputation"
+      ],
       "what_this_is": [
         "A simple system that asks every guest once, at the right moment, and makes it take under a minute."
       ],
@@ -664,6 +672,11 @@
       "phase_label": "Search Visibility",
       "what_we_heard": [
         "Your Google Business Profile is verified but barely used. The website has no structured data, the homepage title is cut off in search results, and the resort is missing from most tourism directories. You also told us that guests ask the same five questions by email every week."
+      ],
+      "heard_quote": "Guests email us the same five questions every week.",
+      "assessment_areas": [
+        "local_visibility",
+        "website_technical"
       ],
       "what_this_is": [
         "Twelve weeks of small, specific jobs: complete the Google profile, fix the technical basics on the website, list the resort consistently across directories, and publish the pages that answer what guests already ask."
@@ -1236,6 +1249,11 @@
       "phase_label": "Booking and Retention",
       "what_we_heard": [
         "Most of your bookings come through third-party sites that take a commission, even from guests who found you by name. You have email addresses for several years of past guests and have never written to them."
+      ],
+      "heard_quote": "We have years of guest emails and have never written to them.",
+      "assessment_areas": [
+        "booking_conversion",
+        "guest_experience"
       ],
       "what_this_is": [
         "Two connected pieces of work: remove the friction from booking on your own website, and start a small, respectful email program for past guests."

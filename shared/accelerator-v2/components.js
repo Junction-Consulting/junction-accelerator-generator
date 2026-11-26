@@ -160,7 +160,7 @@ export function assessmentQuickWins(data) {
   if (!wins.length) return '';
   const rows = wins.map((w, i) => {
     const id = `aqw-${i + 1}`;
-    return `<div class="task-row task-row--win"><input type="checkbox" class="tick" id="${id}" onchange="onQuickWinTick(this)"><div class="task-body"><label class="task-label task-label--strong" for="${id}">${text(w.task)}</label>${has(w.impact) ? `<div class="task-sub">${text(w.impact)}</div>` : ''}</div>${has(w.time_estimate) ? `<span class="task-time">${text(w.time_estimate)}</span>` : ''}</div>`;
+    return `<div class="task-row task-row--win"><input type="checkbox" class="tick" id="${id}" data-qw="${id}" onchange="onQuickWinTick(this)"><div class="task-body"><label class="task-label task-label--strong" for="${id}">${text(w.task)}</label>${has(w.impact) ? `<div class="task-sub">${text(w.impact)}</div>` : ''}</div>${has(w.time_estimate) ? `<span class="task-time">${text(w.time_estimate)}</span>` : ''}</div>`;
   });
   return `<section class="dash-card dash-card--sage dash-wins">
         <div class="dash-card-head">
@@ -378,26 +378,61 @@ export function scoreCell(score, grade) {
 
 // ── Strategy ───────────────────────────────────────────────────────────────
 
-export function objectiveCard(objective, n, tacticNumber) {
-  const pill = tacticNumber ? `Tactic ${tacticNumber} · Weeks ${objective.weeks[0]}-${objective.weeks[1]}` : '';
-  return `<div class="strategy-objective-card" style="--obj-color:var(--objective-color-${cycle(n)})">
-          <div class="strategy-objective-num">${String(n).padStart(2, '0')}</div>
-          <div class="strategy-objective-content">
-            <h3 class="strategy-objective-title"${editKey(`${objective.id}.title`)}>${plain(objective.title)}</h3>
-            <p class="strategy-objective-desc"${editKey(`${objective.id}.description`)}>${md(objective.description)}</p>
-            ${pill ? `<span class="strategy-objective-pill">${pill}</span>` : ''}
-          </div>
-        </div>`;
+// Strategy (DESIGN-BRIEF.md section 6): goal on Carbon, positioning with the
+// statement as a Sage pull quote, then one row per objective linking to its
+// tactic, with that tactic's ring and weeks. Tactics are not listed again.
+
+export function positioningBlock(strategy) {
+  const text = paragraphs(strategy.positioning);
+  const statement = has(strategy.positioning_statement)
+    ? `<section class="tp-card tp-card--sage st-statement"><blockquote class="pull-quote pull-quote--lg">“${md(strategy.positioning_statement)}”</blockquote></section>` : '';
+  if (!text && !statement) return '';
+  return `<div class="tp-row">
+      ${text ? `<section class="tp-card"><h2 class="tp-h2">Your positioning</h2><div class="tp-text" data-editable-key="strategy.positioning">${text}</div></section>` : ''}
+      ${statement}
+    </div>`;
 }
 
-export function tacticOverviewCard(tactic, n) {
-  const label = has(tactic.phase_label) ? `<div class="tactic-overview-phase">${plain(tactic.phase_label)}</div>` : '';
-  return `<div class="tactic-overview-card" style="--color:var(--tactic-color-${cycle(n)})">
-          ${label}
-          <h3 class="tactic-overview-title">${plain(tactic.title)}</h3>
-          <p class="tactic-overview-desc">${md(tactic.subtitle)}</p>
-          <button class="tactic-overview-link" onclick="navigate('tactic${n}')">View full guide ${ICONS.arrowRight}</button>
-        </div>`;
+/** tactic: { n, name } or null */
+export function objectiveRow(objective, n, tactic) {
+  const weeks = objective.weeks && objective.weeks.length === 2 ? (objective.weeks[0] === objective.weeks[1] ? `week ${objective.weeks[0]}` : `weeks ${objective.weeks[0]} to ${objective.weeks[1]}`) : '';
+  const inner = `<span class="st-obj-text"><span class="tp-h3 st-obj-title"${editKey(`${objective.id}.title`)}>${plain(objective.title)}</span><span class="st-obj-desc"${editKey(`${objective.id}.description`)}>${md(objective.description)}</span></span>
+        ${tactic ? `<span class="st-obj-tactic"><span class="pie" data-live-pie="tactic-${tactic.n}" aria-hidden="true"></span><span><span class="st-obj-name">${plain(tactic.name)}</span>${weeks ? ` · ${weeks}` : ''}</span></span>` : ''}`;
+  return tactic
+    ? `<div class="st-obj st-obj--link" role="link" tabindex="0" onclick="navigate('tactic${tactic.n}')" onkeydown="if(event.key==='Enter'){navigate('tactic${tactic.n}')}">
+        ${inner}
+      </div>`
+    : `<div class="st-obj">
+        ${inner}
+      </div>`;
+}
+
+// ── Materials (DESIGN-BRIEF.md section 6) ─────────────────────────────────
+// Only the two PDFs can be wired now. Items that do not exist yet are greyed
+// with when they arrive. Onboarding call notes and the coaching call summary
+// wait for approval (brief section 11).
+
+export function materialsPage({ hasAssessmentPdf, date, days, checkinWeek }) {
+  const row = (title, desc, action, extra = '') => `<div class="mat-item${action ? '' : ' mat-item--later'}${extra}">
+      <div><h2 class="tp-h3">${title}</h2><p>${desc}</p></div>
+      ${action || ''}
+    </div>`;
+  const pdf = fn => `<button type="button" class="btn" onclick="${fn}()">Download PDF</button>`;
+  return `<section id="page-materials" class="page">
+  <div class="tp mat">
+    <header class="tp-head-text">
+      <h1 class="tp-h1">Materials</h1>
+      <p class="tp-sub">Everything from your program, in one place.</p>
+    </header>
+    <div class="mat-list">
+    ${hasAssessmentPdf ? row('Assessment report', `Your full digital marketing assessment as a PDF.${has(date) ? ` ${attr(date)}.` : ''}`, pdf('downloadPDF')) : ''}
+    ${row(`Your ${days}-day plan`, 'Your roadmap as a document to print or share with your team.', pdf('printRoadmap'), ' plan-ready-only')}
+    ${row(`Your ${days}-day plan`, 'Arrives after your coaching call.', '', ' plan-coming-only')}
+    ${row('30-day check-in report', `Arrives after your check-in${checkinWeek ? `, once week ${checkinWeek} is done` : ''}.`, '')}
+    ${row(`${days}-day review`, 'Arrives when your plan is done.', '')}
+    </div>
+  </div>
+</section>`;
 }
 
 // ── Tactic page (DESIGN-BRIEF.md section 6, "Tactic") ─────────────────────
@@ -429,12 +464,12 @@ const proseBlock = (tactic, key, title) => ((tactic[key] || []).length
   ? `<div class="tp-prose"><h2 class="tp-h3">${title}</h2><div class="tp-text"${editKey(`${tactic.id}.${key}`)}>${paragraphs(tactic[key])}</div></div>` : '');
 
 /** A plain table: header row, rows separated by alternating tints, no lines. */
-export function plainTable(columns, rows, extraClass = '') {
+export function plainTable(columns, rows, extraClass = '', cell = md) {
   return `<div class="table-scroll">
             <table class="plain-table${extraClass}">
-              <thead><tr>${columns.map(c => `<th scope="col">${md(c)}</th>`).join('')}</tr></thead>
+              <thead><tr>${columns.map(c => `<th scope="col">${cell(c)}</th>`).join('')}</tr></thead>
               <tbody>
-                ${rows.map(r => `<tr>${r.map((c, i) => (i === 0 ? `<th scope="row">${md(c)}</th>` : `<td>${md(c)}</td>`)).join('')}</tr>`).join('\n                ')}
+                ${rows.map(r => `<tr>${r.map((c, i) => (i === 0 ? `<th scope="row">${cell(c)}</th>` : `<td>${cell(c)}</td>`)).join('')}</tr>`).join('\n                ')}
               </tbody>
             </table>
           </div>`;
@@ -477,6 +512,7 @@ export function tacticOverview(tactic, n) {
     ? `<section class="tp-card tp-card--sage tp-heard">
           <h2 class="tp-h3">What we heard from you</h2>
           <div class="tp-text"${editKey(`${tactic.id}.what_we_heard`)}>${paragraphs(tactic.what_we_heard)}</div>
+          ${has(tactic.heard_quote) ? `<blockquote class="pull-quote"${editKey(`${tactic.id}.heard_quote`)}>“${plain(tactic.heard_quote)}”</blockquote>` : ''}
         </section>` : '';
   const tipsHtml = tips(tactic);
   const resHtml = resources(tactic);
@@ -798,7 +834,7 @@ export function phaseBlock(phase, n, weeksHtml, total) {
     </section>`;
 }
 
-// ── Google Business Profile wins (the plan's quick wins) ──────────────────
+// ── Google profile and website wins (the plan's quick wins) ──────────────────
 
 export function quickWin(item) {
   const id = attr(item.id);
@@ -832,7 +868,7 @@ export function gbpWins(qw) {
   const total = groups.reduce((n, g) => n + g.items.length, 0);
   return `<section class="rm-gbp" id="gbp-wins">
       <div class="rm-divider">
-        <h2 class="rm-h2">Google Business Profile wins</h2>
+        <h2 class="rm-h2">Google profile and website wins</h2>
         <span class="rm-divider-count"><span data-live="gbp-done">0</span> of ${total} done</span>
       </div>
       ${has(qw.intro) ? `<p class="rm-gbp-intro" data-editable-key="quick_wins.intro">${md(qw.intro)}</p>` : ''}
@@ -857,203 +893,200 @@ export const ASSESSMENT_CATEGORIES = [
   { key: 'local_visibility', title: 'Local Visibility', iconClass: 'local', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>' }
 ];
 
-const FINDING_ICONS = {
-  positive: '<svg class="finding-icon positive" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>',
-  negative: '<svg class="finding-icon negative" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/></svg>'
-};
 
 const text = value => attr(value == null ? '' : value);
 const score = value => (value != null && value !== '' ? String(Math.round(Number(value))) : '--');
-export function gradeClass(grade) {
-  const letter = String(grade || '').trim().charAt(0).toLowerCase();
-  return letter && 'abcdf'.includes(letter) ? `grade-${letter}` : '';
-}
 
 /** True when the record has real assessment content, not an empty object. */
 export function hasAssessment(data) {
   return !!(data && data.overall && data.categories && Object.keys(data.categories).length > 0);
 }
 
-export function assessmentGradeCard(data) {
-  const summary = data.overall.summary || (data.executive_summary || {}).headline || '';
-  return `<div class="assessment-grade-card">
-      <div class="grade-circle" id="overallGrade">${text(data.overall.grade || '--')}</div>
-      <div class="grade-details">
-        <h3>Overall Score: <span id="overallScore">${score(data.overall.score)}</span>/100</h3>
-        ${has(summary) ? `<p id="overallSummary"${editKey(data.overall.summary ? 'assessment.overall.summary' : 'assessment.executive_summary.headline.card')}>${text(summary)}</p>` : ''}
-      </div>
-    </div>`;
+// ── Assessment page (DESIGN-BRIEF.md section 6, "Assessment") ─────────────
+// Everything in the record is shown: the summary, every area with all of its
+// metrics, findings, recommendations, score breakdown, sources and
+// confidence, every quick win, every priority recommendation and the
+// visitor and market context. Long lists show the first few and "Show all N".
+
+const LIST_FIRST = 4;
+const levelOf = grade => { const l = scoreLevel(grade); return l ? l.key : 'none'; };
+const words = key => String(key || '').replace(/([a-z])([A-Z])/g, (m, a, b) => `${a} ${b}`).replace(/_/g, ' ').replace(/^./, c => c.toUpperCase());
+const confidenceWord = c => (has(c) ? `${words(c)} confidence` : '');
+
+/** A value from the record as text: lists joined, objects as "key value" pairs, true and false as Yes and No. */
+export function valueText(value) {
+  if (value == null || value === '') return '';
+  if (typeof value === 'boolean') return value ? 'Yes' : 'No';
+  if (Array.isArray(value)) return value.map(valueText).filter(Boolean).join(', ');
+  if (typeof value === 'object') return Object.entries(value).map(([k, v]) => `${words(k).toLowerCase()} ${valueText(v)}`).join(', ');
+  return String(value);
 }
 
-export function categoryScore(category, cat) {
-  return `<div class="grade-breakdown-item">
-          <div class="grade-breakdown-category">
-            ${category.icon}
-            <span>${category.title}</span>
-          </div>
-          <div class="grade-breakdown-score">
-            <span class="grade-breakdown-number">${score(cat.score)}</span>
-            <span class="grade-breakdown-letter ${gradeClass(cat.grade)}">${text(cat.grade || '--')}</span>
-          </div>
-        </div>`;
+/** A list that shows the first few items and a "Show all N" button. */
+function longList(tag, items, label, extraClass = '') {
+  if (!items.length) return '';
+  const rows = items.map((item, i) => (i < LIST_FIRST ? `<li>${item}</li>` : `<li data-more hidden>${item}</li>`)).join('\n                ');
+  const more = items.length > LIST_FIRST ? `<button type="button" class="link-btn show-all" onclick="showAll(this)">Show all ${items.length} ${label}</button>` : '';
+  return `<${tag} class="as-list${extraClass}">
+                ${rows}
+              </${tag}>${more}`;
 }
 
-export function executiveSummary(summary) {
-  if (!summary || !(has(summary.headline) || (summary.key_strengths || []).length || (summary.critical_gaps || []).length)) return '';
+export function assessmentSummary(data, { level }) {
+  const s = data.executive_summary || {};
   const list = (items, key) => (items || []).map((item, i) => `<li${editKey(`assessment.executive_summary.${key}.${i}`)}>${text(item)}</li>`).join('\n            ');
-  return `<div class="executive-summary" id="executiveSummary">
-      <h2>Executive Summary</h2>
-      ${has(summary.headline) ? `<p class="executive-headline"${editKey('assessment.executive_summary.headline')}>${text(summary.headline)}</p>` : ''}
-      <div class="executive-columns">
-        <div class="executive-column strengths">
-          <h4>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-            Key Strengths
-          </h4>
-          <ul>
-            ${list(summary.key_strengths, 'key_strengths')}
-          </ul>
-        </div>
-        <div class="executive-column gaps">
-          <h4>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-            Critical Gaps
-          </h4>
-          <ul>
-            ${list(summary.critical_gaps, 'critical_gaps')}
-          </ul>
+  const o = data.overall;
+  return `<section class="as-card as-summary" id="as-summary">
+      <div class="as-summary-top">
+        ${donut({ pct: o.score, tone: `score-${level ? level.key : 'none'}`, number: score(o.score), sub: 'out of 100', label: `Overall score ${score(o.score)} out of 100, grade ${o.grade}` })}
+        <div class="as-summary-text">
+          <h2 class="tp-h2">Overall grade ${text(o.grade || '')}${level ? ` <span class="as-level as-level--${level.key}">${level.word}</span>` : ''}</h2>
+          ${has(o.confidence) ? `<p class="as-meta">${confidenceWord(o.confidence)}</p>` : ''}
+          ${has(s.headline) ? `<p${editKey('assessment.executive_summary.headline')}>${text(s.headline)}</p>` : ''}
+          ${has(o.summary) ? `<p${editKey('assessment.overall.summary')}>${text(o.summary)}</p>` : ''}
         </div>
       </div>
-      ${has(summary.bottom_line) ? `<div class="executive-bottom-line">
-        <strong>Bottom Line:</strong> <span${editKey('assessment.executive_summary.bottom_line')}>${text(summary.bottom_line)}</span>
+      ${(s.key_strengths || []).length || (s.critical_gaps || []).length ? `<div class="as-columns">
+        ${(s.key_strengths || []).length ? `<div><h3 class="tp-h3">Key strengths</h3><ul class="as-list">
+            ${list(s.key_strengths, 'key_strengths')}
+          </ul></div>` : ''}
+        ${(s.critical_gaps || []).length ? `<div><h3 class="tp-h3">Critical gaps</h3><ul class="as-list">
+            ${list(s.critical_gaps, 'critical_gaps')}
+          </ul></div>` : ''}
       </div>` : ''}
-    </div>`;
+      ${has(s.bottom_line) ? `<div class="as-bottom"><strong class="as-bottom-label">Bottom line.</strong> <span${editKey('assessment.executive_summary.bottom_line')}>${text(s.bottom_line)}</span></div>` : ''}
+    </section>`;
 }
 
-export function assessmentQuickWin(win, i) {
-  return `<div class="quick-win-item">
-          <div class="quick-win-number">${i + 1}</div>
-          <div class="quick-win-content">
-            <div class="quick-win-task"${editKey(`assessment.quick_wins.${i}.task`)}>${text(win.task)}</div>
-            ${has(win.impact) ? `<div class="quick-win-impact"${editKey(`assessment.quick_wins.${i}.impact`)}>${text(win.impact)}</div>` : ''}
-          </div>
-          ${has(win.time_estimate) ? `<div class="quick-win-time">${text(win.time_estimate)}</div>` : ''}
-        </div>`;
-}
-
-export function priorityRecommendation(rec, i) {
-  const tags = [
-    has(rec.category) ? `<span class="priority-item-tag">${text(rec.category)}</span>` : '',
-    has(rec.time_estimate) ? `<span class="priority-item-tag time">${text(rec.time_estimate)}</span>` : '',
-    has(rec.impact) ? `<span class="priority-item-tag impact-${text(String(rec.impact).toLowerCase())}">${text(rec.impact)} Impact</span>` : ''
-  ].filter(Boolean).join('\n              ');
-  return `<div class="priority-item">
-          <div class="priority-item-number">${i + 1}</div>
-          <div class="priority-item-content">
-            <h4${editKey(`assessment.priority_recommendations.${i}.text`)}>${text(rec.text || rec.title)}</h4>
-            ${tags ? `<div class="priority-item-meta">
-              ${tags}
-            </div>` : ''}
-            ${has(rec.expected_result) ? `<p class="priority-item-result"${editKey(`assessment.priority_recommendations.${i}.expected_result`)}>${text(rec.expected_result)}</p>` : ''}
-          </div>
-        </div>`;
-}
-
-export function categoryCard(category, cat) {
-  const metrics = (cat.metrics || []).slice(0, 4).map(metric => {
-    const status = ['good', 'warning', 'critical'].includes(metric.status) ? metric.status : 'good';
-    return `<div class="metric-item">
-                <div class="metric-label">${text(metric.label)}</div>
-                <div class="metric-value"><span class="metric-status ${status}"></span>${text(metric.value)}</div>
-              </div>`;
-  }).join('\n              ');
-  const findings = (cat.findings || []).slice(0, 4).map((finding, i) => `<div class="finding-item">
-                ${finding.type === 'positive' ? FINDING_ICONS.positive : FINDING_ICONS.negative}
-                <span${editKey(`assessment.categories.${category.key}.findings.${i}`)}>${text(finding.text)}</span>
-              </div>`).join('\n              ');
-  return `<div class="category-card">
-          <div class="category-header" onclick="this.parentElement.classList.toggle('open')">
-            <div class="category-icon ${category.iconClass}">
-              ${category.icon}
-            </div>
-            <div class="category-title-wrap">
-              <h3 class="category-title">${category.title}</h3>
-              <span class="category-grade ${gradeClass(cat.grade)}">${text(cat.grade || 'N/A')}</span>
-            </div>
-            <svg class="category-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-          </div>
-          <div class="category-body">
-            ${has(cat.summary) ? `<p class="category-summary"${editKey(`assessment.categories.${category.key}.summary`)}>${text(cat.summary)}</p>` : ''}
-            ${metrics ? `<div class="category-metrics">
+/** One area as a row that opens in place. tactic: { n, title } or null */
+export function areaRow(category, cat, tactic) {
+  const key = category.key;
+  const level = scoreLevel(cat.grade);
+  const share = typeof cat.weight === 'number' ? `${Math.round(cat.weight * 100)}%` : '';
+  const metrics = (cat.metrics || []).map(m => `<div class="as-num as-num--${['good', 'warning', 'critical'].includes(m.status) ? m.status : 'none'}"><b>${text(m.value)}</b><small>${text(m.label)}</small>${has(m.source) ? `<small class="as-num-source">${text(m.source)}</small>` : ''}</div>`).join('\n              ');
+  const findings = (cat.findings || []).map((f, i) => `<span class="as-finding as-finding--${f.type === 'positive' ? 'positive' : 'negative'}"><span class="sr-only">${f.type === 'positive' ? 'Strength: ' : 'Gap: '}</span><span${editKey(`assessment.categories.${key}.findings.${i}`)}>${text(f.text)}</span>${has(f.confidence) ? ` <span class="as-meta">${confidenceWord(f.confidence)}</span>` : ''}</span>`);
+  const recs = (cat.recommendations || []).map((r, i) => `<span${editKey(`assessment.categories.${key}.recommendations.${i}`)}>${text(typeof r === 'string' ? r : r.text)}</span>${typeof r === 'object' && has(r.confidence) ? ` <span class="as-meta">${confidenceWord(r.confidence)}</span>` : ''}`);
+  const breakdown = Object.entries(cat.breakdown || {}).map(([k, b]) => [words(k), valueText(b && b.value), b && b.score != null ? `${score(b.score)}${has(b.grade) ? ` ${b.grade}` : ''}` : '', b && has(b.source) ? b.source : '']);
+  const sources = [...new Set([...(cat.dataSources || []), ...(cat.data_sources || [])])];
+  const sourceLine = [sources.length ? `Sources: ${sources.join(', ')}.` : '', confidenceWord(cat.confidence) ? `${confidenceWord(cat.confidence)}.` : ''].filter(Boolean).join(' ');
+  return `<div class="as-area" data-area="${key}" id="area-${key}">
+          <button type="button" class="as-row" aria-expanded="false" aria-controls="area-${key}-body" onclick="toggleArea(this)">
+            <span class="as-row-name">${text(category.title)}</span>
+            <span class="as-row-score score score--${levelOf(cat.grade)}">${score(cat.score)}</span>
+            <span class="as-row-grade">${text(cat.grade || '')}${level ? `<span class="sr-only"> ${level.word}</span>` : ''}</span>
+            <span class="as-bar" aria-hidden="true"><span class="as-bar-fill as-bar-fill--${levelOf(cat.grade)}" style="--pct:${Number(cat.score) || 0}"></span></span>
+            <span class="as-row-share">${share}</span>
+            <span class="as-row-slot" data-slot="checkin" hidden></span>
+            <span class="as-row-slot" data-slot="review" hidden></span>
+            <span class="chev" aria-hidden="true"></span>
+          </button>
+          <div class="as-area-body" id="area-${key}-body" hidden>
+            ${has(cat.summary) ? `<p${editKey(`assessment.categories.${key}.summary`)}>${text(cat.summary)}</p>` : ''}
+            ${metrics ? `<div class="as-nums">
               ${metrics}
             </div>` : ''}
-            ${findings ? `<div class="category-findings">
-              <h4>Key Findings</h4>
-              ${findings}
+            ${findings.length || recs.length ? `<div class="as-columns">
+              ${findings.length ? `<div><h3 class="tp-h3">What we found</h3>${longList('ul', findings, 'findings', ' as-list--findings')}</div>` : ''}
+              ${recs.length ? `<div><h3 class="tp-h3">What we recommend</h3>${longList('ol', recs, 'recommendations')}</div>` : ''}
             </div>` : ''}
+            ${breakdown.length ? `<details class="as-breakdown"><summary>How this score was worked out</summary>${plainTable(['Measure', 'Value', 'Score', 'Source'], breakdown, ' as-breakdown-table', text)}</details>` : ''}
+            <div class="as-area-foot">
+              ${sourceLine ? `<span class="as-meta">${text(sourceLine)}</span>` : '<span></span>'}
+              ${tactic ? `<button type="button" class="link-btn" onclick="navigate('tactic${tactic.n}')">In your plan: ${plain(tactic.title)}</button>` : ''}
+            </div>
           </div>
         </div>`;
 }
 
-/** The whole Assessment page, or '' when there is no assessment. */
-export function assessmentPage(data, { date } = {}) {
+export function assessmentQuickWins2(wins) {
+  if (!wins.length) return '';
+  const rows = wins.map((w, i) => {
+    const id = `aqw-p-${i + 1}`;
+    const meta = [w.time_estimate, confidenceWord(w.confidence)].filter(has).map(text).join(' · ');
+    return `<div class="task-row task-row--win"><input type="checkbox" class="tick" id="${id}" data-qw="aqw-${i + 1}" onchange="onQuickWinTick(this)"><div class="task-body"><label class="task-label task-label--strong" for="${id}"${editKey(`assessment.quick_wins.${i}.task`)}>${text(w.task)}</label>${has(w.impact) ? `<div class="task-sub"${editKey(`assessment.quick_wins.${i}.impact`)}>${text(w.impact)}</div>` : ''}</div>${meta ? `<span class="task-time">${meta}</span>` : ''}</div>`;
+  });
+  return `<section class="as-card as-card--sage" id="as-quick">
+      <div class="dash-card-head">
+        <div><h2 class="tp-h2">Quick wins</h2><p>Immediate actions you can complete today.</p></div>
+        <div><strong><span data-live="wins-done">0</span> of ${wins.length}</strong> done</div>
+      </div>
+      ${rows.join('\n      ')}
+    </section>`;
+}
+
+export function priorityTable(recs) {
+  if (!recs.length) return '';
+  const rows = recs.map((r, i) => `<tr><th scope="row"${editKey(`assessment.priority_recommendations.${i}.text`)}>${i + 1}. ${text(r.text || r.title)}</th><td>${text(r.category || '')}</td><td>${text(r.time_estimate || '')}</td><td class="as-impact">${text(has(r.impact) ? words(r.impact) : '')}</td><td${editKey(`assessment.priority_recommendations.${i}.expected_result`)}>${text(r.expected_result || '')}</td><td class="as-meta">${text(has(r.confidence) ? words(r.confidence) : '')}</td></tr>`).join('\n            ');
+  return `<section class="as-section" id="as-priority">
+      <div class="as-divider"><h2 class="tp-h2">Priority recommendations</h2><span class="as-meta">The changes that will make the biggest difference, in order.</span></div>
+      <div class="as-card as-card--table">
+        <div class="table-scroll">
+          <table class="plain-table as-priority">
+            <thead><tr><th scope="col">Recommendation</th><th scope="col">Area</th><th scope="col">Time</th><th scope="col">Impact</th><th scope="col">Expected result</th><th scope="col">Confidence</th></tr></thead>
+            <tbody>
+            ${rows}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>`;
+}
+
+const MARKET_TITLES = { visitor_profile: 'Who visits', discovery_journey: 'How they find you', seasonal_considerations: 'Your seasons', trip_integration: 'Where you fit in a trip' };
+
+export function visitorsAndMarket(ctx) {
+  const entries = Object.entries(ctx || {}).filter(([, v]) => has(typeof v === 'string' ? v : valueText(v)));
+  if (!entries.length) return '';
+  const order = Object.keys(MARKET_TITLES);
+  entries.sort((a, b) => (order.indexOf(a[0]) + 1 || 99) - (order.indexOf(b[0]) + 1 || 99));
+  return `<section class="as-section" id="as-market">
+      <div class="as-divider"><h2 class="tp-h2">Your visitors and market</h2></div>
+      <div class="as-market">
+        ${entries.map(([k, v]) => `<div class="as-card as-card--tile"><h3 class="tp-h3">${MARKET_TITLES[k] || text(words(k))}</h3><p${editKey(`assessment.tourism_context.${k}`)}>${text(typeof v === 'string' ? v : valueText(v))}</p></div>`).join('\n        ')}
+      </div>
+    </section>`;
+}
+
+/**
+ * The whole Assessment page, or '' when there is no assessment.
+ * options: { date, areaTactics: { areaKey: { n, title } } }
+ */
+export function assessmentPage(data, { date, areaTactics = {} } = {}) {
   if (!hasAssessment(data)) return '';
   const categories = ASSESSMENT_CATEGORIES.filter(c => data.categories[c.key]);
-  const wins = (data.quick_wins || []).slice(0, 6);
-  const recs = (data.priority_recommendations || []).slice(0, 4);
+  const wins = data.quick_wins || [];
+  const recs = data.priority_recommendations || [];
+  const level = scoreLevel(data.overall.grade);
+  const hasMarket = Object.values(data.tourism_context || {}).some(v => has(typeof v === 'string' ? v : valueText(v)));
+  const jumps = [['as-summary', 'Summary'], ['as-areas', `Your ${categories.length === 6 ? 'six' : categories.length} areas`], wins.length && ['as-quick', 'Quick wins'], recs.length && ['as-priority', 'Priority recommendations'], hasMarket && ['as-market', 'Your visitors and market']].filter(Boolean);
   return `<section id="page-assessment" class="page">
-  <div class="assessment-hero">
-    <div class="assessment-hero-top">
-      <div>
-        <h1 class="assessment-hero-title">Your Digital Marketing Assessment</h1>
-        ${has(date) ? `<p class="assessment-hero-date">Assessment Date: ${text(date)}</p>` : ''}
+  <div class="as">
+    <header class="as-head">
+      <div class="tp-head-text">
+        <h1 class="tp-h1">Your digital marketing assessment</h1>
+        ${has(date) ? `<p class="tp-sub">Assessed on ${text(date)}</p>` : ''}
       </div>
-      <div class="assessment-hero-actions">
-        <button class="download-pdf-btn" onclick="downloadPDF()">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-            <polyline points="7 10 12 15 17 10"/>
-            <line x1="12" y1="15" x2="12" y2="3"/>
-          </svg>
-          Download PDF
-        </button>
+      <button type="button" class="btn btn--outline" onclick="downloadPDF()">Download as PDF</button>
+    </header>
+    <nav class="as-jumps" aria-label="On this page">
+      ${jumps.map(([id, label]) => `<a href="#${id}" onclick="return jumpTo('${id}')">${label}</a>`).join('')}
+    </nav>
+    ${assessmentSummary(data, { level })}
+    <section class="as-section" id="as-areas">
+      <div class="as-divider"><h2 class="tp-h2">${jumps[1][1]}</h2><span class="as-meta">Open an area to see what we found and what we recommend.</span></div>
+      <div class="as-card as-card--list" data-areas>
+        <div class="as-row as-row--head" aria-hidden="true"><span>Area</span><span>Score</span><span>Grade</span><span>Where it sits</span><span>Share of total</span><span data-slot="checkin" hidden>30 days</span><span data-slot="review" hidden>90 days</span><span></span></div>
+        ${categories.map(c => areaRow(c, data.categories[c.key], areaTactics[c.key] || null)).join('\n        ')}
       </div>
-    </div>
-    ${assessmentGradeCard(data)}
-  </div>
-
-  <div class="content-area">
-    <div class="grade-breakdown">
-      <h2>Score Breakdown by Category</h2>
-      <div class="grade-breakdown-grid">
-        ${categories.map(c => categoryScore(c, data.categories[c.key])).join('\n        ')}
+      <span class="sample-badge" data-sample-only hidden>Sample scores for review</span>
+      <div class="as-slots" data-checkin-slots>
+        <div class="as-slot" data-slot-note="checkin"><strong>30-day check-in</strong><span class="as-meta">Your new scores will appear as a second column beside these.</span></div>
+        <div class="as-slot" data-slot-note="review"><strong>90-day review</strong><span class="as-meta">Your final scores will appear as a third column.</span></div>
       </div>
-    </div>
-
-    ${executiveSummary(data.executive_summary)}
-
-    ${wins.length ? `<div class="quick-wins" id="quickWins">
-      <h2>Quick Wins</h2>
-      <p class="quick-wins-intro">Immediate actions you can complete today:</p>
-      <div class="quick-wins-grid">
-        ${wins.map(assessmentQuickWin).join('\n        ')}
-      </div>
-    </div>` : ''}
-
-    ${recs.length ? `<div class="priority-section">
-      <h2>Priority Recommendations</h2>
-      <p class="priority-intro">The changes that will make the biggest difference, in priority order:</p>
-      <div class="priority-list" id="priorityList">
-        ${recs.map(priorityRecommendation).join('\n        ')}
-      </div>
-    </div>` : ''}
-
-    <div class="categories-section">
-      <h2>Detailed Category Analysis</h2>
-      <div class="categories-grid">
-        ${categories.map(c => categoryCard(c, data.categories[c.key])).join('\n        ')}
-      </div>
-    </div>
+    </section>
+    ${assessmentQuickWins2(wins)}
+    ${priorityTable(recs)}
+    ${visitorsAndMarket(data.tourism_context)}
   </div>
 </section>`;
 }

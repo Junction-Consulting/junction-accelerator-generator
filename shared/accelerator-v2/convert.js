@@ -199,6 +199,8 @@ export function convertPlan(planMd, options = {}) {
       subtitle: t.subtitle,
       phase_label: t.phase_label,
       what_we_heard: t.what_we_heard,
+      heard_quote: t.heard_quote || null,
+      assessment_areas: t.assessment_areas || [],
       what_this_is: t.what_this_is,
       why_it_matters: t.why_it_matters,
       time_commitment: oldTactic ? clone(oldTactic.time_commitment ?? null) : null,

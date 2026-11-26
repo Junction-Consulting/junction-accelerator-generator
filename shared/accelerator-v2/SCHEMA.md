@@ -87,6 +87,8 @@ Phases are time periods: the three month blocks of the roadmap. They are not lin
   "short_label": "Social Media",
   "subtitle": "One sentence.",
   "phase_label": "Search Visibility",
+  "heard_quote": "Guests email us the same five questions every week.",
+  "assessment_areas": ["local_visibility", "website_technical"],
   "what_we_heard": ["Paragraph."],
   "what_this_is": ["Paragraph."],
   "why_it_matters": ["Paragraph."],
@@ -100,6 +102,10 @@ Phases are time periods: the three month blocks of the roadmap. They are not lin
   "resources": [{ "title": "Meta Business Suite", "url": "https://business.facebook.com/", "description": "Optional." }]
 }
 ```
+
+`heard_quote` (optional) is the tactic's `Quote:` line: the pull quote in "What we heard from you", in the coach's words, without its quote marks. Empty means no quote is shown. It is never taken from the paragraphs automatically.
+
+`assessment_areas` (optional) is the tactic's `Assessment Areas:` line, as area keys (`website_technical`, `reviews_reputation`, `booking_conversion`, `social_media`, `guest_experience`, `local_visibility`). The Assessment page links each listed area to this tactic. Names the converter does not recognise are a warning.
 
 `phase_label` is the tactic's `Phase:` line, kept exactly as written. It is a theme, not a time period, and is shown as written (for example on the tactic cards). Optional: if it is empty, it is hidden.
 
@@ -204,7 +210,7 @@ Hand-coded HTML mockups (the booking bar, the booking page, the emails) are not 
 
 ### Quick Wins
 
-Shown on the roadmap, after the last month, as "Google Business Profile wins" (DESIGN-BRIEF.md section 6). There is no separate Quick Wins page. Roadmap actions whose `how_to` is `quick_wins` link there. Ticks do not count toward plan progress.
+Shown on the roadmap, after the last month, as "Google profile and website wins" (DESIGN-BRIEF.md section 6). There is no separate Quick Wins page. Roadmap actions whose `how_to` is `quick_wins` link there. Ticks do not count toward plan progress.
 
 ```json
 {
@@ -272,6 +278,8 @@ Coaches keep writing and uploading `plan.md` in the format in `PLAN_FORMAT.md`. 
 | In `plan.md` | Becomes |
 |---|---|
 | `## Goal`, `## Strategic Positioning`, blockquote, `## Welcome Message` | `strategy` |
+| `Quote:` on each tactic (optional, first line of the tactic) | `heard_quote` |
+| `Assessment Areas:` on each tactic (optional, after `Quote:`) | `assessment_areas` |
 | `Phase:` on each tactic | `phase_label`, exactly as written |
 | `Month N Name:` | `phases` (ranges from the month blocks until a plan says otherwise) |
 | `## Tactic N`, its header lines and seven sections | `tactics[]` |
@@ -321,3 +329,4 @@ This needs changes to login and access (`shared/auth.js`, the access rules in Su
 - 2026-11-24 (Stage 2 follow-ups): Checklist items count towards exactly one tactic (`tactic`, `tactic_source`, the `→ tactic: N` marker). The Assessment page comes from the client's `client_assessments` record. `CUTOVER.md` lists what must change outside v2 before a real client moves.
 - 2026-11-26 (design brief phase 2): Tasks are the actions: progress, tactic progress and the saved ticks use `act_` IDs, and the checklist is kept but not shown. Phase descriptions, `next_step` and `progress_headlines` are not shown by the redesigned dashboard. Stage selection, the current week and score levels (by letter grade) live in `assets/v2/progress-model.js`.
 - 2026-11-26 (design brief phase 3): The roadmap shows the quick wins as "Google Business Profile wins" after the last month; the Quick Wins page is gone. Part cards are no longer shown. Tactic pages have two tabs (Overview, Implementation steps) and every step is collapsible. `what_we_heard` is shown as paragraphs: there is no separate pull-quote field yet (see the phase 3 report).
+- 2026-11-26 (design brief phase 4): Tactics gain two optional plan lines: `Quote:` (`heard_quote`) and `Assessment Areas:` (`assessment_areas`). The roadmap section is renamed "Google profile and website wins". The Assessment page shows every field of the record; Strategy no longer lists the tactics; Materials lists what exists and greys what is to come.

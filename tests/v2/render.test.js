@@ -103,7 +103,7 @@ describe('what the shared scripts need', () => {
     const w1 = CONTENT.roadmap.weeks[0];
     expect(page.html).toContain(`onclick="howToLink('tactic1','${w1.actions[0].how_to}')"`);
     expect(page.html).toContain(`id="${w1.actions[0].how_to}"`);
-    // Quick-win links go to the Google Business Profile wins section on the roadmap
+    // Quick-win links go to the Google profile and website wins section on the roadmap
     expect(page.html).toContain('<button type="button" class="link-btn" onclick="openGbpWins()">How to</button>');
     expect(page.html).not.toContain("navigate('gbp')");
     // Once in the roadmap's "How to" preview and once on the dashboard's "This week" card
@@ -228,7 +228,7 @@ describe('dashboard stages (DESIGN-BRIEF.md section 5)', () => {
     expect(before).toContain(`style="--pct:${a.overall.score}"`);
     expect(before).toContain('What happens next');
     expect(before).toContain('Coming with your plan');
-    a.quick_wins.forEach((w, i) => expect(before).toContain(`id="aqw-${i + 1}" onchange="onQuickWinTick(this)"`));
+    a.quick_wins.forEach((w, i) => expect(before).toContain(`id="aqw-${i + 1}" data-qw="aqw-${i + 1}" onchange="onQuickWinTick(this)"`));
   });
 
   test('a score donut is coloured by its letter grade, and the letter is shown', () => {
@@ -358,7 +358,7 @@ describe('the roadmap (DESIGN-BRIEF.md section 6)', () => {
 
   test('month dividers with "N of M done", weeks as rows with a pie, all closed until the page opens one', () => {
     const html = rm();
-    expect((html.match(/<div class="rm-divider">/g) || []).length).toBe(CONTENT.phases.length + 1); // + Google Business Profile wins
+    expect((html.match(/<div class="rm-divider">/g) || []).length).toBe(CONTENT.phases.length + 1); // + Google profile and website wins
     CONTENT.roadmap.weeks.forEach(w => {
       expect(html).toContain(`<span class="pie" data-live-pie="week-${w.number}" aria-hidden="true"></span>`);
       expect(html).toContain(`<div class="rm-week-body" id="wb-${w.number}" hidden>`);
@@ -384,11 +384,11 @@ describe('the roadmap (DESIGN-BRIEF.md section 6)', () => {
     CONTENT.roadmap.weeks.forEach(w => expect(html).toContain(`<label class="rm-notes-label" for="note-${w.id}">Week notes</label>`));
   });
 
-  test('"Google Business Profile wins" comes after the last month, with the plan\'s quick-win groups and its note', () => {
+  test('"Google profile and website wins" comes after the last month, with the plan\'s quick-win groups and its note', () => {
     const html = rm();
     const gbp = html.indexOf('<section class="rm-gbp" id="gbp-wins">');
     expect(gbp).toBeGreaterThan(html.lastIndexOf('<section class="rm-month">'));
-    expect(html).toContain('<h2 class="rm-h2">Google Business Profile wins</h2>');
+    expect(html).toContain('<h2 class="rm-h2">Google profile and website wins</h2>');
     CONTENT.quick_wins.groups.forEach(g => expect(html.slice(gbp)).toContain(`<h3 class="tp-h3">${g.title}</h3>`));
     const c = copy();
     c.quick_wins.note = { title: 'One thing worth watching', text: 'Zqx watch.' };
@@ -410,7 +410,8 @@ describe('computed, not typed', () => {
     expect(page.html).toContain(`id="tactic-cards-section" data-columns="${CONTENT.tactics.length}"`);
     // Every tactic card grid uses the shared rule, sized by the number of tactics
     expect(page.html).toContain(`<div class="dash-tactics tactic-grid" id="tactic-cards-section" data-columns="${CONTENT.tactics.length}">`);
-    expect(page.html).toContain(`<div class="tactics-overview-grid tactic-grid" data-columns="${CONTENT.tactics.length}">`);
+    // The Strategy page does not list the tactics a second time
+    expect(page.html).not.toContain('tactics-overview-grid');
     expect((page.html.match(/class="nav-item" data-page="tactic\d"/g) || []).length).toBe(CONTENT.tactics.length);
     // Each tactic's navigation ring states its own total for screen readers
     Object.entries(page.data.tasks.byTactic).forEach(([n, ids]) => expect(page.html).toContain(`<span class="sr-only" id="nav-ring-${n}-text">, 0 of ${ids.length} done</span>`));
@@ -465,7 +466,6 @@ describe('computed, not typed', () => {
     expect(html).not.toContain('page-tactic4');
     expect(html).toContain('<div class="wm-step-lbl">3 Tactics</div>');
     expect(html).toContain('id="tactic-cards-section" data-columns="3"');
-    expect(html).toContain('<div class="tactics-overview-grid tactic-grid" data-columns="3">');
     expect(validateDashboardV2(html, c)).toEqual([]);
   });
 });
@@ -599,26 +599,155 @@ describe('the Assessment page', () => {
     expect(page.html).toContain('<section id="page-assessment" class="page">');
   });
 
-  test('shows the overall grade, every category score, the summary, quick wins, priorities and category cards', () => {
-    expect(page.html).toContain(`<div class="grade-circle" id="overallGrade">${data.overall.grade}</div>`);
-    expect(page.html).toContain(`<span id="overallScore">${data.overall.score}</span>/100`);
-    expect(page.html).toContain('Assessment Date: October 15, 2026');
-    Object.values(data.categories).forEach(cat => expect(page.html).toContain(`<span class="grade-breakdown-number">${Math.round(cat.score)}</span>`));
-    expect((page.html.match(/class="grade-breakdown-item"/g) || []).length).toBe(6);
-    expect((page.html.match(/class="category-card"/g) || []).length).toBe(6);
-    expect((page.html.match(/class="quick-win-item"/g) || []).length).toBe(Math.min(6, data.quick_wins.length));
-    expect((page.html.match(/class="priority-item"/g) || []).length).toBe(Math.min(4, data.priority_recommendations.length));
-    data.executive_summary.key_strengths.forEach((s, i) => expect(page.html).toContain(`data-editable-key="assessment.executive_summary.key_strengths.${i}"`));
+  const asPage = () => page.html.slice(page.html.indexOf('<section id="page-assessment"'), page.html.indexOf('\n</section>', page.html.indexOf('<section id="page-assessment"')));
+  const plainText = t => C.attr(t);
+
+  test('jump links, in order, to sections that exist', () => {
+    const html = asPage();
+    const jumps = [...html.matchAll(/<a href="#(as-[a-z]+)" onclick="return jumpTo\('\1'\)">([^<]+)<\/a>/g)];
+    expect(jumps.map(m => m[2])).toEqual(['Summary', 'Your six areas', 'Quick wins', 'Priority recommendations', 'Your visitors and market']);
+    jumps.forEach(m => expect(html).toContain(`id="${m[1]}"`));
+    expect(html).toContain('Assessed on October 15, 2026');
+  });
+
+  test('summary: score donut coloured by grade, grade and level, headline, strengths, gaps, bottom line, confidence', () => {
+    const html = asPage();
+    expect(html).toContain(`class="donut donut--lg donut--score-fair" style="--pct:${data.overall.score}"`);
+    expect(html).toContain('Overall grade C <span class="as-level as-level--fair">Fair</span>');
+    expect(html).toContain('High confidence');
+    expect(html).toContain(plainText(data.executive_summary.headline));
+    expect(html).toContain(plainText(data.executive_summary.bottom_line));
+    data.executive_summary.key_strengths.forEach((t, i) => expect(html).toContain(`data-editable-key="assessment.executive_summary.key_strengths.${i}">${plainText(t)}`));
+    data.executive_summary.critical_gaps.forEach(t => expect(html).toContain(plainText(t)));
+  });
+
+  test('the six areas: one list of rows that open in place, coloured by their letter grade', () => {
+    const html = asPage();
+    Object.entries(data.categories).forEach(([key, cat]) => {
+      expect(html).toContain(`<button type="button" class="as-row" aria-expanded="false" aria-controls="area-${key}-body" onclick="toggleArea(this)">`);
+      expect(html).toContain(`<div class="as-area-body" id="area-${key}-body" hidden>`);
+      expect(html).toContain(`<span class="as-row-share">${Math.round(cat.weight * 100)}%</span>`);
+    });
+    expect(html).toContain('<span class="as-row-score score score--needs-work">62</span>');
+    expect(html).toContain('<span class="as-row-score score score--good">78</span>');
+    expect(html).toContain('as-bar-fill as-bar-fill--needs-work" style="--pct:62"');
+  });
+
+  test('nothing from the record is left out: every metric, finding, recommendation, breakdown measure and source', () => {
+    const html = asPage();
+    Object.entries(data.categories).forEach(([key, cat]) => {
+      if (cat.summary) expect(html).toContain(plainText(cat.summary));
+      (cat.metrics || []).forEach(m => { expect(html).toContain(`<b>${plainText(m.value)}</b><small>${plainText(m.label)}</small>`); });
+      (cat.findings || []).forEach(f => expect(html).toContain(plainText(f.text)));
+      (cat.recommendations || []).forEach(r => expect(html).toContain(plainText(typeof r === 'string' ? r : r.text)));
+      Object.keys(cat.breakdown || {}).forEach(k => expect(html).toContain(`<th scope="row">${C.valueText ? k.replace(/_/g, ' ').replace(/^./, c => c.toUpperCase()) : k}</th>`));
+      [...(cat.dataSources || []), ...(cat.data_sources || [])].forEach(src => expect(html).toContain(plainText(src)));
+    });
+    data.quick_wins.forEach(w => { expect(html).toContain(plainText(w.task)); expect(html).toContain(plainText(w.impact)); });
+    data.priority_recommendations.forEach(r => { expect(html).toContain(plainText(r.text)); expect(html).toContain(plainText(r.expected_result)); });
+    Object.values(data.tourism_context).forEach(t => expect(html).toContain(plainText(t)));
+  });
+
+  test('long lists show the first four and "Show all N"', () => {
+    const cat = data.categories.social_media;
+    expect(cat.findings.length).toBeGreaterThan(4);
+    expect(asPage()).toContain(`Show all ${cat.findings.length} findings</button>`);
+    expect((asPage().match(/<li data-more hidden>/g) || []).length).toBeGreaterThan(0);
+  });
+
+  test('each area covered by a tactic links to it', () => {
+    const html = asPage();
+    const start = html.indexOf('id="area-social_media"');
+    expect(html.slice(start, html.indexOf('<div class="as-area"', start))).toContain(`onclick="navigate('tactic1')">In your plan: ${CONTENT.tactics[0].title}</button>`);
+  });
+
+  test('quick wins on Sage with tick boxes that share their key with the dashboard', () => {
+    const html = asPage();
+    expect(html).toContain('<section class="as-card as-card--sage" id="as-quick">');
+    data.quick_wins.forEach((w, i) => expect(html).toContain(`id="aqw-p-${i + 1}" data-qw="aqw-${i + 1}" onchange="onQuickWinTick(this)"`));
+  });
+
+  test('priority recommendations as a plain table', () => {
+    const html = asPage();
+    expect(html).toContain('<table class="plain-table as-priority">');
+    expect(html).toContain('<th scope="col">Recommendation</th><th scope="col">Area</th><th scope="col">Time</th><th scope="col">Impact</th><th scope="col">Expected result</th>');
+    expect((html.match(/data-editable-key="assessment\.priority_recommendations\.\d+\.text"/g) || []).length).toBe(data.priority_recommendations.length);
+  });
+
+  test('check-in and review slots: notes now, columns in the same list once scores exist', () => {
+    const html = asPage();
+    expect(html).toContain('data-slot-note="checkin"');
+    expect(html).toContain('data-slot-note="review"');
+    Object.keys(data.categories).forEach(() => {});
+    expect((html.match(/<span class="as-row-slot" data-slot="checkin" hidden><\/span>/g) || []).length).toBe(6);
   });
 
   test('missing parts are hidden, not filled', () => {
     const slim = { overall: { score: 60, grade: 'C' }, categories: { social_media: { score: 60, grade: 'C' } } };
     const html = render(CONTENT, slim).html;
-    expect((html.match(/class="grade-breakdown-item"/g) || []).length).toBe(1);
-    expect(html).not.toContain('executive-summary');
-    expect(html).not.toContain('quick-wins-grid');
-    expect(html).not.toContain('priority-list');
-    expect(html).not.toContain('Assessment data will be populated');
+    expect((html.match(/class="as-area"/g) || []).length).toBe(1);
+    expect(html).not.toContain('id="as-quick"');
+    expect(html).not.toContain('id="as-priority"');
+    expect(html).not.toContain('id="as-market"');
+    expect(html).not.toContain('Key strengths');
+    expect(html).not.toContain('Bottom line.');
+    expect(html).not.toMatch(/href="#as-(quick|priority|market)"/);
+  });
+});
+
+describe('the Strategy page (DESIGN-BRIEF.md section 6)', () => {
+  const st = () => page.html.slice(page.html.indexOf('<section id="page-strategy"'), page.html.indexOf('\n</section>', page.html.indexOf('<section id="page-strategy"')));
+
+  test('goal on Carbon, positioning, and the statement as a pull quote', () => {
+    const html = st();
+    expect(html).toContain('<section class="st-goal">');
+    expect(html).toContain('data-editable-key="strategy.goal"');
+    expect(html).toContain('<blockquote class="pull-quote pull-quote--lg">“');
+    expect(html).toContain('data-editable-key="strategy.positioning"');
+  });
+
+  test('one row per objective, linking to its tactic with its pie and weeks; tactics are not listed again', () => {
+    const html = st();
+    CONTENT.objectives.forEach(o => {
+      const n = CONTENT.tactics.findIndex(t => t.id === o.tactic) + 1;
+      expect(html).toContain(`onclick="navigate('tactic${n}')"`);
+      expect(html).toContain(`<span class="pie" data-live-pie="tactic-${n}" aria-hidden="true"></span>`);
+      expect(html).toContain(`weeks ${o.weeks[0]} to ${o.weeks[1]}`);
+    });
+    expect(html).toContain(`Your ${['zero', 'one', 'two', 'three', 'four'][CONTENT.objectives.length]} objectives`);
+    expect(html).not.toContain('tactic-overview-card');
+  });
+
+  test('without a positioning statement there is no pull quote', () => {
+    const c = copy();
+    c.strategy.positioning_statement = null;
+    expect(render(c).html).not.toContain('pull-quote--lg');
+  });
+});
+
+describe('the Materials page (DESIGN-BRIEF.md section 6)', () => {
+  const mat = () => page.html.slice(page.html.indexOf('<section id="page-materials"'), page.html.indexOf('\n</section>', page.html.indexOf('<section id="page-materials"')));
+
+  test('the two PDFs are wired; later items are greyed with when they arrive', () => {
+    const html = mat();
+    expect(html).toContain('onclick="downloadPDF()">Download PDF</button>');
+    expect(html).toContain('onclick="printRoadmap()">Download PDF</button>');
+    expect(html).toContain('<div class="mat-item mat-item--later">\n      <div><h2 class="tp-h3">30-day check-in report</h2><p>Arrives after your check-in, once week 4 is done.</p></div>');
+    expect(html).toContain('<h2 class="tp-h3">90-day review</h2><p>Arrives when your plan is done.</p>');
+    expect(html).toContain('mat-item--later plan-coming-only');
+  });
+
+  test('without an assessment there is no assessment report row', () => {
+    expect(render(CONTENT, null).html).not.toContain('Assessment report</h2>');
+  });
+});
+
+describe('the "What we heard" pull quote', () => {
+  test('shows the coach\'s quote in the Sage box, and nothing when there is none', () => {
+    CONTENT.tactics.forEach(t => expect(page.html).toContain(`<blockquote class="pull-quote" data-editable-key="${t.id}.heard_quote">“${t.heard_quote}”</blockquote>`));
+    const c = copy();
+    c.tactics.forEach(t => { t.heard_quote = null; });
+    expect(render(c).html).not.toContain('<blockquote class="pull-quote" ');
   });
 });
 

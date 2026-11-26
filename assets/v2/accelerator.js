@@ -234,6 +234,25 @@ function toggleHowTo(id, btn) {
   btn.setAttribute('aria-expanded', box.hidden ? 'false' : 'true');
   btn.textContent = box.hidden ? 'How to' : 'Hide how to';
 }
+// ── Assessment: areas open in place, long lists, jump links ─
+function toggleArea(btn) {
+  const area = btn.closest('.as-area');
+  const open = !area.classList.contains('open');
+  area.classList.toggle('open', open);
+  btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  area.querySelector('.as-area-body').hidden = !open;
+}
+function showAll(btn) {
+  const list = btn.previousElementSibling;
+  if (list) list.querySelectorAll('[data-more]').forEach(li => { li.hidden = false; });
+  btn.remove();
+}
+function jumpTo(id) {
+  const el = document.getElementById(id);
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  return false;
+}
+
 function openGbpWins() {
   navigate('roadmap');
   const section = document.getElementById('gbp-wins');
@@ -292,8 +311,12 @@ function onMirrorTick(el) {
   real.dispatchEvent(new Event('change', { bubbles: true }));
 }
 
+// The assessment's quick wins show on the dashboard and the Assessment page:
+// both boxes share one key (data-qw), kept in this browser.
 function onQuickWinTick(el) {
-  state.checks[el.id] = el.checked;
+  const key = el.getAttribute('data-qw') || el.id;
+  state.checks[key] = el.checked;
+  document.querySelectorAll(`input[data-qw="${key}"]`).forEach(b => { b.checked = el.checked; });
   saveState();
   updateProgress();
 }
@@ -340,6 +363,7 @@ function updateProgress() {
     if (navText) navText.textContent = ', ' + d + ' of ' + tot + ' done';
     // The tactic page's donut
     setPct(`[data-live-donut="tactic-${t}"]`, p);
+    setPct(`[data-live-pie="tactic-${t}"]`, p);
     setLive(`tactic-${t}-pct`, p + '%');
   }
 
@@ -369,9 +393,9 @@ function updateProgress() {
   });
 
   // The assessment's quick wins (this browser; not plan progress)
-  const wins = [...document.querySelectorAll('input[id^="aqw-"]')];
+  const wins = [...document.querySelectorAll('input[data-qw]')];
   const winsTotal = PAGE.assessment ? PAGE.assessment.quickWins : 0;
-  const winsDone = [...new Set(wins.filter(w => w.checked).map(w => w.id))].length;
+  const winsDone = [...new Set(wins.filter(w => w.checked).map(w => w.getAttribute('data-qw')))].length;
   setLive('wins-done', winsDone);
   setPct('[data-live-ring="wins"]', MODEL.percent(winsDone, winsTotal));
 
@@ -480,10 +504,30 @@ function renderDashboard() {
     li.querySelector('[data-step-note]').textContent = step.note;
   });
 
+  renderAssessmentSlots(scores);
   if (stage === 'delivered') renderReadList();
   if (stage === 'during') renderThisWeek();
   if (stage === 'done') renderResults(scores);
   lastStage = stage;
+}
+
+// Later scores become extra columns in the six-areas list
+function renderAssessmentSlots(scores) {
+  const list = document.querySelector('[data-areas]');
+  if (!list) return;
+  ['checkin', 'review'].forEach(slot => {
+    const entry = scores && scores[slot];
+    list.classList.toggle('has-' + slot, !!entry);
+    list.querySelectorAll(`[data-slot="${slot}"]`).forEach(cell => {
+      cell.hidden = !entry;
+      const area = cell.closest('[data-area]');
+      if (entry && area) cell.innerHTML = cellHtml(entry.areas[area.getAttribute('data-area')]);
+    });
+    const note = document.querySelector(`[data-slot-note="${slot}"]`);
+    if (note) note.hidden = !!entry;
+  });
+  const sample = !!(scores && ((scores.checkin && scores.checkin.sample) || (scores.review && scores.review.sample)));
+  document.querySelectorAll('#page-assessment [data-sample-only]').forEach(b => { b.hidden = !sample; });
 }
 
 function renderReadList() {
@@ -583,7 +627,7 @@ function changeText(from, to) {
 
 function renderResults(scores) {
   const a = PAGE.assessment;
-  const sampleBadge = document.querySelector('[data-sample-only]');
+  const sampleBadge = document.querySelector('[data-dashboard] [data-sample-only]');
   if (sampleBadge) sampleBadge.hidden = !(scores && ((scores.review && scores.review.sample) || (scores.checkin && scores.checkin.sample)));
   if (a) {
     const review = scores && scores.review;
@@ -637,6 +681,7 @@ function restoreState() {
   Object.keys(state.checks).forEach(id => {
     const el = document.getElementById(id);
     if (el && state.checks[id]) el.checked = true;
+    document.querySelectorAll(`input[data-qw="${id}"]`).forEach(b => { b.checked = !!state.checks[id]; });
   });
   Object.keys(state.notes).forEach(id => {
     const ta = document.getElementById('note-' + id);

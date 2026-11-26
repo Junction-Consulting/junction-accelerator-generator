@@ -21,6 +21,8 @@ You already deliver a five-star stay. This plan is about making sure the people 
 ---
 
 ## Tactic 1: Social Media Activation
+Quote: The blocker is time, not ideas.
+Assessment Areas: Social media and content
 Phase: Foundation
 Short Label: Social Media
 Subtitle: Build a consistent, engaging presence that drives discovery and turns followers into guests.
@@ -97,6 +99,8 @@ Leisure travellers find places to stay on Instagram and Facebook before they eve
 ---
 
 ## Tactic 2: Review Generation
+Quote: Asking for a review has always felt awkward.
+Assessment Areas: Reviews and reputation
 Phase: Growth
 Short Label: Reviews
 Subtitle: Turn happy guests into steady, recent reviews.
@@ -146,6 +150,8 @@ Review count and recency both affect local ranking. A property with 70 recent re
 ---
 
 ## Tactic 3: Local Search Visibility and the Pages That Earn Search Traffic All Year
+Quote: Guests email us the same five questions every week.
+Assessment Areas: Local visibility, Website and technical
 Phase: Search Visibility
 Short Label: Local Search
 Subtitle: Be the first result when someone nearby searches for a lakeside cabin.
@@ -243,6 +249,8 @@ Someone searching "lakeside cabin near me" is ready to book. Local search is whe
 ---
 
 ## Tactic 4: Direct Booking and Guest Email
+Quote: We have years of guest emails and have never written to them.
+Assessment Areas: Online booking and conversion, Digital guest experience
 Phase: Booking and Retention
 Short Label: Booking and Email
 Subtitle: Make booking direct the easiest option, and stay in touch with guests who have already stayed.

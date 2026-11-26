@@ -87,6 +87,7 @@ export function textFields(content) {
     push(T, t.id, 'subtitle', t.subtitle);
     if (t.phase_label != null) push(T, t.id, 'phase label', t.phase_label, false);
     for (const key of ['what_we_heard', 'what_this_is', 'why_it_matters']) (t[key] || []).forEach((p, i) => push(T, t.id, `${key}[${i}]`, p));
+    if (t.heard_quote) push(T, t.id, 'heard_quote', t.heard_quote);
     if (t.time_commitment) {
       push(T, t.id, 'time_commitment.amount', t.time_commitment.amount, false);
       push(T, t.id, 'time_commitment.detail', t.time_commitment.detail, false);
@@ -481,13 +482,14 @@ export function hiddenContent(content) {
   // but the redesigned dashboard (DESIGN-BRIEF.md) does not show them, so an
   // empty one hides nothing.
   group('roadmap.closing', 'Roadmap closing note', isEmpty((content.roadmap || {}).closing) ? ['Roadmap'] : []);
+  group('tactics[].heard_quote', 'Pull quote', (content.tactics || []).map((t, i) => ({ t, where: `Tactic ${i + 1}` })).filter(({ t }) => isEmpty(t.heard_quote)).map(x => x.where));
   group('tactics[].time_commitment', 'Time commitment', (content.tactics || []).map((t, i) => ({ t, where: `Tactic ${i + 1}` })).filter(({ t }) => !t.time_commitment || isEmpty(t.time_commitment.amount)).map(x => x.where));
   const s = content.strategy || {};
   group('strategy.welcome_message', 'Welcome message', isEmpty(s.welcome_message) ? ['Welcome screen'] : []);
   group('strategy.positioning_statement', 'Positioning statement', isEmpty(s.positioning_statement) ? ['Strategy page'] : []);
-  if (((content.quick_wins || {}).groups || []).length) group('quick_wins.intro', 'Quick Wins introduction', (content.quick_wins || {}).intro ? [] : ['Quick Wins page']);
+  if (((content.quick_wins || {}).groups || []).length) group('quick_wins.intro', 'Quick Wins introduction', (content.quick_wins || {}).intro ? [] : ['Google profile and website wins (roadmap)']);
   group('tactics[].phase_label', 'Tactic phase label', (content.tactics || []).map((t, i) => ({ t, where: `Tactic ${i + 1}` })).filter(({ t }) => isEmpty(t.phase_label)).map(x => x.where));
-  group('quick_wins.note', 'Quick Wins closing note', (content.quick_wins || {}).note ? [] : ['Quick Wins page']);
+  group('quick_wins.note', 'Quick Wins closing note', (content.quick_wins || {}).note ? [] : ['Google profile and website wins (roadmap)']);
   return groups;
 }
 

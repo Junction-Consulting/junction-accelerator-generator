@@ -173,6 +173,23 @@
   --confirm-radius-v2: 4px;
   --confirm-pad-v2: 6px;
 
+  /* Assessment, Strategy and Materials (DESIGN-BRIEF.md section 6) */
+  --type-quote: 22px;
+  --type-quote-lg: 24px;
+  --type-goal: 20px;
+  --leading-quote: 1.25;
+  --area-score-col: 56px;
+  --area-share-col: 90px;
+  --area-slot-col: 72px;
+  --area-chev-col: 24px;
+  --area-bar: 10px;
+  --area-name-min: 220px;
+  --num-min: 140px;
+  --type-num: 22px;
+  --market-min: 280px;
+  --finding-dot-top: .55em;
+  --materials-max: 900px;
+
   /* ── v1 names, re-pointed to the Junction roles ─────────────────────
      The pages not yet rebuilt (phases 2 to 4) still use these. Each one
      goes when the last component using it is rebuilt. */

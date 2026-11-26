@@ -212,9 +212,6 @@ export function renderDashboard(content, options = {}) {
     return C.phaseBlock(p, i + 1, html, data.tasks.byPhase[i + 1].length);
   }).join('\n\n    ');
 
-  // Positioning: paragraphs, then the statement under its label (as v1 shows a blockquote)
-  let positioning = C.paragraphs(strategy.positioning);
-  if (has(strategy.positioning_statement)) positioning += `${positioning ? '<br><br>' : ''}<strong>Your Strategic Positioning</strong><br>${C.md(strategy.positioning_statement)}`;
 
   const printPhases = phases.map(p => `${C.plain(p.name)} (Weeks ${p.weeks[0]}-${p.weeks[1]})`);
   const printPhaseText = printPhases.length > 1 ? `${printPhases.slice(0, -1).join(', ')}, and ${printPhases[printPhases.length - 1]}` : printPhases.join('');
@@ -234,17 +231,15 @@ export function renderDashboard(content, options = {}) {
     NAV_TACTICS: tactics.map((t, i) => C.navTactic(t, i + 1, data.tasks.byTactic[i + 1].length)).join('\n      '),
     NAV_COACH: C.navCoach(client.coach_email),
     NAV_ASSESSMENT: C.hasAssessment(options.assessment) ? C.navAssessment() : '',
-    MATERIALS_ASSESSMENT: C.hasAssessment(options.assessment) ? `<div class="materials-item">
-      <div><h2>Assessment report</h2><p>Your digital marketing assessment as a document to print or save as a PDF.</p></div>
-      <button type="button" class="materials-btn" onclick="downloadPDF()">Download PDF</button>
-    </div>` : '',
-    ASSESSMENT_PAGE: C.assessmentPage(options.assessment, { date: formatDate(client.cohort_start) }),
+    MATERIALS_PAGE: C.materialsPage({ hasAssessmentPdf: C.hasAssessment(options.assessment), date: formatDate(client.cohort_start), days, checkinWeek: phases.length ? phases[0].weeks[1] : null }),
+    ASSESSMENT_PAGE: C.assessmentPage(options.assessment, { date: formatDate(client.cohort_start), areaTactics: Object.fromEntries(tactics.flatMap((t, i) => (t.assessment_areas || []).map(k => [k, { n: i + 1, title: t.title }])).reverse()) }),
     PHASE_COUNT_WORD: NUMBER_WORDS[phases.length] || String(phases.length),
     TACTIC_COUNT: String(tactics.length),
     GOAL: goal,
-    POSITIONING: positioning,
-    OBJECTIVES: objectives.map((o, i) => C.objectiveCard(o, i + 1, tacticNumber.get(o.tactic))).join('\n        '),
-    TACTIC_OVERVIEW_CARDS: tactics.map((t, i) => C.tacticOverviewCard(t, i + 1)).join('\n        '),
+    POSITIONING: C.positioningBlock(strategy),
+    OBJECTIVES_HEADING: `Your ${NUMBER_WORDS[objectives.length] || objectives.length} objective${objectives.length === 1 ? '' : 's'}`,
+    STRATEGY_NEXT: tactics.length ? `<div class="tp-foot tp-foot--end"><button type="button" class="btn" onclick="navigate('tactic1')">Next: ${C.plain(tactics[0].title)}</button></div>` : '',
+    OBJECTIVES: objectives.map((o, i) => { const n = tacticNumber.get(o.tactic); return C.objectiveRow(o, i + 1, n ? { n, name: tactics[n - 1].short_label || tactics[n - 1].title } : null); }).join('\n      '),
     TACTIC_PAGES: tactics.map((t, i) => C.tacticPage(t, i + 1, { assetUrl, total: data.tasks.byTactic[i + 1].length, stepWeeks, next: tactics[i + 1] ? { n: i + 2, title: tactics[i + 1].title } : null })).join('\n\n'),
     PRINT_COHORT_START: client.cohort_start ? `<strong>Cohort Start:</strong> ${formatDate(client.cohort_start)}<br>\n          ` : '',
     PRINT_PHASES: printPhaseText,

@@ -133,7 +133,7 @@ Notes:
 
 - Jump links: Summary, Your six areas, Quick wins, Priority recommendations, Your visitors and market.
 - Summary: overall score donut, grade, headline, key strengths, critical gaps, bottom line.
-- Your six areas: one list. Each row shows area, score, grade, bar and share of total, with a chevron, and opens in place to show the summary, the numbers, findings, recommendations, sources and confidence, plus a link to the tactic that covers it when there is one. Long lists show the first few with "Show all N".
+- Your six areas: one list. Each row shows area, score, grade, bar and share of total, with a chevron, and opens in place to show the summary, the numbers, findings, recommendations, sources and confidence, plus a link to the tactic that covers it when there is one. Which tactic covers which area is stated in the plan, never guessed: an optional `Assessment Areas:` line on each tactic. Long lists show the first few with "Show all N".
 - Slots for the 30-day check-in and 90-day review: later scores become extra columns in the same list.
 - Quick wins on Sage, tickable, with time and impact.
 - Priority recommendations as a plain table: recommendation, area, time, impact, expected result.
@@ -143,7 +143,7 @@ Notes:
 
 **Tactic.** Header with title, subtitle, "Tactic N · theme label" and a donut. Two tabs.
 
-- Overview: What this is, Why it matters, What we heard from you (Sage, pull quote), Success metrics as a plain table, Tips (Sage-25), Resources. No "What this breaks into".
+- Overview: What this is, Why it matters, What we heard from you (Sage, with a pull quote in Fraunces when the plan gives one: an optional `Quote:` line on each tactic. Nothing shown when absent, and never a sentence picked automatically), Success metrics as a plain table, Tips (Sage-25), Resources. No "What this breaks into".
 - Implementation steps: one continuous scroll. Parts are headings, not tabs. Every step is collapsible with a chevron. An open step shows its labels (time, cost, Contractor, Critical), a link to its week on the roadmap, bullets and sub-bullets, tables, media and step resources.
 - `[CONFIRM ...]` notes render inline as a Sage highlight.
 - Media uses one frame per type (website, document, phone, email, none) with a Mockup or Example badge and an optional caption, always below the step text.
@@ -155,7 +155,7 @@ Notes:
 - Weeks are plain rows with a small ring. Only the open week sits on a white panel.
 - Inside a week: one list of actions, each with a tick box, "How to" and "Note". "How to" expands a short preview from the linked step (its first two bullets) with a link to the full step.
 - Week notes field.
-- After Month 3: a section named "Google Business Profile wins" holding the plan's own quick-win groups and its "One thing worth watching" note. Tickable. Roadmap actions that point to quick wins link here.
+- After Month 3: a section named "Google profile and website wins" holding the plan's own quick-win groups and its "One thing worth watching" note. Tickable. Roadmap actions that point to quick wins link here.
 - Download as PDF.
 
 **Materials.** One row per item: assessment report, onboarding call notes, coaching call summary, 90-day plan PDF. Items that do not exist yet (30-day check-in report, 90-day review) show greyed with when they arrive. Only the two PDFs can be wired now. List the rest under section 11.
@@ -166,7 +166,7 @@ Notes:
 - **Tactic progress** counts the actions whose "how to" points into that tactic. Actions with no link count toward the overall total only.
 - **Everything updates at once.** Ticking an action updates the week count, the donut, the phase bars, the tactic rings in the navigation and the tactic cards without a reload, on every page that shows them.
 - **Keys.** Ticks are saved by action ID through the existing `shared/progress.js`. Do not edit that file.
-- **Quick wins and Google Business Profile wins** are tickable and do not count toward plan progress.
+- **Quick wins and Google profile and website wins** are tickable and do not count toward plan progress.
 - **Read state** (stage 2a) and **last step opened** can be kept in the browser for now. Note this in `CUTOVER.md` as something to move to the account later.
 - **Steps and areas** remember nothing: they open collapsed except the one linked to.
 

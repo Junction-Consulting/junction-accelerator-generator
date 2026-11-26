@@ -73,38 +73,21 @@
 
 <!-- STRATEGY -->
 <section id="page-strategy" class="page">
-  <div class="page-header">
-    <div class="page-header-eyebrow">Your Strategy</div>
-    <h1>{{PROGRAM_DAYS}}-Day Marketing Strategy</h1>
-    <p>Your customised roadmap to marketing success</p>
-  </div>
-  <div class="content-area">
-    <div class="strategy-goal">
-      <div class="strategy-goal-quote">&ldquo;</div>
-      <div class="strategy-goal-inner">
-        <div class="strategy-goal-label">Your {{PROGRAM_DAYS}}-Day Goal</div>
-        <p class="strategy-goal-text" data-editable-key="strategy.goal">{{GOAL}}</p>
-      </div>
-    </div>
-
-    <div class="strategy-positioning">
-      <div class="strategy-positioning-label">Strategic Positioning</div>
-      <p class="strategy-positioning-text" data-editable-key="strategy.positioning">{{POSITIONING}}</p>
-    </div>
-
-    <div class="strategy-objectives">
-      <div class="strategy-objectives-label">Your Objectives</div>
-      <div class="strategy-objectives-grid">
-        {{OBJECTIVES}}
-      </div>
-    </div>
-
-    <div class="tactics-overview">
-      <div class="tactics-overview-label">Your Tactics</div>
-      <div class="tactics-overview-grid tactic-grid" data-columns="{{TACTIC_COUNT}}">
-        {{TACTIC_OVERVIEW_CARDS}}
-      </div>
-    </div>
+  <div class="tp st">
+    <header class="tp-head-text">
+      <h1 class="tp-h1">Your {{PROGRAM_DAYS}}-day strategy</h1>
+      <p class="tp-sub">Where you are going, and why this approach fits {{CLIENT_NAME}}.</p>
+    </header>
+    <section class="st-goal">
+      <h2 class="tp-h2 st-goal-title">Your goal</h2>
+      <div class="st-goal-text" data-editable-key="strategy.goal">{{GOAL}}</div>
+    </section>
+    {{POSITIONING}}
+    <section class="st-objectives">
+      <h2 class="tp-h2 rm-divider st-rule">{{OBJECTIVES_HEADING}}</h2>
+      {{OBJECTIVES}}
+    </section>
+    {{STRATEGY_NEXT}}
   </div>
 </section>
 
@@ -171,20 +154,8 @@
   </div>
 </section>
 
-<!-- MATERIALS (interim: Phase 4 builds the full page) -->
-<section id="page-materials" class="page">
-  <div class="materials">
-    <div class="materials-header">
-      <h1>Materials</h1>
-      <p>Everything from your program, in one place.</p>
-    </div>
-    {{MATERIALS_ASSESSMENT}}
-    <div class="materials-item plan-ready-only">
-      <div><h2>Your {{PROGRAM_DAYS}}-day plan</h2><p>Your roadmap as a document to print or save as a PDF.</p></div>
-      <button type="button" class="materials-btn" onclick="printRoadmap()">Download PDF</button>
-    </div>
-  </div>
-</section>
+<!-- MATERIALS -->
+{{MATERIALS_PAGE}}
 
 
 <!-- WELCOME MODAL -->

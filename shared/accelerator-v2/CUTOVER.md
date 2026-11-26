@@ -94,6 +94,14 @@ Items are grouped by what breaks if they are skipped.
 - **Why:** implementation steps now open collapsed, and a roadmap week's actions are only visible when the week is open. Edit Mode still finds every editable item by its key, but an editor has to open a step or week to see its text. "What we heard" has no pull-quote field to edit.
 - **Change:** consider an "open everything" switch while Edit Mode is on.
 
+### 18. Two new optional tactic lines in the plan format
+- **Files:** `PLAN_FORMAT.md`, the drafting instructions (`CLAUDE_PROJECT_INSTRUCTIONS.md`, `GOOGLE_DOC_TEMPLATE.md`, `COACH_SOP.md`), `shared/plan-validator.js`, `tests/plan-format-docs.test.js`
+- **Why:** v2 reads two optional lines at the top of each tactic, straight after the `## Tactic N:` heading:
+  - `Quote: The blocker is time, not ideas.` The pull quote in "What we heard from you". The coach writes it; v2 never picks a sentence itself. With no line, no quote is shown.
+  - `Assessment Areas: Social media and content, Local visibility` Which assessment areas the tactic covers, so the Assessment page can link each area to its tactic. With no line, there is no link.
+  Neither is in `PLAN_FORMAT.md` or the drafting instructions yet. The v1 reader ignores both lines when they come before `Phase:`, but would add them to the subtitle if they came after `Subtitle:`.
+- **Change:** document both lines (and where they go) in the plan format and drafting instructions, and teach the v1 validator to accept them.
+
 ## Already handled inside v2
 
 For reference, these do not need changes outside v2:
