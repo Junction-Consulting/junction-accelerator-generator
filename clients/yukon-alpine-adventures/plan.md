@@ -163,7 +163,12 @@ Instagram now shows Reels to people who are likely to be interested, whether or 
 #### Part A: Set Up the System
 
 1. **Choose your five content categories**
-   - Write these five categories at the top of a note on your phone, so you never start from a blank page: **Come with me** (a floatplane drop-off, a morning in camp, a ridge walk), **The land** (one place at a time: Kusawa, Asi Keyi, the Boundary Ranges, the Takhini headwaters), **How we do it** (packing, bear safety, off-trail travel, backcountry cooking from your newsletter recipes), **Guest moments** (first caribou, a summit, camp dinner, shared with permission) and **Plan your trip** (itineraries, dates, what's included, who each trip suits).
+   - Write these five categories at the top of a note on your phone, so you never start from a blank page:
+     - **Come with me**: a floatplane drop-off, a morning in camp, a ridge walk
+     - **The land**: one place at a time (Kusawa, Asi Keyi, the Boundary Ranges, the Takhini headwaters)
+     - **How we do it**: packing, bear safety, off-trail travel, backcountry cooking from your newsletter recipes
+     - **Guest moments**: first caribou, a summit, camp dinner, shared with permission
+     - **Plan your trip**: itineraries, dates, what's included, who each trip suits
    - Aim for four in five posts from the first four categories. Plan your trip is the only category that sells directly, and carousels carry most of it.
    - For every post, ask one question before you publish: would someone send this to their hiking group chat? That is the share you're after.
 
