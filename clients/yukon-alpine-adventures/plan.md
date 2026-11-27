@@ -324,7 +324,11 @@ Over half of travellers now use AI somewhere in their trip planning, and AI tool
 
 7. **Run the AI search test**
    - Open ChatGPT in a private (incognito) browser window, without logging in, so it doesn't know who you are.
-   - Ask the questions your guests would ask: "Help me plan a guided backpacking trip in the Yukon", "What are the best small-group hiking expeditions in the Yukon?", "Is there a guided fly-in hiking trip in Kluane or Asi Keyi?", "Is a guided backpacking trip in the Yukon a good idea for a solo woman?"
+   - Ask the questions your guests would ask:
+     - "Help me plan a guided backpacking trip in the Yukon"
+     - "What are the best small-group hiking expeditions in the Yukon?"
+     - "Is there a guided fly-in hiking trip in Kluane or Asi Keyi?"
+     - "Is a guided backpacking trip in the Yukon a good idea for a solo woman?"
    - Note whether you're mentioned, and which companies are. Then ask: "Which sources did you use for that answer?" Push for specifics if it hedges.
    - Repeat the same questions in Google's AI answers and any other AI tool you use. Save the results in one document so you can compare them later.
 
