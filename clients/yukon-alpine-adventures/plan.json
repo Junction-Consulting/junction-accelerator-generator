@@ -1,0 +1,207 @@
+{
+  "client_name": "Yukon Alpine Adventures",
+  "client_slug": "yukon-alpine-adventures",
+  "goal": "Your 2027 season is set: five dated expeditions from June 24 to September 11, six guests each, which is 30 seats at $3,900 to $5,300 per person. Since The New York Times feature came out this November, you have gone from about one inquiry a month to four or five a week. The 90 days of this plan run through December, January and February, which is exactly when your guests start talking to you and then commit. The goal is to turn that attention into confirmed seats without adding hours you don't have.\n\nBy the end of February, anyone who finds you should be able to see every 2027 departure in one place with its dates, price, difficulty and spots left, and send you a booking request in one step that tells you which trip they want and how experienced they are. Your screening conversation stays exactly as it is. You will also know which requests came from Instagram, Google, the article, ChatGPT or a friend, because right now every booking arrives as an email and none of it is measured.\n\nAlongside that, you'll move from posting about once every two weeks to two or three times a week, using a content system built around the one full day a week you have in the off-season. Your four itinerary PDFs will become web pages that Google and AI tools can read and cite, so the trip-planning searches that already sent you your first guest in 2025 keep working for you.\n\nThe order matters. The booking path comes first because the inquiries are arriving now. Content runs the whole 90 days because the booking window is open the whole 90 days. Itinerary pages and search work come in January, once the booking path is in place. This plan has no paid advertising in it. Your past Meta and Google campaigns ran without any way to connect spend to bookings, and that gap gets fixed here first. The one real cost is the creator trip in Tactic 2: giving a seat on a late-season departure to a content creator is a marketing expense of up to one full trip price plus your share of the flight, and you should plan for it that way.",
+  "coach_email": "conner@elearningu.com",
+  "weeks": [
+    {
+      "week": 1,
+      "month": 1,
+      "title": "Week 1: Departures Page and the Early Bird Push",
+      "actions": [
+        "Make the behind-the-scenes Reel on The New York Times trip and mention the Early Bird saving, which ends December 15, in the caption → links to: Tactic 2 / Step 4",
+        "Complete the Google Business Profile and website quick wins → links to: GBP Quick Wins",
+        "Build the 2027 Departures page with all five dated trips → links to: Tactic 1 / Step 1"
+      ],
+      "checklist": [
+        "The New York Times behind-the-scenes Reel is posted and pinned",
+        "Google review link is in your post-trip email template",
+        "2027 Departures page lists all five dated trips in List view"
+      ],
+      "deep_link": "https://accelerator.elearningu.com/yukon-alpine-adventures/#week-1"
+    },
+    {
+      "week": 2,
+      "month": 1,
+      "title": "Week 2: The Booking Request Form",
+      "actions": [
+        "Add dates, price, rating and spots left to each departure → links to: Tactic 1 / Step 2",
+        "Change every \"Start your adventure\" button to \"Request to book\" and link it to the departures page → links to: Tactic 1 / Step 3",
+        "Build the booking request form below the departures list → links to: Tactic 1 / Step 4"
+      ],
+      "checklist": [
+        "Each departure shows dates, price, challenge rating and spots left",
+        "All seven trip and overview page buttons go to the departures page",
+        "The booking request form is live and a test request reached your inbox"
+      ],
+      "deep_link": "https://accelerator.elearningu.com/yukon-alpine-adventures/#week-2"
+    },
+    {
+      "week": 3,
+      "month": 1,
+      "title": "Week 3: Thank-You Page and Content Categories",
+      "actions": [
+        "Create the Booking Request Received page and set the form to redirect to it → links to: Tactic 1 / Step 5",
+        "Add the \"Request to book\" button to the site header → links to: Tactic 1 / Step 6",
+        "Write your five content categories in a note on your phone → links to: Tactic 2 / Step 1",
+        "After December 15, take down the Early Bird banner or update it with a new end date"
+      ],
+      "checklist": [
+        "A test request lands on the thank-you page",
+        "The header button shows on desktop and on mobile",
+        "Your five content categories are written down where you'll see them",
+        "The site no longer shows an expired offer"
+      ],
+      "deep_link": "https://accelerator.elearningu.com/yukon-alpine-adventures/#week-3"
+    },
+    {
+      "week": 4,
+      "month": 1,
+      "title": "Week 4: Tracking and a Lighter Holiday Week",
+      "actions": [
+        "Create the booking_request key event in Google Analytics → links to: Tactic 1 / Step 7",
+        "Create the Booking request custom conversion in Meta Events Manager → links to: Tactic 1 / Step 8",
+        "Start the request log and add every request that has come in since Week 2 → links to: Tactic 1 / Step 9",
+        "Ask an AI tool for five Reel ideas for one category and storyboard one of them → links to: Tactic 2 / Step 7"
+      ],
+      "checklist": [
+        "booking_request is marked as a key event in Google Analytics",
+        "The Booking request custom conversion is active in Meta",
+        "Your request log has a row for every request so far, with its source",
+        "One storyboard is saved and ready to film or edit"
+      ],
+      "deep_link": "https://accelerator.elearningu.com/yukon-alpine-adventures/#week-4"
+    },
+    {
+      "week": 5,
+      "month": 2,
+      "title": "Week 5: Clip Library and the First Itinerary Page",
+      "actions": [
+        "Sort last summer's footage into your five category folders → links to: Tactic 2 / Step 2",
+        "Turn the Kusawa itinerary PDF into a web page → links to: Tactic 3 / Step 1"
+      ],
+      "checklist": [
+        "Each category folder has at least 10 clips",
+        "The Kusawa itinerary page is live and linked from the Kusawa trip page"
+      ],
+      "deep_link": "https://accelerator.elearningu.com/yukon-alpine-adventures/#week-5"
+    },
+    {
+      "week": 6,
+      "month": 2,
+      "title": "Week 6: Edits Workflow and Weekly Rhythm",
+      "actions": [
+        "Make your first two Reels in Edits, 15 minutes each → links to: Tactic 2 / Step 3",
+        "Schedule this week's two Reels and one post in Meta Business Suite → links to: Tactic 2 / Step 6",
+        "Review six weeks of requests in your log and decide whether to test deposits → links to: Tactic 1 / Step 10"
+      ],
+      "checklist": [
+        "Two Reels made in Edits are posted or scheduled",
+        "This week's posts are scheduled in Meta Business Suite",
+        "Your deposit decision for 2027 is written down"
+      ],
+      "deep_link": "https://accelerator.elearningu.com/yukon-alpine-adventures/#week-6"
+    },
+    {
+      "week": 7,
+      "month": 2,
+      "title": "Week 7: Carousels and Itinerary Pages",
+      "actions": [
+        "Post the Kusawa itinerary carousel → links to: Tactic 2 / Step 5",
+        "Turn The Boundary Ranges itinerary into a web page → links to: Tactic 3 / Step 2",
+        "Add photos and alt text to both itinerary pages → links to: Tactic 3 / Step 3",
+        "Make and schedule this week's Reels → links to: Tactic 2 / Step 6"
+      ],
+      "checklist": [
+        "The Kusawa carousel is posted with dates, price and a booking call to action",
+        "The Boundary Ranges itinerary page is live",
+        "Every image on both itinerary pages has alt text"
+      ],
+      "deep_link": "https://accelerator.elearningu.com/yukon-alpine-adventures/#week-7"
+    },
+    {
+      "week": 8,
+      "month": 2,
+      "title": "Week 8: YouTube, TikTok and Search Terms",
+      "actions": [
+        "Create your YouTube channel and TikTok account and upload your existing Reels with search-style titles → links to: Tactic 2 / Step 8",
+        "List one main search term for each page and connect Google Search Console → links to: Tactic 3 / Step 4",
+        "Post the Boundary Ranges carousel → links to: Tactic 2 / Step 5"
+      ],
+      "checklist": [
+        "YouTube and TikTok accounts are live with your back catalogue uploaded",
+        "Every main page has one search term written next to it",
+        "Google Search Console is connected in Squarespace"
+      ],
+      "deep_link": "https://accelerator.elearningu.com/yukon-alpine-adventures/#week-8"
+    },
+    {
+      "week": 9,
+      "month": 3,
+      "title": "Week 9: SEO Titles and Scheduled Shorts",
+      "actions": [
+        "Rewrite the SEO title and description on every trip page, starting with The Boundary Ranges → links to: Tactic 3 / Step 5",
+        "Set each trip page's subheadings as real headings that include its search term → links to: Tactic 3 / Step 6",
+        "Schedule a month of YouTube Shorts and the next 10 days of TikToks → links to: Tactic 2 / Step 9",
+        "Turn the Asi Keyi and Headwaters of the Takhini itineraries into web pages → links to: Tactic 3 / Step 2"
+      ],
+      "checklist": [
+        "Every trip page has its own SEO title and description",
+        "Each trip page has one Heading 1 and at least two Heading 2s",
+        "YouTube Shorts are scheduled through the end of the month",
+        "All four itinerary pages are live"
+      ],
+      "deep_link": "https://accelerator.elearningu.com/yukon-alpine-adventures/#week-9"
+    },
+    {
+      "week": 10,
+      "month": 3,
+      "title": "Week 10: The AI Search Test and the Creator Trip",
+      "actions": [
+        "Run the AI search test in a private window and save the answers and sources → links to: Tactic 3 / Step 7",
+        "Choose your 2027 creator trip departure and hold one seat → links to: Tactic 2 / Step 10",
+        "Post the Asi Keyi carousel and this week's Reels → links to: Tactic 2 / Step 6"
+      ],
+      "checklist": [
+        "AI test results and sources are saved in one document",
+        "One seat on your chosen departure is held for the creator trip",
+        "This week's carousel and Reels are posted"
+      ],
+      "deep_link": "https://accelerator.elearningu.com/yukon-alpine-adventures/#week-10"
+    },
+    {
+      "week": 11,
+      "month": 3,
+      "title": "Week 11: FAQs and Partner Outreach",
+      "actions": [
+        "Add eight new questions to your FAQ page → links to: Tactic 3 / Step 8",
+        "Contact Air North and your shortlist of creators about the 2027 creator trip → links to: Tactic 2 / Step 11",
+        "Post the Headwaters of the Takhini carousel → links to: Tactic 2 / Step 5"
+      ],
+      "checklist": [
+        "The FAQ page answers at least 19 questions",
+        "Air North and at least one creator have been contacted",
+        "Four itinerary carousels are posted"
+      ],
+      "deep_link": "https://accelerator.elearningu.com/yukon-alpine-adventures/#week-11"
+    },
+    {
+      "week": 12,
+      "month": 3,
+      "title": "Week 12: Giveaway Plan and Results Review",
+      "actions": [
+        "Write the spring giveaway plan and rules → links to: Tactic 2 / Step 12",
+        "Update your Travel Yukon and TripAdvisor listings based on what the AI test showed → links to: Tactic 3 / Step 9",
+        "Post the Where The Light Lingers carousel → links to: Tactic 2 / Step 5",
+        "Count requests and confirmed bookings by source in your request log and bring the numbers to your next coaching call"
+      ],
+      "checklist": [
+        "The giveaway plan has dates, a prize, rules and a skill-testing question",
+        "Travel Yukon and TripAdvisor show your 2027 departures",
+        "All five itinerary carousels are posted",
+        "You know how many requests and bookings each source produced"
+      ],
+      "deep_link": "https://accelerator.elearningu.com/yukon-alpine-adventures/#week-12"
+    }
+  ]
+}
