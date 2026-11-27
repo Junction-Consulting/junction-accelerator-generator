@@ -1,0 +1,204 @@
+{
+  "client_name": "Ya Doma Nature and Forest Therapy",
+  "client_slug": "ya-doma-nature-and-forest-therapy",
+  "goal": "In the next 90 days, you will get Ya Doma ready to relaunch in March 2027. By the end of week 12, your forest therapy walk will be written down from welcome to tea ceremony, it will have a price you have worked out rather than guessed, and someone who finds you on Google, Instagram or Tourism Harrison will be able to understand it and book a date in a few clicks.\n\nThis plan is about clarity and the booking path, not about reach. Your website already gets 5 to 6 visits a day from around the world, and your 5 Google reviews are all five stars. The people are finding you. What is missing is a clear offer, a price, and a simple way to say yes. Today, bookings arrive by phone and email with no system behind them, and people who inquire often book and then cancel. Fixing that comes before any extra promotion, because more visitors to an unclear page only means more emails to answer.\n\nRevenue will not arrive inside these 90 days, because you are not running walks until the relaunch. What you will have at week 12 is a walk that is bookable online with set dates, a website that leads straight to it, Google Analytics collecting data from day one, a complete Google Business Profile ready to reopen, and the pricing worksheet that tells you how many walks a month it takes to reach your goal of working fully for yourself. That number becomes the target for 2027.\n\nThe plan is built around one day a week. Each week has two to four jobs, and none of them need technical skills beyond copying, pasting and filling in forms in Wix and Google.",
+  "coach_email": "conner@elearningu.com",
+  "weeks": [
+    {
+      "week": 1,
+      "month": 1,
+      "title": "Week 1: Quick wins and your run sheet",
+      "actions": [
+        "Work through the GBP Quick Wins list → links to: GBP Quick Wins",
+        "Write your walk run sheet from welcome to tea ceremony → links to: Tactic 1 / Step 1",
+        "Install Google Analytics 4 on your Wix site so it starts collecting data now → links to: Tactic 2 / Step 8",
+        "Confirm you can edit your Google Business Profile and set your service area → links to: Tactic 3 / Step 1"
+      ],
+      "checklist": [
+        "Quick Wins are ticked off",
+        "Run sheet document exists with timings for each part of the walk",
+        "Google Analytics Realtime report shows your own visit",
+        "Google profile shows your service area with no street address"
+      ],
+      "deep_link": "https://accelerator.elearningu.com/ya-doma-nature-and-forest-therapy/#week-1"
+    },
+    {
+      "week": 2,
+      "month": 1,
+      "title": "Week 2: Name what guests walk away with",
+      "actions": [
+        "Write one or two sentences describing what guests walk away with → links to: Tactic 1 / Step 2",
+        "Decide which walks and services you will offer at relaunch, and their lengths → links to: Tactic 1 / Step 3",
+        "Check the website for your home address and remove it → links to: Tactic 2 / Step 7"
+      ],
+      "checklist": [
+        "Your \"what you walk away with\" statement is saved and read aloud",
+        "Relaunch lineup, lengths and group size are written down",
+        "No home street address or location pin appears anywhere on yadoma.ca"
+      ],
+      "deep_link": "https://accelerator.elearningu.com/ya-doma-nature-and-forest-therapy/#week-2"
+    },
+    {
+      "week": 3,
+      "month": 1,
+      "title": "Week 3: Price the walk",
+      "actions": [
+        "Work through the pricing tool's walking tour template and set your prices → links to: Tactic 1 / Step 4",
+        "Choose your accessibility approach and write the sentence for your booking page → links to: Tactic 1 / Step 5"
+      ],
+      "checklist": [
+        "Break-even price and final price are written down for each format",
+        "You know how many walks a month you need to reach your income goal",
+        "Accessibility approach is chosen and written as one sentence"
+      ],
+      "deep_link": "https://accelerator.elearningu.com/ya-doma-nature-and-forest-therapy/#week-3"
+    },
+    {
+      "week": 4,
+      "month": 1,
+      "title": "Week 4: Policies and your business details sheet",
+      "actions": [
+        "Write your cancellation and weather policy → links to: Tactic 1 / Step 6",
+        "Create your business details sheet with your name, descriptions and contact details → links to: Tactic 2 / Step 11",
+        "Update your Google profile description, categories and services → links to: Tactic 3 / Step 2"
+      ],
+      "checklist": [
+        "Cancellation and weather policy is written in five sentences or fewer",
+        "Business details sheet is saved and ready to copy from",
+        "Google profile description, categories and services match the business details sheet"
+      ],
+      "deep_link": "https://accelerator.elearningu.com/ya-doma-nature-and-forest-therapy/#week-4"
+    },
+    {
+      "week": 5,
+      "month": 2,
+      "title": "Week 5: Set up Wix Bookings",
+      "actions": [
+        "Set up your scheduled walk as a Wix Bookings class and add your first dates → links to: Tactic 1 / Step 7",
+        "Set up private walks as appointment requests that you approve → links to: Tactic 1 / Step 8"
+      ],
+      "checklist": [
+        "Scheduled walk service exists with price, length and group size",
+        "At least four March and April 2027 dates are in the Booking Calendar",
+        "Private walk service is set to manual approval"
+      ],
+      "deep_link": "https://accelerator.elearningu.com/ya-doma-nature-and-forest-therapy/#week-5"
+    },
+    {
+      "week": 6,
+      "month": 2,
+      "title": "Week 6: Booking forms and testing",
+      "actions": [
+        "Build the custom booking forms and connect your booking policy → links to: Tactic 1 / Step 9",
+        "Test the booking path on your phone and ask a friend to test it → links to: Tactic 1 / Step 10"
+      ],
+      "checklist": [
+        "Both booking forms ask how the guest heard about Ya Doma",
+        "A test booking produced a confirmation email and appeared in the calendar",
+        "A test private walk request appeared under Pending Booking Requests"
+      ],
+      "deep_link": "https://accelerator.elearningu.com/ya-doma-nature-and-forest-therapy/#week-6"
+    },
+    {
+      "week": 7,
+      "month": 2,
+      "title": "Week 7: Homepage",
+      "actions": [
+        "Replace the closure notice with a relaunch message → links to: Tactic 2 / Step 1",
+        "Rewrite the top of the homepage with one message and one booking button → links to: Tactic 2 / Step 2",
+        "Put the walk first in your homepage services → links to: Tactic 2 / Step 3",
+        "Check every page has only one Heading 1 → links to: Tactic 2 / Step 9"
+      ],
+      "checklist": [
+        "The 2026 closure notice is gone",
+        "The booking button is visible on the first screen on a phone",
+        "Every page has exactly one Heading 1"
+      ],
+      "deep_link": "https://accelerator.elearningu.com/ya-doma-nature-and-forest-therapy/#week-7"
+    },
+    {
+      "week": 8,
+      "month": 2,
+      "title": "Week 8: Service pages",
+      "actions": [
+        "Add an itinerary, price and Book button to the forest therapy walk page → links to: Tactic 2 / Step 4",
+        "Apply the same format to every other service offered at relaunch → links to: Tactic 2 / Step 5",
+        "Update the homepage search description → links to: Tactic 2 / Step 12"
+      ],
+      "checklist": [
+        "Walk page shows itinerary, price, length and a working Book Now button",
+        "Every live service has a price and a button",
+        "Homepage meta description is under 155 characters"
+      ],
+      "deep_link": "https://accelerator.elearningu.com/ya-doma-nature-and-forest-therapy/#week-8"
+    },
+    {
+      "week": 9,
+      "month": 3,
+      "title": "Week 9: Guest emails",
+      "actions": [
+        "Write and save your welcome and logistics email template → links to: Tactic 1 / Step 11",
+        "Write and save your thank-you email template → links to: Tactic 1 / Step 12",
+        "Save replies for the five questions you're asked most → links to: Tactic 1 / Step 13"
+      ],
+      "checklist": [
+        "Welcome email template is saved in Gmail with meeting point and parking",
+        "Thank-you email template is saved in Gmail",
+        "Five saved replies are ready in Gmail"
+      ],
+      "deep_link": "https://accelerator.elearningu.com/ya-doma-nature-and-forest-therapy/#week-9"
+    },
+    {
+      "week": 10,
+      "month": 3,
+      "title": "Week 10: What to expect, search details and your email list",
+      "actions": [
+        "Add a What to Expect section to the walk page → links to: Tactic 2 / Step 6",
+        "Add business details markup to your homepage without your home address → links to: Tactic 2 / Step 10",
+        "Ask Tourism Harrison to update your listing → links to: Tactic 3 / Step 7",
+        "Ask past guests if they'd like to join your email list → links to: Tactic 3 / Step 9"
+      ],
+      "checklist": [
+        "What to Expect is live and does not reveal the meeting point",
+        "Rich Results Test shows your business details with no errors and no street address",
+        "Tourism Harrison has your updated details",
+        "Email sign-up form is live in the website footer"
+      ],
+      "deep_link": "https://accelerator.elearningu.com/ya-doma-nature-and-forest-therapy/#week-10"
+    },
+    {
+      "week": 11,
+      "month": 3,
+      "title": "Week 11: Photos, reviews and your story",
+      "actions": [
+        "Add 10 to 20 photos to your Google profile → links to: Tactic 3 / Step 3",
+        "Copy your Google review link into the thank-you template → links to: Tactic 3 / Step 5",
+        "Film your forest clips and record three or four voiceovers → links to: Tactic 3 / Step 10"
+      ],
+      "checklist": [
+        "Google profile shows at least 10 new photos",
+        "Thank-you template contains the review link",
+        "Three or four voiceover clips are saved and ready to post"
+      ],
+      "deep_link": "https://accelerator.elearningu.com/ya-doma-nature-and-forest-therapy/#week-11"
+    },
+    {
+      "week": 12,
+      "month": 3,
+      "title": "Week 12: Relaunch",
+      "actions": [
+        "Invite meditation regulars and past guests to a pilot walk → links to: Tactic 3 / Step 6",
+        "Send Tourism Harrison your relaunch dates and booking link → links to: Tactic 3 / Step 8",
+        "Reopen your Google profile → links to: Tactic 3 / Step 4",
+        "Email your list and post your first relaunch clip → links to: Tactic 3 / Step 11"
+      ],
+      "checklist": [
+        "Pilot walk date is set and invitations are sent",
+        "Tourism Harrison has your relaunch dates",
+        "Google profile no longer shows \"Temporarily closed\"",
+        "Relaunch email is sent and the first clip is posted with the booking link"
+      ],
+      "deep_link": "https://accelerator.elearningu.com/ya-doma-nature-and-forest-therapy/#week-12"
+    }
+  ]
+}
