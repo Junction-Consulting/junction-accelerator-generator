@@ -259,7 +259,7 @@ Most people look at your site on a phone with something else competing for their
 ### Tips
 - Andrea, our designer, will mock up what the homepage and walk page could look like. Use the mockups as a guide, not a redesign. If a Wix change gets stuck, bring it to the next coaching call.
 - Make every change on your phone view as well. In the Wix editor, switch to the mobile view with the phone icon at the top before you publish.
-- You can change your page title later if you want to be found for a different search, for example "grief support walk Harrison". Change one thing at a time so you can see what worked.
+- You can change your page title later if you want to be found for a different search, for example "grief support walk Harrison". Change one thing at a time so you know which change made the difference.
 - Wix's own statistics still work alongside Google Analytics. Use Wix for a quick look and Google Analytics to see where visitors came from.
 
 ### Resources
