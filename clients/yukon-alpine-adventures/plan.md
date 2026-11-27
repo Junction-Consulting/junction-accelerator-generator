@@ -71,7 +71,13 @@ People who can see a date and press a button feel they have taken a step, and mo
 
 4. **Build the booking request form**
    - On the 2027 Departures page, click **Edit** and add a new section below the calendar section. You can't add blocks inside the calendar section itself, only above or below it.
-   - Add a **Form** block. Click the pencil icon to edit it and build these fields: Name, Email, **Which expedition?** (dropdown listing each trip with its dates, plus "North of Dakwäkäda or custom dates"), **How many guests?** (dropdown, 1 to 6), **Your backpacking experience** (dropdown: "I hike but haven't backpacked", "A few overnight trips", "Multi-day trips, including off-trail"), **Anything you're nervous about or want to ask?** (text area), and **How did you hear about us?** (dropdown: The New York Times article, Instagram, Google search, ChatGPT or another AI tool, Travel Yukon, a friend, the Adventure Club newsletter, Other).
+   - Add a **Form** block. Click the pencil icon to edit it and build these fields:
+     - **Name** and **Email**
+     - **Which expedition?**: a dropdown listing each trip with its dates, plus "North of Dakwäkäda or custom dates"
+     - **How many guests?**: a dropdown from 1 to 6
+     - **Your backpacking experience**: a dropdown with "I hike but haven't backpacked", "A few overnight trips" and "Multi-day trips, including off-trail"
+     - **Anything you're nervous about or want to ask?**: a text area
+     - **How did you hear about us?**: a dropdown with The New York Times article, Instagram, Google search, ChatGPT or another AI tool, Travel Yukon, a friend, the Adventure Club newsletter, and Other
    - Make Name, Email, expedition and experience required. Leave the rest optional so the form stays quick.
    - Set the button text to "Send my booking request".
    - Under the form's **Storage** settings, keep email notifications on so each request reaches your inbox the way inquiries do now.
