@@ -251,7 +251,6 @@ Instagram now shows Reels to people who are likely to be interested, whether or 
 - [Meta Business Suite](https://business.facebook.com): plan and schedule Instagram and Facebook posts
 - [YouTube Studio](https://studio.youtube.com): upload and schedule Shorts
 - [TikTok Studio](https://www.tiktok.com/tiktokstudio): upload and schedule TikToks from a computer
-- [Air North](https://www.flyairnorth.com): your past giveaway partner
 
 ---
 
